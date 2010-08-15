@@ -32,6 +32,8 @@ private:
     int fine_obj;
     carta_territorio deck[MAXCARDS];
     obbiettivi_t deck_obj[MAX_OBJ_CARDS];
+
+    void inserisci_bonus_terr(int d);
     //Funzioni  private
 };
 
