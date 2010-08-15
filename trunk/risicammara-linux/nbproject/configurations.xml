@@ -5,6 +5,13 @@
                    displayName="Header Files"
                    projectFiles="true"
                    kind="SOURCE_LOGICAL_FOLDER">
+      <itemPath>headers/debug_console_messages.h</itemPath>
+      <itemPath>headers/fasi_gioco.h</itemPath>
+      <itemPath>headers/giocatori.h</itemPath>
+      <itemPath>headers/main.h</itemPath>
+      <itemPath>headers/mazzo.h</itemPath>
+      <itemPath>headers/plancia.h</itemPath>
+      <itemPath>headers/regolestruct.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -15,6 +22,13 @@
                    displayName="Source Files"
                    projectFiles="true"
                    kind="SOURCE_LOGICAL_FOLDER">
+      <itemPath>armate.cpp</itemPath>
+      <itemPath>debug_console_messages.cpp</itemPath>
+      <itemPath>fasi_gioco.cpp</itemPath>
+      <itemPath>giocatori.cpp</itemPath>
+      <itemPath>main.cpp</itemPath>
+      <itemPath>mazzo.cpp</itemPath>
+      <itemPath>plancia.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -37,6 +51,41 @@
         <platform>3</platform>
       </toolsSet>
       <compileType>
+        <cTool>
+          <preprocessorList>
+            <Elem>DEBUG</Elem>
+          </preprocessorList>
+          <warningLevel>3</warningLevel>
+        </cTool>
+        <ccTool>
+          <preprocessorList>
+            <Elem>DEBUG</Elem>
+          </preprocessorList>
+          <warningLevel>3</warningLevel>
+        </ccTool>
+      </compileType>
+    </conf>
+    <conf name="Debug_ROB" type="1">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <compilerSet>MinGW|MinGW</compilerSet>
+        <platform>3</platform>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <preprocessorList>
+            <Elem>DEBUG</Elem>
+            <Elem>DEBUG_ROB</Elem>
+          </preprocessorList>
+          <warningLevel>3</warningLevel>
+        </cTool>
+        <ccTool>
+          <preprocessorList>
+            <Elem>DEBUG</Elem>
+            <Elem>DEBUG_ROB</Elem>
+          </preprocessorList>
+          <warningLevel>3</warningLevel>
+        </ccTool>
       </compileType>
     </conf>
     <conf name="Release" type="1">
