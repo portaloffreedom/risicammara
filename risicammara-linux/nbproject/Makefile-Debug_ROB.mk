@@ -14,15 +14,15 @@ GREP=grep
 NM=nm
 CCADMIN=CCadmin
 RANLIB=ranlib
-CC=
-CCC=
-CXX=
-FC=
-AS=
+CC=gcc.exe
+CCC=g++.exe
+CXX=g++.exe
+FC=g77.exe
+AS=as.exe
 
 # Macros
-CND_PLATFORM=GNU-Windows
-CND_CONF=Debug
+CND_PLATFORM=MinGW-Windows
+CND_CONF=Debug_ROB
 CND_DISTDIR=dist
 
 # Include project Makefile
@@ -60,54 +60,54 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-Debug.mk dist/Debug/GNU-Windows/risicammara-linux.exe
+	"${MAKE}"  -f nbproject/Makefile-Debug_ROB.mk dist/Debug_ROB/MinGW-Windows/risicammara-linux.exe
 
-dist/Debug/GNU-Windows/risicammara-linux.exe: ${OBJECTFILES}
-	${MKDIR} -p dist/Debug/GNU-Windows
+dist/Debug_ROB/MinGW-Windows/risicammara-linux.exe: ${OBJECTFILES}
+	${MKDIR} -p dist/Debug_ROB/MinGW-Windows
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/risicammara-linux ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -Werror -DDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -g -Werror -DDEBUG -DDEBUG_ROB -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
 
 ${OBJECTDIR}/debug_console_messages.o: debug_console_messages.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -Werror -DDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/debug_console_messages.o debug_console_messages.cpp
+	$(COMPILE.cc) -g -Werror -DDEBUG -DDEBUG_ROB -MMD -MP -MF $@.d -o ${OBJECTDIR}/debug_console_messages.o debug_console_messages.cpp
 
 ${OBJECTDIR}/plancia.o: plancia.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -Werror -DDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/plancia.o plancia.cpp
+	$(COMPILE.cc) -g -Werror -DDEBUG -DDEBUG_ROB -MMD -MP -MF $@.d -o ${OBJECTDIR}/plancia.o plancia.cpp
 
 ${OBJECTDIR}/mazzo.o: mazzo.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -Werror -DDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/mazzo.o mazzo.cpp
+	$(COMPILE.cc) -g -Werror -DDEBUG -DDEBUG_ROB -MMD -MP -MF $@.d -o ${OBJECTDIR}/mazzo.o mazzo.cpp
 
 ${OBJECTDIR}/armate.o: armate.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -Werror -DDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/armate.o armate.cpp
+	$(COMPILE.cc) -g -Werror -DDEBUG -DDEBUG_ROB -MMD -MP -MF $@.d -o ${OBJECTDIR}/armate.o armate.cpp
 
 ${OBJECTDIR}/giocatori.o: giocatori.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -Werror -DDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/giocatori.o giocatori.cpp
+	$(COMPILE.cc) -g -Werror -DDEBUG -DDEBUG_ROB -MMD -MP -MF $@.d -o ${OBJECTDIR}/giocatori.o giocatori.cpp
 
 ${OBJECTDIR}/fasi_gioco.o: fasi_gioco.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -Werror -DDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/fasi_gioco.o fasi_gioco.cpp
+	$(COMPILE.cc) -g -Werror -DDEBUG -DDEBUG_ROB -MMD -MP -MF $@.d -o ${OBJECTDIR}/fasi_gioco.o fasi_gioco.cpp
 
 # Subprojects
 .build-subprojects:
 
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
-	${RM} -r build/Debug
-	${RM} dist/Debug/GNU-Windows/risicammara-linux.exe
+	${RM} -r build/Debug_ROB
+	${RM} dist/Debug_ROB/MinGW-Windows/risicammara-linux.exe
 
 # Subprojects
 .clean-subprojects:

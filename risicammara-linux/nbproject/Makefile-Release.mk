@@ -32,7 +32,14 @@ include Makefile
 OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
-OBJECTFILES=
+OBJECTFILES= \
+	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/debug_console_messages.o \
+	${OBJECTDIR}/plancia.o \
+	${OBJECTDIR}/mazzo.o \
+	${OBJECTDIR}/armate.o \
+	${OBJECTDIR}/giocatori.o \
+	${OBJECTDIR}/fasi_gioco.o
 
 
 # C Compiler Flags
@@ -57,7 +64,42 @@ LDLIBSOPTIONS=
 
 dist/Release/GNU-Windows/risicammara-linux.exe: ${OBJECTFILES}
 	${MKDIR} -p dist/Release/GNU-Windows
-	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/risicammara-linux ${OBJECTFILES} ${LDLIBSOPTIONS} 
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/risicammara-linux ${OBJECTFILES} ${LDLIBSOPTIONS} 
+
+${OBJECTDIR}/main.o: main.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
+
+${OBJECTDIR}/debug_console_messages.o: debug_console_messages.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/debug_console_messages.o debug_console_messages.cpp
+
+${OBJECTDIR}/plancia.o: plancia.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/plancia.o plancia.cpp
+
+${OBJECTDIR}/mazzo.o: mazzo.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/mazzo.o mazzo.cpp
+
+${OBJECTDIR}/armate.o: armate.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/armate.o armate.cpp
+
+${OBJECTDIR}/giocatori.o: giocatori.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/giocatori.o giocatori.cpp
+
+${OBJECTDIR}/fasi_gioco.o: fasi_gioco.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/fasi_gioco.o fasi_gioco.cpp
 
 # Subprojects
 .build-subprojects:
