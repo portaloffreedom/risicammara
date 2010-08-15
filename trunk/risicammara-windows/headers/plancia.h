@@ -11,11 +11,18 @@
 using namespace std;
 
 struct territorio_plancia{
-    territori_t         territorio;
+    territori_t         territorio; // probabilmente inutile in quanto il territorio è già identificato dalla posizione dell'array in cui si trova.
+    /** Continente a cui appartiene il territorio*/
     continenti_t        continente;
+    /** Proprietario a cui appartiene il territorio*/
     players_t           proprietario;
+    /** Numero di armate presenti nel territorio.*/
     int                 num_armate;
+
+    /** La lista di tutti i territori adiacenti a questo*/
     list<territori_t>   adiacenze;
+    /** Il numero di territori adiacenti a questo (questioni di velocità)*/
+    int size_adj_list;
 };
 
 class tabellone

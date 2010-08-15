@@ -34,6 +34,7 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/debug_console_messages.o \
 	${OBJECTDIR}/plancia.o \
 	${OBJECTDIR}/mazzo.o \
 	${OBJECTDIR}/armate.o \
@@ -69,6 +70,11 @@ ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -Werror -s -DDEBUG -DDEBUG_ROB -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
+
+${OBJECTDIR}/debug_console_messages.o: debug_console_messages.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -Werror -s -DDEBUG -DDEBUG_ROB -MMD -MP -MF $@.d -o ${OBJECTDIR}/debug_console_messages.o debug_console_messages.cpp
 
 ${OBJECTDIR}/plancia.o: plancia.cpp 
 	${MKDIR} -p ${OBJECTDIR}

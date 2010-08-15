@@ -13,6 +13,152 @@ extern mazzo maz;
 extern giocatore ALLPLAYERS[];
 extern unsigned int GIOCATORI;
 
+/**
+ * Completa il territorio della carta e il relativo bonus associato.
+ * @param d Indice di servizio per il for delle carte.
+ */
+void mazzo::inserisci_bonus_terr(int d){
+
+    territori_t territorio = static_cast<territori_t>(d);
+    deck[d].territorio = territorio;
+    
+    switch(territorio)
+    {
+        case Alaska:
+            deck[d].bonus = fante;
+            break;
+        case Territori_del_Nord_Ovest:
+            deck[d].bonus = cannone;
+            break;
+        case Groenlandia:
+            deck[d].bonus = cavallo;
+            break;
+        case Alberta:
+            deck[d].bonus = fante;
+            break;
+        case Ontario:
+            deck[d].bonus = cavallo;
+            break;
+        case Quebec:
+            deck[d].bonus = cannone;
+            break;
+        case Stati_Uniti_Occidentali:
+            deck[d].bonus = fante;
+            break;
+        case Stati_Uniti_Orientali:
+            deck[d].bonus = cannone;
+            break;
+        case America_Centrale:
+            deck[d].bonus = cavallo;
+            break;
+        case Venezuela:
+            deck[d].bonus = cannone;
+            break;
+        case Peru:
+            deck[d].bonus = cavallo;
+            break;
+        case Brasile:
+            deck[d].bonus = cannone;
+            break;
+        case Argentina:
+            deck[d].bonus = fante;
+            break;
+        case Islanda:
+            deck[d].bonus = fante;
+            break;
+        case Scandinavia:
+            deck[d].bonus = cannone;
+            break;
+        case  Gran_Bretagna:
+            deck[d].bonus = cavallo;
+            break;
+        case Europa_Settentrionale:
+            deck[d].bonus = cavallo;
+            break;
+        case Europa_Occidentale:
+            deck[d].bonus = fante;
+            break;
+        case Europa_Meridionale:
+            deck[d].bonus = cavallo;
+            break;
+        case Ucraina:
+            deck[d].bonus = cannone;
+            break;
+                    //Africa
+        case Africa_del_Nord:
+            deck[d].bonus = fante;
+            break;
+        case Egitto:
+            deck[d].bonus = fante;
+            break;
+        case Congo:
+            deck[d].bonus = cavallo;
+            break;
+        case Africa_Orientale:
+            deck[d].bonus = cannone;
+            break;
+        case Africa_del_Sud:
+            deck[d].bonus = cannone;
+            break;
+        case Madagascar:
+            deck[d].bonus = fante;
+            break;
+                    //Asia
+        case Urali:
+            deck[d].bonus = cavallo;
+            break;
+        case Siberia:
+            deck[d].bonus = cannone;
+            break;
+        case Jacuzia:
+            deck[d].bonus = cavallo;
+            break;
+        case Cita:
+            deck[d].bonus = fante;
+            break;
+        case Kamchatka:
+            deck[d].bonus = cavallo;
+            break;
+        case Giappone:
+            deck[d].bonus = fante;
+            break;
+        case Mongolia:
+            deck[d].bonus = cannone;
+            break;
+        case Afghanistan:
+            deck[d].bonus = fante;
+            break;
+        case Medio_Oriente:
+            deck[d].bonus = cannone;
+            break;
+        case India:
+            deck[d].bonus = fante;
+            break;
+        case Cina:
+            deck[d].bonus = cavallo;
+            break;
+        case Siam:
+            deck[d].bonus = cannone;
+            break;
+                    //Oceania
+        case Indonesia:
+            deck[d].bonus = cavallo;
+            break;
+        case Nuova_Guinea:
+            deck[d].bonus = cavallo;
+            break;
+        case Australia_Orientale:
+            deck[d].bonus = fante;
+            break;
+        case Australia_Occidentale:
+            deck[d].bonus = cannone;
+            break;
+         default:
+             deck[d].bonus = jolly;
+             break;
+    }
+};
+
 mazzo::mazzo()
 {
     inizio = 0;
@@ -20,20 +166,12 @@ mazzo::mazzo()
     inizio_obj = 0;
     fine_obj = MAX_OBJ_CARDS;
     for(int i=0;i<fine;i++){
-        deck[i].bonus = cannone;
-        deck[i].territorio = static_cast<territori_t>(i);
+        inserisci_bonus_terr(i);
     }
 };
 
 mazzo::~mazzo(){
-    inizio = 0;
-    fine = MAXCARDS;
-    inizio_obj = 0;
-    fine_obj = MAX_OBJ_CARDS;
-    for(int i=0;i<fine;i++){
-        deck[i].bonus = cannone;
-        deck[i].territorio = static_cast<territori_t>(i);
-    }
+    mazzo();
 };
 
 void mazzo::mischia(bool first )
@@ -112,3 +250,4 @@ void mazzo::distribuisci_territori(){
     inizio = 0;
     mischia(false);
 };
+

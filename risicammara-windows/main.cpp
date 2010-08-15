@@ -2,11 +2,11 @@
  */
 #include <cstdlib>
 #include <iostream>
-#include "headers/regolestruct.h"
-#include "headers/mazzo.h"
-#include "headers/plancia.h"
-#include "headers/giocatori.h"
-#include "headers/fasi_gioco.h"
+#include "headers/main.h"
+
+#ifdef DEBUG
+#include "headers/debug_console_messages.h"
+#endif
 using namespace std;
 
 giocatore ALLPLAYERS[MAXPLAYERS];
@@ -15,42 +15,39 @@ tabellone plancia;
 mazzo maz;
 unsigned int GIOCATORI = 4;
 
-int parte_opengl(int &argc, char **argv);
-
 int main(int argc, char** argv)
 {
 #ifdef DEBUG
-#ifdef DEBUG_ROB
-
-#endif
 
     char scelta;
     cout<<  "Che interfaccia vuoi provare?"
             "- (O)penGL\n"
             "- (G)TK\n"
             "- G(l)ade\n"
+#ifdef DEBUG
+            "- (C)ommand line\n"
+#endif
             "scelta:";
     cin>>scelta;
     switch(scelta){
         case 'o':
         case 'O':
-            cout<<"-------------------------------------\n"
-                "COMANDI:\n"
-                "f -> qualità immagine\n"
-                "l -> luci\n"
-                "freccie -> movimento\n"
-                "ESC -> esci\n"
-              "-------------------------------------\n";
         case 'g':
         case 'G':
         case 'l':
         case 'L':
-            cout<<"fillo metti la tua interfaccia qui\n";
-            return 0;
+            cout<<"TO DO!\n";
+            break;
+#ifdef DEBUG
+        case 'c':
+        case 'C':
+            break;
+#endif
+
         default:
             cout<<"Input non accetto\n";
     }
 
 #endif
-    return 13;
+    return 0;
 };

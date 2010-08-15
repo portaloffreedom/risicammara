@@ -10,7 +10,8 @@ using namespace std;
 extern giocatore ALLPLAYERS[];
 extern tabellone plancia;
 
-//Completa le adiacenze dei territori per la costruzione del planisfero
+/** Completa le adiacenze dei territori per la costruzione del planisfero
+ * @param d l'indice territorio. */
 void tabellone::completa_adiacenze(int d){
     switch(d){
         case 0:
@@ -65,24 +66,28 @@ void tabellone::completa_adiacenze(int d){
             plancia[d].adiacenze.push_back(Alberta);
             plancia[d].adiacenze.push_back(Territori_del_Nord_Ovest);
             plancia[d].adiacenze.push_back(Kamchatka);
+            plancia[d].size_adj_list = 3;
             break;
         case Territori_del_Nord_Ovest:
             plancia[d].adiacenze.push_back(Alaska);
             plancia[d].adiacenze.push_back(Groenlandia);
             plancia[d].adiacenze.push_back(Alberta);
             plancia[d].adiacenze.push_back(Ontario);
+            plancia[d].size_adj_list = 4;
             break;
         case Groenlandia:
             plancia[d].adiacenze.push_back(Territori_del_Nord_Ovest);
             plancia[d].adiacenze.push_back(Quebec);
             plancia[d].adiacenze.push_back(Ontario);
             plancia[d].adiacenze.push_back(Islanda);
+            plancia[d].size_adj_list = 4;
             break;
         case Alberta:
             plancia[d].adiacenze.push_back(Alaska);
             plancia[d].adiacenze.push_back(Territori_del_Nord_Ovest);
             plancia[d].adiacenze.push_back(Ontario);
             plancia[d].adiacenze.push_back(Stati_Uniti_Occidentali);
+            plancia[d].size_adj_list = 4;
             break;
         case Ontario:
             plancia[d].adiacenze.push_back(Territori_del_Nord_Ovest);
@@ -91,65 +96,77 @@ void tabellone::completa_adiacenze(int d){
             plancia[d].adiacenze.push_back(Stati_Uniti_Occidentali);
             plancia[d].adiacenze.push_back(Alberta);
             plancia[d].adiacenze.push_back(Stati_Uniti_Orientali);
+            plancia[d].size_adj_list = 6;
             break;
         case Quebec:
             plancia[d].adiacenze.push_back(Groenlandia);
             plancia[d].adiacenze.push_back(Ontario);
             plancia[d].adiacenze.push_back(Stati_Uniti_Orientali);
+            plancia[d].size_adj_list = 3;
             break;
         case Stati_Uniti_Occidentali:
             plancia[d].adiacenze.push_back(Alberta);
             plancia[d].adiacenze.push_back(Ontario);
             plancia[d].adiacenze.push_back(Stati_Uniti_Orientali);
             plancia[d].adiacenze.push_back(America_Centrale);
+            plancia[d].size_adj_list = 4;
             break;
         case Stati_Uniti_Orientali:
             plancia[d].adiacenze.push_back(Stati_Uniti_Occidentali);
             plancia[d].adiacenze.push_back(Ontario);
             plancia[d].adiacenze.push_back(Quebec);
             plancia[d].adiacenze.push_back(America_Centrale);
+            plancia[d].size_adj_list = 4;
             break;
         case America_Centrale:
             plancia[d].adiacenze.push_back(Stati_Uniti_Occidentali);
             plancia[d].adiacenze.push_back(Stati_Uniti_Orientali);
             plancia[d].adiacenze.push_back(Venezuela);
+            plancia[d].size_adj_list = 3;
             break;
         case Venezuela:
             plancia[d].adiacenze.push_back(Peru);
             plancia[d].adiacenze.push_back(Brasile);
             plancia[d].adiacenze.push_back(America_Centrale);
+            plancia[d].size_adj_list = 3;
             break;
         case Peru:
             plancia[d].adiacenze.push_back(Venezuela);
             plancia[d].adiacenze.push_back(Brasile);
             plancia[d].adiacenze.push_back(Argentina);
+            plancia[d].size_adj_list = 3;
             break;
         case Brasile:
             plancia[d].adiacenze.push_back(Venezuela);
             plancia[d].adiacenze.push_back(Peru);
             plancia[d].adiacenze.push_back(Argentina);
             plancia[d].adiacenze.push_back(Africa_del_Nord);
+            plancia[d].size_adj_list = 4;
             break;
         case Argentina:
             plancia[d].adiacenze.push_back(Peru);
             plancia[d].adiacenze.push_back(Brasile);
+            plancia[d].size_adj_list = 2;
             break;
         case Islanda:
             plancia[d].adiacenze.push_back(Groenlandia);
             plancia[d].adiacenze.push_back(Scandinavia);
             plancia[d].adiacenze.push_back(Gran_Bretagna);
+            plancia[d].size_adj_list = 3;
             break;
         case Scandinavia:
             plancia[d].adiacenze.push_back(Ucraina);
             plancia[d].adiacenze.push_back(Gran_Bretagna);
             plancia[d].adiacenze.push_back(Europa_Settentrionale);
             plancia[d].adiacenze.push_back(Islanda);
+            plancia[d].size_adj_list = 4;
             break;
         case  Gran_Bretagna:
             plancia[d].adiacenze.push_back(Scandinavia);
             plancia[d].adiacenze.push_back(Europa_Settentrionale);
             plancia[d].adiacenze.push_back(Islanda);
             plancia[d].adiacenze.push_back(Europa_Occidentale);
+            plancia[d].size_adj_list = 4;
             break;
         case Europa_Settentrionale:
             plancia[d].adiacenze.push_back(Scandinavia);
@@ -157,12 +174,14 @@ void tabellone::completa_adiacenze(int d){
             plancia[d].adiacenze.push_back(Gran_Bretagna);
             plancia[d].adiacenze.push_back(Europa_Occidentale);
             plancia[d].adiacenze.push_back(Europa_Meridionale);
+            plancia[d].size_adj_list = 5;
             break;
         case Europa_Occidentale:
             plancia[d].adiacenze.push_back(Gran_Bretagna);
             plancia[d].adiacenze.push_back(Europa_Settentrionale);
             plancia[d].adiacenze.push_back(Europa_Meridionale);
             plancia[d].adiacenze.push_back(Africa_del_Nord);
+            plancia[d].size_adj_list = 4;
             break;
         case Europa_Meridionale:
             plancia[d].adiacenze.push_back(Europa_Settentrionale);
@@ -171,6 +190,7 @@ void tabellone::completa_adiacenze(int d){
             plancia[d].adiacenze.push_back(Egitto);
             plancia[d].adiacenze.push_back(Ucraina);
             plancia[d].adiacenze.push_back(Medio_Oriente);
+            plancia[d].size_adj_list = 6;
             break;
         case Ucraina:
             plancia[d].adiacenze.push_back(Scandinavia);
@@ -179,6 +199,7 @@ void tabellone::completa_adiacenze(int d){
             plancia[d].adiacenze.push_back(Medio_Oriente);
             plancia[d].adiacenze.push_back(Urali);
             plancia[d].adiacenze.push_back(Afghanistan);
+            plancia[d].size_adj_list = 6;
             break;
                     //Africa
         case Africa_del_Nord:
@@ -188,17 +209,20 @@ void tabellone::completa_adiacenze(int d){
             plancia[d].adiacenze.push_back(Egitto);
             plancia[d].adiacenze.push_back(Congo);
             plancia[d].adiacenze.push_back(Africa_Orientale);
+            plancia[d].size_adj_list = 6;
             break;
         case Egitto:
             plancia[d].adiacenze.push_back(Africa_del_Nord);
             plancia[d].adiacenze.push_back(Europa_Meridionale);
             plancia[d].adiacenze.push_back(Medio_Oriente);
             plancia[d].adiacenze.push_back(Africa_Orientale);
+            plancia[d].size_adj_list = 4;
             break;
         case Congo:
             plancia[d].adiacenze.push_back(Africa_del_Nord);
             plancia[d].adiacenze.push_back(Africa_Orientale);
             plancia[d].adiacenze.push_back(Africa_del_Sud);
+            plancia[d].size_adj_list = 3;
             break;
         case Africa_Orientale:
             plancia[d].adiacenze.push_back(Egitto);
@@ -206,15 +230,18 @@ void tabellone::completa_adiacenze(int d){
             plancia[d].adiacenze.push_back(Congo);
             plancia[d].adiacenze.push_back(Madagascar);
             plancia[d].adiacenze.push_back(Africa_del_Sud);
+            plancia[d].size_adj_list = 5;
             break;
         case Africa_del_Sud:
             plancia[d].adiacenze.push_back(Madagascar);
             plancia[d].adiacenze.push_back(Congo);
             plancia[d].adiacenze.push_back(Africa_Orientale);
+            plancia[d].size_adj_list = 3;
             break;
         case Madagascar:
             plancia[d].adiacenze.push_back(Africa_Orientale);
             plancia[d].adiacenze.push_back(Africa_del_Sud);
+            plancia[d].size_adj_list = 2;
             break;
                     //Asia
         case Urali:
@@ -222,6 +249,7 @@ void tabellone::completa_adiacenze(int d){
             plancia[d].adiacenze.push_back(Afghanistan);
             plancia[d].adiacenze.push_back(Cina);
             plancia[d].adiacenze.push_back(Siberia);
+            plancia[d].size_adj_list = 4;
             break;
         case Siberia:
             plancia[d].adiacenze.push_back(Urali);
@@ -229,17 +257,20 @@ void tabellone::completa_adiacenze(int d){
             plancia[d].adiacenze.push_back(Mongolia);
             plancia[d].adiacenze.push_back(Cita);
             plancia[d].adiacenze.push_back(Jacuzia);
+            plancia[d].size_adj_list = 5;
             break;
         case Jacuzia:
             plancia[d].adiacenze.push_back(Cita);
             plancia[d].adiacenze.push_back(Siberia);
             plancia[d].adiacenze.push_back(Kamchatka);
+            plancia[d].size_adj_list = 3;
             break;
         case Cita:
             plancia[d].adiacenze.push_back(Siberia);
             plancia[d].adiacenze.push_back(Jacuzia);
             plancia[d].adiacenze.push_back(Mongolia);
             plancia[d].adiacenze.push_back(Kamchatka);
+            plancia[d].size_adj_list = 4;
             break;
         case Kamchatka:
             plancia[d].adiacenze.push_back(Jacuzia);
@@ -247,10 +278,12 @@ void tabellone::completa_adiacenze(int d){
             plancia[d].adiacenze.push_back(Cita);
             plancia[d].adiacenze.push_back(Giappone);
             plancia[d].adiacenze.push_back(Alaska);
+            plancia[d].size_adj_list = 5;
             break;
         case Giappone:
             plancia[d].adiacenze.push_back(Kamchatka);
             plancia[d].adiacenze.push_back(Mongolia);
+            plancia[d].size_adj_list = 2;
             break;
         case Mongolia:
             plancia[d].adiacenze.push_back(Giappone);
@@ -258,12 +291,14 @@ void tabellone::completa_adiacenze(int d){
             plancia[d].adiacenze.push_back(Siberia);
             plancia[d].adiacenze.push_back(Cita);
             plancia[d].adiacenze.push_back(Kamchatka);
+            plancia[d].size_adj_list = 5;
             break;
         case Afghanistan:
             plancia[d].adiacenze.push_back(Ucraina);
             plancia[d].adiacenze.push_back(Urali);
             plancia[d].adiacenze.push_back(Cina);
             plancia[d].adiacenze.push_back(Medio_Oriente);
+            plancia[d].size_adj_list = 4;
             break;
         case Medio_Oriente:
             plancia[d].adiacenze.push_back(Ucraina);
@@ -272,11 +307,13 @@ void tabellone::completa_adiacenze(int d){
             plancia[d].adiacenze.push_back(Cina);
             plancia[d].adiacenze.push_back(India);
             plancia[d].adiacenze.push_back(Afghanistan);
+            plancia[d].size_adj_list = 6;
             break;
         case India:
             plancia[d].adiacenze.push_back(Medio_Oriente);
             plancia[d].adiacenze.push_back(Cina);
             plancia[d].adiacenze.push_back(Siam);
+            plancia[d].size_adj_list = 3;
             break;
         case Cina:
             plancia[d].adiacenze.push_back(Urali);
@@ -286,41 +323,51 @@ void tabellone::completa_adiacenze(int d){
             plancia[d].adiacenze.push_back(Medio_Oriente);
             plancia[d].adiacenze.push_back(Siam);
             plancia[d].adiacenze.push_back(India);
+            plancia[d].size_adj_list = 7;
             break;
         case Siam:
             plancia[d].adiacenze.push_back(Indonesia);
             plancia[d].adiacenze.push_back(India);
             plancia[d].adiacenze.push_back(Cina);
+            plancia[d].size_adj_list = 3;
             break;
                     //Oceania
         case Indonesia:
             plancia[d].adiacenze.push_back(Siam);
             plancia[d].adiacenze.push_back(Nuova_Guinea);
             plancia[d].adiacenze.push_back(Australia_Occidentale);
+            plancia[d].size_adj_list = 3;
             break;
         case Nuova_Guinea:
             plancia[d].adiacenze.push_back(Indonesia);
             plancia[d].adiacenze.push_back(Australia_Orientale);
             plancia[d].adiacenze.push_back(Australia_Occidentale);
+            plancia[d].size_adj_list = 3;
             break;
         case Australia_Orientale:
             plancia[d].adiacenze.push_back(Australia_Occidentale);
             plancia[d].adiacenze.push_back(Nuova_Guinea);
+            plancia[d].size_adj_list = 2;
             break;
         case Australia_Occidentale:
             plancia[d].adiacenze.push_back(Indonesia);
             plancia[d].adiacenze.push_back(Nuova_Guinea);
             plancia[d].adiacenze.push_back(Australia_Orientale);
+            plancia[d].size_adj_list = 3;
          default:
 			break;
     }
 
 };
 
-//Costruisce tutta la plancia di gioco come un grafo a liste di adiacenza
-//e completa tutto in maniera standard, senza proprietari e armate.
+/**Costruisce tutta la plancia di gioco come un grafo a liste di adiacenza
+ * e completa tutto in maniera standard, senza proprietari e armate.  */
 tabellone::tabellone(){
+    //Tutti i territori nell'enumerato sono elencati da 0 a 41
+    //usando un "for" si rende tutto più veloce
     for(int i=0;i<42;i++){
+        //dentro aggiorniamo il proprietario del territorio e le armate presenti
+        //e ne completiamo le adiacenze
         plancia[i].territorio = static_cast<territori_t>(i);
         plancia[i].proprietario = nessuno;
         plancia[i].num_armate = 0;
@@ -328,6 +375,12 @@ tabellone::tabellone(){
     }   
 };
 
+/**
+ * Cambia il proprietario di un territorio aggiornando le armate.
+ * @param territorio Il territorio di cui cambiare il proprietario
+ * @param nuovo_proprietario Il nuovo proprietario del territorio
+ * @param nuove_armate Il numero di armate da aggiornare. Default: 1
+ */
 void Cambia_proprietario(   territori_t territorio,
                             players_t nuovo_proprietario,
                             int nuove_armate = 1)

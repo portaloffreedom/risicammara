@@ -27,11 +27,12 @@ const int MAXCARDS = 44;
 const int MAXPLAYERS = 6;
 const int MAX_OBJ_CARDS = 14;
 
-enum modalita_t{    nuovo,
-                    connetti,
-                    prova
-};
-enum armate_t {blu,rosse,nere,gialle,viola,verdi};
+enum armate_t { blu,
+                rosse,
+                nere,
+                gialle,
+                viola,
+                verdi};
 
 enum continenti_t { Nord_America    = 0,
                     Sud_America     = 1,
@@ -131,13 +132,25 @@ struct carta_territorio{
 };
 
 struct giocatore{
+    /** Se il giocatore è in gioco o meno.*/
     bool                    isActive;
+    /** Le carte in mano di ogni giocatore*/
     list<carta_territorio>  carte_mano;
+    /** Numero di carte in mano (questioni di performance)*/
+    int num_carte_mano;
+    /** Obbiettivo assegnato al giocatore */
     obbiettivi_t            obbiettivo;
+    /** Numero di Territori in possesso del giocatore */
     int                     numero_territori;
+    /** Continenti sotto il controllo del giocatore*/
     list<continenti_t>      continenti;
+    /** Numero dei continenti */
+    int numero_continenti;
+    /** Numero di Armate a giro che il giocatore deve posizionare*/
     int                     armate_giro;
+    /** Nome del giocatore*/
     char                    nome[21];
+    /** Colore delle armate da lui scelte*/
     armate_t                colore;
 };
 #endif	/* REGOLESTRUCT_H */
