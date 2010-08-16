@@ -1,0 +1,16 @@
+armate.cpp
+debug_console_messages.cpp
+fasi_gioco.cpp
+giocatori.cpp
+headers/debug_console_messages.h
+headers/fasi_gioco.h
+headers/giocatori.h
+headers/main.h
+headers/mazzo.h
+headers/plancia.h
+headers/regolestruct.h
+main.cpp
+mazzo.cpp
+nbproject/configurations.xml
+nbproject/project.xml
+plancia.cpp
