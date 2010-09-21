@@ -14,14 +14,14 @@ GREP=grep
 NM=nm
 CCADMIN=CCadmin
 RANLIB=ranlib
-CC=gcc.exe
-CCC=g++.exe
-CXX=g++.exe
-FC=g77.exe
-AS=as.exe
+CC=gcc
+CCC=g++
+CXX=g++
+FC=
+AS=as
 
 # Macros
-CND_PLATFORM=MinGW-Windows
+CND_PLATFORM=GNU-Linux-x86
 CND_CONF=Debug_ROB
 CND_DISTDIR=dist
 
@@ -60,10 +60,10 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-Debug_ROB.mk dist/Debug_ROB/MinGW-Windows/risicammara-linux.exe
+	"${MAKE}"  -f nbproject/Makefile-Debug_ROB.mk dist/Debug_ROB/GNU-Linux-x86/risicammara-linux
 
-dist/Debug_ROB/MinGW-Windows/risicammara-linux.exe: ${OBJECTFILES}
-	${MKDIR} -p dist/Debug_ROB/MinGW-Windows
+dist/Debug_ROB/GNU-Linux-x86/risicammara-linux: ${OBJECTFILES}
+	${MKDIR} -p dist/Debug_ROB/GNU-Linux-x86
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/risicammara-linux ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
 ${OBJECTDIR}/main.o: main.cpp 
@@ -107,7 +107,7 @@ ${OBJECTDIR}/fasi_gioco.o: fasi_gioco.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r build/Debug_ROB
-	${RM} dist/Debug_ROB/MinGW-Windows/risicammara-linux.exe
+	${RM} dist/Debug_ROB/GNU-Linux-x86/risicammara-linux
 
 # Subprojects
 .clean-subprojects:
