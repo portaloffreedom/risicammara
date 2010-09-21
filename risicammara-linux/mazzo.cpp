@@ -161,6 +161,7 @@ void mazzo::inserisci_bonus_terr(int d){
 
 mazzo::mazzo()
 {
+    reinizio_point = 0;
     inizio = 0;
     fine = MAXCARDS;
     inizio_obj = 0;
@@ -170,8 +171,12 @@ mazzo::mazzo()
     }
 };
 
+mazzo::mazzo(bool first){
+    reinizio_point = 0;
+    inizio = 0;
+    fine = MAXCARDS;
+};
 mazzo::~mazzo(){
-    mazzo();
 };
 
 void mazzo::mischia(bool first )
@@ -251,3 +256,8 @@ void mazzo::distribuisci_territori(){
     mischia(false);
 };
 
+void mazzo::push(carta_territorio card){
+    deck[reinizio_point].bonus = card.bonus;
+    deck[reinizio_point].territorio = card.territorio;
+    reinizio_point ++;
+};

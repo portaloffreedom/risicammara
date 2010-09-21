@@ -15,16 +15,19 @@ class mazzo
 {
 public:
     mazzo();
+    mazzo(bool);
     ~mazzo();
     void mischia(bool first = true);
     void mischia_obj();
     void distribuisci_obj();
     void distribuisci_territori();
+    void push(carta_territorio);
     carta_territorio pesca();
     territori_t pesca_first();
     obbiettivi_t pesca_obj();
 private:
     //globali private
+    int reinizio_point;
     int inizio;
     int fine;
     int new_fine;

@@ -46,7 +46,7 @@ void inizio_turno(){
     ALLPLAYERS[CURRENTPLAYER].armate_giro = ALLPLAYERS[CURRENTPLAYER].numero_territori / 3;
     //un giocatore che ha meno di 4 territori non puo' avere un continente
     //pertanto si esce direttamente dalla funzione evitando giri inutili.
-    if(ALLPLAYERS[CURRENTPLAYER].numero_territori <4) return;
+    if(ALLPLAYERS[CURRENTPLAYER].numero_territori < 4) return;
     int re = 0;
     for(int i=0;i<42;i++){
         if(plancia.plancia[i].proprietario != CURRENTPLAYER){
@@ -162,13 +162,19 @@ void nuovo_gioco()
     cin.get(ALLPLAYERS[i].nome,MAX_NAME_LENGTH);
     cin.ignore(1,'\n');
     }
+    
 #endif
-    maz.~mazzo();
     maz.mischia(true);
     maz.mischia_obj();
     maz.distribuisci_obj();
     maz.distribuisci_territori();
     CURRENTPLAYER = giocatore1;
+    
+#ifdef DEBUG_ROB
+    inizio_turno();
+    cout<<"Numero di armate a giro del giocatore "<<CURRENTPLAYER<<": "
+            <<ALLPLAYERS[CURRENTPLAYER].armate_giro<<endl;
+#endif
 };
 
 #ifdef DEBUG_ROBz

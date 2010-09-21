@@ -8,6 +8,7 @@
 #ifndef DEBUG_CONSOLE_MESSAGES_H
 #define	DEBUG_CONSOLE_MESSAGES_H
 
+void commline();
 
 
 #endif	/* DEBUG_CONSOLE_MESSAGES_H */
