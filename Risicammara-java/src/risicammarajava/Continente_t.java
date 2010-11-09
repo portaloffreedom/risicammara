@@ -1,12 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package risicammarajava;
 
 /**
- *
+ * Enumerato che rappresenta i continenti e il loro bonus armate.
  * @author stengun
  */
 public enum Continente_t {
@@ -19,10 +14,17 @@ public enum Continente_t {
     NESSUNO         (0);
     
     private int numeroarmate;
-    
+/**
+ * Costruttore dell'enumerato
+ * @param armate Armate che il continente da al giocatore
+ */
     Continente_t(int armate){
         this.numeroarmate = armate;
     }
+    /**
+     * Interfaccia per leggere il numero di armate bonus per il dato continente.
+     * @return Numero di armate bonus che il continente fornisce.
+     */
     public int getArmate(){
         return numeroarmate;
     }
