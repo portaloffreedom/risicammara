@@ -21,9 +21,10 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-    JFrame finestra = new JFrame("Culo");
+        JFrame finestra = new JFrame("Culo");
+        finestra.setMinimumSize(new Dimension(800, 400));
         Container contestoFinestra = finestra.getContentPane();
-        PannelloSpeciale pannello = new PannelloSpeciale();
+        PannelloSpeciale pannello = new PannelloSpeciale(0);
 
         finestra.setBounds(500, 400, 200, 180);
         contestoFinestra.add(pannello);
