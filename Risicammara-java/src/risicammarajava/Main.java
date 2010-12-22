@@ -45,22 +45,27 @@ public class Main {
 
             public void windowClosed(WindowEvent e) {
                 //throw new UnsupportedOperationException("Not supported yet.");
+                System.out.println("windowClosed");
             }
 
             public void windowIconified(WindowEvent e) {
                 //throw new UnsupportedOperationException("Not supported yet.");
+                System.out.println("windowIconified");
             }
 
             public void windowDeiconified(WindowEvent e) {
                 //throw new UnsupportedOperationException("Not supported yet.");
+                System.out.println("windowDeiconified");
             }
 
             public void windowActivated(WindowEvent e) {
                 //throw new UnsupportedOperationException("Not supported yet.");
+                System.out.println("windowActivated");
             }
 
             public void windowDeactivated(WindowEvent e) {
                 //throw new UnsupportedOperationException("Not supported yet.");
+                System.out.println("windowDeactivated");
             }
         });
         finestra.setVisible(true);

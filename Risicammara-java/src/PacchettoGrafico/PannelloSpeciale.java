@@ -6,6 +6,7 @@
 package PacchettoGrafico;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.geom.*;
 import javax.swing.*;
 
@@ -20,10 +21,13 @@ public class PannelloSpeciale extends JPanel {
     private OrologioTimer cronometro;
     private MillisecondiDiEsecuzione performance;
     private int durataFrame;
+    boolean ridimensionata;
 
 
     public PannelloSpeciale(int durataFrame) {
         super();
+
+        this.addComponentListener(new AscoltatorePannello(this));
 
         dimensioni = new Dimension();
         this.cronometro = new OrologioTimer();
@@ -37,7 +41,6 @@ public class PannelloSpeciale extends JPanel {
     
     @Override
     public void paintComponent (Graphics g) {
-        long millisecondi = cronometro.tempoPassato();
         Point posizioneMouse = super.getMousePosition();
         int mouseX = 0;
         int mouseY = 0;
@@ -45,14 +48,28 @@ public class PannelloSpeciale extends JPanel {
         if (posizioneMouse != null) {
             mouseX=posizioneMouse.x;
             mouseY=posizioneMouse.y;
-        }
-        else { try {
-                Thread.sleep(90);
-                this.repaint();
-                return;
-            } catch (InterruptedException e) { System.out.println("Errrore: "+e); }
+            this.renderizzaScena(g, mouseX, mouseY);
+            return;
         }
 
+        if (this.ridimensionata == true) {
+            this.renderizzaScena(g, mouseX, mouseY);
+            this.ridimensionata=false;
+            return;
+        }
+
+        try {
+            Thread.sleep(90);
+            this.repaint();
+        }
+        catch (InterruptedException e) { System.out.println("Errrore: "+e); }
+
+
+
+    }
+
+    private void renderizzaScena (Graphics g, int mouseX, int mouseY){
+        long millisecondi = cronometro.tempoPassato();
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
         this.getSize(dimensioni);
@@ -62,7 +79,7 @@ public class PannelloSpeciale extends JPanel {
 
         this.barra.disegna(g2);
         this.performance.disegna(g2);
-        
+
 
 
 
@@ -76,6 +93,42 @@ public class PannelloSpeciale extends JPanel {
         }
 
         this.repaint();
+
+    }
+
+}
+
+
+
+
+/**
+ * Classe che serve come sempice ascoltatore del Pannello speciale.
+ * @author matteo
+ */
+class AscoltatorePannello implements ComponentListener {
+    
+    private PannelloSpeciale pannello;
+
+    public AscoltatorePannello(PannelloSpeciale pannello) {
+        this.pannello=pannello;
+    }
+
+    public void componentResized(ComponentEvent e) {
+        //throw new UnsupportedOperationException("Not supported yet.");
+        //System.out.println("componentResized");
+        this.pannello.ridimensionata=true;
+    }
+
+    public void componentMoved(ComponentEvent e) {
+        //throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void componentShown(ComponentEvent e) {
+        //throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void componentHidden(ComponentEvent e) {
+        //throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }
