@@ -3,17 +3,16 @@
  * and open the template in the editor.
  */
 
-package risicammarajava;
+package PacchettoGrafico;
 
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.*;
-import PacchettoGrafico.*;
 
 /**
  *
- * @author stengun
+ * @author matteo
  */
 public class Main {
 
@@ -21,7 +20,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-    JFrame finestra = new JFrame("Culo");
+        JFrame finestra = new JFrame("Culo");
         Container contestoFinestra = finestra.getContentPane();
         PannelloSpeciale pannello = new PannelloSpeciale();
 
