@@ -15,19 +15,22 @@ import javax.swing.*;
  */
 public class PannelloSpeciale extends JPanel {
 
-    Dimension dimensioni;
-    Elemento_2DGraphics barra;
-    OrologioTimer cronometro;
-    MillisecondiDiEsecuzione performance;
+    private Dimension dimensioni;
+    private Elemento_2DGraphics barra;
+    private OrologioTimer cronometro;
+    private MillisecondiDiEsecuzione performance;
+    private int durataFrame;
 
 
-    public PannelloSpeciale() {
+    public PannelloSpeciale(int durataFrame) {
         super();
+
         dimensioni = new Dimension();
         this.cronometro = new OrologioTimer();
-        barra = new BarraSuperiore(dimensioni, 40);
+        barra = new BarraSuperiore(dimensioni, this, 60);
         this.performance = new MillisecondiDiEsecuzione(this.dimensioni, cronometro);
-        System.out.println("Dimensioni: "+dimensioni);
+        this.durataFrame = durataFrame;
+        //System.out.println("Dimensioni: "+dimensioni);
 
     }
 
@@ -47,7 +50,7 @@ public class PannelloSpeciale extends JPanel {
                 Thread.sleep(90);
                 this.repaint();
                 return;
-            } catch (InterruptedException e) { System.out.println(e); }
+            } catch (InterruptedException e) { System.out.println("Errrore: "+e); }
         }
 
         super.paintComponent(g);
@@ -57,38 +60,20 @@ public class PannelloSpeciale extends JPanel {
 
         g2.draw(new Line2D.Double(mouseX, mouseY, millisecondi%500, 70));
 
-
+        this.barra.disegna(g2);
+        this.performance.disegna(g2);
         
 
 
 
-        /*//
-         * Funzioni di prova per vedere come disegnare
-         * 
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        //g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-        //g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HBGR);
-        //g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        //g2.setFont(new Font("Arial", 1, 10));
-
-        g2.drawString("Hello", 10, 10);
-        g2.drawString("Alla Facciaccia di Narni", 10, 30);
-        
-        g2.draw(new Line2D.Double(5, 5, 50, 120));
-
-        g2.setBackground(Color.yellow);
-        g2.setPaint(new GradientPaint(0f,0f,Color.blue,0f,30f,Color.blue));
-        g2.fillRect(5, 5, 50, 50);
-
-        g2.setColor(Color.yellow);
-        g2.fill3DRect(dimensioni.width-200, dimensioni.height-100, 200, 100, true);
-
-        g2.setColor(Color.red);
-        g2.drawLine(0, 0, dimensioni.width, dimensioni.height);
-         */
-
-        barra.disegna(g2);
-        performance.disegna(g2);
+        long tempoSleep = this.durataFrame-cronometro.getEsecTime();
+        if (tempoSleep > 0) {
+            try {
+                Thread.sleep(tempoSleep);
+            } catch (InterruptedException ex) {
+                System.err.println("Errore: "+ex);
+            }
+        }
 
         this.repaint();
     }

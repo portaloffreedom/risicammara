@@ -14,7 +14,7 @@ public class OrologioTimer {
 
     private long firstTime;
     private long tempoPrima;
-    private long millisecondiDiEsecuzione;
+    private int millisecondiDiEsecuzione;
 
     public OrologioTimer (){
         //this.lastTime=Calendar.getInstance().getTimeInMillis();
@@ -24,7 +24,7 @@ public class OrologioTimer {
 
     public long tempoPassato (){
         long tempoDopo= System.currentTimeMillis();
-        this.millisecondiDiEsecuzione= tempoDopo - this.tempoPrima;
+        this.millisecondiDiEsecuzione= (int) (tempoDopo - this.tempoPrima);
         this.tempoPrima= tempoDopo;
         return tempoDopo-this.firstTime;
     }
