@@ -5,10 +5,15 @@
 
 package PacchettoGrafico;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
-import javax.swing.*;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.geom.Line2D;
+import javax.swing.JPanel;
+
 
 /**
  *
@@ -18,6 +23,7 @@ public class PannelloSpeciale extends JPanel {
 
     private Dimension dimensioni;
     private Elemento_2DGraphics barra;
+    private Elemento_2DGraphics menuGiocatore;
     private OrologioTimer cronometro;
     private MillisecondiDiEsecuzione performance;
     private int durataFrame;
@@ -30,10 +36,18 @@ public class PannelloSpeciale extends JPanel {
         this.addComponentListener(new AscoltatorePannello(this));
 
         dimensioni = new Dimension();
+
         this.cronometro = new OrologioTimer();
-        barra = new BarraSuperiore(dimensioni, this, 60);
         this.performance = new MillisecondiDiEsecuzione(this.dimensioni, cronometro);
         this.durataFrame = durataFrame;
+
+        BarraSuperiore barraSuperriore = new BarraSuperiore(dimensioni, this, 60);
+        MenuGiocatore menuGiocatore = new MenuGiocatore(dimensioni);
+        this.menuGiocatore = menuGiocatore;
+        this.barra = barraSuperriore;
+        barraSuperriore.addCarteActionListener(null);
+        barraSuperriore.addGiocatoreActionListener(menuGiocatore);
+
         //System.out.println("Dimensioni: "+dimensioni);
 
     }
@@ -49,15 +63,18 @@ public class PannelloSpeciale extends JPanel {
             mouseX=posizioneMouse.x;
             mouseY=posizioneMouse.y;
             this.renderizzaScena(g, mouseX, mouseY);
+            this.repaint();
             return;
         }
 
         if (this.ridimensionata == true) {
             this.renderizzaScena(g, mouseX, mouseY);
             this.ridimensionata=false;
+            this.repaint();
             return;
         }
 
+        
         try {
             Thread.sleep(90);
             this.repaint();
@@ -79,6 +96,7 @@ public class PannelloSpeciale extends JPanel {
 
         this.barra.disegna(g2);
         this.performance.disegna(g2);
+        this.menuGiocatore.disegna(g2);
 
 
 
@@ -91,8 +109,6 @@ public class PannelloSpeciale extends JPanel {
                 System.err.println("Errore: "+ex);
             }
         }
-
-        this.repaint();
 
     }
 

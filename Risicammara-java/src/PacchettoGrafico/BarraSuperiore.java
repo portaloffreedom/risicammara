@@ -7,6 +7,7 @@ package PacchettoGrafico;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 
@@ -41,5 +42,12 @@ public class BarraSuperiore extends Elemento_2DGraphics {
         this.carteButton.setBounds((dimensioni.width-5-100), 5, 100, 50);
     }
 
+    public void addGiocatoreActionListener (ActionListener ascoltatore){
+        this.giocatoreButton.addActionListener(ascoltatore);
+    }
+
+    public void addCarteActionListener (ActionListener ascoltatore){
+        this.carteButton.addActionListener(ascoltatore);
+    }
 
 }
