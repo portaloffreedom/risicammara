@@ -21,22 +21,37 @@ public class MenuGiocatore extends Elemento_2DGraphics implements ActionListener
     private int numeroArmate;
     private String obbiettivo;
 
+    private int larghezza;
+    private int altezza;
+    private int bordo;
+    private int distanzaSuperiore;
     private boolean visibile;
+
 
     public MenuGiocatore(Dimension dimensioni) {
         super(dimensioni);
         this.visibile=false;
 
+        this.larghezza = 120;
+        this.altezza = 70;
+        this.bordo = 5;
+        this.distanzaSuperiore = 55;
+
+        //Parte provvisoria
         this.numeroTerritori = 13;
         this.numeroArmate = 42;
-
+        this.obbiettivo = "Succhiatemeloooo!";
     }
 
     @Override
     public void disegna(Graphics2D graphics2D) {
         if (visibile) {
+
+            //parte provvisoria
             graphics2D.setColor(Color.red);
-            graphics2D.fill3DRect(5, 55, 100, 70, true);
+            graphics2D.fill3DRect(this.bordo, this.distanzaSuperiore, this.larghezza, this.altezza, true);
+            graphics2D.setColor(Color.black);
+            graphics2D.drawString(this.obbiettivo, this.bordo+5, this.distanzaSuperiore+15);
         }
     }
 
