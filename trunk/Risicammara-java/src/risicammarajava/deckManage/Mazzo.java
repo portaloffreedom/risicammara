@@ -1,6 +1,6 @@
-package risicammarajava;
+package risicammarajava.deckManage;
+import risicammarajava.territori_t;
 import java.util.Random;
-
 /**
  * Classe che rappresenta un oggetto di tipo Mazzo (contenitore di carte) e le
  * azioni che è possibile effettuare su di esso (Pescare una carta o mischiare
@@ -34,7 +34,7 @@ public class Mazzo {
             deck[i] = new Carta(t);
             i++;
         }
-        Mischia();
+        this.Mischia();
     }
     
 /**
@@ -48,7 +48,7 @@ public class Mazzo {
             if(scarti == null) return null;
             ScambiaMazzi();
         }
-        Carta temp = deck[inizio_mazzo--];
+        Carta temp = deck[--inizio_mazzo];
         return temp;
     }
 /**
@@ -58,7 +58,7 @@ public class Mazzo {
         Random random = new Random();
         for(int i=0;i<inizio_mazzo;i++){
             Carta temp;
-            int r = random.nextInt()%inizio_mazzo;
+            int r = random.nextInt(inizio_mazzo);
             temp = deck[i];
             deck[i] = deck[r];
             deck[r] = temp;
