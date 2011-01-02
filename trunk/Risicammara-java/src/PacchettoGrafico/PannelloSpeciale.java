@@ -9,17 +9,19 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.geom.Line2D;
 import javax.swing.JPanel;
+import risicammarajava.turnManage.ListaPlayers;
 
 
 /**
  *
  * @author matteo
  */
-public class PannelloSpeciale extends JPanel {
+public class PannelloSpeciale extends JPanel{
 
     private Dimension dimensioni;
     private Elemento_2DGraphics barra;
@@ -29,12 +31,10 @@ public class PannelloSpeciale extends JPanel {
     private int durataFrame;
     boolean ridimensionata;
 
-
-    public PannelloSpeciale(int durataFrame) {
+    public PannelloSpeciale(int durataFrame,ListaPlayers listagiocatori,int turno) {
         super();
 
         this.addComponentListener(new AscoltatorePannello(this));
-
         dimensioni = new Dimension();
 
         this.cronometro = new OrologioTimer();
@@ -42,11 +42,12 @@ public class PannelloSpeciale extends JPanel {
         this.durataFrame = durataFrame;
 
         BarraSuperiore barraSuperriore = new BarraSuperiore(dimensioni, this, 60);
-        MenuGiocatore menuGiocatore = new MenuGiocatore(dimensioni);
-        this.menuGiocatore = menuGiocatore;
+        MenuGiocatore menuGiocator = new MenuGiocatore(dimensioni,listagiocatori,turno);
+        this.menuGiocatore = menuGiocator;
         this.barra = barraSuperriore;
         barraSuperriore.addCarteActionListener(null);
-        barraSuperriore.addGiocatoreActionListener(menuGiocatore);
+        barraSuperriore.addGiocatoreActionListener(menuGiocator);
+        barraSuperriore.addProssimoMouseListener(menuGiocator);
 
         //System.out.println("Dimensioni: "+dimensioni);
 
@@ -111,6 +112,7 @@ public class PannelloSpeciale extends JPanel {
         }
 
     }
+
 
 }
 

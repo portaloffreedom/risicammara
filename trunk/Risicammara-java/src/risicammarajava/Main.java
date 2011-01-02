@@ -11,6 +11,8 @@ import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.JFrame;
+import risicammarajava.playerManage.Giocatore;
+import risicammarajava.turnManage.ListaPlayers;
 
 
 /**
@@ -31,11 +33,28 @@ public class Main implements WindowListener {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
-        JFrame finestra = new JFrame("Culo");
+        ListaPlayers listagiocatori = new ListaPlayers();
+        Giocatore gioc = new Giocatore("Roberto", Colore_t.BLU);
+        gioc.setObj(Obbiettivi_t.ASIASUDAMERICA);
+        gioc.incCarte();
+        gioc.incCarte();
+        gioc.incCarte();
+        gioc.incTerritori();
+        listagiocatori.addPlayer(gioc);
+        gioc = new Giocatore("matteo",Colore_t.NERO);
+        gioc.setObj(Obbiettivi_t.BLU);
+        gioc.incCarte();
+        gioc.incCarte();
+        gioc.incTerritori();
+        gioc.incTerritori();
+        gioc.incTerritori();
+        listagiocatori.addPlayer(gioc);
+        int turno=0;
+        
+        JFrame finestra = new JFrame("Risicammara");
         finestra.setMinimumSize(new Dimension(800, 400));
         Container contestoFinestra = finestra.getContentPane();
-        PannelloSpeciale pannello = new PannelloSpeciale(0);
+        PannelloSpeciale pannello = new PannelloSpeciale(0,listagiocatori,turno);
 
         finestra.setBounds(500, 400, 200, 180);
         contestoFinestra.add(pannello);
