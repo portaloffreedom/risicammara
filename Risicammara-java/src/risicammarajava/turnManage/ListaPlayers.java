@@ -25,6 +25,16 @@ public class ListaPlayers {
         }
         listaplayers.add(new Giocatore(nome,colore_armate));
     }
+
+        public void addPlayer(Giocatore player){
+        for(int i = 0;i<listaplayers.size();i++){
+            if(listaplayers.get(i).getArmyColour() == player.getArmyColour()){
+                return;
+            }
+        }
+        listaplayers.add(player);
+    }
+
     public void setArmate(int num_player,int num_armate){
         listaplayers.get(num_player).setArmatedisponibili(num_armate);
     }

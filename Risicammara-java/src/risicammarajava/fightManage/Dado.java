@@ -8,7 +8,7 @@ import java.util.Random;
 
 /**
  * Classe che implementa l'oggetto "dado" che può essere lanciato per ottenere
- * un numero.
+ * un numero compreso fra 1 e il numero delle facce del dado.
  * @author stengun
  */
 public class Dado {
