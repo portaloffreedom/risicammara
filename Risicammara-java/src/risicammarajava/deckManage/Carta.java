@@ -1,4 +1,7 @@
-package risicammarajava;
+package risicammarajava.deckManage;
+
+import risicammarajava.territori_t;
+import risicammarajava.Bonus_t;
 
 /**
  * Classe che rappresenta la carta del mazzo.
