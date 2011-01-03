@@ -46,7 +46,7 @@ public class MenuGiocatore extends Elemento_2DGraphics implements ActionListener
         //Parte provvisoria
         this.numeroTerritori = this.listagiocatori.get(MenuGiocatore.turno).getNumTerritori();
         this.numeroArmate = this.listagiocatori.get(MenuGiocatore.turno).getArmateperturno();
-        this.obbiettivo = this.listagiocatori.get(MenuGiocatore.turno).getObbiettivo_String();
+        this.obbiettivo = this.listagiocatori.get(MenuGiocatore.turno).getObbiettivo().toString();
         this.nomegiocatore = this.listagiocatori.get(MenuGiocatore.turno).getNome();
     }
 
@@ -58,7 +58,7 @@ public class MenuGiocatore extends Elemento_2DGraphics implements ActionListener
             graphics2D.setColor(Color.red);
             graphics2D.fill3DRect(this.bordo, this.distanzaSuperiore, this.larghezza, this.altezza, true);
             graphics2D.setColor(Color.black);
-            graphics2D.drawString(this.listagiocatori.get(turno).getObbiettivo_String(), this.bordo+5, this.distanzaSuperiore+15);
+            graphics2D.drawString(this.listagiocatori.get(turno).getObbiettivo().toString(), this.bordo+5, this.distanzaSuperiore+15);
         }
     }
 

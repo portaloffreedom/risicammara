@@ -81,13 +81,6 @@ public class Giocatore {
         return obbiettivo;
     }
     /**
-     * Restituisce l'obbiettivo del giocatore sottoforma di Stringa
-     * @return la stringa che descrive l'obbiettivo
-     */
-    public String getObbiettivo_String(){
-        return obbiettivo.getTesto();
-    }
-    /**
      * Lista dei territori posseduti dal giocatore
      */
     private List<territori_t> listaterr;
