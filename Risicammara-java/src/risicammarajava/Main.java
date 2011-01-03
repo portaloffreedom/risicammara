@@ -33,6 +33,8 @@ public class Main implements WindowListener {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+
+
         ListaPlayers listagiocatori = new ListaPlayers();
         Giocatore gioc = new Giocatore("Roberto", Colore_t.BLU);
         gioc.setObj(Obbiettivi_t.ASIASUDAMERICA);
@@ -56,12 +58,17 @@ public class Main implements WindowListener {
         Container contestoFinestra = finestra.getContentPane();
         PannelloSpeciale pannello = new PannelloSpeciale(0,listagiocatori,turno);
 
-        finestra.setBounds(500, 400, 200, 180);
+        finestra.setBounds(200, 180, 200, 180);
         contestoFinestra.add(pannello);
 
 
         finestra.addWindowListener(new Main(pannello));
         finestra.setVisible(true);
+
+        if (args[0].equals("--debug")) {
+            System.out.println("Poteri della SuperMucca attivati ;)");
+            PoteriDellaSuperMucca dio = new PoteriDellaSuperMucca();
+        }
     }
 
     public void windowOpened(WindowEvent e) {
