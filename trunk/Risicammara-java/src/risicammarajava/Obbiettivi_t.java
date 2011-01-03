@@ -35,7 +35,9 @@ public enum Obbiettivi_t {
     Obbiettivi_t(String testo){
         this.testo_obbiettivo = testo;
     }
-    public String getTesto(){
+
+    @Override
+    public String toString(){
         return testo_obbiettivo;
     }
 }
