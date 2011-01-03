@@ -8,7 +8,6 @@ package PacchettoGrafico;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 
