@@ -13,7 +13,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.geom.Line2D;
 import javax.swing.JPanel;
-import risicammarajava.turnManage.ListaPlayers;
+import risicammarajava.playerManage.ListaPlayers;
 
 
 /**

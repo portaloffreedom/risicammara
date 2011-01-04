@@ -12,7 +12,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.JFrame;
 import risicammarajava.playerManage.Giocatore;
-import risicammarajava.turnManage.ListaPlayers;
+import risicammarajava.playerManage.ListaPlayers;
 
 
 /**
@@ -38,18 +38,9 @@ public class Main implements WindowListener {
         ListaPlayers listagiocatori = new ListaPlayers();
         Giocatore gioc = new Giocatore("Roberto", Colore_t.BLU);
         gioc.setObj(Obbiettivi_t.ASIASUDAMERICA);
-        gioc.incCarte();
-        gioc.incCarte();
-        gioc.incCarte();
-        gioc.incTerritori();
         listagiocatori.addPlayer(gioc);
         gioc = new Giocatore("matteo",Colore_t.NERO);
         gioc.setObj(Obbiettivi_t.BLU);
-        gioc.incCarte();
-        gioc.incCarte();
-        gioc.incTerritori();
-        gioc.incTerritori();
-        gioc.incTerritori();
         listagiocatori.addPlayer(gioc);
         int turno=0;
         

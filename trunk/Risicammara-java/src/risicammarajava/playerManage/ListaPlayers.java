@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package risicammarajava.turnManage;
+package risicammarajava.playerManage;
 import java.util.ArrayList;
 import java.util.List;
 import risicammarajava.Colore_t;
