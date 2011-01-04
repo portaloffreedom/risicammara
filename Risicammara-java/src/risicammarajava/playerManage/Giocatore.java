@@ -3,6 +3,7 @@ package risicammarajava.playerManage;
 import java.util.ArrayList;
 import java.util.List;
 import risicammarajava.*;
+import risicammarajava.deckManage.Carta;
 
 /**
  * Oggetto di tipo giocatore che include il nome, il colore delle armate e
@@ -13,8 +14,7 @@ public class Giocatore {
     private String nome;
     private int armate_bonus;
     private Colore_t colore_armate;
-    private int numero_territori;
-    private int carte;
+    private ArrayList<Carta> carte;
     private Obbiettivi_t obbiettivo;
 /**
  * Il costruttore dell'oggetto giocatore. Non viene inizializzato il campo per
@@ -27,7 +27,7 @@ public class Giocatore {
         this.nome = nome;
         this.colore_armate = colore_armate;
         this.armate_bonus = 0;
-        this.carte = 0;
+        this.carte = new ArrayList<Carta>();
         this.listaterr = new ArrayList<territori_t>();
         this.obbiettivo = null;
     }
@@ -71,7 +71,7 @@ public class Giocatore {
      * @return Numero di carte del giocatore
      */
     public int numCarte(){
-        return carte;
+        return carte.size();
     }
     /**
      * Restituisce l'oggetto Obbiettivo del giocatore
@@ -92,33 +92,11 @@ public class Giocatore {
     public void addTerr(territori_t territorio){
         listaterr.add(territorio);
     }
-    /**
-     * Incrementa il numero di carte possedute dal giocatore
-     */
-    public void incCarte(){
-        carte +=1;
-    }
-    /**
-     * Decrementa il numero di carte possedute dal giocatore
-     */
-    private void decCarte(){
-        if(carte<1) return;
-        carte -=1;
-    }
-    /**
-     * Incrementa il numero di territori poseduti dal giocatore
-     */
-    public void incTerritori(){
-        numero_territori += 1;
-    }
-    /**
-     * Decrementa il numero di territori posseduti dal giocatore
-     */
-    public void decTerritori(){
-        if(numero_territori < 1) return;
-        numero_territori -=1;
-    }
     public void setObj(Obbiettivi_t obj){
         this.obbiettivo = obj;
+    }
+
+    public void addCard(Carta card){
+        carte.add(card);
     }
 }

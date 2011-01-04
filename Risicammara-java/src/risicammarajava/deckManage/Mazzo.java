@@ -20,11 +20,11 @@ public class Mazzo {
  * e l'array che rappresenta il contenitore delle carte.
  * @param numcarte Numero delle carte che dovrà avere il mazzo
  */
-    public Mazzo(int numcarte){
-        inizio_mazzo = numcarte;
+    public Mazzo(){
+        inizio_mazzo = territori_t.values().length;
         inizio_scarti = 0;
         scarti = null;
-        deck = new Carta[numcarte];
+        deck = new Carta[territori_t.values().length];
         int i = 0;
         /*
          * Vengono inserite tante carte quante sono le costanti dell'enumerato
@@ -96,5 +96,11 @@ public class Mazzo {
         if(inizio_mazzo == 0)
             return true;
         else return false;
+    }
+
+    public territori_t getCard(int index){
+        if(index >0) index = index-1;
+        if(index > deck.length) return null;
+        return deck[index].getTerritorio();
     }
 }

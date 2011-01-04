@@ -14,7 +14,6 @@ import risicammarajava.territori_t;
  */
 public class Plancia {
     private Territorio_plancia[] tabellone;
-
     public Plancia(){
         tabellone = new Territorio_plancia[42];
         int i = 0;
@@ -23,6 +22,14 @@ public class Plancia {
             i++;
             if((t == territori_t.Jolly1)|(t == territori_t.Jolly2)|(i==42)) break;
         }
+    }
+
+    public Territorio_plancia getTerritorio(territori_t territorio){
+        territori_t[] terr = territori_t.values();
+        for(int i=0;i<terr.length;i++){
+            if(terr[i] == territorio) return tabellone[i];
+        }
+        return null;
     }
 
 }
