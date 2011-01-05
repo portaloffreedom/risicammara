@@ -7,13 +7,14 @@ package risicammarajava.boardManage;
 import risicammarajava.Continente_t;
 import risicammarajava.playerManage.Giocatore;
 import risicammarajava.territori_t;
-import risicammarajava.turnManage.TerritorialArmy;
 
 /**
- *
+ * Classe che rappresenta un territorio della plancia di gioco e tutte
+ * le operazioni che è possibile fare su di esso.
  * @author stengun
  */
-public class Territorio_plancia implements TerritorialArmy {
+public class Territorio_plancia {
+
     private territori_t territorio;
     private int armate_presenti;
     private Giocatore proprietario;

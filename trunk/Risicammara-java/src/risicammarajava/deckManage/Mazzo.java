@@ -1,6 +1,4 @@
 package risicammarajava.deckManage;
-import risicammarajava.territori_t;
-import java.util.Random;
 /**
  * Classe che rappresenta un oggetto di tipo Mazzo (contenitore di carte) e le
  * azioni che è possibile effettuare su di esso (Pescare una carta o mischiare
