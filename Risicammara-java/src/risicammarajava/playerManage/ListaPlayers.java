@@ -13,36 +13,32 @@ import risicammarajava.playerManage.Giocatore;
  * @author stengun
  */
 public class ListaPlayers {
-    private List <Giocatore> listaplayers;
+    private List <Giocatore> listaPlayers;
     public ListaPlayers(){
-        listaplayers = new ArrayList<Giocatore>();
+        listaPlayers = new ArrayList<Giocatore>();
     }
     public void addPlayer(String nome,Colore_t colore_armate){
-        for(int i = 0;i<listaplayers.size();i++){
-            if(listaplayers.get(i).getArmyColour() == colore_armate){
-                return; 
-            }
-        }
-        listaplayers.add(new Giocatore(nome,colore_armate));
+        this.addPlayer(new Giocatore(nome, colore_armate));
     }
 
         public void addPlayer(Giocatore player){
-        for(int i = 0;i<listaplayers.size();i++){
-            if(listaplayers.get(i).getArmyColour() == player.getArmyColour()){
+        for(int i = 0;i<listaPlayers.size();i++){
+            if(listaPlayers.get(i).getArmyColour() == player.getArmyColour()){
+                System.err.println("Errore: Giocatore non inserito. Colore già preso da un'altro giocatore");
                 return;
             }
         }
-        listaplayers.add(player);
+        listaPlayers.add(player);
     }
 
     public void setArmate(int num_player,int num_armate){
-        listaplayers.get(num_player).setArmatedisponibili(num_armate);
+        listaPlayers.get(num_player).setArmatedisponibili(num_armate);
     }
 
     public int getSize(){
-        return listaplayers.size();
+        return listaPlayers.size();
     }
     public Giocatore get(int index){
-        return listaplayers.get(index);
+        return listaPlayers.get(index);
     }
 }

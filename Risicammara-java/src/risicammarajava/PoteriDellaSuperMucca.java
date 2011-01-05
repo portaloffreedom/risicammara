@@ -14,6 +14,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import risicammarajava.turnManage.Partita;
 
 /**
  *
@@ -21,8 +22,11 @@ import javax.swing.JTextField;
  */
 public class PoteriDellaSuperMucca extends JFrame {
 
-    public PoteriDellaSuperMucca() {
+    private Partita partita;
+
+    public PoteriDellaSuperMucca(Partita partita) {
         super("Poteri della SuperMucca");
+        this.partita=partita;
 
         //**********************************************************************
         //impostazioni della finestra
