@@ -147,4 +147,8 @@ public class Partita {
         //TODO Completare la verifica vittoria per i continenti
         return false;
     };
+
+    public ListaPlayers getListaGiocatori() {
+        return this.listagiocatori;
+    }
 }

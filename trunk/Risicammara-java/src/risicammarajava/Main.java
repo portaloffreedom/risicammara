@@ -11,7 +11,6 @@ import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.JFrame;
-import risicammarajava.playerManage.Giocatore;
 import risicammarajava.playerManage.ListaPlayers;
 import risicammarajava.turnManage.Partita;
 
