@@ -7,7 +7,6 @@ package risicammarajava.turnManage;
 
 import risicammarajava.Obbiettivi_t;
 import risicammarajava.boardManage.Plancia;
-import risicammarajava.deckManage.Mazzo;
 import risicammarajava.deckManage.MazzoObbiettivi;
 import risicammarajava.deckManage.MazzoTerritori;
 import risicammarajava.playerManage.Giocatore;
@@ -22,22 +21,29 @@ import risicammarajava.territori_t;
  * prepara il mazzo per giocare.
  * @author Sten_Gun
  */
-public class NuovoGioco {
+public class Partita {
+    private Plancia planciadigioco;
+    private ListaPlayers listagiocatori;
+    private MazzoTerritori mazzo;
+    private int giocturno;
+    private Fasi_t[] fasi;
+    private int fase_attuale;
 
     /**
-     * Costruttore NuovoGioco che inizializza tutti gli oggetti in modo da prepararli
+     * Costruttore ::Partita che inizializza tutti gli oggetti in modo da prepararli
      * all'utilizzo da parte di altri oggetti dentro il programma principale.
      * I parametri che vengono passati possono anche non essere inizializzati.
      * @param planciadigioco L'oggetto che rappresenta la plancia di gioco
      * @param listagiocatori L'oggetto che rappresenta la lista dei giocatori
      * @param mazzo L'oggetto che rappresenta il mazzo
      */
-    NuovoGioco(Plancia planciadigioco,ListaPlayers listagiocatori,MazzoTerritori mazzo){
-        planciadigioco = new Plancia();
-        mazzo = new MazzoTerritori();
+    Partita(){
+        this.planciadigioco = new Plancia();
+        this.mazzo = new MazzoTerritori();
         territori_t car = mazzo.getCard(1);
         int mult = 1;
         int numgioc = listagiocatori.getSize();
+        //Distribuzione territori e armate
         for(int i=numgioc-1;i>=0;i--){
             Giocatore giocatorediturno = listagiocatori.get(i);
             while(car!=null){
@@ -53,8 +59,46 @@ public class NuovoGioco {
                      car = mazzo.getCard(i+mult);
                  }
              }
+             giocatorediturno.setArmatedisponibili(NumeroArmate(numgioc)-giocatorediturno.getNumTerritori());
         }
+        //Distribuzione obbiettivi
         MazzoObbiettivi mazzoobj = new MazzoObbiettivi();
         for(int i = 0; i<numgioc;i++) listagiocatori.get(i).setObj((Obbiettivi_t)mazzoobj.Pesca());
+        giocturno = 0;
+
+        this.fasi = Fasi_t.values();
+        this.fase_attuale = 0;
     }
+
+    public Plancia getPlancia(){
+        return planciadigioco;
+    };
+    public Giocatore getGiocatoreDiTurno(){
+        return listagiocatori.get(giocturno);
+    };
+    public void ProssimoGiocatore(){
+        if(giocturno == listagiocatori.getSize()) giocturno = 0;
+        else giocturno++;
+        return;
+    };
+    public void ProssimaFase(){
+        if(fase_attuale < fasi.length) fase_attuale++;
+        else fase_attuale = 0;
+        return;
+    };
+    //private boolean theresVictory();
+    private int NumeroArmate(int numerogiocatori){
+        switch(numerogiocatori){
+            case 6:
+                return 20;
+            case 5:
+                return 25;
+            case 4:
+                return 30;
+            case 3:
+                return 35;
+            default:
+                return 0;
+        }
+    };
 }

@@ -3,7 +3,7 @@ package risicammarajava.playerManage;
 import java.util.ArrayList;
 import java.util.List;
 import risicammarajava.*;
-import risicammarajava.deckManage.Card;
+import risicammarajava.deckManage.Carta;
 
 /**
  * Oggetto di tipo giocatore che include il nome, il colore delle armate e
@@ -14,7 +14,7 @@ public class Giocatore {
     private String nome;
     private int armate_bonus;
     private Colore_t colore_armate;
-    private ArrayList<Card> carte;
+    private ArrayList<Carta> carte;
     private Obbiettivi_t obbiettivo;
 /**
  * Il costruttore dell'oggetto giocatore. Non viene inizializzato il campo per
@@ -27,7 +27,7 @@ public class Giocatore {
         this.nome = nome;
         this.colore_armate = colore_armate;
         this.armate_bonus = 0;
-        this.carte = new ArrayList<Card>();
+        this.carte = new ArrayList<Carta>();
         this.listaterr = new ArrayList<territori_t>();
         this.obbiettivo = null;
     }
@@ -104,7 +104,7 @@ public class Giocatore {
      * Aggiunge una carta al mazzo del gicoatore
      * @param card La carta da aggiungere
      */
-    public void addCard(Card card){
+    public void addCard(Carta card){
         carte.add(card);
     }
 }
