@@ -7,7 +7,6 @@ package risicammarajava.turnManage;
 
 import risicammarajava.Obbiettivi_t;
 import risicammarajava.boardManage.Plancia;
-import risicammarajava.boardManage.Territorio_plancia;
 import risicammarajava.deckManage.MazzoObbiettivi;
 import risicammarajava.deckManage.MazzoTerritori;
 import risicammarajava.playerManage.Giocatore;
@@ -48,9 +47,8 @@ public class Partita {
             while(car!=null){
                  if(!((car == territori_t.Jolly1)|(car == territori_t.Jolly2))){
                      mult+=numgioc;
-                     Territorio_plancia terpla = planciadigioco.getTerritorio(car);
-                     giocatorediturno.addTerr(terpla);
-                     terpla.setProprietario(giocatorediturno);
+                     giocatorediturno.addTerr(car);
+                     planciadigioco.getTerritorio(car).setProprietario(giocatorediturno);
                      car = mazzo.getCard(i+mult);
                  }
                  else{
@@ -127,17 +125,14 @@ public class Partita {
      */
     private boolean Verifica_territoriale(Giocatore gioc){
         int numterritori = 24;
-        switch(gioc.getObbiettivo()){
-            case DICIOTTODUE:
+        if(gioc.getObbiettivo() == Obbiettivi_t.DICIOTTODUE){
                 numterritori = 18;
                 if(gioc.getNumTerritori() >= numterritori){
-                    for(Territorio_plancia t : gioc.getListaterr()){
-                        if(t.getArmate() < 2) return false;
+                    for(territori_t t : gioc.getListaterr()){
+                        if(planciadigioco.getTerritorio(t).getArmate() < 2) return false;
                     }
                     return true;
                 }
-            default:
-                break;
         }
         if(gioc.getNumTerritori() >= numterritori) return true;
         return false;
