@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import risicammarajava.*;
 import risicammarajava.deckManage.Carta;
+import risicammarajava.turnManage.TerritorialArmy;
 
 /**
  * Oggetto di tipo giocatore che include il nome, il colore delle armate e
@@ -28,7 +29,7 @@ public class Giocatore {
         this.colore_armate = colore_armate;
         this.armate_bonus = 0;
         this.carte = new ArrayList<Carta>();
-        this.listaterr = new ArrayList<territori_t>();
+        this.listaterr = new ArrayList<TerritorialArmy>();
         this.obbiettivo = null;
     }
     /**
@@ -83,13 +84,17 @@ public class Giocatore {
     /**
      * Lista dei territori posseduti dal giocatore
      */
-    private List<territori_t> listaterr;
+    private List<TerritorialArmy> listaterr;
+
+    public List<TerritorialArmy> getListaterr(){
+        return listaterr;
+    }
 
     /**
      * Aggiunge un territorio alla lista di quelli posseduti dal giocatore
      * @param territorio Il territorio da aggiungere
      */
-    public void addTerr(territori_t territorio){
+    public void addTerr(TerritorialArmy territorio){
         listaterr.add(territorio);
     }
 
