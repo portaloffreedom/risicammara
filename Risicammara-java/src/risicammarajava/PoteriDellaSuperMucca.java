@@ -33,6 +33,7 @@ public class PoteriDellaSuperMucca extends JFrame {
         this.setVisible(true);
         this.setSize(200, 200);
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        this.setAlwaysOnTop(true);
 
         //**********************************************************************
         //impostazione del pannello
@@ -45,6 +46,10 @@ public class PoteriDellaSuperMucca extends JFrame {
         
         // ComboBox per la selezione del Giocatore
         JComboBox selezioneGiocatore = new JComboBox();
+        //selezioneGiocatore.addItem("Porcone")
+        for (int i=0; i<partita.getListaGiocatori().getSize(); i++){
+            selezioneGiocatore.addItem(partita.getListaGiocatori().get(i));
+        }
         pannello.add(selezioneGiocatore);
 
         // Label con scritto "Numero Armate"

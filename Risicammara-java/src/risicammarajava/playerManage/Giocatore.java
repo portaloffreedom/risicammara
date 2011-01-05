@@ -12,11 +12,13 @@ import risicammarajava.deckManage.Carta;
  * @author stengun
  */
 public class Giocatore {
+
     private String nome;
     private int armate_bonus;
     private Colore_t colore_armate;
     private ArrayList<Carta> carte;
     private Obbiettivi_t obbiettivo;
+
 /**
  * Il costruttore dell'oggetto giocatore. Non viene inizializzato il campo per
  * le armate che il giocatore mette ad ogni turno, poiché si effettua tramite
@@ -32,6 +34,7 @@ public class Giocatore {
         this.listaterr = new ArrayList<Territorio_plancia>();
         this.obbiettivo = null;
     }
+
     /**
      * Serve per leggere il nome del giocatore
      * @return Nome del giocatore (String)
@@ -39,6 +42,7 @@ public class Giocatore {
     public String getNome(){
         return nome;
     }
+
     /**
      * Serve per leggere il colore delle armate del giocatore
      * @return Colore delle armate (::Colore_t)
@@ -46,6 +50,7 @@ public class Giocatore {
     public Colore_t getArmyColour(){
         return colore_armate;
     }
+
     /**
      * Leggere le armate bonus senza toccarle
      * @return il numero di armate che il giocatore può inserire (int)
@@ -53,13 +58,15 @@ public class Giocatore {
     public int getArmateperturno(){
         return armate_bonus;
     }
-/**
- * Modifica il numero di armate disponibili per quel giocatore
- * @param armate Numero di armate disponibili per il giocatore
- */
+
+    /**
+     * Modifica il numero di armate disponibili per quel giocatore
+     * @param armate Numero di armate disponibili per il giocatore
+     */
     public void setArmatedisponibili(int armate){
         this.armate_bonus = armate;
     }
+
     /**
      * Restituisce il numero di territori posseduti dal giocatore
      * @return  Numero dei territori del giocatore
@@ -67,6 +74,7 @@ public class Giocatore {
     public int getNumTerritori(){
         return listaterr.size();
     }
+
     /**
      * Ritorna il numero di carte possedute dal giocatore
      * @return Numero di carte del giocatore
@@ -74,6 +82,7 @@ public class Giocatore {
     public int numCarte(){
         return carte.size();
     }
+
     /**
      * Restituisce l'oggetto Obbiettivo del giocatore
      * @return oggetto "obbiettivo" del giocatore
@@ -81,6 +90,7 @@ public class Giocatore {
     public Obbiettivi_t getObbiettivo(){
         return obbiettivo;
     }
+
     /**
      * Lista dei territori posseduti dal giocatore
      */
@@ -105,11 +115,17 @@ public class Giocatore {
     public void setObj(Obbiettivi_t obj){
         this.obbiettivo = obj;
     }
+
     /**
      * Aggiunge una carta al mazzo del gicoatore
      * @param card La carta da aggiungere
      */
     public void addCard(Carta card){
         carte.add(card);
+    }
+
+    @Override
+    public String toString(){
+        return this.nome;
     }
 }
