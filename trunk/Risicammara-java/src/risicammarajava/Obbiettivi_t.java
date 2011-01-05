@@ -5,11 +5,13 @@
 
 package risicammarajava;
 
+import risicammarajava.deckManage.Carta;
+
 /**
  *
  * @author stengun
  */
-public enum Obbiettivi_t {
+public enum Obbiettivi_t implements Carta {
     NORDAMERICAOCEANIA      ("Conquistare la totalità del Nord America e Dell'Oceania"),
     ASIAAFRICA              ("Conquistare la totalità dell'Asia e dell'Africa"),
     ASIASUDAMERICA          ("Conquistare la totalità dell'Asia e del Sud America"),
@@ -40,4 +42,9 @@ public enum Obbiettivi_t {
     public String toString(){
         return testo_obbiettivo;
     }
+
+    public String tipoCarta() {
+        return this.testo_obbiettivo;
+    }
+
 }
