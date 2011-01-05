@@ -78,8 +78,8 @@ public final class MazzoTerritori extends Mazzo {
     }
 
     public territori_t getCard(int index){
-        if(index >0) index = index-1;
-        if(index > deck.length) return null;
+        if((index > deck.length) | (index < 1)) return null;
+        index -=1;
         return (territori_t)deck[index];
     }
 

@@ -5,7 +5,6 @@
 
 package risicammarajava.turnManage;
 
-import java.util.List;
 import risicammarajava.Obbiettivi_t;
 import risicammarajava.boardManage.Plancia;
 import risicammarajava.boardManage.Territorio_plancia;
@@ -33,12 +32,8 @@ public class Partita {
     private int fase_attuale;
 
     /**
-     * Costruttore ::Partita che inizializza tutti gli oggetti in modo da prepararli
-     * all'utilizzo da parte di altri oggetti dentro il programma principale.
-     * I parametri che vengono passati possono anche non essere inizializzati.
-     * @param planciadigioco L'oggetto che rappresenta la plancia di gioco
+     * Costruttore ::Partita che inizializza tutti gli oggetti
      * @param listagiocatori L'oggetto che rappresenta la lista dei giocatori
-     * @param mazzo L'oggetto che rappresenta il mazzo
      */
     public Partita(ListaPlayers listagiocatori){
         this.listagiocatori = listagiocatori;
@@ -96,10 +91,10 @@ public class Partita {
             Giocatore giocat = listagiocatori.get(i);
             Obbiettivi_t obj = giocat.getObbiettivo();
             if(getVictoryType(obj) == tipovittoria_t.TERRITORIALE){
-                if(Verifica_territoriale(giocat,obj)) return giocat;
+                if(Verifica_territoriale(giocat)) return giocat;
             }
             if(getVictoryType(obj) == tipovittoria_t.CONTINENTALE){
-                if(Verifica_continentale(giocat,obj)) return giocat;
+                if(Verifica_continentale(giocat)) return giocat;
             }
         }
         return null;
@@ -124,13 +119,19 @@ public class Partita {
         return obj.VictoryType();
     }
 
-    private boolean Verifica_territoriale(Giocatore gioc,Obbiettivi_t obj){
+    /**
+     * Funzione che verifica se c'è stata una vittoria territoriale da parte del
+     * giocatore passato come parametro.
+     * @param gioc Il giocatore con la vittoria da verificare
+     * @return Il riferimento al giocatore se ha vinto, null altrimenti.
+     */
+    private boolean Verifica_territoriale(Giocatore gioc){
         int numterritori = 24;
-        switch(obj){
+        switch(gioc.getObbiettivo()){
             case DICIOTTODUE:
                 numterritori = 18;
                 if(gioc.getNumTerritori() >= numterritori){
-                    for(TerritorialArmy t : gioc.getListaterr()){
+                    for(Territorio_plancia t : gioc.getListaterr()){
                         if(t.getArmate() < 2) return false;
                     }
                     return true;
@@ -142,7 +143,7 @@ public class Partita {
         return false;
     };
 
-    private boolean Verifica_continentale(Giocatore gioc,Obbiettivi_t obj){
+    private boolean Verifica_continentale(Giocatore gioc){
         //TODO Completare la verifica vittoria per i continenti
         return false;
     };
