@@ -13,6 +13,7 @@ import java.awt.event.WindowListener;
 import javax.swing.JFrame;
 import risicammarajava.playerManage.Giocatore;
 import risicammarajava.playerManage.ListaPlayers;
+import risicammarajava.turnManage.Partita;
 
 
 /**
@@ -20,46 +21,55 @@ import risicammarajava.playerManage.ListaPlayers;
  * @author stengun
  */
 public class Main implements WindowListener {
-    
-    private PannelloSpeciale pannello;
-
-    public Main(PannelloSpeciale pannello) {
-        super();
-        this.pannello=pannello;
-    }
-
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        boolean debug = false;
+        if (args[0].equals("--debug")) debug=true;
 
+        Main main = new Main(debug);
 
-        ListaPlayers listagiocatori = new ListaPlayers();
-        Giocatore gioc = new Giocatore("Roberto", Colore_t.BLU);
-        gioc.setObj(Obbiettivi_t.ASIASUDAMERICA);
-        listagiocatori.addPlayer(gioc);
-        gioc = new Giocatore("matteo",Colore_t.NERO);
-        gioc.setObj(Obbiettivi_t.BLU);
-        listagiocatori.addPlayer(gioc);
-        int turno=0;
-        
+    }
+    
+    private PannelloSpeciale pannello;
+    private Partita partita;
+    private boolean debug;
+
+    public Main(boolean debug) {
+        super();
+        this.debug= debug;
+
+        ListaPlayers listaGiocatori = new ListaPlayers();
+        listaGiocatori.addPlayer("Roberto", Colore_t.BLU);
+        listaGiocatori.addPlayer("Matteo", Colore_t.GIALLO);
+        listaGiocatori.addPlayer("Mandingo", Colore_t.NERO);
+        this.partita = new Partita(listaGiocatori);
+
+        this.inizializzaPartita();
+
+    }
+
+    private void inizializzaPartita() {
+
         JFrame finestra = new JFrame("Risicammara");
         finestra.setMinimumSize(new Dimension(800, 400));
         Container contestoFinestra = finestra.getContentPane();
-        PannelloSpeciale pannello = new PannelloSpeciale(60);
+        this.pannello = new PannelloSpeciale(60, this.partita);
 
         finestra.setBounds(200, 180, 200, 180);
         contestoFinestra.add(pannello);
 
 
-        finestra.addWindowListener(new Main(pannello));
+        finestra.addWindowListener(this);
         finestra.setVisible(true);
 
-        if (args[0].equals("--debug")) {
+        if (this.debug == true) {
             System.out.println("Poteri della SuperMucca attivati ;)");
-            PoteriDellaSuperMucca dio = new PoteriDellaSuperMucca();
+            PoteriDellaSuperMucca dio = new PoteriDellaSuperMucca(this.partita);
         }
+
     }
 
     public void windowOpened(WindowEvent e) {

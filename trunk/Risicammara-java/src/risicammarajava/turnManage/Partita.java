@@ -40,7 +40,7 @@ public class Partita {
      * @param listagiocatori L'oggetto che rappresenta la lista dei giocatori
      * @param mazzo L'oggetto che rappresenta il mazzo
      */
-    Partita(ListaPlayers listagiocatori){
+    public Partita(ListaPlayers listagiocatori){
         this.listagiocatori = listagiocatori;
         this.planciadigioco = new Plancia();
         this.mazzo = new MazzoTerritori();

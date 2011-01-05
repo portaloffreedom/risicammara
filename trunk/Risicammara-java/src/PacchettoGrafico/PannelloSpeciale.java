@@ -13,6 +13,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.geom.Line2D;
 import javax.swing.JPanel;
+import risicammarajava.turnManage.Partita;
 
 
 /**
@@ -20,6 +21,8 @@ import javax.swing.JPanel;
  * @author matteo
  */
 public class PannelloSpeciale extends JPanel{
+
+    private Partita partita;
 
     private Dimension dimensioni;
     private Elemento_2DGraphics barra;
@@ -29,8 +32,9 @@ public class PannelloSpeciale extends JPanel{
     private int durataFrame;
     boolean ridimensionata;
 
-    public PannelloSpeciale(int frameRateMassimo) {
+    public PannelloSpeciale(int frameRateMassimo, Partita partita) {
         super();
+        this.partita= partita;
 
         this.addComponentListener(new AscoltatorePannello(this));
         dimensioni = new Dimension();
