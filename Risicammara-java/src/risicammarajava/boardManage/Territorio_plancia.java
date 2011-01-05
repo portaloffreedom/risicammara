@@ -4,14 +4,16 @@
  */
 
 package risicammarajava.boardManage;
+import risicammarajava.Continente_t;
 import risicammarajava.playerManage.Giocatore;
 import risicammarajava.territori_t;
+import risicammarajava.turnManage.TerritorialArmy;
 
 /**
  *
  * @author stengun
  */
-public class Territorio_plancia {
+public class Territorio_plancia implements TerritorialArmy {
     private territori_t territorio;
     private int armate_presenti;
     private Giocatore proprietario;
@@ -34,6 +36,10 @@ public class Territorio_plancia {
 
     public territori_t getTerritorio(){
         return this.territorio;
+    }
+
+    public Continente_t getContinente(){
+        return this.territorio.getContinente();
     }
 
     public int getArmate(){

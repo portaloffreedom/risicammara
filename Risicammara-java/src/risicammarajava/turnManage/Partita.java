@@ -5,13 +5,16 @@
 
 package risicammarajava.turnManage;
 
+import java.util.List;
 import risicammarajava.Obbiettivi_t;
 import risicammarajava.boardManage.Plancia;
+import risicammarajava.boardManage.Territorio_plancia;
 import risicammarajava.deckManage.MazzoObbiettivi;
 import risicammarajava.deckManage.MazzoTerritori;
 import risicammarajava.playerManage.Giocatore;
 import risicammarajava.playerManage.ListaPlayers;
 import risicammarajava.territori_t;
+import risicammarajava.tipovittoria_t;
 
 /**
  * Questa classe ha il compito di inizializzare tutti gli oggetti che servono per
@@ -37,7 +40,8 @@ public class Partita {
      * @param listagiocatori L'oggetto che rappresenta la lista dei giocatori
      * @param mazzo L'oggetto che rappresenta il mazzo
      */
-    Partita(){
+    Partita(ListaPlayers listagiocatori){
+        this.listagiocatori = listagiocatori;
         this.planciadigioco = new Plancia();
         this.mazzo = new MazzoTerritori();
         territori_t car = mazzo.getCard(1);
@@ -49,9 +53,9 @@ public class Partita {
             while(car!=null){
                  if(!((car == territori_t.Jolly1)|(car == territori_t.Jolly2))){
                      mult+=numgioc;
-                     giocatorediturno.addTerr(car);
-                     planciadigioco.getTerritorio(car).setArmate(1);
-                     planciadigioco.getTerritorio(car).setProprietario(giocatorediturno);
+                     Territorio_plancia terpla = planciadigioco.getTerritorio(car);
+                     giocatorediturno.addTerr(terpla);
+                     terpla.setProprietario(giocatorediturno);
                      car = mazzo.getCard(i+mult);
                  }
                  else{
@@ -86,7 +90,20 @@ public class Partita {
         else fase_attuale = 0;
         return;
     };
-    //private boolean theresVictory();
+    private Giocatore Vincitore(){
+        int numpl = listagiocatori.getSize();
+        for(int i = 0;i<numpl;i++){
+            Giocatore giocat = listagiocatori.get(i);
+            Obbiettivi_t obj = giocat.getObbiettivo();
+            if(getVictoryType(obj) == tipovittoria_t.TERRITORIALE){
+                if(Verifica_territoriale(giocat,obj)) return giocat;
+            }
+            if(getVictoryType(obj) == tipovittoria_t.CONTINENTALE){
+                if(Verifica_continentale(giocat,obj)) return giocat;
+            }
+        }
+        return null;
+    };
     private int NumeroArmate(int numerogiocatori){
         switch(numerogiocatori){
             case 6:
@@ -100,5 +117,33 @@ public class Partita {
             default:
                 return 0;
         }
+    };
+
+    //Funzioni per verificare le condizioni di vittoria in base all'obbiettivo
+    private tipovittoria_t getVictoryType(Obbiettivi_t obj){
+        return obj.VictoryType();
+    }
+
+    private boolean Verifica_territoriale(Giocatore gioc,Obbiettivi_t obj){
+        int numterritori = 24;
+        switch(obj){
+            case DICIOTTODUE:
+                numterritori = 18;
+                if(gioc.getNumTerritori() >= numterritori){
+                    for(TerritorialArmy t : gioc.getListaterr()){
+                        if(t.getArmate() < 2) return false;
+                    }
+                    return true;
+                }
+            default:
+                break;
+        }
+        if(gioc.getNumTerritori() >= numterritori) return true;
+        return false;
+    };
+
+    private boolean Verifica_continentale(Giocatore gioc,Obbiettivi_t obj){
+        //TODO Completare la verifica vittoria per i continenti
+        return false;
     };
 }
