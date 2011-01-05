@@ -1,11 +1,13 @@
 package risicammarajava;
 
+import risicammarajava.deckManage.Carta;
+
 /**
  * Enumerato che rappresenta tutti i territori, i relativi bonus e il continente
  * a cui appartengono.
  * @author stengun
  */
-public enum territori_t {
+public enum territori_t implements Carta {
                     //Nord America
                     Alaska                      (Bonus_t.FANTE,  Continente_t.NORDAMERICA, Integer.parseInt("3")),
                     Territori_del_Nord_Ovest    (Bonus_t.CANNONE,Continente_t.NORDAMERICA, Integer.parseInt("4")),
@@ -82,12 +84,18 @@ public enum territori_t {
                     public Continente_t getContinente(){
                         return this.continente;
                     }
-/**
- * Leggere quanti territori sono vicini a questo
- * @return Il numero dei territori adiacenti
- */
+                    /**
+                     * Leggere quanti territori sono vicini a questo
+                     * @return Il numero dei territori adiacenti
+                     */
                     public int getNumadiacenze(){
                         return this.territori_adiacenti;
                     }
+
+    public String tipoCarta() {
+        return "Territorio";
+    }
+
+
 };
 

@@ -69,6 +69,7 @@ public class PoteriDellaSuperMucca extends JFrame {
 
         // Colore armate del Giocatore selezionato
         JTextField coloreArmate = new JTextField("Colore");
+        coloreArmate.setEditable(false);
         pannello.add(coloreArmate);
 
         // Selezione carte in mano
@@ -77,6 +78,7 @@ public class PoteriDellaSuperMucca extends JFrame {
 
         // Dati per carta selezionata
         JTextField datiCarta = new JTextField("Dati della carta");
+        datiCarta.setEditable(false);
         pannello.add(datiCarta);
 
         // Pulsante dai Carta
