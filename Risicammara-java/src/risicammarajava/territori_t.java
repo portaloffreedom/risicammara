@@ -9,7 +9,7 @@ import risicammarajava.deckManage.Carta;
  */
 public enum territori_t implements Carta {
                     //Nord America
-                    Alaska                      (Bonus_t.FANTE,  Continente_t.NORDAMERICA, Integer.parseInt("3")),
+                    Alaska                      (Bonus_t.FANTE,  Continente_t.NORDAMERICA, 3),
                     Territori_del_Nord_Ovest    (Bonus_t.CANNONE,Continente_t.NORDAMERICA, Integer.parseInt("4")),
                     Groenlandia                 (Bonus_t.CAVALLO,Continente_t.NORDAMERICA, Integer.parseInt("4")),
                     Alberta                     (Bonus_t.FANTE,  Continente_t.NORDAMERICA, Integer.parseInt("4")),
@@ -93,7 +93,7 @@ public enum territori_t implements Carta {
                     }
 
     public String tipoCarta() {
-        return "Territorio";
+        return this.toString();
     }
 
 
