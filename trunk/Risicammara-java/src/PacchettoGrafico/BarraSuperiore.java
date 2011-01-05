@@ -21,8 +21,6 @@ public class BarraSuperiore extends Elemento_2DGraphics {
     protected JPanel pannello;
     protected JButton giocatoreButton;
     protected JButton carteButton;
-    protected JButton addplayerButton;
-    protected JButton prossimoButton;
 
 
     public BarraSuperiore(Dimension dimensioni,JPanel pannello, int altezza){
@@ -32,15 +30,9 @@ public class BarraSuperiore extends Elemento_2DGraphics {
 
         this.giocatoreButton = new JButton("Giocatore");
         pannello.add(this.giocatoreButton);
-
-        this.addplayerButton = new JButton("Aggiungi Giocatore");
-        pannello.add(this.addplayerButton);
         
         this.carteButton = new JButton("Carte");
         pannello.add(this.carteButton);
-
-        this.prossimoButton = new JButton ("prossimo");
-        pannello.add(this.prossimoButton);
     }
 
     @Override
@@ -52,14 +44,6 @@ public class BarraSuperiore extends Elemento_2DGraphics {
 
     public void addGiocatoreActionListener (ActionListener ascoltatore){
         this.giocatoreButton.addActionListener(ascoltatore);
-    }
-
-    public void addProssimoMouseListener (ActionListener ascoltatore){
-        this.prossimoButton.addActionListener(ascoltatore);
-    }
-
-    public void addNewPlayerActionListener (ActionListener ascoltatore){
-        this.addplayerButton.addActionListener(ascoltatore);
     }
     
     public void addCarteActionListener (ActionListener ascoltatore){

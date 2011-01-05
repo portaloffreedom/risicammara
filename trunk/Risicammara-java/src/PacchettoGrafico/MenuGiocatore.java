@@ -28,25 +28,15 @@ public class MenuGiocatore extends Elemento_2DGraphics implements ActionListener
     private int bordo;
     private int distanzaSuperiore;
     private boolean visibile;
-    private ListaPlayers listagiocatori;
-    protected static int turno;
 
-    public MenuGiocatore(Dimension dimensioni,ListaPlayers listagiocatori,int turno) {
+    public MenuGiocatore(Dimension dimensioni) {
         super(dimensioni);
         this.visibile=false;
-        this.listagiocatori = listagiocatori;
-        MenuGiocatore.turno = turno;
 
         this.larghezza = 120;
         this.altezza = 70;
         this.bordo = 5;
         this.distanzaSuperiore = 55;
-
-        //Parte provvisoria
-        this.numeroTerritori = this.listagiocatori.get(MenuGiocatore.turno).getNumTerritori();
-        this.numeroArmate = this.listagiocatori.get(MenuGiocatore.turno).getArmateperturno();
-        this.obbiettivo = this.listagiocatori.get(MenuGiocatore.turno).getObbiettivo().toString();
-        this.nomegiocatore = this.listagiocatori.get(MenuGiocatore.turno).getNome();
     }
 
     @Override
@@ -57,16 +47,11 @@ public class MenuGiocatore extends Elemento_2DGraphics implements ActionListener
             graphics2D.setColor(Color.red);
             graphics2D.fill3DRect(this.bordo, this.distanzaSuperiore, this.larghezza, this.altezza, true);
             graphics2D.setColor(Color.black);
-            graphics2D.drawString(this.listagiocatori.get(turno).getObbiettivo().toString(), this.bordo+5, this.distanzaSuperiore+15);
+            graphics2D.drawString("Tutti gli uomini del presidente", this.bordo+5, this.distanzaSuperiore+15);
         }
     }
 
     public void actionPerformed(ActionEvent e) {
-        if(e.getActionCommand().equals("prossimo")){
-            if(listagiocatori.getSize()-1 > turno) turno++;
-
-        }
-        else
         this.visibile = !this.visibile;
     }
 }
