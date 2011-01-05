@@ -13,7 +13,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.geom.Line2D;
 import javax.swing.JPanel;
-import risicammarajava.playerManage.ListaPlayers;
 
 
 /**
@@ -30,7 +29,7 @@ public class PannelloSpeciale extends JPanel{
     private int durataFrame;
     boolean ridimensionata;
 
-    public PannelloSpeciale(int durataFrame,ListaPlayers listagiocatori,int turno) {
+    public PannelloSpeciale(int frameRateMassimo) {
         super();
 
         this.addComponentListener(new AscoltatorePannello(this));
@@ -38,15 +37,14 @@ public class PannelloSpeciale extends JPanel{
 
         this.cronometro = new OrologioTimer();
         this.performance = new MillisecondiDiEsecuzione(this.dimensioni, cronometro);
-        this.durataFrame = durataFrame;
+        this.durataFrame = (int) ((1.0/frameRateMassimo)*1000);
 
         BarraSuperiore barraSuperriore = new BarraSuperiore(dimensioni, this, 60);
-        MenuGiocatore menuGiocator = new MenuGiocatore(dimensioni,listagiocatori,turno);
+        MenuGiocatore menuGiocator = new MenuGiocatore(dimensioni);
         this.menuGiocatore = menuGiocator;
         this.barra = barraSuperriore;
         barraSuperriore.addCarteActionListener(null);
         barraSuperriore.addGiocatoreActionListener(menuGiocator);
-        barraSuperriore.addProssimoMouseListener(menuGiocator);
 
         //System.out.println("Dimensioni: "+dimensioni);
 
@@ -76,7 +74,7 @@ public class PannelloSpeciale extends JPanel{
 
         
         try {
-            Thread.sleep(90);
+            Thread.sleep(this.durataFrame*2);
             this.repaint();
         }
         catch (InterruptedException e) { System.out.println("Errrore: "+e); }
@@ -109,7 +107,7 @@ public class PannelloSpeciale extends JPanel{
                 System.err.println("Errore: "+ex);
             }
         }
-
+        
     }
 
 

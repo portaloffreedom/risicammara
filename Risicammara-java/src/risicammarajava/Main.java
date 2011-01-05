@@ -47,7 +47,7 @@ public class Main implements WindowListener {
         JFrame finestra = new JFrame("Risicammara");
         finestra.setMinimumSize(new Dimension(800, 400));
         Container contestoFinestra = finestra.getContentPane();
-        PannelloSpeciale pannello = new PannelloSpeciale(0,listagiocatori,turno);
+        PannelloSpeciale pannello = new PannelloSpeciale(60);
 
         finestra.setBounds(200, 180, 200, 180);
         contestoFinestra.add(pannello);
@@ -91,7 +91,6 @@ public class Main implements WindowListener {
     public void windowActivated(WindowEvent e) {
         //throw new UnsupportedOperationException("Not supported yet.");
         System.out.println("windowActivated");
-        //this.pannello.repaint();
     }
 
     public void windowDeactivated(WindowEvent e) {
