@@ -64,6 +64,7 @@ public class Partita {
         int gio = numgioc-1;
         int inc = 1;
                 while(mazzo.getCard(inc)!= null){
+                    Giocatore giocorrente = listagiocatori.get(gio);
                     car = mazzo.getCard(inc);
                     inc++;
                     while((car == territori_t.Jolly1)||(car == territori_t.Jolly2)){
@@ -71,8 +72,9 @@ public class Partita {
                         inc++;
                     }
                     if(car == null) break;
-                    planciadigioco.getTerritorio(car).setProprietario(listagiocatori.get(gio));
-                    listagiocatori.get(gio).addTerr(car);
+                    planciadigioco.getTerritorio(car).setProprietario(giocorrente);
+                    giocorrente.addTerr(car);
+                    giocorrente.setArmatedisponibili(NumeroArmate(numgioc)-giocorrente.getNumTerritori());
                     if(gio==0) gio = numgioc-1;
                     else gio--;
                 }
