@@ -71,6 +71,7 @@ public class Partita {
                         inc++;
                     }
                     if(car == null) break;
+                    planciadigioco.getTerritorio(car).setProprietario(listagiocatori.get(gio));
                     listagiocatori.get(gio).addTerr(car);
                     if(gio==0) gio = numgioc-1;
                     else gio--;
