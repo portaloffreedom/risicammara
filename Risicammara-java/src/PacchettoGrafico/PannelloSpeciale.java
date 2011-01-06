@@ -44,11 +44,11 @@ public class PannelloSpeciale extends JPanel{
         this.durataFrame = (int) ((1.0/frameRateMassimo)*1000);
 
         BarraSuperiore barraSuperriore = new BarraSuperiore(dimensioni, this, 60);
-        MenuGiocatore menuGiocator = new MenuGiocatore(dimensioni);
-        this.menuGiocatore = menuGiocator;
+        MenuGiocatore menuGiocatore = new MenuGiocatore(dimensioni, partita);
+        this.menuGiocatore = menuGiocatore;
         this.barra = barraSuperriore;
         barraSuperriore.addCarteActionListener(null);
-        barraSuperriore.addGiocatoreActionListener(menuGiocator);
+        barraSuperriore.addGiocatoreActionListener(menuGiocatore);
 
         //System.out.println("Dimensioni: "+dimensioni);
 
@@ -61,28 +61,15 @@ public class PannelloSpeciale extends JPanel{
         int mouseX = 0;
         int mouseY = 0;
 
+
         if (posizioneMouse != null) {
             mouseX=posizioneMouse.x;
             mouseY=posizioneMouse.y;
-            this.renderizzaScena(g, mouseX, mouseY);
-            this.repaint();
-            return;
         }
 
-        if (this.ridimensionata == true) {
-            this.renderizzaScena(g, mouseX, mouseY);
-            this.ridimensionata=false;
-            this.repaint();
-            return;
-        }
-
-        
-        try {
-            Thread.sleep(this.durataFrame*2);
-            this.repaint();
-        }
-        catch (InterruptedException e) { System.out.println("Errrore: "+e); }
-
+        this.renderizzaScena(g, mouseX, mouseY);
+        this.repaint();
+        return;
 
 
     }
@@ -94,7 +81,7 @@ public class PannelloSpeciale extends JPanel{
         this.getSize(dimensioni);
         //System.out.println("Dimensioni: "+dimensioni);
 
-        g2.draw(new Line2D.Double(mouseX, mouseY, millisecondi%500, 70));
+        //g2.draw(new Line2D.Double(mouseX, mouseY, millisecondi%500, 70));
 
         this.barra.disegna(g2);
         this.performance.disegna(g2);

@@ -79,7 +79,7 @@ public class PoteriDellaSuperMucca extends JFrame {
         //    selezioneGiocatore.addItem(giocatoreSelezionato.getListaterr().get(i));
         //}
         for (territori_t territorio : giocatoreSelezionato.getListaterr()){
-            selezioneGiocatore.addItem(territorio);
+            selezioneTerritorio.addItem(territorio);
         }
         pannello.add(selezioneTerritorio);
 
