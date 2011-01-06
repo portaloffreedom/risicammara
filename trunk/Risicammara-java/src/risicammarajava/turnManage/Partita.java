@@ -38,26 +38,43 @@ public class Partita {
         this.listagiocatori = listagiocatori;
         this.planciadigioco = new Plancia();
         this.mazzo = new MazzoTerritori();
-        territori_t car = mazzo.getCard(1);
-        int mult = 1;
+        territori_t car;// = car = mazzo.getCard(1);
+        int mult = 0;
+        int jolly = 0;
         int numgioc = listagiocatori.getSize();
         //Distribuzione territori e armate
-        for(int i=numgioc-1;i>=0;i--){
-            Giocatore giocatorediturno = listagiocatori.get(i);
-            while(car!=null){
-                 if(!((car == territori_t.Jolly1)|(car == territori_t.Jolly2))){
-                     mult+=numgioc;
-                     giocatorediturno.addTerr(car);
-                     planciadigioco.getTerritorio(car).setProprietario(giocatorediturno);
-                     car = mazzo.getCard(i+mult);
-                 }
-                 else{
-                     mult+=1;
-                     car = mazzo.getCard(i+mult);
-                 }
-             }
-             giocatorediturno.setArmatedisponibili(NumeroArmate(numgioc)-giocatorediturno.getNumTerritori());
-        }
+//        for(int i=numgioc-1;i>=0;i--){
+//            car = mazzo.getCard(1+i+mult);
+//            Giocatore giocatorediturno = listagiocatori.get(i);
+//            while(car!=null){
+//                 if(!((car == territori_t.Jolly1)||(car == territori_t.Jolly2))){
+//                     mult+=numgioc;
+//                    giocatorediturno.addTerr(car);
+//                     planciadigioco.getTerritorio(car).setProprietario(giocatorediturno);
+//                 }
+//                 else{
+//                     mult+=1;
+//                     jolly+=1;
+//                 }
+//                 car = mazzo.getCard(1+i+mult);
+//             }
+//             mult = jolly;
+//            giocatorediturno.setArmatedisponibili(NumeroArmate(numgioc)-giocatorediturno.getNumTerritori());
+//        }
+        int gio = numgioc-1;
+        int inc = 1;
+                while(mazzo.getCard(inc)!= null){
+                    car = mazzo.getCard(inc);
+                    inc++;
+                    while((car == territori_t.Jolly1)||(car == territori_t.Jolly2)){
+                        car = mazzo.getCard(inc);
+                        inc++;
+                    }
+                    if(car == null) break;
+                    listagiocatori.get(gio).addTerr(car);
+                    if(gio==0) gio = numgioc-1;
+                    else gio--;
+                }
         //Distribuzione obbiettivi
         MazzoObbiettivi mazzoobj = new MazzoObbiettivi();
         for(int i = 0; i<numgioc;i++) listagiocatori.get(i).setObj((Obbiettivi_t)mazzoobj.Pesca());
