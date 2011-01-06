@@ -23,13 +23,9 @@ public class TestoACapo extends Elemento_2DGraphics {
     public TestoACapo (Graphics2D graphics2D, Dimension dimensioni, Rectangle rectangolo, String testo){
         super(dimensioni);
         this.testo=testo;
-        
-        this.rettangolo= rectangolo;
-        this.rettangolo.x +=2;
-        this.rettangolo.y +=1;
-        this.rettangolo.height -=2;
-        this.rettangolo.width  -=4;
 
+        this.rettangolo = new Rectangle(rectangolo.x+4, rectangolo.y, rectangolo.width-6, 0);
+        
         this.fontMetrics = graphics2D.getFontMetrics();
     }
 
@@ -40,22 +36,32 @@ public class TestoACapo extends Elemento_2DGraphics {
 
     public void disegna(Graphics2D graphics2D, String testo) {
         boolean finito = false;
-        int spazio_precedente = testo.length();
-        while(!finito){
+        String restante = testo;
+        for (int i=1; !finito; i++){
+            String sottoStringa = new String(restante);
+            int spazio_precedente = restante.length();
+            while(fontMetrics.stringWidth(sottoStringa)>rettangolo.width) {
+                spazio_precedente = sottoStringa.lastIndexOf(' ', spazio_precedente);
+                sottoStringa = sottoStringa.substring(0, spazio_precedente);
+            }
+            graphics2D.drawString(sottoStringa, (float)rettangolo.getX(), (float)rettangolo.getY()+((fontMetrics.getMaxAscent()+2)*i));
+            restante = restante.substring(spazio_precedente);
+            if (restante.isEmpty()) finito=true;
+            else restante = restante.substring(1);
 
 
+            /*
             spazio_precedente = testo.lastIndexOf(' ', spazio_precedente);
             String sottoStringa = testo.substring(0, spazio_precedente);
             testo = testo.substring(spazio_precedente+1);
             System.out.println(sottoStringa+":"+testo);
+             */
 
 
             //System.out.println("Stringa: "+sottoStringa);
             //System.out.println("Dimensioni: "+fontMetrics.stringWidth(sottoStringa));
-
-            finito = true;
         }
-        graphics2D.drawString(testo, (float)rettangolo.getX(), (float)rettangolo.getY()+fontMetrics.getMaxAscent());
+        //graphics2D.drawString(testo, (float)rettangolo.getX(), (float)rettangolo.getY()+fontMetrics.getMaxAscent());
     }
 
 }
