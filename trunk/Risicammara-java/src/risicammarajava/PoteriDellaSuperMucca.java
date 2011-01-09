@@ -38,7 +38,7 @@ public class PoteriDellaSuperMucca extends JFrame {
     private JSpinner numeroArmate;
     private JTextArea obbiettivo;
     private JComboBox selezioneTerritorio;
-    private JSpinner numeroArmateTerritorio;
+    //private JSpinner numeroArmateTerritorio;
     private JTextField coloreArmate;
 
     public PoteriDellaSuperMucca(Partita partita) {
@@ -66,7 +66,10 @@ public class PoteriDellaSuperMucca extends JFrame {
         for (int i=0; i<partita.getListaGiocatori().getSize(); i++){
             selezioneGiocatore.addItem(partita.getListaGiocatori().get(i));
         }
-        this.giocatoreSelezionato=partita.getListaGiocatori().get(1);
+        Giocatore giocatoreSelezionato=partita.getListaGiocatori().get(0);
+        this.giocatoreSelezionato = null; // importante impostarlo in null, o la
+                                          // funzione this.giocatoreSelezionato
+                                          // non funziona al primo giro.
         pannello.add(selezioneGiocatore);
 
         // Label con scritto "Numero Armate"------------------------------------
@@ -128,23 +131,27 @@ public class PoteriDellaSuperMucca extends JFrame {
     }
 
     final void cambiaSelezioneGiocatore(Giocatore  giocatoreSelezionato){
-        this.giocatoreSelezionato = giocatoreSelezionato;
+        //controlla di non chiamare la funzione per niente (cosa che avverrebbe una volta su due)
+        if (giocatoreSelezionato == this.giocatoreSelezionato)
+            { return; }
+        else 
+            {this.giocatoreSelezionato = giocatoreSelezionato;}
 
         //*********************************************************************
-        String testoObbiettivo = giocatoreSelezionato.getObbiettivo().toString();
+        String testoObbiettivo = this.giocatoreSelezionato.getObbiettivo().toString();
         if (testoObbiettivo.length() > 35) {
             testoObbiettivo = testoObbiettivo.substring(0, 35);
         }
         obbiettivo.setText(testoObbiettivo);
 
-        numeroArmate.setValue(giocatoreSelezionato.getArmateperturno());
+        numeroArmate.setValue(this.giocatoreSelezionato.getArmateperturno());
 
         selezioneTerritorio.removeAllItems();
-        for (territori_t territorio : giocatoreSelezionato.getListaterr()){
+        for (territori_t territorio : this.giocatoreSelezionato.getListaterr()){
             selezioneTerritorio.addItem(territorio);
         }
 
-        coloreArmate.setText(giocatoreSelezionato.getArmyColour().toString());
+        coloreArmate.setText(this.giocatoreSelezionato.getArmyColour().toString());
         
     }
 
