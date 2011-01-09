@@ -38,6 +38,7 @@ public class PoteriDellaSuperMucca extends JFrame {
     private JSpinner numeroArmate;
     private JTextArea obbiettivo;
     private JComboBox selezioneTerritorio;
+    private JSpinner numeroArmateTerritorio;
     private JTextField coloreArmate;
 
     public PoteriDellaSuperMucca(Partita partita) {
@@ -87,7 +88,7 @@ public class PoteriDellaSuperMucca extends JFrame {
 
         /*
         // Spinner per cambiare il numero di armate nel territorio--------------
-        JSpinner numeroArmateTerritorio = new JSpinner();
+        this.numeroArmateTerritorio = new JSpinner();
         pannello.add(numeroArmateTerritorio);
 
         // lista dei territori del Giocatore selezionato------------------------
@@ -129,7 +130,14 @@ public class PoteriDellaSuperMucca extends JFrame {
     final void cambiaSelezioneGiocatore(Giocatore  giocatoreSelezionato){
         this.giocatoreSelezionato = giocatoreSelezionato;
 
-        obbiettivo.setText(giocatoreSelezionato.getObbiettivo().toString().substring(0, 20));
+        //*********************************************************************
+        String testoObbiettivo = giocatoreSelezionato.getObbiettivo().toString();
+        if (testoObbiettivo.length() > 35) {
+            testoObbiettivo = testoObbiettivo.substring(0, 35);
+        }
+        obbiettivo.setText(testoObbiettivo);
+
+        numeroArmate.setValue(giocatoreSelezionato.getArmateperturno());
 
         selezioneTerritorio.removeAllItems();
         for (territori_t territorio : giocatoreSelezionato.getListaterr()){
