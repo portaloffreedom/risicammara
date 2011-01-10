@@ -14,23 +14,23 @@ import java.awt.Graphics2D;
  * 
  * @author matteo
  */
-abstract class Elemento_2DGraphics {
+interface Elemento_2DGraphics {
 
-    /**
+    /*
      * Dimensioni del pannello su cui si deve disegnare
-     */
+     *
     protected Dimension dimensioni;
 
-    /**
+    /*
      * Costruttore base
      *
      * @param dimensioni passare il riferimento alle dimensioni del pannello
      * (con la funzioni pannello.getSize() )
-     */
+     *
     protected Elemento_2DGraphics(Dimension dimensioni){
         super();
         this.dimensioni=dimensioni;
-    }
+    }*/
 
     /**
      * Funzioni Astratta che deve richiamare essere chiamata per disegnare
@@ -38,6 +38,6 @@ abstract class Elemento_2DGraphics {
      *
      * @param graphics2D contesto grafico su cui disegnare
      */
-    abstract public void disegna (Graphics2D graphics2D);
+    public void disegna (Graphics2D graphics2D);
 
 }

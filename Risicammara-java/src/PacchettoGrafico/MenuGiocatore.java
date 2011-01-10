@@ -17,16 +17,17 @@ import risicammarajava.turnManage.Partita;
  *
  * @author matteo
  */
-public class MenuGiocatore extends Elemento_2DGraphics implements ActionListener {
+public class MenuGiocatore implements ActionListener, Elemento_2DGraphics {
 
     private Rectangle rettangolo;
+    private Dimension dimensioni;
     private boolean visibile;
 
     private Partita partita;
 
 
     public MenuGiocatore(Dimension dimensioni, Partita partita) {
-        super(dimensioni);
+        this.dimensioni=dimensioni;
         this.visibile=false;
         this.partita=partita;
 

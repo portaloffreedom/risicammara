@@ -25,8 +25,8 @@ public class PannelloSpeciale extends JPanel{
     private Partita partita;
 
     private Dimension dimensioni;
-    private Elemento_2DGraphics barra;
-    private Elemento_2DGraphics menuGiocatore;
+    private BarraSuperiore barra;
+    private MenuGiocatore menuGiocatore;
     private OrologioTimer cronometro;
     private MillisecondiDiEsecuzione performance;
     private int durataFrame;
@@ -43,12 +43,10 @@ public class PannelloSpeciale extends JPanel{
         this.performance = new MillisecondiDiEsecuzione(this.dimensioni, cronometro);
         this.durataFrame = (int) ((1.0/frameRateMassimo)*1000);
 
-        BarraSuperiore barraSuperriore = new BarraSuperiore(dimensioni, this, 60);
-        MenuGiocatore menuGiocatore = new MenuGiocatore(dimensioni, partita);
-        this.menuGiocatore = menuGiocatore;
-        this.barra = barraSuperriore;
-        barraSuperriore.addCarteActionListener(null);
-        barraSuperriore.addGiocatoreActionListener(menuGiocatore);
+        this.barra = new BarraSuperiore(dimensioni, this, 60);
+        this.menuGiocatore = new MenuGiocatore(dimensioni, partita);
+        this.barra.addCarteActionListener(null);
+        this.barra.addGiocatoreActionListener(menuGiocatore);
 
         //System.out.println("Dimensioni: "+dimensioni);
 

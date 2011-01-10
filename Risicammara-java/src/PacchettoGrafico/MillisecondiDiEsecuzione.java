@@ -12,12 +12,13 @@ import java.awt.Graphics2D;
  *
  * @author matteo
  */
-public class MillisecondiDiEsecuzione extends Elemento_2DGraphics{
-    
+public class MillisecondiDiEsecuzione implements Elemento_2DGraphics{
+
+    private Dimension dimensioni;
     private OrologioTimer Cronometro;
 
     public MillisecondiDiEsecuzione (Dimension dimensioni, OrologioTimer Cronometro) {
-        super(dimensioni);
+        this.dimensioni=dimensioni;
         this.Cronometro = Cronometro;
     }
 

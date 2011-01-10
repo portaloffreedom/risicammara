@@ -14,14 +14,15 @@ import java.awt.Rectangle;
  *
  * @author matteo
  */
-public class TestoACapo extends Elemento_2DGraphics {
+public class TestoACapo implements  Elemento_2DGraphics {
     
     private String testo;
     private FontMetrics fontMetrics;
     private Rectangle rettangolo;
+    protected Dimension dimensioni;
     
     public TestoACapo (Graphics2D graphics2D, Dimension dimensioni, Rectangle rectangolo, String testo){
-        super(dimensioni);
+        this.dimensioni=dimensioni;
         this.testo=testo;
 
         this.rettangolo = new Rectangle(rectangolo.x+4, rectangolo.y, rectangolo.width-6, 0);
