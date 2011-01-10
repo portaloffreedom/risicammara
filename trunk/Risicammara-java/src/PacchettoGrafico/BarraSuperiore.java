@@ -7,7 +7,9 @@ package PacchettoGrafico;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.event.ActionListener;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 
@@ -15,8 +17,9 @@ import javax.swing.JButton;
  *
  * @author matteo
  */
-public class BarraSuperiore extends Elemento_2DGraphics {
-    
+public class BarraSuperiore implements Elemento_2DGraphics {
+
+    private Dimension dimensioni;
     protected int altezza;
     protected JPanel pannello;
     protected JButton giocatoreButton;
@@ -24,14 +27,18 @@ public class BarraSuperiore extends Elemento_2DGraphics {
 
 
     public BarraSuperiore(Dimension dimensioni,JPanel pannello, int altezza){
-        super(dimensioni);
+        this.dimensioni=dimensioni;
         this.pannello=pannello;
         this.altezza=altezza;
 
-        this.giocatoreButton = new JButton("Giocatore");
+        //this.giocatoreButton = new JButton("Giocatore");
+        //this.giocatoreButton = new JButton(new ImageIcon("./risorse/sfondo_pulsante.png", carteButtonDescription));
+        this.giocatoreButton = new BottoneRisicammara("Giocatore", dimensioni);
         pannello.add(this.giocatoreButton);
-        
-        this.carteButton = new JButton("Carte");
+
+        //this.carteButton.setText("Carte");
+        //this.carteButton = new JButton(new ImageIcon("./risorse/sfondo_pulsante.png", carteButtonDescription));
+        this.carteButton = new BottoneRisicammara("Carte", dimensioni);
         pannello.add(this.carteButton);
     }
 

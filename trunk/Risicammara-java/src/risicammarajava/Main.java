@@ -26,7 +26,7 @@ public class Main implements WindowListener {
      */
     public static void main(String[] args) {
         boolean debug = false;
-        if (args[0].equals("--debug")) debug=true;
+        if (args.length>= 1 && args[0].equals("--debug")) debug=true;
 
         Main main = new Main(debug);
 
