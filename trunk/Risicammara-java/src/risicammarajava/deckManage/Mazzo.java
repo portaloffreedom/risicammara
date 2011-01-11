@@ -16,7 +16,7 @@ public abstract class Mazzo {
  * e l'array che rappresenta il contenitore delle carte.
  * @param numcarte Numero delle carte che dovrà avere il mazzo
  */
-    public Mazzo(Carta[] tipo){
+    protected Mazzo(Carta[] tipo){
         deck = tipo;
         inizio_mazzo = deck.length;
     }
