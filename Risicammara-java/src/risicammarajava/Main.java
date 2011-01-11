@@ -26,7 +26,7 @@ public class Main implements WindowListener {
      */
     public static void main(String[] args) {
         boolean debug = false;
-        if (args.length>= 1 && args[0].equals("--debug")) debug=true;
+        if (args.length>= 1 && (args[0].equals("--debug") || args[0].equals("-d"))) debug=true;
 
         Main main = new Main(debug);
 
@@ -40,17 +40,19 @@ public class Main implements WindowListener {
         super();
         this.debug= debug;
 
+        //TODO dialogo di "crea partita"
         ListaPlayers listaGiocatori = new ListaPlayers();
         listaGiocatori.addPlayer("Roberto", Colore_t.BLU);
         listaGiocatori.addPlayer("Matteo", Colore_t.GIALLO);
         listaGiocatori.addPlayer("Mandingo", Colore_t.NERO);
-        this.partita = new Partita(listaGiocatori);
 
-        this.inizializzaPartita();
+        this.inizializzaPartita(new Partita(listaGiocatori));
 
     }
 
-    private void inizializzaPartita() {
+    private void inizializzaPartita(Partita partita) {
+
+        this.partita=partita;
 
         JFrame finestra = new JFrame("Risicammara");
         finestra.setMinimumSize(new Dimension(800, 400));
