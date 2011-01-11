@@ -13,11 +13,12 @@ import risicammarajava.Obbiettivi_t;
  * @author Sten_Gun
  */
 public final class MazzoObbiettivi extends Mazzo{
-    private int puntomaz;
+
     public MazzoObbiettivi(){
         super(Obbiettivi_t.values());
-        puntomaz = 0;
-        this.Mischia();
+        Mischia();
+        Mischia();
+        Mischia();
     }
 
     protected void Mischia() {
@@ -31,7 +32,8 @@ public final class MazzoObbiettivi extends Mazzo{
         }
     }
     public Carta Pesca(){
-        return deck[puntomaz++];
+        Carta temp = deck[--inizio_mazzo];
+        return temp;
     }
 }
 
