@@ -9,7 +9,6 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.ActionListener;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 
@@ -32,12 +31,10 @@ public class BarraSuperiore implements Elemento_2DGraphics {
         this.altezza=altezza;
 
         //this.giocatoreButton = new JButton("Giocatore");
-        //this.giocatoreButton = new JButton(new ImageIcon("./risorse/sfondo_pulsante.png", carteButtonDescription));
         this.giocatoreButton = new BottoneRisicammara("Giocatore", dimensioni);
         pannello.add(this.giocatoreButton);
 
         //this.carteButton.setText("Carte");
-        //this.carteButton = new JButton(new ImageIcon("./risorse/sfondo_pulsante.png", carteButtonDescription));
         this.carteButton = new BottoneRisicammara("Carte", dimensioni);
         pannello.add(this.carteButton);
     }

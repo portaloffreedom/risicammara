@@ -5,6 +5,7 @@ package risicammarajava;
  * @author stengun
  */
 public enum Colore_t {
+    NULLO,
     BLU,
     ROSSO,
     GIALLO,

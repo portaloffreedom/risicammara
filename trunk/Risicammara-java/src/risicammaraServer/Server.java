@@ -17,6 +17,7 @@ import java.util.logging.Logger;
  */
 public class Server {
     private ServerSocket socksrv;
+    private Thread listaGiocatori[];
     /**
      * @param args the command line arguments
      */
@@ -33,12 +34,20 @@ public class Server {
             System.err.println("Errore: "+ex);
             System.exit(-1);
         }
-        try {
-            Socket accettazione = this.socksrv.accept();
-        } catch (IOException ex) {
-            //TODO cattura eccezione "aspetta client"
-            System.err.println("Errore: "+ex);
-            System.exit(-2);
+
+
+
+        for (int i=0; i<listaGiocatori.length; i++) {
+            Socket accettazione = null;
+
+            try {
+                accettazione = this.socksrv.accept();
+            } catch (IOException ex) {
+                //TODO cattura eccezione "aspetta client"
+                System.err.println("Errore: "+ex);
+                System.exit(-2);
+            }
+            listaGiocatori[i]= new Thread(new GiocatoreThread(accettazione));
         }
     }
 }
