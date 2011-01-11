@@ -10,6 +10,7 @@ package risicammarajava.deckManage;
 public abstract class Mazzo {
 
     protected Carta[] deck;
+    protected int inizio_mazzo;
 /**
  * Costruttore Predefinito del mazzo. Inizializza tutte le variabili
  * e l'array che rappresenta il contenitore delle carte.
@@ -17,6 +18,17 @@ public abstract class Mazzo {
  */
     public Mazzo(Carta[] tipo){
         deck = tipo;
+        inizio_mazzo = deck.length;
+    }
+
+/**
+ * Testa se il mazzo delle carte è vuoto
+ * @return true se il mazzo non ha più carte, falso altrimenti.
+ */
+    protected boolean isEmpty(){
+        if(inizio_mazzo == 0)
+            return true;
+        else return false;
     }
 
 /**

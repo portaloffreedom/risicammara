@@ -14,15 +14,15 @@ import risicammarajava.territori_t;
  */
 public final class MazzoTerritori extends Mazzo {
     private Carta[] scarti;
-    private int inizio_mazzo;
     private int inizio_scarti;
 
     public MazzoTerritori(){
         super(territori_t.values());
-        inizio_mazzo = deck.length;
         inizio_scarti = 0;
         scarti = null;
-        this.Mischia();
+        Mischia();
+        Mischia();
+        Mischia();
     }
 
 
@@ -64,17 +64,6 @@ public final class MazzoTerritori extends Mazzo {
         inizio_mazzo = inizio_scarti;
         inizio_scarti = 0;
         this.Mischia();
-    }
-
-
-/**
- * Testa se il mazzo delle carte è vuoto
- * @return true se il mazzo non ha più carte, falso altrimenti.
- */
-    private boolean isEmpty(){
-        if(inizio_mazzo == 0)
-            return true;
-        else return false;
     }
 
     public territori_t getCard(int index){
