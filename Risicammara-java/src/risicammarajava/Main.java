@@ -5,12 +5,22 @@
 
 package risicammarajava;
 
+import PacchettoGrafico.CollegatiPartita;
 import PacchettoGrafico.PannelloSpeciale;
+import PacchettoGrafico.SalaAttesa;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
+import risicammaraServer.MessageManage.Messaggio_Comandi;
+import risicammaraServer.MessageManage.Messaggio_chat;
+import risicammaraServer.MessageManage.comandi_t;
 import risicammarajava.playerManage.ListaPlayers;
 import risicammarajava.turnManage.Partita;
 
@@ -31,26 +41,57 @@ public class Main implements WindowListener {
         Main main = new Main(debug);
 
     }
-    
+
+    public static final int PORT = 12345;
     private PannelloSpeciale pannello;
     private Partita partita;
     private boolean debug;
+    private Socket server;
 
     public Main(boolean debug) {
         super();
         this.debug= debug;
 
         //TODO dialogo di "crea partita"
+        this.collegatiPartita();
+
+        
+        
+
+    }
+
+    public void collegatiPartita(){
+        CollegatiPartita dialogo = new CollegatiPartita(this);
+        System.out.println("8===D");
+        }
+
+    public void salaAttesa(Socket server){
+        this.server=server;
+
+
+        //SalaAttesa finestraSalaAttesa = new SalaAttesa(server);
+
+
+        
         ListaPlayers listaGiocatori = new ListaPlayers();
         listaGiocatori.addPlayer("Roberto", Colore_t.BLU);
         listaGiocatori.addPlayer("Matteo", Colore_t.GIALLO);
         listaGiocatori.addPlayer("Mandingo", Colore_t.NERO);
+        try {
+            new ObjectOutputStream(server.getOutputStream()).writeObject(new Messaggio_Comandi(comandi_t.CONNECTED, "Giocatore"));
+            new ObjectOutputStream(server.getOutputStream()).writeObject(new Messaggio_chat("culo", "messaggiopluffete"));
+            new ObjectOutputStream(server.getOutputStream()).writeObject(new Messaggio_chat("culo", "messaggiopluffete2"));
+        } catch (IOException ex) {
+            System.err.println(ex);
+        }
 
         this.inizializzaPartita(new Partita(listaGiocatori));
+         /*
+         */
 
     }
 
-    private void inizializzaPartita(Partita partita) {
+    public void inizializzaPartita(Partita partita) {
 
         this.partita=partita;
 
@@ -73,6 +114,7 @@ public class Main implements WindowListener {
 
     }
 
+    // <editor-fold defaultstate="collapsed" desc="ascoltatore finestre">
     public void windowOpened(WindowEvent e) {
         //throw new UnsupportedOperationException("Not supported yet.");
         System.out.println("Ciao Mondo di merda!!");
@@ -107,6 +149,5 @@ public class Main implements WindowListener {
     public void windowDeactivated(WindowEvent e) {
         //throw new UnsupportedOperationException("Not supported yet.");
         System.out.println("windowDeactivated");
-    }
-
+    }// </editor-fold>
 }
