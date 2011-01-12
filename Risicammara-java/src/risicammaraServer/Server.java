@@ -7,12 +7,10 @@ package risicammaraServer;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import risicammarajava.playerManage.Giocatore;
 
 /**
- *
+ * Lato server di Risicammara.
  * @author Sten_Gun
  */
 public class Server {

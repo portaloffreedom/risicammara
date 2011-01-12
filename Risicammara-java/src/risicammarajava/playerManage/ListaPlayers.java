@@ -39,10 +39,19 @@ public class ListaPlayers {
         listaPlayers.add(player);
     }
 
+    /**
+     * Imposta il numero delle armate disponibili da mettere nella plancia.
+     * @param num_player L'indice del giocatore
+     * @param num_armate Il numero di armate.
+     */
     public void setArmate(int num_player,int num_armate){
         listaPlayers.get(num_player).setArmatedisponibili(num_armate);
     }
 
+    /**
+     * Fornisce il numero di giocatori
+     * @return Numero di giocatori
+     */
     public int getSize(){
         return listaPlayers.size();
     }
@@ -55,4 +64,9 @@ public class ListaPlayers {
     public Giocatore get(int index){
         return listaPlayers.get(index);
     }
+    
+    public void remPlayer(int index) throws UnsupportedOperationException, IndexOutOfBoundsException{
+        this.listaPlayers.remove(index);
+    }
+
 }
