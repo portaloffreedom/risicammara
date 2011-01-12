@@ -9,7 +9,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
-import java.awt.Rectangle;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
@@ -19,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 import risicammaraServer.MessageManage.Messaggio_Comandi;
 import risicammaraServer.MessageManage.comandi_t;
 import risicammarajava.Colore_t;
@@ -32,16 +32,18 @@ public class SalaAttesa extends JFrame implements WindowListener {
     private boolean leader;
     private Socket server;
     private QuadratoGiocatori giocatori[];
+    private JToggleButton pronti[];
 
     public SalaAttesa(Socket server, boolean leader) {
         super("Sala d'Attesa");
         this.server=server;
         this.leader=leader;
         this.giocatori= new QuadratoGiocatori[6];
+        this.pronti = new JToggleButton[6];
 
         this.addWindowListener(this);
-        this.setBounds(100, 100, 500, 300);
-        //this.setResizable(false);
+        this.setBounds(100, 100, 500, 305);
+        this.setResizable(false);
 
         JPanel pannello = new JPanel(new LayoutManager() {
 
@@ -68,42 +70,49 @@ public class SalaAttesa extends JFrame implements WindowListener {
         this.getContentPane().add(pannello);
         //pannello.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-        if (leader) disegnaInterfacciaLeader(pannello);
-        else disegnaInterfaccia(pannello);
-        
+        disegnaGiocatori(pannello);
 
-        disegnaRimanente(pannello);
+        this.pronti[0].setSelected(true);
+        this.pronti[1].setEnabled(true);
 
-       
         this.setVisible(true);
-
-
-        for (QuadratoGiocatori quadratoGiocatori : giocatori) {
-            BottoneGiocatori cacca = (BottoneGiocatori) quadratoGiocatori;
-            System.out.println(cacca.getBounds());
-        }
     }
 
     public SalaAttesa(Socket server) {
         this(server, false);
     }
 
-    private void disegnaInterfacciaLeader(JPanel pannello){
+    private void disegnaGiocatori(JPanel pannello) {
         for (int i=0; i<6; i++) {
-            BottoneGiocatori bottone = new BottoneGiocatori("Giocatore "+(i+1));
-            pannello.add(bottone);
-            this.giocatori[i]= bottone;
-            bottone.setColore(Colore_t.GIALLO);
-            bottone.setBounds(new Rectangle(5, 5+(30*i), 80, 30));
+
+            this.pronti[i] = new JToggleButton("Ω");
+            pannello.add(this.pronti[i]);
+
+            if (this.leader)
+                    this.giocatori[i] = quadratoInterfacciaLeader(pannello, i);
+            else 
+                    this.giocatori[i] = quadratoInterfaccia(pannello, i);
+
+
+            this.pronti[i].setBounds(125, 5+(45*i), 45, 45);
+            this.pronti[i].setEnabled(false);
+
+            this.giocatori[i].setColore(Colore_t.GIALLO);
+            this.giocatori[i].setBounds(5, 5+(45*i), 120, 45);
         }
     }
 
-    private void disegnaInterfaccia(JPanel pannello) {
-        //throw new UnsupportedOperationException("Not yet implemented");
+
+    private QuadratoGiocatori quadratoInterfacciaLeader(JPanel pannello, int i){
+        BottoneGiocatori bottone = new BottoneGiocatori("Giocatore "+(i+1));
+        pannello.add(bottone);
+        return bottone;
     }
 
-    private void disegnaRimanente(JPanel pannello) {
-        //throw new UnsupportedOperationException("Not yet implemented");
+    private QuadratoGiocatori quadratoInterfaccia(JPanel pannello, int i) {
+        labelGiocatori label = new labelGiocatori("Giocatore "+(i+1));
+        pannello.add(label);
+        return label;
     }
 
     // <editor-fold defaultstate="collapsed" desc="Window Listener">
@@ -149,6 +158,7 @@ public class SalaAttesa extends JFrame implements WindowListener {
         public void setNome(String testo);
         public void setColore(Colore_t colore);
         public void setVisible(boolean visible);
+        public void setBounds(int x, int y, int width, int height);
     }
 
     private class BottoneGiocatori extends JButton implements QuadratoGiocatori {

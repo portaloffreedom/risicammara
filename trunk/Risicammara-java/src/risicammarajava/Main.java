@@ -69,7 +69,7 @@ public class Main implements WindowListener {
         this.server=server;
 
 
-        SalaAttesa finestraSalaAttesa = new SalaAttesa(server, true);
+        SalaAttesa finestraSalaAttesa = new SalaAttesa(server, false);
 
 
         /*
