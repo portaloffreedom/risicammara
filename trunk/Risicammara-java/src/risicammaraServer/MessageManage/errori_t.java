@@ -10,6 +10,7 @@ package risicammaraServer.MessageManage;
  * @author Sten_Gun
  */
 public enum errori_t {
+    NICKUSED,
     INVALIDNICK,
     INVALIDPLAYER;
 }

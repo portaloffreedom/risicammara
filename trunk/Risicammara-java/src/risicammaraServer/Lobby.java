@@ -1,7 +1,6 @@
 
 package risicammaraServer;
 
-import risicammaraServer.MessageManage.errori_t;
 import java.net.*;
 import java.io.*;
 import java.util.*;
@@ -10,20 +9,19 @@ import risicammaraServer.MessageManage.Messaggio_Comandi;
 import risicammaraServer.MessageManage.Messaggio_Errore;
 import risicammaraServer.MessageManage.Messaggio_chat;
 import risicammaraServer.MessageManage.comandi_t;
-import risicammaraServer.MessageManage.messaggio_t;
 
 public class Lobby
 {
    private ServerSocket serverSocket;
    int clientPort;
    ArrayList clients;
-   ArrayList nicks;
+   ArrayList giocatori;
 
 
    public void start() throws IOException
    {
       clients = new ArrayList();
-      nicks = new ArrayList();
+      giocatori = new ArrayList();
       Socket client;
       serverSocket = new ServerSocket(12345);
       getServerInfo();
@@ -114,13 +112,9 @@ public class Lobby
       Messaggio msgReceived = (Messaggio)is.readObject();
       switch(msgReceived.getType()){
           case ERROR:
-              if(((Messaggio_Errore)msgReceived).getError().equals(errori_t.INVALIDNICK)){
-                //TODO codice per nick non valido
-              }
+              ErrorHandling_recv(((Messaggio_Errore)msgReceived));
           case COMMAND:
-              if(((Messaggio_Comandi)msgReceived).getComando().equals(comandi_t.DISCONNECT)){
-                  //TODO codice per giocatore disconnesso
-              }
+              CommandHandling_recv((Messaggio_Comandi)msgReceived);
           default:
               break;
       }
@@ -128,6 +122,35 @@ public class Lobby
       return msgReceived;
    }
 
+   private void ErrorHandling_recv (Messaggio_Errore errorMsg){
+       switch(errorMsg.getError()){
+           default:
+               break;
+       }
+   }
+   
+   private void CommandHandling_recv(Messaggio_Comandi cmdMsg){
+        switch(cmdMsg.getComando()){
+            case CONNECTED:
+                Random rand = new Random();
+                String nick = cmdMsg.getSender();
+                int caz = 0;
+                while(giocatori.contains(nick)){
+                   caz = rand.nextInt(20);
+                   nick = nick + caz;
+                }
+            default:
+                break;
+        }
+   }
+    /**
+     *
+     * @param recMsg
+     * @param is
+     * @param os
+     * @param client
+     * @throws IOException
+     */
 
    public void sendMessage(Messaggio recMsg, ObjectInputStream is, ObjectOutputStream os,
        Socket client ) throws IOException
@@ -138,6 +161,7 @@ public class Lobby
          Socket cl = (Socket)all.next();
          switch(recMsg.getType()){
              case COMMAND:
+                 break;
              case CHAT:
                  broadcastMessage(((Messaggio_chat)recMsg), cl);
              default:
