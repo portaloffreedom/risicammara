@@ -12,7 +12,7 @@ import risicammarajava.deckManage.Carta;
  */
 public class Giocatore {
 
-    private String nome;
+    protected String nome;
     private int armate_bonus;
     private Colore_t colore_armate;
     private ArrayList<Carta> carte;

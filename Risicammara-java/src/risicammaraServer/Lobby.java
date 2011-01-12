@@ -8,7 +8,7 @@ import risicammaraServer.MessageManage.Messaggio;
 import risicammaraServer.MessageManage.Messaggio_Comandi;
 import risicammaraServer.MessageManage.Messaggio_Errore;
 import risicammaraServer.MessageManage.Messaggio_chat;
-import risicammaraServer.MessageManage.comandi_t;
+import risicammarajava.playerManage.ListaPlayers;
 
 public class Lobby
 {
@@ -16,12 +16,15 @@ public class Lobby
    int clientPort;
    ArrayList clients;
    ArrayList giocatori;
+   ListaPlayers gioc;
+   Giocatore_Net gioctemp;
 
 
    public void start() throws IOException
    {
       clients = new ArrayList();
       giocatori = new ArrayList();
+      gioc = new ListaPlayers();
       Socket client;
       serverSocket = new ServerSocket(12345);
       getServerInfo();
@@ -40,6 +43,9 @@ public class Lobby
    private void startListeningSingleClient(Socket client)
    {
       Thread t = new Thread (new ParallelServer(client));
+      gioctemp = new Giocatore_Net();
+      gioctemp.AssignThread(t);
+      gioctemp.setSocket(client);
       t.start();
    }
 
@@ -68,10 +74,11 @@ public class Lobby
       {
          try
          {
-            while (true)
+            while (this.client.isConnected())
             {
                sendMessage(receiveMessage(is), is, os, client);
             }
+            System.out.println("Utente "+client+" disconnesso.");
          }
          catch (Exception ex)
          {
@@ -107,7 +114,7 @@ public class Lobby
    }
 
 
-   public Messaggio receiveMessage(ObjectInputStream is) throws IOException, ClassNotFoundException
+   public synchronized Messaggio receiveMessage(ObjectInputStream is) throws IOException, ClassNotFoundException
    {
       Messaggio msgReceived = (Messaggio)is.readObject();
       switch(msgReceived.getType()){
@@ -139,9 +146,26 @@ public class Lobby
                    caz = rand.nextInt(20);
                    nick = nick + caz;
                 }
+                giocatori.add(nick);
+                gioctemp.setNome(nick);
+                this.gioc.addPlayer(gioctemp);
+                System.out.println(giocatori);
             default:
                 break;
         }
+   }
+
+   private void CommandHandling(Messaggio_Comandi cmdMsg,Socket cl, Socket client){
+       switch(cmdMsg.getComando()){
+           case CONNECTED:
+        try {
+            addNewUser(cmdMsg.getSender(), cl, client);
+        } catch (IOException ex) {
+            System.out.println("Eccezione IO su ADDUSER");
+        }
+           default:
+               break;
+       }
    }
     /**
      *
@@ -152,36 +176,26 @@ public class Lobby
      * @throws IOException
      */
 
-   public void sendMessage(Messaggio recMsg, ObjectInputStream is, ObjectOutputStream os,
+   public synchronized void sendMessage(Messaggio recMsg, ObjectInputStream is, ObjectOutputStream os,
        Socket client ) throws IOException
    {
-      int idxToRemove = -1;
-      for(Iterator all = clients.iterator(); all.hasNext();)
+      //int idxToRemove = -1;
+      System.out.println("Sono fuori");
+       for(Iterator all = clients.iterator(); all.hasNext();)
       {
+         System.out.println("cl: "+all);
          Socket cl = (Socket)all.next();
          switch(recMsg.getType()){
              case COMMAND:
+                 CommandHandling((Messaggio_Comandi)recMsg,cl,client);
                  break;
              case CHAT:
-                 broadcastMessage(((Messaggio_chat)recMsg), cl);
+                 Messaggio_chat ctt = (Messaggio_chat)recMsg;
+                 System.out.println(ctt.getNick()+": "+ctt.getMessaggio());
+                 broadcastMessage(ctt, cl);
              default:
                  break;
          }
-         /*         if(recMsg.startsWith("~"))
-            addNewUser(recMsg, cl, client);
-         else if(recMsg.startsWith("^"))
-            idxToRemove = removeUser(recMsg, idxToRemove, cl, client);
-         else
-         {
-            if(recMsg.equals("NOGOODUSER") && cl.equals(client))
-            {
-               new DataOutputStream(cl.getOutputStream()).writeBytes(recMsg + "\n");
-               idxToRemove = removeUser(recMsg, idxToRemove, cl, client);
-            }
-            else
-               broadcastMessage(recMsg, cl);
-         }
- */
 
       }
       /*
@@ -197,28 +211,11 @@ public class Lobby
    private void addNewUser(String recMsg, Socket cl, Socket client) throws IOException
    {
        //TODO codice per l'aggiunta di un utente nella lista
-       /*
       if (cl.equals(client))
       {
-         StringBuffer response = new StringBuffer();
-         for (int i = 0; i < nicks.size(); i++)
-         {
-            response.append(nicks.get(i));
-            response.append("~");
-         }
-
-         String strResponse = "OKNEWUSER" + response.toString();
-         System.out.println(strResponse);
-         new DataOutputStream(cl.getOutputStream()).writeBytes(strResponse + "\n");
+         recMsg = "Aggiunto";
       }
-      else
-      {
-         String strName = recMsg.substring(1);
-         new DataOutputStream(cl.getOutputStream()).writeBytes("NEWUSER" + strName +
-            "\n");
-      }
-        * 
-        */
+         new ObjectOutputStream(cl.getOutputStream()).writeObject(new Messaggio_chat("SERVER", recMsg));
    }
 
 

@@ -29,6 +29,7 @@ public class ListaPlayers {
      * @param player L'oggetto giocatore da inserire in lista
      */
     public void addPlayer(Giocatore player){
+        if(!player.getArmyColour().equals(Colore_t.NULLO))
         for(int i = 0;i<listaPlayers.size();i++){
             if(listaPlayers.get(i).getArmyColour() == player.getArmyColour()){
                 System.err.println("Errore: Giocatore non inserito. Colore già preso da un'altro giocatore");
