@@ -69,10 +69,10 @@ public class Main implements WindowListener {
         this.server=server;
 
 
-        //SalaAttesa finestraSalaAttesa = new SalaAttesa(server);
+        SalaAttesa finestraSalaAttesa = new SalaAttesa(server, true);
 
 
-        
+        /*
         ListaPlayers listaGiocatori = new ListaPlayers();
         listaGiocatori.addPlayer("Roberto", Colore_t.BLU);
         listaGiocatori.addPlayer("Matteo", Colore_t.GIALLO);
