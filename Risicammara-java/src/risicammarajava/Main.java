@@ -12,16 +12,8 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
-import risicammaraServer.MessageManage.Messaggio_Comandi;
-import risicammaraServer.MessageManage.Messaggio_chat;
-import risicammaraServer.MessageManage.comandi_t;
-import risicammarajava.playerManage.ListaPlayers;
 import risicammarajava.turnManage.Partita;
 
 
@@ -69,7 +61,7 @@ public class Main implements WindowListener {
         this.server=server;
 
 
-        SalaAttesa finestraSalaAttesa = new SalaAttesa(server, false);
+        SalaAttesa finestraSalaAttesa = new SalaAttesa(server, true);
 
 
         /*
