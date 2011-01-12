@@ -15,4 +15,5 @@ public enum comandi_t {
     EXIT,           // Giocatore Disconnesso
     CONNECTED,      // Giocatore Connesso
     DISCONNECT,     // Disconnette il server (crea una nuova lobby)
+    PLYADDED;       // Giocatore aggiunto
 }

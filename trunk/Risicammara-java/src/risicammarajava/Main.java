@@ -62,7 +62,7 @@ public class Main implements WindowListener {
 
     public void collegatiPartita(){
         CollegatiPartita dialogo = new CollegatiPartita(this);
-        System.out.println("8===D");
+        //System.out.println("8===D");
         }
 
     public void salaAttesa(Socket server){
