@@ -11,9 +11,17 @@ package risicammaraServer.MessageManage;
  */
 public class Messaggio_Comandi implements Messaggio{
     private comandi_t comando;
+    private String sender;
+    private String receiver;
 
-    public Messaggio_Comandi(comandi_t cmd){
+    public Messaggio_Comandi(comandi_t cmd, String inviante){
+        this(cmd, inviante, null);
+    }
+
+    public Messaggio_Comandi(comandi_t cmd, String inviante, String who){
         this.comando = cmd;
+        this.sender = inviante;
+        this.receiver = who;
     }
 
     public messaggio_t getType() {
@@ -22,5 +30,13 @@ public class Messaggio_Comandi implements Messaggio{
 
     public comandi_t getComando(){
         return comando;
+    }
+
+    public String getSender(){
+        return sender;
+    }
+
+    public String getReceiver(){
+        return receiver;
     }
 }
