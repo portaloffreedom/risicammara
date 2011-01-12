@@ -5,6 +5,8 @@
 
 package risicammaraServer.MessageManage;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Sten_Gun
