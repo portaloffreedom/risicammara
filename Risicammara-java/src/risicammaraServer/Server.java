@@ -6,48 +6,28 @@
 package risicammaraServer;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import risicammarajava.playerManage.Giocatore;
 
 /**
  *
  * @author Sten_Gun
  */
 public class Server {
-    private ServerSocket socksrv;
-    private Thread listaGiocatori[];
+    static ServerSocket socksrv;
+    static Giocatore[] listaGiocatori;
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Server nomeserver = new Server(12312);
-        // TODO code application logic here
-    }
-
-    public Server(int porta){
+        // TODO Codice Server
+        Lobby lobserv = new Lobby();
         try {
-            this.socksrv = new ServerSocket(porta, 6);
+            lobserv.start();
         } catch (IOException ex) {
-            //TODO cattura eccezione server
-            System.err.println("Errore: "+ex);
-            System.exit(-1);
-        }
-
-
-
-        for (int i=0; i<listaGiocatori.length; i++) {
-            Socket accettazione = null;
-
-            try {
-                accettazione = this.socksrv.accept();
-            } catch (IOException ex) {
-                //TODO cattura eccezione "aspetta client"
-                System.err.println("Errore: "+ex);
-                System.exit(-2);
-            }
-            listaGiocatori[i]= new Thread(new GiocatoreThread(accettazione));
+            System.err.print(ex.getStackTrace());
         }
     }
 }
