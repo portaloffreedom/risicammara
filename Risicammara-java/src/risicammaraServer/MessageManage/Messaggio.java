@@ -5,11 +5,14 @@
 
 package risicammaraServer.MessageManage;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Sten_Gun
  */
-public interface Messaggio {
+public interface Messaggio extends Serializable {
+
     public messaggio_t getType();
 
 }
