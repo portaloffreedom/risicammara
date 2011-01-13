@@ -10,19 +10,19 @@ package risicammaraServer.MessageManage;
  * @author Sten_Gun
  */
 public class MessaggioChat implements Messaggio {
-    private String sender;
+    private int sender;
     private String messaggio;
 
-    public MessaggioChat(String sender, String messaggio) {
+    public Messaggio_chat(int sender, String msg){
         this.sender = sender;
-        this.messaggio = messaggio;
+        this.messaggio = msg;
     }
     
     public messaggio_t getType() {
         return messaggio_t.CHAT;
     }
 
-    public String getNick(){
+    public int getSender(){
         return sender;
     }
 

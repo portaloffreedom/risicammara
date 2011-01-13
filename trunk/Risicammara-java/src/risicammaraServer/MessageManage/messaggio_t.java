@@ -10,11 +10,8 @@ package risicammaraServer.MessageManage;
  * @author Sten_Gun
  */
 public enum messaggio_t {
-    //parte necessaria alla lobby
-
-    /** Messaggio: "Si è connesso un nuovo giocatore
-     * @see risicammaraServer.MessageManage.MessaggioNuovoGiocatore
-     */
+    OKADD,              // Pacchetto di "ok" ad una aggiunta giocatore.
+    DISCONNECTED,       // Informa il server dell'avvenuta disconnessione di un giocatore
     AGGIUNGIGIOCATORE, //quando viene ricevuto un nuovo Socket di un nuovo giocatore connesso
     /** Messaggio di conferma avvenuta connessione da parte del Server contenente
      * anche tutte le informazione che servono per inizializzare la partita e

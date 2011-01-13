@@ -5,7 +5,6 @@
 
 package risicammaraServer;
 
-import java.util.Comparator;
 import java.util.PriorityQueue;
 import risicammaraServer.MessageManage.Messaggio;
 
@@ -16,10 +15,10 @@ import risicammaraServer.MessageManage.Messaggio;
 public class CodaMsg {
     private PriorityQueue<Messaggio> coda;
     private boolean occupato;
-    private Comparator ordinatore;
 
     public CodaMsg(){
         coda = new PriorityQueue<Messaggio>();
+        this.occupato = false;
     }
 
     public synchronized void Send(Messaggio msg){
@@ -30,17 +29,21 @@ public class CodaMsg {
             System.exit(-1);
         }
         occupato = true;
-            coda.offer(msg);
+        coda.offer(msg);
         occupato = false;
+        notifyAll();
     }
 
     public synchronized Messaggio get(){
-        if(coda.isEmpty()) try {
+        if(occupato || coda.isEmpty()) try {
             wait();
         } catch (InterruptedException ex) {
             System.out.println("Thread terminato in modo anomalo: "+ex.getStackTrace());
             System.exit(-1);
         }
-        return coda.poll();
+        occupato = true;
+        Messaggio ms = coda.poll();
+        occupato = false;
+        return ms;
     }
 }

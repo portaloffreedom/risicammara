@@ -76,8 +76,9 @@ public class AscoltatoreLobby implements Runnable {
             //TODO fermarsi quando coda piena → gestito dal'oggetto
 
             giocatore = ascoltatore.accept();
-            
             coda.Send(new MessaggioNuovoGiocatore(giocatore));
+            //TODO spedire messaggio nuovo giocatore
+            //coda.send(new nuovoGiocatoreMessage(giocatore));
         }
     }
 }

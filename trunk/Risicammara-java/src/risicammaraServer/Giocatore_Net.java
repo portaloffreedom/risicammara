@@ -42,4 +42,8 @@ public class Giocatore_Net extends Giocatore {
         super.nome = nom;
     }
 
+    public void setArmyColour(Colore_t col){
+        super.colore_armate = col;
+    }
+
 }

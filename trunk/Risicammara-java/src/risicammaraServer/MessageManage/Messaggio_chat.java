@@ -9,24 +9,24 @@ package risicammaraServer.MessageManage;
  *
  * @author Sten_Gun
  */
-public class Messaggio_Errore implements Messaggio{
-    private errori_t errore;
+public class Messaggio_chat implements Messaggio {
     private int sender;
+    private String messaggio;
 
-    public Messaggio_Errore(errori_t err,int sender){
-        this.errore = err;
+    public Messaggio_chat(int sender, String msg){
         this.sender = sender;
+        this.messaggio = msg;
     }
-
-    public errori_t getError(){
-        return this.errore;
-    }
-
+    
     public messaggio_t getType() {
-        return messaggio_t.ERROR;
+        return messaggio_t.CHAT;
     }
 
-    public int getSender() {
+    public int getSender(){
         return sender;
+    }
+
+    public String getMessaggio(){
+        return messaggio;
     }
 }

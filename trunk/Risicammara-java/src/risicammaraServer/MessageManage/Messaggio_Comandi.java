@@ -12,28 +12,28 @@ package risicammaraServer.MessageManage;
 public class Messaggio_Comandi implements Messaggio{
 
     private comandi_t comando;
-    private String sender;
-    private String receiver;
+    private int sender;
+    private int receiver;
 
     /**
      * Costruttore del pacchetto
      * @param cmd Il comando desiderato
      * @param inviante  il nome del giocatore che lo ha inviato (SERVER se è di sistema)
      */
-    public Messaggio_Comandi(comandi_t cmd, String inviante){
-        this(cmd, inviante, null);
+    public Messaggio_Comandi(comandi_t cmd, int inviante){
+        this(cmd, inviante, -2);
     }
 
     /**
      * Costruttore alternativo del pacchetto
      * @param cmd il comando desiderato.
-     * @param inviante il nome del giocatore che invia il comando (SERVER se è il sistema)
-     * @param who il nome di chi riceve questa azione(non può essere SERVER)
+     * @param inviante l'indice del giocatore che invia il comando (-1 se è il sistema,-2 se null)
+     * @param who l'indice di chi riceve questa azione(non può essere -1)
      */
-    public Messaggio_Comandi(comandi_t cmd, String inviante, String who){
+    public Messaggio_Comandi(comandi_t cmd, int inviante, int who){
         this.comando = cmd;
         this.sender = inviante;
-        if((who != null) && who.equals("SERVER")) who=null;
+        if((who < -1) && (who < 0)) who=-2;
         this.receiver = who;
     }
 /**
@@ -53,16 +53,16 @@ public class Messaggio_Comandi implements Messaggio{
     }
 /**
  * Fornisce il nome di chi ha inviato il pacchetto
- * @return il nome del mandante come Stringa
+ * @return l'indice del giocatore che invia il comando.
  */
-    public String getSender(){
+    public int getSender(){
         return sender;
     }
 /**
  * Fornisce chi riceve l'azione di questo comando.
- * @return il nome di chi riceve l'azione come Stringa
+ * @return l'indice del giocatore che riceve l'azione.
  */
-    public String getReceiver(){
+    public int getReceiver(){
         return receiver;
     }
 }

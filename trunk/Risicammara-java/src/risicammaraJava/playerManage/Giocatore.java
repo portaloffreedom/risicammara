@@ -14,7 +14,7 @@ public class Giocatore {
 
     protected String nome;
     private int armate_bonus;
-    private Colore_t colore_armate;
+    protected Colore_t colore_armate;
     private ArrayList<Carta> carte;
     private Obbiettivi_t obbiettivo;
 
