@@ -13,6 +13,7 @@ import java.awt.Rectangle;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import javax.swing.JButton;
@@ -45,8 +46,12 @@ public class SalaAttesa extends JFrame implements WindowListener {
     private final static Rectangle invioR = new Rectangle(finestraR.width-(altezza+margine), finestraR.height-(30+altezza+margine), altezza, altezza);
     private final static Rectangle immissioneR = new Rectangle(nomeGiocatoreR.x, invioR.y, finestraR.width-(giocatoriR.width+prontiR.width+invioR.width+margine*4), altezza);
     private final static Rectangle cronologiaR = new Rectangle(nomeGiocatoreR.x, nomeGiocatoreR.y+altezza+margine*2, immissioneR.width+invioR.width, finestraR.height-(35+altezza*2+margine*4));
+
     private boolean leader;
     private Socket server;
+    private ObjectOutputStream scriviServer;
+    private ObjectInputStream  leggiServer;
+
     private QuadratoGiocatori giocatori[];
     private JToggleButton pronti[];
     private JTextField nomeGiocatore;
@@ -67,31 +72,12 @@ public class SalaAttesa extends JFrame implements WindowListener {
         this.setBounds(finestraR);
         this.setResizable(false);
 
-        JPanel pannello = new JPanel(new LayoutManager() {
-
-            public void addLayoutComponent(String name, Component comp) {
-                //throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            public void removeLayoutComponent(Component comp) {
-                //throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            public Dimension preferredLayoutSize(Container parent) {
-                return new Dimension(80, 30);
-            }
-
-            public Dimension minimumLayoutSize(Container parent) {
-                return new Dimension(80, 30);
-            }
-
-            public void layoutContainer(Container parent) {
-                //throw new UnsupportedOperationException("Not supported yet.");
-            }
-        });
+        JPanel pannello = new JPanel(new LayoutManagerMatteo());
         this.getContentPane().add(pannello);
 
         disegnaGiocatori(pannello);
+
+        personalizza();
 
         this.setVisible(true);
     }
@@ -201,6 +187,10 @@ public class SalaAttesa extends JFrame implements WindowListener {
         //throw new UnsupportedOperationException("Not supported yet.");
     }// </editor-fold>
 
+    private void personalizza() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
     private interface QuadratoGiocatori {
         public void setNome(String testo);
         public void setColore(Colore_t colore);
@@ -237,5 +227,31 @@ public class SalaAttesa extends JFrame implements WindowListener {
             this.setForeground(colore.getColor());
         }
 
+    }
+
+    static class LayoutManagerMatteo implements LayoutManager {
+
+        public LayoutManagerMatteo() {
+        }
+
+        public void addLayoutComponent(String name, Component comp) {
+            //throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        public void removeLayoutComponent(Component comp) {
+            //throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        public Dimension preferredLayoutSize(Container parent) {
+            return new Dimension(80, 30);
+        }
+
+        public Dimension minimumLayoutSize(Container parent) {
+            return new Dimension(80, 30);
+        }
+
+        public void layoutContainer(Container parent) {
+            //throw new UnsupportedOperationException("Not supported yet.");
+        }
     }
 }
