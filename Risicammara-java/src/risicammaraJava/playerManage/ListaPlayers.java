@@ -3,10 +3,10 @@
  * and open the template in the editor.
  */
 
-package risicammarajava.playerManage;
+package risicammaraJava.playerManage;
 import java.util.ArrayList;
 import java.util.List;
-import risicammarajava.Colore_t;
+import risicammaraClient.Colore_t;
 /**
  *
  * @author stengun

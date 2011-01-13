@@ -7,11 +7,8 @@ package risicammaraServer;
 
 import java.io.IOException;
 import java.net.*;
-import java.rmi.server.SocketSecurityException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import risicammarajava.Main;
-import risicammarajava.playerManage.Giocatore;
+import risicammaraClient.Main;
+import risicammaraJava.playerManage.Giocatore;
 
 /**
  * Lato server di Risicammara.
@@ -21,7 +18,8 @@ public class Server {
     private ServerSocket socksrv;
     private Giocatore[] listaGiocatori;
     private int porta;
-    private
+    //TODO riferimento alla coda
+    //TODO riferimento al numero giocatori
 
     /**
      * @param args the command line arguments
@@ -35,58 +33,25 @@ public class Server {
         this.porta=porta;
 
 
-        AscoltoreConnessioni prova = new AscoltoreConnessioni(Thread.currentThread(), this.porta);
+        AscoltatoreLobby prova = new AscoltatoreLobby(Thread.currentThread(), this.porta);
         prova.run();
-        try {
-            this.wait();
-        } catch (InterruptedException ex) {
-            System.err.println(null);
+
+
+        while (true) {
+
+            
+
         }
 
-        /*
-            Lobby lobserv = new Lobby(Thread.currentThread());
-            try {
-            lobserv.start();
-            } catch (IOException ex) {
-            System.err.print(ex.getStackTrace());
-            }
-             */
 
-
+/*
+    Lobby lobserv = new Lobby(Thread.currentThread());
+    try {
+    lobserv.start();
+    } catch (IOException ex) {
+    System.err.print(ex.getStackTrace());
     }
-
-    private class AscoltoreConnessioni implements Runnable {
-        private Thread server;
-        private int porta;
-        private ServerSocket ascoltatore;
-        private int numeroConnessioni;
-        private final int numeroMassimoConnessi
-
-        public AscoltoreConnessioni(Thread server, int porta) {
-            this.server = server;
-            this.porta = porta;
-        }
-
-        public void run() {
-            try {
-                this.ascoltatore = new ServerSocket(this.porta);
-            } catch (IOException ex) {
-                System.err.println("Impossibile aprire una connessione sulla porta: "+this.porta);
-                System.err.println("Errore: "+ex.getStackTrace());
-                System.exit(0);
-            }
-
-
-        }
-
-        private void ascolta(){
-            Socket giocatore = null;
-
-            while (numeroConnessioni<=6)
-            ascoltatore.accept()
-        }
-
+     */
     }
 }
-
 

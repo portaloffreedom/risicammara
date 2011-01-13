@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package risicammarajava;
+package risicammaraClient;
 
 import java.awt.Container;
 import java.awt.event.ItemEvent;
@@ -14,8 +14,8 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import risicammarajava.playerManage.Giocatore;
-import risicammarajava.turnManage.Partita;
+import risicammaraJava.playerManage.Giocatore;
+import risicammaraJava.turnManage.Partita;
 
 /**
  *

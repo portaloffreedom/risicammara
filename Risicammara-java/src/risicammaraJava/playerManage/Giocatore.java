@@ -1,9 +1,9 @@
-package risicammarajava.playerManage;
+package risicammaraJava.playerManage;
 
 import java.util.ArrayList;
 import java.util.List;
-import risicammarajava.*;
-import risicammarajava.deckManage.Carta;
+import risicammaraClient.*;
+import risicammaraJava.deckManage.Carta;
 
 /**
  * Oggetto di tipo giocatore che include il nome, il colore delle armate e

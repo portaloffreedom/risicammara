@@ -3,16 +3,16 @@
  * and open the template in the editor.
  */
 
-package risicammarajava.turnManage;
+package risicammaraJava.turnManage;
 
-import risicammarajava.Obbiettivi_t;
-import risicammarajava.boardManage.Plancia;
-import risicammarajava.deckManage.MazzoObbiettivi;
-import risicammarajava.deckManage.MazzoTerritori;
-import risicammarajava.playerManage.Giocatore;
-import risicammarajava.playerManage.ListaPlayers;
-import risicammarajava.territori_t;
-import risicammarajava.tipovittoria_t;
+import risicammaraClient.Obbiettivi_t;
+import risicammaraJava.boardManage.Plancia;
+import risicammaraJava.deckManage.MazzoObbiettivi;
+import risicammaraJava.deckManage.MazzoTerritori;
+import risicammaraJava.playerManage.Giocatore;
+import risicammaraJava.playerManage.ListaPlayers;
+import risicammaraClient.territori_t;
+import risicammaraClient.tipovittoria_t;
 
 /**
  * Questa classe ha il compito di inizializzare tutti gli oggetti che servono per

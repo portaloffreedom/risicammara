@@ -1,4 +1,4 @@
-package risicammarajava;
+package risicammaraClient;
 
 /**
  * Enumerato che rappresenta i continenti e il loro bonus armate.

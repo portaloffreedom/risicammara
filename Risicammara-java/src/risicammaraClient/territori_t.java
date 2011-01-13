@@ -1,6 +1,6 @@
-package risicammarajava;
+package risicammaraClient;
 
-import risicammarajava.deckManage.Carta;
+import risicammaraJava.deckManage.Carta;
 
 /**
  * Enumerato che rappresenta tutti i territori, i relativi bonus e il continente

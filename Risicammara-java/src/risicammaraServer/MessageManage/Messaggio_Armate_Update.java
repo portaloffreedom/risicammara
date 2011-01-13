@@ -5,7 +5,7 @@
 
 package risicammaraServer.MessageManage;
 
-import risicammarajava.territori_t;
+import risicammaraClient.territori_t;
 
 /**
  *

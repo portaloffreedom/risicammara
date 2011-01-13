@@ -3,8 +3,8 @@
 package risicammaraServer;
 
 import java.net.Socket;
-import risicammarajava.Colore_t;
-import risicammarajava.playerManage.Giocatore;
+import risicammaraClient.Colore_t;
+import risicammaraJava.playerManage.Giocatore;
 
 /**
  *
