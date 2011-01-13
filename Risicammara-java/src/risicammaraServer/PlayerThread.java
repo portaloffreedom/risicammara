@@ -5,18 +5,52 @@
 
 package risicammaraServer;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import risicammaraServer.MessageManage.Messaggio;
+
 /**
  *
  * @author Sten_Gun
  */
-public class PlayerThread implements Runnable{
+public class PlayerThread extends Thread{
     private boolean stop;
-    private boolean sleep;
-    public PlayerThread(){
+    private Socket player_socket;
+    private int player_index;
+    private CodaMsg coda;
+    public PlayerThread(CodaMsg coda,Socket playerSocket,int player_index){
+        this.coda = coda;
+        this.player_index = player_index;
+        this.player_socket = playerSocket;
     }
+
+    @Override
     public void run() {
         this.stop = false;
-        this.sleep = false;
+        ObjectInputStream is = null;
+        try {
+            is = new ObjectInputStream(player_socket.getInputStream());
+        } catch (IOException ex) {
+            System.err.println("Errore: "+ex.getStackTrace());
+            System.exit(-1);
+        }
+        while(!stop){
+            try {
+                coda.Send((Messaggio)is.readObject());
+            } catch (Exception ex) {
+                System.err.println("Errore: "+ex.getStackTrace());
+                System.exit(-1);
+            }
+        }
     }
+
+    public void setStop(boolean stop) {
+        this.stop = stop;
+    }
+
+    
 
 }
