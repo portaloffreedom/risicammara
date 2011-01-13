@@ -10,6 +10,7 @@ package risicammaraServer.MessageManage;
  * @author Sten_Gun
  */
 public enum messaggio_t {
+    AGGIUNGIGIOCATORE, //quando viene ricevuto un nuovo Socket di un nuovo giocatore connesso
     CHAT,       //Il pacchetto ricevuto è di tipo MESSAGGIO DI CHAT
     COMMAND,    //Il pacchetto ricevuto è un comando client/server
     ERROR,      //Il pacchetto ricevuto è una notifica di errore

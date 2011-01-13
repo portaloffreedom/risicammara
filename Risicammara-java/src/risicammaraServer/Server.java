@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.*;
 import risicammaraClient.Main;
 import risicammaraJava.playerManage.Giocatore;
+import risicammaraServer.MessageManage.Messaggio;
 
 /**
  * Lato server di Risicammara.
@@ -17,6 +18,7 @@ import risicammaraJava.playerManage.Giocatore;
 public class Server {
     private ServerSocket socksrv;
     private Giocatore[] listaGiocatori;
+    private CodaMsg coda;
     private int porta;
     //TODO riferimento alla coda
     //TODO riferimento al numero giocatori
@@ -30,14 +32,22 @@ public class Server {
     }
 
     public Server (int porta) {
-        this.porta=porta;
+        this.porta = porta;
+        this.coda = new CodaMsg();
 
-
-        AscoltatoreLobby prova = new AscoltatoreLobby(Thread.currentThread(), this.porta);
+        AscoltatoreLobby prova = new AscoltatoreLobby(Thread.currentThread(), this.porta, this.coda);
         prova.run();
 
 
+        Messaggio msg = null;
         while (true) {
+
+            msg = coda.get();
+
+            switch (msg.getType()) {
+                case AGGIUNGIGIOCATORE:
+                    
+            }
 
             
 
