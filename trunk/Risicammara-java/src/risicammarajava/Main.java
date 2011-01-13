@@ -12,8 +12,14 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import javax.swing.JFrame;
+import risicammaraServer.MessageManage.Messaggio_Comandi;
+import risicammaraServer.MessageManage.Messaggio_chat;
+import risicammaraServer.MessageManage.comandi_t;
+import risicammarajava.playerManage.ListaPlayers;
 import risicammarajava.turnManage.Partita;
 
 
@@ -65,11 +71,12 @@ public class Main implements WindowListener {
 
 
         /*
+         //prova per vedere se funziona la parte vera del programma "risiko"
         ListaPlayers listaGiocatori = new ListaPlayers();
         listaGiocatori.addPlayer("Roberto", Colore_t.BLU);
         listaGiocatori.addPlayer("Matteo", Colore_t.GIALLO);
         listaGiocatori.addPlayer("Mandingo", Colore_t.NERO);
-        try {
+        /*try {
             new ObjectOutputStream(server.getOutputStream()).writeObject(new Messaggio_Comandi(comandi_t.CONNECTED, "Giocatore"));
             new ObjectOutputStream(server.getOutputStream()).writeObject(new Messaggio_chat("culo", "messaggiopluffete"));
             new ObjectOutputStream(server.getOutputStream()).writeObject(new Messaggio_chat("culo", "messaggiopluffete2"));
