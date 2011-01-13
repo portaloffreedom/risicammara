@@ -5,20 +5,37 @@
 
 package risicammaraServer.MessageManage;
 
+import risicammaraJava.playerManage.ListaPlayers;
+
 /**
  *
- * @author matteo
+ * @author Sten_Gun
  */
-public class MessaggioConfermaNuovoGiocatore implements Messaggio {
+public class MessaggioConfermaNuovoGiocatore implements Messaggio{
 
-    private int numeroGiocatore;
+    private ListaPlayers listgioc;
+    private int indexply;
 
-    public messaggio_t getType() {
-        return messaggio_t.CONFERMAAGGIUNGIGIOCATORE;
+    public MessaggioConfermaNuovoGiocatore(ListaPlayers listgioc, int indexply) {
+        this.listgioc = listgioc;
+        this.indexply = indexply;
     }
 
-    public int getNumeroGiocatore() {
-        return numeroGiocatore;
+
+    public messaggio_t getType() {
+        return messaggio_t.OKADD;
+    }
+
+    public ListaPlayers getPlyList(){
+        return listgioc;
+    }
+
+    public int getPlyIndex(){
+        return indexply;
+    }
+
+    public int getSender() {
+        return -1;
     }
 
 }

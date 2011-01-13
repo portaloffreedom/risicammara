@@ -16,7 +16,7 @@ import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraServer.MessageManage.Messaggio;
 import risicammaraServer.MessageManage.MessaggioNuovoGiocatore;
-import risicammaraServer.MessageManage.MessaggioNuovoGiocatoreAck;
+import risicammaraServer.MessageManage.MessaggioConfermaNuovoGiocatore;
 import risicammaraServer.MessageManage.Messaggio_Comandi;
 import risicammaraServer.MessageManage.Messaggio_Errore;
 import risicammaraServer.MessageManage.Messaggio_chat;
@@ -47,7 +47,7 @@ public class Server {
         this.porta = porta;
         this.coda = new CodaMsg();
 
-        AscoltatoreLobby prova = new AscoltatoreLobby(Thread.currentThread(), this.porta, this.coda);
+        AscoltatoreLobby prova = new AscoltatoreLobby(this.porta, this.coda);
         prova.run();
 
 
@@ -67,7 +67,7 @@ public class Server {
                     int plynumb = listaGiocatori.addPlayer(gioctemp);
                     try {
                         ObjectOutputStream os = new ObjectOutputStream(mgio.getConnessioneGiocatore().getOutputStream());
-                        os.writeObject(new MessaggioNuovoGiocatoreAck(listaGiocatori,plynumb));
+                        os.writeObject(new MessaggioConfermaNuovoGiocatore(listaGiocatori,plynumb));
                     } catch (IOException ex) {
                         System.out.println("errore stream");
                         System.exit(-1);
