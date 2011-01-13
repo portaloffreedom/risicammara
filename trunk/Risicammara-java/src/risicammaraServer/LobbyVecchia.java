@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 import risicammaraServer.MessageManage.Messaggio;
 import risicammaraServer.MessageManage.Messaggio_Comandi;
 import risicammaraServer.MessageManage.Messaggio_Errore;
-import risicammaraServer.MessageManage.Messaggio_chat;
+import risicammaraServer.MessageManage.MessaggioChat;
 import risicammaraJava.playerManage.ListaPlayers;
 /**
  * Classe che rappresenta la LobbyVecchia lato server (che fornisce la lista dei giocatori necessaria
@@ -252,7 +252,7 @@ public class LobbyVecchia
                  CommandHandling((Messaggio_Comandi)recMsg,cl,client,idxToRemove);
                  break;
              case CHAT:
-                 Messaggio_chat ctt = (Messaggio_chat)recMsg;
+                 MessaggioChat ctt = (MessaggioChat)recMsg;
                  System.out.println(ctt.getNick()+": "+ctt.getMessaggio());
                  broadcastMessage(ctt, cl);
              default:
@@ -281,7 +281,7 @@ public class LobbyVecchia
       {
          recMsg = "Joined.";
       }
-         new ObjectOutputStream(cl.getOutputStream()).writeObject(new Messaggio_chat("SERVER", recMsg));
+         new ObjectOutputStream(cl.getOutputStream()).writeObject(new MessaggioChat("SERVER", recMsg));
    }
 
 /**
@@ -307,7 +307,7 @@ public class LobbyVecchia
       else
       {
           recMsg = recMsg + " è uscito dalla sala d'attesa.";
-         new ObjectOutputStream(cl.getOutputStream()).writeObject(new Messaggio_chat("SERVER", recMsg));
+         new ObjectOutputStream(cl.getOutputStream()).writeObject(new MessaggioChat("SERVER", recMsg));
       }
       return idxToRemove;
    }
@@ -318,7 +318,7 @@ public class LobbyVecchia
  * @param cl il client da notificare (iterato)
  * @throws IOException Eccezione di I/O dovuta ai socket
  */
-   private void broadcastMessage(Messaggio_chat recMsg, Socket cl) throws IOException
+   private void broadcastMessage(MessaggioChat recMsg, Socket cl) throws IOException
    {
          new ObjectOutputStream(cl.getOutputStream()).writeObject(recMsg);
    }
