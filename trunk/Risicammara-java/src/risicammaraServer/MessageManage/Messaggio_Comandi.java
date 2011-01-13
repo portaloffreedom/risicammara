@@ -33,7 +33,7 @@ public class Messaggio_Comandi implements Messaggio{
     public Messaggio_Comandi(comandi_t cmd, String inviante, String who){
         this.comando = cmd;
         this.sender = inviante;
-        if(who.equals("SERVER")) who=null;
+        if((who != null) && who.equals("SERVER")) who=null;
         this.receiver = who;
     }
 /**
