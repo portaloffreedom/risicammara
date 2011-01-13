@@ -136,6 +136,7 @@ public class SalaAttesa extends JFrame implements WindowListener {
 
         this.cronologiaChat = new JTextArea();
         this.cronologiaChat.setBounds(cronologiaR);
+        this.cronologiaChat.setEditable(false);
 
 
         pannello.add(this.nomeGiocatore);
