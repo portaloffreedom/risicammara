@@ -15,7 +15,7 @@ import risicammaraServer.MessageManage.MessaggioNuovoGiocatore;
  * e nel caso le notifica al Thread Server che penserà a processarle.
  * @author matteo
  */
-public class AscoltatoreLobby implements Runnable {
+public class AscoltatoreLobby extends Thread {
     /** Variabile che memorizza la coda che server per mandare messaggi al "Server" */
     private CodaMsg coda;
 
@@ -24,6 +24,8 @@ public class AscoltatoreLobby implements Runnable {
     /** Variabile che memorizza il ServerSocket che deve rimanere in ascolto */
     private ServerSocket ascoltatore;
 
+    /** Variabile che serve per stoppare il thread a comando */
+    private boolean stop;
     /**
      * Inizializza semplicemente i parametri necessari a fare partire un Socket
      * in ascolto a nuove connessioni.
@@ -34,6 +36,7 @@ public class AscoltatoreLobby implements Runnable {
     public AscoltatoreLobby(int porta, CodaMsg coda) {
         this.porta = porta;
         this.coda = coda;
+        this.stop = false;
     }
 
     /**
@@ -41,6 +44,7 @@ public class AscoltatoreLobby implements Runnable {
      * dell'interfaccia Runnable per creare un nuovo Thread si cui questo è il
      * nuovo "main"
      */
+    @Override
     public void run() {
         try {
             this.ascoltatore = new ServerSocket(this.porta);
@@ -72,13 +76,9 @@ public class AscoltatoreLobby implements Runnable {
     private void ascolta() throws IOException {
         Socket giocatore = null;
 
-        while (true) {
-            //TODO fermarsi quando coda piena → gestito dal'oggetto
-
+        while (!this.stop) {
             giocatore = ascoltatore.accept();
             coda.Send(new MessaggioNuovoGiocatore(giocatore));
-            //TODO spedire messaggio nuovo giocatore
-            //coda.send(new nuovoGiocatoreMessage(giocatore));
         }
     }
 }

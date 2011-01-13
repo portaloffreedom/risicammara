@@ -63,8 +63,8 @@ public class Server {
                     MessaggioNuovoGiocatore mgio = (MessaggioNuovoGiocatore)msg;
                     Giocatore_Net gioctemp = new Giocatore_Net(mgio.getConnessioneGiocatore());
                     gioctemp.setArmyColour(Colore_t.NULLO);
-                    gioctemp.AssignThread(new Thread(new PlayerThread()));
                     int plynumb = listaGiocatori.addPlayer(gioctemp);
+                    gioctemp.AssignThread(new Thread(new PlayerThread(coda,mgio.getConnessioneGiocatore(),plynumb)));
                     try {
                         ObjectOutputStream os = new ObjectOutputStream(mgio.getConnessioneGiocatore().getOutputStream());
                         os.writeObject(new MessaggioConfermaNuovoGiocatore(listaGiocatori,plynumb));
@@ -122,26 +122,29 @@ public class Server {
     * funzione ::receiveMessage
     * @param cmdMsg il pacchetto Messaggio_Comando
     */
-   private Messaggio_chat CommandHandling(Messaggio_Comandi cmdMsg){
-        switch(cmdMsg.getComando()){
-            case DISCONNECT:
-                Giocatore_Net tempgioc = (Giocatore_Net)listaGiocatori.get(cmdMsg.getSender());
-                Socket giosock = tempgioc.getSocket();
-                String nomegioc = tempgioc.getNome();
-                listaGiocatori.remPlayer(cmdMsg.getSender());
-                try {
-                    ObjectOutputStream os = new ObjectOutputStream(giosock.getOutputStream());
-                    os.writeObject(new Messaggio_Comandi(comandi_t.DISCONNECT, -1));
-                    os.writeObject(new Messaggio_chat(-1, "sei stato disconnesso"));
-                    giosock.close();
-                } catch (IOException ex) {
-                    System.err.println("Errore socket: "+ex.getStackTrace());
-                }
-                return new Messaggio_chat(-1,"Giocatore "+nomegioc+" disconnesso.");
-            default:
-                return new Messaggio_chat(-1,"comando non riconosciuto.");
-        }
-   }
+private Messaggio_chat CommandHandling(Messaggio_Comandi cmdMsg){
+    //TODO Completare il codice di Exit.
+    //TODO Completare il codice di KICKPLAYER
+    //TODO Completare il codice di NUOVAPARTITA
+    switch(cmdMsg.getComando()){
+        case DISCONNECT:
+            Giocatore_Net tempgioc = (Giocatore_Net)listaGiocatori.get(cmdMsg.getSender());
+            Socket giosock = tempgioc.getSocket();
+            String nomegioc = tempgioc.getNome();
+            listaGiocatori.remPlayer(cmdMsg.getSender());
+            try {
+                ObjectOutputStream os = new ObjectOutputStream(giosock.getOutputStream());
+                os.writeObject(new Messaggio_Comandi(comandi_t.DISCONNECT, -1));
+                os.writeObject(new Messaggio_chat(-1, "sei stato disconnesso"));
+                giosock.close();
+            } catch (IOException ex) {
+                System.err.println("Errore socket: "+ex.getStackTrace());
+            }
+            return new Messaggio_chat(-1,"Giocatore "+nomegioc+" disconnesso.");
+        default:
+            return new Messaggio_chat(-1,"comando non riconosciuto.");
+    }
+}
 
     /**
      * Il server notifica i client tramite un messaggio che appare nella chat
