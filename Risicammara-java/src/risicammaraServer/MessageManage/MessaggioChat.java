@@ -13,7 +13,7 @@ public class MessaggioChat implements Messaggio {
     private int sender;
     private String messaggio;
 
-    public Messaggio_chat(int sender, String msg){
+    public MessaggioChat(int sender, String msg){
         this.sender = sender;
         this.messaggio = msg;
     }
