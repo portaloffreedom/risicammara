@@ -8,6 +8,8 @@ package risicammaraServer;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import risicammaraServer.MessageManage.MessaggioNuovoGiocatore;
+import risicammaraServer.MessageManage.Messaggio_Comandi;
 
 /**
  *
@@ -15,14 +17,15 @@ import java.net.Socket;
  */
 public class AscoltatoreLobby implements Runnable {
     private Thread server;
+    private CodaMsg coda;
+
     private int porta;
     private ServerSocket ascoltatore;
-    private int numeroConnessioni;
-    private final int numeroMassimoConnessi = 6;
 
-    public AscoltatoreLobby(Thread server, int porta) {
+    public AscoltatoreLobby(Thread server, int porta, CodaMsg coda) {
         this.server = server;
         this.porta = porta;
+        this.coda = coda;
     }
 
     public void run() {
@@ -53,6 +56,7 @@ public class AscoltatoreLobby implements Runnable {
             giocatore = ascoltatore.accept();
             //TODO spedire messaggio nuovo giocatore
             //coda.send(new nuovoGiocatoreMessage(giocatore));
+            coda.Send(new MessaggioNuovoGiocatore(giocatore));
         }
     }
 }
