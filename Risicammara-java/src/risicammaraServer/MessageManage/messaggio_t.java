@@ -11,10 +11,23 @@ package risicammaraServer.MessageManage;
  */
 public enum messaggio_t {
     //parte necessaria alla lobby
+
+    /** Messaggio: "Si è connesso un nuovo giocatore
+     * @see risicammaraServer.MessageManage.MessaggioNuovoGiocatore
+     */
     AGGIUNGIGIOCATORE, //quando viene ricevuto un nuovo Socket di un nuovo giocatore connesso
+    /** Messaggio di conferma avvenuta connessione da parte del Server contenente
+     * anche tutte le informazione che servono per inizializzare la partita e
+     * la lista giocatori del client 
+     * @see risicammaraServer.MessageManage.MessaggioConfermaNuovoGiocatore
+     */
     CONFERMAAGGIUNGIGIOCATORE, //per il messaggio di risposta che deve mandare il server
 
     //altro
+
+    /** Messaggio di chat (contente testo e mittente) 
+     * @see risicammaraServer.MessageManage.Messaggio_chat
+     */
     CHAT,       //Il pacchetto ricevuto è di tipo MESSAGGIO DI CHAT
     COMMAND,    //Il pacchetto ricevuto è un comando client/server
     ERROR,      //Il pacchetto ricevuto è una notifica di errore
