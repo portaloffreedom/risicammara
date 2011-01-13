@@ -5,14 +5,13 @@
 
 package risicammaraJava.playerManage;
 import java.util.ArrayList;
-import java.util.List;
 import risicammaraClient.Colore_t;
 /**
  *
  * @author stengun
  */
 public class ListaPlayers {
-    private List <Giocatore> listaPlayers;
+    private ArrayList <Giocatore> listaPlayers;
     public ListaPlayers(){
         listaPlayers = new ArrayList<Giocatore>();
     }
@@ -21,22 +20,18 @@ public class ListaPlayers {
      * @param nome Stringa contenente il nome giocatore
      * @param colore_armate Colore delle armate del giocatore
      */
-    public void addPlayer(String nome,Colore_t colore_armate){
-        this.addPlayer(new Giocatore(nome, colore_armate));
+    public int addPlayer(String nome,Colore_t colore_armate){
+        return this.addPlayer(new Giocatore(nome, colore_armate));
     }
     /**
      * Aggiunge un oggetto giocatore alla lista.
      * @param player L'oggetto giocatore da inserire in lista
      */
-    public void addPlayer(Giocatore player){
-        if(!player.getArmyColour().equals(Colore_t.NULLO))
-        for(int i = 0;i<listaPlayers.size();i++){
-            if(listaPlayers.get(i).getArmyColour() == player.getArmyColour()){
-                System.err.println("Errore: Giocatore non inserito. Colore già preso da un'altro giocatore");
-                return;
-            }
-        }
-        listaPlayers.add(player);
+    public int addPlayer(Giocatore player){
+        int index = listaPlayers.indexOf(null);
+        if(index < 0) index = listaPlayers.size();
+        listaPlayers.add(index-1,player);
+        return index;
     }
 
     /**
@@ -65,8 +60,14 @@ public class ListaPlayers {
         return listaPlayers.get(index);
     }
     
-    public void remPlayer(int index) throws UnsupportedOperationException, IndexOutOfBoundsException{
-        this.listaPlayers.remove(index);
+    public void remPlayer(int index){
+        this.listaPlayers.add(index,null);
+    }
+
+    public String getNomeByIndex(int index){
+        if(index < -1 || listaPlayers.get(index) == null) return "NAME_ERROR";
+        if(index < 0  ) return "SERVER";
+        return listaPlayers.get(index).getNome();
     }
 
 }

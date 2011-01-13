@@ -42,6 +42,10 @@ public class MessaggioNuovoGiocatore implements Messaggio {
         return connessioneGiocatore;
     }
 
+    public int getSender() {
+        return -1;
+    }
+
     
 
 }

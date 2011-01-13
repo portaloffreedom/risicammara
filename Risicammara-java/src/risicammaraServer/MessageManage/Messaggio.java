@@ -18,5 +18,6 @@ public interface Messaggio extends Serializable {
      * @return tipo di messaggio ::messaggio_t
      */
     public messaggio_t getType();
+    public int getSender();
 
 }
