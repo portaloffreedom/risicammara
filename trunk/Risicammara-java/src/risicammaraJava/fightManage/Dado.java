@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package risicammarajava.fightManage;
+package risicammaraJava.fightManage;
 import java.util.Random;
 
 /**

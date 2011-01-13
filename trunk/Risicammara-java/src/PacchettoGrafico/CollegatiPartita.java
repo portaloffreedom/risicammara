@@ -20,7 +20,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import risicammarajava.Main;
+import risicammaraClient.Main;
 
 /**
  *

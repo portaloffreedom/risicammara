@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package risicammarajava;
+package risicammaraClient;
 
 import PacchettoGrafico.CollegatiPartita;
 import PacchettoGrafico.PannelloSpeciale;
@@ -19,8 +19,8 @@ import javax.swing.JFrame;
 import risicammaraServer.MessageManage.Messaggio_Comandi;
 import risicammaraServer.MessageManage.Messaggio_chat;
 import risicammaraServer.MessageManage.comandi_t;
-import risicammarajava.playerManage.ListaPlayers;
-import risicammarajava.turnManage.Partita;
+import risicammaraJava.playerManage.ListaPlayers;
+import risicammaraJava.turnManage.Partita;
 
 
 /**

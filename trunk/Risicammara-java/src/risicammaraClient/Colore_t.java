@@ -1,4 +1,4 @@
-package risicammarajava;
+package risicammaraClient;
 
 import java.awt.Color;
 

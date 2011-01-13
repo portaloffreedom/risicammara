@@ -3,9 +3,9 @@
  * and open the template in the editor.
  */
 
-package risicammarajava;
+package risicammaraClient;
 
-import risicammarajava.deckManage.Carta;
+import risicammaraJava.deckManage.Carta;
 
 /**
  *

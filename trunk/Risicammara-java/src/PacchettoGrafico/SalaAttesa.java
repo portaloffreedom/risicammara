@@ -26,7 +26,7 @@ import javax.swing.JToggleButton;
 import javax.swing.plaf.metal.MetalBorders.TextFieldBorder;
 import risicammaraServer.MessageManage.Messaggio_Comandi;
 import risicammaraServer.MessageManage.comandi_t;
-import risicammarajava.Colore_t;
+import risicammaraClient.Colore_t;
 
 /**
  *

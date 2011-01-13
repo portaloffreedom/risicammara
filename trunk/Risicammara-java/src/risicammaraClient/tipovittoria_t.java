@@ -1,4 +1,4 @@
-package risicammarajava;
+package risicammaraClient;
 
 /**
  *  Enumerato che mostra il tipo di vittoria possibile.
