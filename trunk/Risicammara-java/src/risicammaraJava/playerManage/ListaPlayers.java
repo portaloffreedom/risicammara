@@ -30,8 +30,11 @@ public class ListaPlayers implements Serializable {
      */
     public int addPlayer(Giocatore player){
         int index = listaPlayers.indexOf(null);
-        if(index < 0) index = listaPlayers.size();
-        listaPlayers.add(index,player);
+        if(index < 0) {
+            index = listaPlayers.size();
+            listaPlayers.add(null);
+        }
+        listaPlayers.set(index,player);
         return index;
     }
 
@@ -63,7 +66,7 @@ public class ListaPlayers implements Serializable {
     }
     
     public void remPlayer(int index){
-        this.listaPlayers.add(index,null);
+        this.listaPlayers.set(index, null);
     }
 
     public String getNomeByIndex(int index){
