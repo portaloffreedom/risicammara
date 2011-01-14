@@ -16,7 +16,7 @@ public class Server implements Runnable {
     private static ListaPlayers listaGiocatori;
     private CodaMsg coda;
     private int porta;
-    //TODO riferimento al numero giocatori
+    //TODO riferimento al numero giocatori (probabilmente inutile avendo il riferimento del thread.)
 
     /**
      * @param args the command line arguments

@@ -8,6 +8,8 @@ package risicammaraServer;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import risicammaraClient.Colore_t;
 import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraServer.MessageManage.Messaggio;
@@ -20,9 +22,13 @@ import risicammaraServer.MessageManage.MessaggioNuovoGiocatore;
 import risicammaraServer.MessageManage.MessaggioComandi;
 import risicammaraServer.MessageManage.MessaggioErrore;
 import risicammaraServer.MessageManage.comandi_t;
+import risicammaraServer.MessageManage.errori_t;
 
 /**
- *
+ * La classe che rappresenta un oggetto "lobby" (sala d'attesa)
+ * La lobby accetta le connessioni di massimo 6 giocatori contemporanei,
+ * superato questo limite il thread che ascolta le connessioni entra in wait e sarà svegliato soltanto
+ * quando i giocatori saranno meno di 6.
  * @author Sten_Gun
  */
 public class Lobby {
@@ -30,16 +36,31 @@ public class Lobby {
     private ListaPlayers listaGiocatori;
     private CodaMsg coda;
     private int porta;
+    AscoltatoreLobby attendiConnessioni;
 
+/**
+ * Inizializza tutte le variabili necessarie.
+ * @param porta la porta su cui aprire in ascolto il server
+ * @param coda la coda dove verranno immessi i messaggi da processare
+ */
     public Lobby (int porta, CodaMsg coda) {
         this.porta = porta;
         this.coda = coda;
         this.listaGiocatori = new ListaPlayers();
     }
 
+    /**
+     * Avvia la gestione dei messaggi da parte del server.
+     * Il server attende che vi sia un messaggio sulla coda dei messaggi (che in questo caso
+     * è come se fosse un buffer di messaggi).
+     * Questa funzione esce soltanto quando un giocatore preme "nuova partita". A quel punto
+     * i giocatori che fanno parte della lobby diventeranno i giocatori della partita vera e propria
+     * e questa lista deve essere restituita dalla funzione.
+     * @return la lista dei giocatori finale.
+     */
     public ListaPlayers start(){
-        AscoltatoreLobby prova = new AscoltatoreLobby(this.porta, this.coda);
-        prova.start();
+        attendiConnessioni = new AscoltatoreLobby(this.porta, this.coda);
+        attendiConnessioni.start();
         boolean inizia = false;
         Messaggio msg = null;
         while (!inizia) {
@@ -60,6 +81,18 @@ public class Lobby {
                     break;
                 case AGGIUNGIGIOCATORE:
                     MessaggioNuovoGiocatore mgio = (MessaggioNuovoGiocatore)msg;
+                    if(listaGiocatori.getSize() > 5){
+                        try {
+                            broadcastMessage(new MessaggioErrore(errori_t.CONNECTIONREFUSED, -1), mgio.getConnessioneGiocatore());
+                            mgio.getConnessioneGiocatore().close();
+                        } catch (IOException ex) {
+                            System.err.println("Errore di invio errore connessione: "+ex.getMessage());
+                        }
+                        finally{
+                            ctt = null;
+                        }
+                        break;
+                    }
                     Giocatore_Net gioctemp = new Giocatore_Net(mgio.getConnessioneGiocatore());
                     gioctemp.setArmyColour(Colore_t.NULLO); //TODO probabilmente si può togliere perché non fa niente (è già nullo il colore)
                     int plynumb = listaGiocatori.addPlayer(gioctemp);
@@ -84,13 +117,14 @@ public class Lobby {
                     break;
                 case CHAT:
                     ctt = msg;
+                    break;
                 default:
                     ctt = new MessaggioChat(-1, "Messaggio non ancora gestito");
                     break;
                 }
                 //Stampa il messaggio di chat corrispondente e lo invia a tutti.
                     System.out.println(ctt.toString());
-          for(int i = 0;i<listaGiocatori.getSize();i++)
+          if(ctt!= null) for(int i = 0;i<listaGiocatori.getSize();i++)
           {
              if(i == escludi) continue;
               //System.out.println("cl: "+all);
@@ -102,15 +136,14 @@ public class Lobby {
                         broadcastMessage(ctt, cl);
                     } catch (IOException ex) {
                         System.err.println("Errore broadcast: "+ex.getMessage());
-                        System.exit(-1);
                     }
                 }
         }
         return listaGiocatori;
     }
    /**
-    * Funzione che gestisce i messaggi di tipo ::MessaggioErrore per
-    * la funzione ::receiveMessage
+    * Funzione che gestisce i messaggi di tipo MessaggioErrore per
+    * la funzione receiveMessage
     * @param errorMsg Il pacchetto MessaggioErrore
     */
    private Messaggio ErrorHandling(MessaggioErrore errorMsg){
@@ -136,6 +169,7 @@ private Messaggio CommandHandling(MessaggioComandi cmdMsg){
             if(th.isAlive()) th.setStop(true);
             Socket giosock = tempgioc.getSocket();
             listaGiocatori.remPlayer(cmdMsg.getSender());
+            attendiConnessioni.setNumeroGiocatori(listaGiocatori.getSize());
             try {
                 giosock.close();
             } catch (Exception ex) {
@@ -148,9 +182,9 @@ private Messaggio CommandHandling(MessaggioComandi cmdMsg){
 }
 
     /**
-     * Il server notifica i client tramite un messaggio che appare nella chat
+     * Spedisce un pacchetto ad un client.
      * @param recMsg Il messaggio di chat
-     * @param cl il client da notificare (iterato)
+     * @param cl il client da notificare
      * @throws IOException Eccezione di I/O dovuta ai socket
      */
    private void broadcastMessage(Messaggio recMsg, Socket cl) throws IOException
