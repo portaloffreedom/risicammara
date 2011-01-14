@@ -8,11 +8,7 @@ package risicammaraServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import risicammaraServer.MessageManage.Messaggio;
-import risicammaraServer.MessageManage.MessaggioComandi;
-import risicammaraServer.MessageManage.comandi_t;
 
 /**
  *
@@ -43,10 +39,11 @@ public class PlayerThread extends Thread{
             try {
                 coda.Send((Messaggio)is.readObject());
             } catch (Exception ex) {
-                System.err.println("Giocatore non raggiungibile: "+ex.getMessage());
-                System.exit(-1);
+                System.err.println("Giocatore "+player_index+" non raggiungibile: "+ex.getMessage());
+                stop = true;
             }
         }
+        System.out.println("Thread giocatore "+ player_index+" stoppato");
     }
 
     public void setStop(boolean stop) {
