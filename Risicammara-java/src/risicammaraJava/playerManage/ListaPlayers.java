@@ -13,8 +13,11 @@ import risicammaraClient.Colore_t;
  */
 public class ListaPlayers implements Serializable {
     private ArrayList <Giocatore> listaPlayers;
+    private int nullnumber;
+
     public ListaPlayers(){
         listaPlayers = new ArrayList<Giocatore>();
+        this.nullnumber = 0;
     }
     /**
      * Aggiunge un giocatore direttamente in lista.
@@ -34,6 +37,7 @@ public class ListaPlayers implements Serializable {
             index = listaPlayers.size();
             listaPlayers.add(null);
         }
+        else nullnumber--;
         listaPlayers.set(index,player);
         return index;
     }
@@ -52,7 +56,7 @@ public class ListaPlayers implements Serializable {
      * @return Numero di giocatori
      */
     public int getSize(){
-        return listaPlayers.size();
+        return listaPlayers.size()-nullnumber;
     }
 
     /**
@@ -67,6 +71,7 @@ public class ListaPlayers implements Serializable {
     
     public void remPlayer(int index){
         this.listaPlayers.set(index, null);
+        this.nullnumber++;
     }
 
     public String getNomeByIndex(int index){

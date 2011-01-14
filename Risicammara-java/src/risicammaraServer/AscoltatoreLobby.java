@@ -37,6 +37,7 @@ public class AscoltatoreLobby extends Thread {
         this.porta = porta;
         this.coda = coda;
         this.stop = false;
+        this.numerogiocatori = 0;
     }
 
     /**
@@ -78,7 +79,15 @@ public class AscoltatoreLobby extends Thread {
 
         while (!this.stop) {
             giocatore = ascoltatore.accept();
+            if(numerogiocatori>5) continue;
+            numerogiocatori++;
             coda.Send(new MessaggioNuovoGiocatore(giocatore));
         }
+    }
+
+    private int numerogiocatori;
+
+    public void setNumeroGiocatori(int num){
+        this.numerogiocatori = num;
     }
 }

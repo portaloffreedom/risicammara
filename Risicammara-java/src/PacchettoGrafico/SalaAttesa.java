@@ -20,8 +20,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -33,7 +31,6 @@ import javax.swing.JToggleButton;
 import javax.swing.plaf.metal.MetalBorders.TextFieldBorder;
 import risicammaraClient.Colore_t;
 import risicammaraJava.playerManage.ListaPlayers;
-import risicammaraServer.MessageManage.Messaggio;
 import risicammaraServer.MessageManage.MessaggioAggiornaDatiGiocatore;
 import risicammaraServer.MessageManage.MessaggioChat;
 import risicammaraServer.MessageManage.MessaggioConfermaNuovoGiocatore;
@@ -88,7 +85,7 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
         this.pronti = new JToggleButton[6];
         this.lobby = true; //imposta lo "stato" come lobby
 
-        this.indexGiocatore = -1;
+        this.indexGiocatore = -2;
         this.listaGiocatori = null;
 
 
