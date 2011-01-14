@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import javax.swing.JFrame;
-import risicammaraServer.MessageManage.Messaggio_Comandi;
+import risicammaraServer.MessageManage.MessaggioComandi;
 import risicammaraServer.MessageManage.MessaggioChat;
 import risicammaraServer.MessageManage.comandi_t;
 import risicammaraJava.playerManage.ListaPlayers;
@@ -77,7 +77,7 @@ public class Main implements WindowListener {
         listaGiocatori.addPlayer("Matteo", Colore_t.GIALLO);
         listaGiocatori.addPlayer("Mandingo", Colore_t.NERO);
         /*try {
-            new ObjectOutputStream(server.getOutputStream()).writeObject(new Messaggio_Comandi(comandi_t.CONNECTED, "Giocatore"));
+            new ObjectOutputStream(server.getOutputStream()).writeObject(new MessaggioComandi(comandi_t.CONNECTED, "Giocatore"));
             new ObjectOutputStream(server.getOutputStream()).writeObject(new MessaggioChat("culo", "messaggiopluffete"));
             new ObjectOutputStream(server.getOutputStream()).writeObject(new MessaggioChat("culo", "messaggiopluffete2"));
         } catch (IOException ex) {

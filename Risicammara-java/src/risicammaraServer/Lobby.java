@@ -14,8 +14,8 @@ import risicammaraServer.MessageManage.Messaggio;
 import risicammaraServer.MessageManage.MessaggioChat;
 import risicammaraServer.MessageManage.MessaggioConfermaNuovoGiocatore;
 import risicammaraServer.MessageManage.MessaggioNuovoGiocatore;
-import risicammaraServer.MessageManage.Messaggio_Comandi;
-import risicammaraServer.MessageManage.Messaggio_Errore;
+import risicammaraServer.MessageManage.MessaggioComandi;
+import risicammaraServer.MessageManage.MessaggioErrore;
 import risicammaraServer.MessageManage.comandi_t;
 
 /**
@@ -61,10 +61,10 @@ public class Lobby {
                     ctt = new MessaggioChat(-1, "Nuovo giocatore aggiunto: "+gioctemp.getNome());
                     break;
                 case COMMAND:
-                    ctt = CommandHandling((Messaggio_Comandi)msg);
+                    ctt = CommandHandling((MessaggioComandi)msg);
                     break;
                 case ERROR:
-                    ctt = ErrorHandling((Messaggio_Errore)msg);
+                    ctt = ErrorHandling((MessaggioErrore)msg);
                     break;
                 case CHAT:
                     ctt = (MessaggioChat)msg;
@@ -92,11 +92,11 @@ public class Lobby {
         return listaGiocatori;
     }
    /**
-    * Funzione che gestisce i messaggi di tipo ::Messaggio_Errore per
+    * Funzione che gestisce i messaggi di tipo ::MessaggioErrore per
     * la funzione ::receiveMessage
-    * @param errorMsg Il pacchetto Messaggio_Errore
+    * @param errorMsg Il pacchetto MessaggioErrore
     */
-   private MessaggioChat ErrorHandling(Messaggio_Errore errorMsg){
+   private MessaggioChat ErrorHandling(MessaggioErrore errorMsg){
        switch(errorMsg.getError()){
            default:
                return new MessaggioChat(-1,"Errore non gestito.");
@@ -108,7 +108,7 @@ public class Lobby {
     * funzione ::receiveMessage
     * @param cmdMsg il pacchetto Messaggio_Comando
     */
-private MessaggioChat CommandHandling(Messaggio_Comandi cmdMsg){
+private MessaggioChat CommandHandling(MessaggioComandi cmdMsg){
     //TODO Completare il codice di Exit.
     //TODO Completare il codice di KICKPLAYER
     //TODO Completare il codice di NUOVAPARTITA
@@ -120,7 +120,7 @@ private MessaggioChat CommandHandling(Messaggio_Comandi cmdMsg){
             listaGiocatori.remPlayer(cmdMsg.getSender());
             try {
                 ObjectOutputStream os = new ObjectOutputStream(giosock.getOutputStream());
-                os.writeObject(new Messaggio_Comandi(comandi_t.DISCONNECT, -1));
+                os.writeObject(new MessaggioComandi(comandi_t.DISCONNECT, -1));
                 os.writeObject(new MessaggioChat(-1, "sei stato disconnesso"));
                 giosock.close();
             } catch (IOException ex) {
