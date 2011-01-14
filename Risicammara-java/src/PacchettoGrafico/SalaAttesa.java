@@ -158,7 +158,7 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
 
     private void creaConnessione() throws IOException, ClassNotFoundException {
         this.scriviServer = new ObjectOutputStream(new BufferedOutputStream(this.server.getOutputStream()));
-        this.leggiServer  = new ObjectInputStream( new BufferedInputStream( this.server.getInputStream( )));
+        this.leggiServer  = new ObjectInputStream(new BufferedInputStream(this.server.getInputStream()));
         MessaggioConfermaNuovoGiocatore msg = (MessaggioConfermaNuovoGiocatore) leggiServer.readObject();
         this.indexGiocatore = msg.getPlyIndex();
         this.listaGiocatori = msg.getPlyList();
@@ -261,6 +261,7 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
         //TODO resetta il riquadro del messaggio
         //TODO scrivi il messaggio sulla cronologia principale
         scriviServer.writeObject(new MessaggioChat(this.indexGiocatore, "Prova_ciccia"));
+        scriviServer.flush();
     }
 
     private QuadratoGiocatori quadratoInterfacciaLeader(JPanel pannello, int i){
