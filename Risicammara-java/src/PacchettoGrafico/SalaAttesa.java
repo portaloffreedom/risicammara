@@ -10,6 +10,8 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.BufferedInputStream;
@@ -29,20 +31,20 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.plaf.metal.MetalBorders.TextFieldBorder;
-import risicammaraServer.MessageManage.MessaggioComandi;
-import risicammaraServer.MessageManage.comandi_t;
 import risicammaraClient.Colore_t;
-import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraServer.MessageManage.Messaggio;
+import risicammaraServer.MessageManage.MessaggioAggiornaDatiGiocatore;
+import risicammaraServer.MessageManage.MessaggioChat;
 import risicammaraServer.MessageManage.MessaggioConfermaNuovoGiocatore;
 
 /**
  *
  * @author matteo
  */
-public class SalaAttesa extends JFrame implements WindowListener {
+public class SalaAttesa extends JFrame implements WindowListener, Runnable {
 
+    // Rettangoli e variabili necessarie per disegnare pulsanti e roba sul pannello
     private final static Rectangle finestraR = new Rectangle(100, 100, 600, 305);
     private final static int margine = 5;
     private final static int altezza = 40;
@@ -55,14 +57,20 @@ public class SalaAttesa extends JFrame implements WindowListener {
     private final static Rectangle immissioneR = new Rectangle(nomeGiocatoreR.x, invioR.y, finestraR.width-(giocatoriR.width+prontiR.width+invioR.width+margine*4), altezza);
     private final static Rectangle cronologiaR = new Rectangle(nomeGiocatoreR.x, nomeGiocatoreR.y+altezza+margine*2, immissioneR.width+invioR.width, finestraR.height-(35+altezza*2+margine*4));
 
+    // variabili locali per il funzionamento interno
     private boolean leader;
     private Socket server;
     private ObjectOutputStream scriviServer;
     private ObjectInputStream  leggiServer;
+    /** Variabile che serve per decidere quando deve smettere la sala d'attesa e
+     * cominciare la partita */
+    private boolean lobby;
 
+    //roba ricevuta dal sever
     private int indexGiocatore;
     private ListaPlayers listaGiocatori;
 
+    //Oggetti disegnati sul pannello
     private QuadratoGiocatori giocatori[];
     private JToggleButton pronti[];
     private JTextField nomeGiocatore;
@@ -78,6 +86,7 @@ public class SalaAttesa extends JFrame implements WindowListener {
         this.leader=leader;
         this.giocatori= new QuadratoGiocatori[6];
         this.pronti = new JToggleButton[6];
+        this.lobby = true; //imposta lo "stato" come lobby
 
         this.indexGiocatore = -1;
         this.listaGiocatori = null;
@@ -113,6 +122,40 @@ public class SalaAttesa extends JFrame implements WindowListener {
 
     public SalaAttesa(Socket server) {
         this(server, false);
+    }
+
+    public void run() {
+        Messaggio arrivo = null;
+
+        while (lobby) {
+            try {
+                arrivo = (Messaggio) leggiServer.readObject();
+            } catch (IOException ex) {
+                System.err.println("Errore! Client disconnesso :"+ex);
+                System.exit(15);
+            } catch (ClassNotFoundException ex) {
+                System.err.println("Attenzione! messaggio arrivato irriconoscibile: "+ex);
+            }
+
+            System.out.println("Nuovo messaggio arrivato: "+arrivo);
+
+            switch (arrivo.getType()) {
+                case CHAT:
+                    //TODO fare vedere il messaggio nell'interfaccia grafica
+                    MessaggioChat msgChat = (MessaggioChat) arrivo;
+                    System.out.println("Messaggio Chat| "+msgChat.toString(listaGiocatori));
+                    break;
+
+                case AGGIORNADATIGIOCATORE:
+                    MessaggioAggiornaDatiGiocatore msgUpdateGiocatore = (MessaggioAggiornaDatiGiocatore) arrivo;
+                    //TODO aggiornare dati giocatore
+                    break;
+                    
+                default:
+                    System.err.println("Messaggio ignorato (il programma potrebbe non funzionare più bene");
+            }
+
+        }
     }
 
     private void creaConnessione() throws IOException, ClassNotFoundException {
@@ -156,6 +199,16 @@ public class SalaAttesa extends JFrame implements WindowListener {
         
         this.invioChat = new JButton("Invia");
         this.invioChat.setBounds(invioR);
+        this.invioChat.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    mandaMessaggioChat();
+                } catch (IOException ex) {
+                    System.err.println("Errore! Messaggio non inviato: "+ex);
+                }
+            }
+        });
 
         this.cronologiaChat = new JTextArea();
         this.cronologiaChat.setBounds(cronologiaR);
@@ -173,10 +226,13 @@ public class SalaAttesa extends JFrame implements WindowListener {
 
     private void personalizza() {
         int i=0;
-        
+
+        //TODO rendere più efficente memorizzando il riferimento nell'array in un riferimento temporaneo
         for (; i<this.listaGiocatori.getSize(); i++) {
-            if ( this.listaGiocatori.get(i) == null )
+            if ( this.listaGiocatori.get(i) == null ) {
                 this.giocatori[i].setNome("sconnesso ø");
+                this.giocatori[i].setColore(Colore_t.NERO);
+            }
             else {
                 this.giocatori[i].setNome(this.listaGiocatori.getNomeByIndex(i));
                 this.giocatori[i].setColore(this.listaGiocatori.get(i).getArmyColour());
@@ -202,14 +258,21 @@ public class SalaAttesa extends JFrame implements WindowListener {
 
     }
 
+    public void mandaMessaggioChat () throws IOException {
+        //TODO prendi il messaggio dal riquadro apposta
+        //TODO resetta il riquadro del messaggio
+        //TODO scrivi il messaggio sulla cronologia principale
+        scriviServer.writeObject(new MessaggioChat(this.indexGiocatore, "Prova_ciccia"));
+    }
+
     private QuadratoGiocatori quadratoInterfacciaLeader(JPanel pannello, int i){
-        BottoneGiocatori bottone = new BottoneGiocatori(/*"Giocatore "+(i+1)*/);
+        BottoneGiocatori bottone = new BottoneGiocatori();
         pannello.add(bottone);
         return bottone;
     }
 
     private QuadratoGiocatori quadratoInterfaccia(JPanel pannello, int i) {
-        labelGiocatori label = new labelGiocatori(/*"Giocatore "+(i+1)*/);
+        labelGiocatori label = new labelGiocatori();
         label.setBorder(new TextFieldBorder());
         pannello.add(label);
         return label;

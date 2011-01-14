@@ -8,6 +8,8 @@ package risicammaraClient;
 import PacchettoGrafico.CollegatiPartita;
 import PacchettoGrafico.PannelloSpeciale;
 import PacchettoGrafico.SalaAttesa;
+import com.sun.java.swing.plaf.motif.MotifLookAndFeel;
+import com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
@@ -15,7 +17,12 @@ import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 import risicammaraServer.MessageManage.MessaggioComandi;
 import risicammaraServer.MessageManage.MessaggioChat;
 import risicammaraServer.MessageManage.comandi_t;
@@ -52,6 +59,18 @@ public class Client implements WindowListener, Runnable {
         super();
         this.debug= debug;
         this.porta = porta;
+        
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException ex) {
+            System.err.println("Look and feel error: "+ex);
+        } catch (InstantiationException ex) {
+            System.err.println("Look and feel error: "+ex);
+        } catch (IllegalAccessException ex) {
+            System.err.println("Look and feel error: "+ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            System.err.println("Look and feel di sistema non supportato: "+ex);
+        }
     }
 
     public void run() {
