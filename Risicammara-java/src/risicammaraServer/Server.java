@@ -14,9 +14,8 @@ import risicammaraJava.playerManage.ListaPlayers;
  */
 public class Server implements Runnable {
     private static ListaPlayers listaGiocatori;
-    protected CodaMsg coda;
-    protected int porta;
     private CodaMsg coda;
+    private int porta;
     //TODO riferimento al numero giocatori
 
     /**
