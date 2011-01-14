@@ -12,10 +12,14 @@ import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -28,6 +32,9 @@ import javax.swing.plaf.metal.MetalBorders.TextFieldBorder;
 import risicammaraServer.MessageManage.MessaggioComandi;
 import risicammaraServer.MessageManage.comandi_t;
 import risicammaraClient.Colore_t;
+import risicammaraJava.playerManage.ListaPlayers;
+import risicammaraServer.MessageManage.Messaggio;
+import risicammaraServer.MessageManage.MessaggioConfermaNuovoGiocatore;
 
 /**
  *
@@ -52,6 +59,9 @@ public class SalaAttesa extends JFrame implements WindowListener {
     private ObjectOutputStream scriviServer;
     private ObjectInputStream  leggiServer;
 
+    private int indexGiocatore;
+    private ListaPlayers listaGiocatori;
+
     private QuadratoGiocatori giocatori[];
     private JToggleButton pronti[];
     private JTextField nomeGiocatore;
@@ -67,6 +77,24 @@ public class SalaAttesa extends JFrame implements WindowListener {
         this.leader=leader;
         this.giocatori= new QuadratoGiocatori[6];
         this.pronti = new JToggleButton[6];
+
+        this.indexGiocatore = -1;
+        this.listaGiocatori = null;
+
+
+        try {
+            creaConnessione();
+        } catch (IOException ex) {
+            System.err.println("Il sistema non è riuscito ad aprire gli stream"
+                    + "di output o di input dal server oppure non è riuscito a"
+                    + "ricevere il messaggio dal server. Errore: "+ex);
+            System.exit(3);
+        } catch (ClassNotFoundException ex) {
+            System.err.println("Errore di lettura nel messaggio di conferma del"
+                    + " server: "+ex);
+            System.exit(4);
+        }
+
 
         this.addWindowListener(this);
         this.setBounds(finestraR);
@@ -84,6 +112,14 @@ public class SalaAttesa extends JFrame implements WindowListener {
 
     public SalaAttesa(Socket server) {
         this(server, false);
+    }
+
+    private void creaConnessione() throws IOException, ClassNotFoundException {
+        this.scriviServer = new ObjectOutputStream(new BufferedOutputStream(this.server.getOutputStream()));
+        this.leggiServer  = new ObjectInputStream( new BufferedInputStream( this.server.getInputStream( )));
+        MessaggioConfermaNuovoGiocatore msg = (MessaggioConfermaNuovoGiocatore) leggiServer.readObject();
+        this.indexGiocatore = msg.getPlyIndex();
+        this.listaGiocatori = msg.getPlyList();
     }
 
     private void disegnaGiocatori(JPanel pannello) {
@@ -134,6 +170,11 @@ public class SalaAttesa extends JFrame implements WindowListener {
 
     }
 
+    private void personalizza() {
+        
+
+
+    }
 
     private QuadratoGiocatori quadratoInterfacciaLeader(JPanel pannello, int i){
         BottoneGiocatori bottone = new BottoneGiocatori("Giocatore "+(i+1));
@@ -187,14 +228,15 @@ public class SalaAttesa extends JFrame implements WindowListener {
         //throw new UnsupportedOperationException("Not supported yet.");
     }// </editor-fold>
 
-    private void personalizza() {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
+    // <editor-fold defaultstate="collapsed" desc="Classi e interfacce interne al funzionamento della Sala d'Attesa">
     private interface QuadratoGiocatori {
+
         public void setNome(String testo);
+
         public void setColore(Colore_t colore);
+
         public void setVisible(boolean visible);
+
         public void setBounds(int x, int y, int width, int height);
     }
 
@@ -216,7 +258,7 @@ public class SalaAttesa extends JFrame implements WindowListener {
     private class labelGiocatori extends JLabel implements QuadratoGiocatori {
 
         public labelGiocatori(String text) {
-            super (text, CENTER);
+            super(text, CENTER);
         }
 
         public void setNome(String testo) {
@@ -226,7 +268,6 @@ public class SalaAttesa extends JFrame implements WindowListener {
         public void setColore(Colore_t colore) {
             this.setForeground(colore.getColor());
         }
-
     }
 
     static class LayoutManagerMatteo implements LayoutManager {
@@ -253,5 +294,5 @@ public class SalaAttesa extends JFrame implements WindowListener {
         public void layoutContainer(Container parent) {
             //throw new UnsupportedOperationException("Not supported yet.");
         }
-    }
+    }// </editor-fold>
 }

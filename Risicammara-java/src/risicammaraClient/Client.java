@@ -27,7 +27,7 @@ import risicammaraJava.turnManage.Partita;
  *
  * @author stengun
  */
-public class Main implements WindowListener {
+public class Client implements WindowListener, Runnable {
 
     /**
      * @param args the command line arguments
@@ -36,8 +36,9 @@ public class Main implements WindowListener {
         boolean debug = false;
         if (args.length>= 1 && (args[0].equals("--debug") || args[0].equals("-d"))) debug=true;
 
-        Main main = new Main(debug);
-
+        Client client = new Client(debug, Client.PORT);
+        client.run(); //Attenzione non viene creato un Thread, viene solo
+                      //eseguito il metodo run
     }
 
     public static final int PORT = 12345;
@@ -45,21 +46,21 @@ public class Main implements WindowListener {
     private Partita partita;
     private boolean debug;
     private Socket server;
+    private int porta;
 
-    public Main(boolean debug) {
+    public Client(boolean debug, int porta) {
         super();
         this.debug= debug;
+        this.porta = porta;
+    }
 
+    public void run() {
         //TODO dialogo di "crea partita"
         this.collegatiPartita();
-
-        
-        
-
     }
 
     public void collegatiPartita(){
-        CollegatiPartita dialogo = new CollegatiPartita(this);
+        CollegatiPartita dialogo = new CollegatiPartita(this, this.porta);
         //System.out.println("8===D");
         }
 

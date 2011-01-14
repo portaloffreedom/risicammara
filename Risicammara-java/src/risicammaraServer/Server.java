@@ -6,15 +6,14 @@
 package risicammaraServer;
 
 import java.net.*;
-import risicammaraClient.Main;
+import risicammaraClient.Client;
 import risicammaraJava.playerManage.ListaPlayers;
 
 /**
  * Lato server di Risicammara.
  * @author Sten_Gun
  */
-public class Server {
-    private ServerSocket socksrv;
+public class Server implements Runnable {
     private static ListaPlayers listaGiocatori;
     protected CodaMsg coda;
     protected int porta;
@@ -26,16 +25,28 @@ public class Server {
      */
 public static void main(String[] args) {
 
-    Lobby server = new Lobby(Main.PORT,listaGiocatori);
-    listaGiocatori = server.start();
-    startPartita();
-}
-
-    
-
-public static void startPartita(){
+    Server meStesso = new Server(Client.PORT);
+    meStesso.run(); //Attenzione non viene creato un Thread, viene solo eseguito
+                    //il metodo run
 
 }
+
+    public Server(int porta) {
+        this.porta = porta;
+
+
+    }
+
+    public void run() {
+        Lobby server = new Lobby(porta);
+        listaGiocatori = server.start();
+        this.startPartita();
+    }
+
+
+    public static void startPartita(){
+
+    }
 
 
 /*

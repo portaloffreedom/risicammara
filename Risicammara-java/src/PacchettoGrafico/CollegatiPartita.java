@@ -20,7 +20,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import risicammaraClient.Main;
+import risicammaraClient.Client;
 
 /**
  *
@@ -31,20 +31,22 @@ public class CollegatiPartita extends JFrame implements WindowListener {
     private TextField stringaIndirizzo;
     private JButton collegati;
     private JCheckBox locale;
-    private Main main;
+    private Client main;
 
     private Socket server;
+    private int porta;
 
     public Socket getServer() {
         return server;
     }
 
-    public CollegatiPartita(Main main) {
+    public CollegatiPartita(Client main, int porta) {
         super("Collegati al server");
         this.addWindowListener(this);
         this.setBounds(100, 100, 300, 100);
         this.setResizable(false);
-        this.main=main;
+        this.main = main;
+        this.porta = porta;
 
         JPanel pannello = new JPanel(new BorderLayout(5, 5));
         this.getContentPane().add(pannello);
@@ -59,7 +61,7 @@ public class CollegatiPartita extends JFrame implements WindowListener {
 
         this.collegati = new JButton("Collegati");
         pannello.add(collegati, BorderLayout.EAST);
-        this.collegati.addActionListener(new ActionCollegati(this));
+        this.collegati.addActionListener(new ActionCollegati(this, this.porta));
 
         this.setVisible(true);
     }
@@ -112,9 +114,11 @@ public class CollegatiPartita extends JFrame implements WindowListener {
     private static class ActionCollegati implements ActionListener {
 
         private CollegatiPartita memoria;
+        private int porta;
 
-        public ActionCollegati(CollegatiPartita memoria) {
-            this.memoria=memoria;
+        public ActionCollegati(CollegatiPartita memoria, int porta) {
+            this.memoria = memoria;
+            this.porta = porta;
         }
 
         public void actionPerformed(ActionEvent e) {
@@ -133,7 +137,7 @@ public class CollegatiPartita extends JFrame implements WindowListener {
             }
 
             try {
-                memoria.server = new Socket(ip, Main.PORT);
+                memoria.server = new Socket(ip, this.porta);
             } catch (IOException ex) {
                 System.err.println("Errore col server "+ip+": "+ex.getLocalizedMessage());
                 return;

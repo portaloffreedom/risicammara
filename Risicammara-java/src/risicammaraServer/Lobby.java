@@ -28,9 +28,10 @@ public class Lobby {
     private CodaMsg coda;
     private int porta;
 
-    public Lobby (int porta,ListaPlayers listaGiocatori) {
+    public Lobby (int porta) {
         this.porta = porta;
         this.coda = new CodaMsg();
+        this.listaGiocatori = new ListaPlayers();
     }
 
     public ListaPlayers start(){
@@ -48,14 +49,14 @@ public class Lobby {
                 case AGGIUNGIGIOCATORE:
                     MessaggioNuovoGiocatore mgio = (MessaggioNuovoGiocatore)msg;
                     Giocatore_Net gioctemp = new Giocatore_Net(mgio.getConnessioneGiocatore());
-                    gioctemp.setArmyColour(Colore_t.NULLO);
+                    gioctemp.setArmyColour(Colore_t.NULLO); //TODO probabilmente si può togliere perché non fa niente (è già nullo il colore)
                     int plynumb = listaGiocatori.addPlayer(gioctemp);
                     gioctemp.AssignThread(new Thread(new PlayerThread(coda,mgio.getConnessioneGiocatore(),plynumb)));
                     try {
                         ObjectOutputStream os = new ObjectOutputStream(mgio.getConnessioneGiocatore().getOutputStream());
                         os.writeObject(new MessaggioConfermaNuovoGiocatore(listaGiocatori,plynumb));
                     } catch (IOException ex) {
-                        System.out.println("errore stream");
+                        System.out.println("Errore nel creare lo Stream di output verso il nuovo utente o di invio del messaggio: "+ex);
                         System.exit(-1);
                     }
                     ctt = new MessaggioChat(-1, "Nuovo giocatore aggiunto: "+gioctemp.getNome());

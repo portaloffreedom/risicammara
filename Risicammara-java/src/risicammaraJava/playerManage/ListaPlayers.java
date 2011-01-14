@@ -4,13 +4,14 @@
  */
 
 package risicammaraJava.playerManage;
+import java.io.Serializable;
 import java.util.ArrayList;
 import risicammaraClient.Colore_t;
 /**
  *
  * @author stengun
  */
-public class ListaPlayers {
+public class ListaPlayers implements Serializable {
     private ArrayList <Giocatore> listaPlayers;
     public ListaPlayers(){
         listaPlayers = new ArrayList<Giocatore>();
@@ -30,7 +31,7 @@ public class ListaPlayers {
     public int addPlayer(Giocatore player){
         int index = listaPlayers.indexOf(null);
         if(index < 0) index = listaPlayers.size();
-        listaPlayers.add(index-1,player);
+        listaPlayers.add(index,player);
         return index;
     }
 

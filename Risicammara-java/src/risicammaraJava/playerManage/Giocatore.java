@@ -1,5 +1,6 @@
 package risicammaraJava.playerManage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import risicammaraClient.*;
@@ -10,7 +11,7 @@ import risicammaraJava.deckManage.Carta;
  * le armate che può inserire in quel dato turno.
  * @author stengun
  */
-public class Giocatore {
+public class Giocatore implements Serializable {
 
     protected String nome;
     private int armate_bonus;
