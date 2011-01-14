@@ -31,6 +31,7 @@ import javax.swing.JToggleButton;
 import javax.swing.plaf.metal.MetalBorders.TextFieldBorder;
 import risicammaraClient.Colore_t;
 import risicammaraJava.playerManage.ListaPlayers;
+import risicammaraServer.MessageManage.Messaggio;
 import risicammaraServer.MessageManage.MessaggioAggiornaDatiGiocatore;
 import risicammaraServer.MessageManage.MessaggioChat;
 import risicammaraServer.MessageManage.MessaggioConfermaNuovoGiocatore;
