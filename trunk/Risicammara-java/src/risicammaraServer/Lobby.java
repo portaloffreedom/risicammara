@@ -11,6 +11,7 @@ import java.net.Socket;
 import risicammaraClient.Colore_t;
 import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraServer.MessageManage.Messaggio;
+import risicammaraServer.MessageManage.MessaggioAddPlayer;
 import risicammaraServer.MessageManage.MessaggioAggiornaDatiGiocatore;
 import risicammaraServer.MessageManage.MessaggioCambiaNickColore;
 import risicammaraServer.MessageManage.MessaggioChat;
@@ -18,6 +19,7 @@ import risicammaraServer.MessageManage.MessaggioConfermaNuovoGiocatore;
 import risicammaraServer.MessageManage.MessaggioNuovoGiocatore;
 import risicammaraServer.MessageManage.MessaggioComandi;
 import risicammaraServer.MessageManage.MessaggioErrore;
+import risicammaraServer.MessageManage.comandi_t;
 
 /**
  *
@@ -72,7 +74,7 @@ public class Lobby {
                         System.out.println("Errore nel creare lo Stream di output verso il nuovo utente o di invio del messaggio: "+ex);
                         System.exit(-1);
                     }
-                    ctt = new MessaggioChat(-1, "Giocatore in chat: "+gioctemp.getNome());
+                    ctt = new MessaggioAddPlayer(gioctemp);
                     break;
                 case COMMAND:
                     ctt = CommandHandling((MessaggioComandi)msg);
@@ -81,7 +83,7 @@ public class Lobby {
                     ctt = ErrorHandling((MessaggioErrore)msg);
                     break;
                 case CHAT:
-                    ctt = (MessaggioChat)msg;
+                    ctt = msg;
                 default:
                     ctt = new MessaggioChat(-1, "Messaggio non ancora gestito");
                     break;
@@ -111,7 +113,7 @@ public class Lobby {
     * la funzione ::receiveMessage
     * @param errorMsg Il pacchetto MessaggioErrore
     */
-   private MessaggioChat ErrorHandling(MessaggioErrore errorMsg){
+   private Messaggio ErrorHandling(MessaggioErrore errorMsg){
        switch(errorMsg.getError()){
            default:
                return new MessaggioChat(-1,"Errore non gestito.");
@@ -119,11 +121,11 @@ public class Lobby {
    }
 
    /**
-    * Funzione che gestisce i messaggi di tipo ::Messaggio_Comando per la
-    * funzione ::receiveMessage
+    * Funzione che gestisce i messaggi di tipo MessaggioComando per la costruzione della risposta.
+    * @see risicammaraServer.Lobby
     * @param cmdMsg il pacchetto Messaggio_Comando
     */
-private MessaggioChat CommandHandling(MessaggioComandi cmdMsg){
+private Messaggio CommandHandling(MessaggioComandi cmdMsg){
     //TODO Completare il codice di Exit.
     //TODO Completare il codice di KICKPLAYER
     //TODO Completare il codice di NUOVAPARTITA
@@ -133,14 +135,13 @@ private MessaggioChat CommandHandling(MessaggioComandi cmdMsg){
             PlayerThread th = (PlayerThread)tempgioc.getThread();
             if(th.isAlive()) th.setStop(true);
             Socket giosock = tempgioc.getSocket();
-            String nomegioc = tempgioc.getNome();
             listaGiocatori.remPlayer(cmdMsg.getSender());
             try {
                 giosock.close();
             } catch (Exception ex) {
                 System.err.println("Errore socket Disconnessione: "+ex.getMessage());
             }
-            return new MessaggioChat(-1,"Giocatore "+nomegioc+" disconnesso.");
+            return new MessaggioComandi(comandi_t.DISCONNECT, cmdMsg.getSender());
         default:
             return new MessaggioChat(-1,"comando non riconosciuto.");
     }
