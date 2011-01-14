@@ -16,7 +16,6 @@ import risicammaraServer.MessageManage.MessaggioConfermaNuovoGiocatore;
 import risicammaraServer.MessageManage.MessaggioNuovoGiocatore;
 import risicammaraServer.MessageManage.MessaggioComandi;
 import risicammaraServer.MessageManage.MessaggioErrore;
-import risicammaraServer.MessageManage.comandi_t;
 
 /**
  *
@@ -84,7 +83,7 @@ public class Lobby {
              Giocatore_Net giotmp = (Giocatore_Net)listaGiocatori.get(i);
              if(giotmp == null) continue;
              Socket cl = giotmp.getSocket();
-
+             if(cl.isClosed()) continue;
                     try {
                         broadcastMessage(ctt, cl);
                     } catch (IOException ex) {
@@ -119,6 +118,7 @@ private MessaggioChat CommandHandling(MessaggioComandi cmdMsg){
     switch(cmdMsg.getComando()){
         case DISCONNECT:
             Giocatore_Net tempgioc = (Giocatore_Net)listaGiocatori.get(cmdMsg.getSender());
+            ((PlayerThread)tempgioc.getThread()).setStop(true);
             Socket giosock = tempgioc.getSocket();
             String nomegioc = tempgioc.getNome();
             listaGiocatori.remPlayer(cmdMsg.getSender());
