@@ -5,7 +5,9 @@
 
 package risicammaraServer;
 
+import java.util.LinkedList;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import risicammaraServer.MessageManage.Messaggio;
 
 /**
@@ -13,11 +15,11 @@ import risicammaraServer.MessageManage.Messaggio;
  * @author Sten_Gun
  */
 public class CodaMsg {
-    private PriorityQueue<Messaggio> coda;
+    private Queue<Messaggio> coda;
     private boolean occupato;
 
     public CodaMsg(){
-        coda = new PriorityQueue<Messaggio>();
+        coda = new LinkedList<Messaggio>();
         this.occupato = false;
     }
 
@@ -29,7 +31,7 @@ public class CodaMsg {
             System.exit(-1);
         }
         occupato = true;
-        coda.offer(msg);
+        coda.add(msg);
         occupato = false;
         notifyAll();
     }
@@ -44,6 +46,7 @@ public class CodaMsg {
         occupato = true;
         Messaggio ms = coda.poll();
         occupato = false;
+        notify();
         return ms;
     }
 }
