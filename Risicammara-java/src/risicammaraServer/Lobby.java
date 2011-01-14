@@ -27,9 +27,9 @@ public class Lobby {
     private CodaMsg coda;
     private int porta;
 
-    public Lobby (int porta) {
+    public Lobby (int porta, CodaMsg coda) {
         this.porta = porta;
-        this.coda = new CodaMsg();
+        this.coda = coda;
         this.listaGiocatori = new ListaPlayers();
     }
 

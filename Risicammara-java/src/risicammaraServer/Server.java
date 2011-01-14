@@ -16,7 +16,7 @@ public class Server implements Runnable {
     private static ListaPlayers listaGiocatori;
     protected CodaMsg coda;
     protected int porta;
-    //TODO riferimento alla coda
+    private CodaMsg coda;
     //TODO riferimento al numero giocatori
 
     /**
@@ -32,12 +32,14 @@ public static void main(String[] args) {
 
     public Server(int porta) {
         this.porta = porta;
+        this.coda = new CodaMsg();
 
 
     }
 
     public void run() {
-        Lobby server = new Lobby(porta);
+
+        Lobby server = new Lobby(porta,coda);
         listaGiocatori = server.start();
         startPartita();
     }
