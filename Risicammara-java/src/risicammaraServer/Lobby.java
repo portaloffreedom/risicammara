@@ -51,7 +51,7 @@ public class Lobby {
                     gioctemp.setArmyColour(Colore_t.NULLO); //TODO probabilmente si può togliere perché non fa niente (è già nullo il colore)
                     int plynumb = listaGiocatori.addPlayer(gioctemp);
                     PlayerThread gioth = new PlayerThread(coda,mgio.getConnessioneGiocatore(),plynumb);
-                    gioth.start();
+                    if(!gioth.isAlive()) gioth.start();
                     gioctemp.setNome("Giocatore"+plynumb);
                     gioctemp.AssignThread(gioth);
                     try {
@@ -118,7 +118,8 @@ private MessaggioChat CommandHandling(MessaggioComandi cmdMsg){
     switch(cmdMsg.getComando()){
         case DISCONNECT:
             Giocatore_Net tempgioc = (Giocatore_Net)listaGiocatori.get(cmdMsg.getSender());
-            ((PlayerThread)tempgioc.getThread()).setStop(true);
+            PlayerThread th = (PlayerThread)tempgioc.getThread();
+            if(th.isAlive()) th.setStop(true);
             Socket giosock = tempgioc.getSocket();
             String nomegioc = tempgioc.getNome();
             listaGiocatori.remPlayer(cmdMsg.getSender());

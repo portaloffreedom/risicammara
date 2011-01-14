@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import risicammaraServer.MessageManage.Messaggio;
+import risicammaraServer.MessageManage.MessaggioComandi;
+import risicammaraServer.MessageManage.comandi_t;
 
 /**
  *
@@ -32,8 +34,7 @@ public class PlayerThread extends Thread{
         try {
             is = new ObjectInputStream(player_socket.getInputStream());
         } catch (IOException ex) {
-            System.err.println("Errore: "+ex.getStackTrace());
-            System.exit(-1);
+            System.err.println("Errore input thread Giocatore " + player_index+": "+ex.getMessage());
         }
         while(!stop){
             try {
@@ -41,6 +42,7 @@ public class PlayerThread extends Thread{
             } catch (Exception ex) {
                 System.err.println("Giocatore "+player_index+" non raggiungibile: "+ex.getMessage());
                 stop = true;
+                coda.Send(new MessaggioComandi(comandi_t.DISCONNECT, player_index));
             }
         }
         System.out.println("Thread giocatore "+ player_index+" stoppato");
