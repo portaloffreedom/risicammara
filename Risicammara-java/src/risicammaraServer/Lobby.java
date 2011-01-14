@@ -11,6 +11,8 @@ import java.net.Socket;
 import risicammaraClient.Colore_t;
 import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraServer.MessageManage.Messaggio;
+import risicammaraServer.MessageManage.MessaggioAggiornaDatiGiocatore;
+import risicammaraServer.MessageManage.MessaggioCambiaNickColore;
 import risicammaraServer.MessageManage.MessaggioChat;
 import risicammaraServer.MessageManage.MessaggioConfermaNuovoGiocatore;
 import risicammaraServer.MessageManage.MessaggioNuovoGiocatore;
@@ -42,9 +44,18 @@ public class Lobby {
          msg = coda.get();
          System.out.println("Tipo messaggio: "+msg.getType().toString());
           //System.out.println("Sono fuori");
-
-         MessaggioChat ctt = null;
+         int escludi = -1;
+         Messaggio ctt = null;
             switch (msg.getType()) {
+                // Processa i vari tipi di pacchetto possibili
+                case MODIFICANICKCOLORE:
+                    MessaggioCambiaNickColore mnick = (MessaggioCambiaNickColore)msg;
+                    Giocatore_Net giotmp = (Giocatore_Net)listaGiocatori.get(msg.getSender());
+                    giotmp.setNome(mnick.getNick());
+                    giotmp.setArmyColour(mnick.getColore());
+                    ctt = new MessaggioAggiornaDatiGiocatore(mnick.getNick(), mnick.getColore(), mnick.getSender());
+                    escludi = mnick.getSender();
+                    break;
                 case AGGIUNGIGIOCATORE:
                     MessaggioNuovoGiocatore mgio = (MessaggioNuovoGiocatore)msg;
                     Giocatore_Net gioctemp = new Giocatore_Net(mgio.getConnessioneGiocatore());
@@ -61,7 +72,7 @@ public class Lobby {
                         System.out.println("Errore nel creare lo Stream di output verso il nuovo utente o di invio del messaggio: "+ex);
                         System.exit(-1);
                     }
-                    ctt = new MessaggioChat(-1, "Nuovo giocatore aggiunto: "+gioctemp.getNome());
+                    ctt = new MessaggioChat(-1, "Giocatore in chat: "+gioctemp.getNome());
                     break;
                 case COMMAND:
                     ctt = CommandHandling((MessaggioComandi)msg);
@@ -76,10 +87,11 @@ public class Lobby {
                     break;
                 }
                 //Stampa il messaggio di chat corrispondente e lo invia a tutti.
-                    System.out.println(listaGiocatori.getNomeByIndex(ctt.getSender())+": "+ctt.getMessaggio());
+                    System.out.println(ctt.toString());
           for(int i = 0;i<listaGiocatori.getSize();i++)
           {
-             //System.out.println("cl: "+all);
+             if(i == escludi) continue;
+              //System.out.println("cl: "+all);
              Giocatore_Net giotmp = (Giocatore_Net)listaGiocatori.get(i);
              if(giotmp == null) continue;
              Socket cl = giotmp.getSocket();
@@ -140,7 +152,7 @@ private MessaggioChat CommandHandling(MessaggioComandi cmdMsg){
      * @param cl il client da notificare (iterato)
      * @throws IOException Eccezione di I/O dovuta ai socket
      */
-   private void broadcastMessage(MessaggioChat recMsg, Socket cl) throws IOException
+   private void broadcastMessage(Messaggio recMsg, Socket cl) throws IOException
    {
          new ObjectOutputStream(cl.getOutputStream()).writeObject(recMsg);
    }

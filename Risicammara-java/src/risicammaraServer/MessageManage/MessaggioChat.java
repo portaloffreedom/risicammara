@@ -5,6 +5,8 @@
 
 package risicammaraServer.MessageManage;
 
+import risicammaraJava.playerManage.ListaPlayers;
+
 /**
  *
  * @author Sten_Gun
@@ -24,6 +26,10 @@ public class MessaggioChat implements Messaggio {
 
     public int getSender(){
         return sender;
+    }
+
+    public String toString(ListaPlayers list){
+        return list.getNomeByIndex(sender)+": "+messaggio;
     }
 
     public String getMessaggio(){

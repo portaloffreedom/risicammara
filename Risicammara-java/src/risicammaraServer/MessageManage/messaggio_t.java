@@ -10,6 +10,7 @@ package risicammaraServer.MessageManage;
  * @author Sten_Gun
  */
 public enum messaggio_t {
+    MODIFICANICKCOLORE, // Pacchetto che segnala una modifica di nick e colore.
     OKADD,              // Pacchetto di "ok" ad una aggiunta giocatore.
     DISCONNECTED,       // Informa il server dell'avvenuta disconnessione di un giocatore
     AGGIUNGIGIOCATORE, //quando viene ricevuto un nuovo Socket di un nuovo giocatore connesso
@@ -28,8 +29,6 @@ public enum messaggio_t {
     CHAT,       //Il pacchetto ricevuto è di tipo MESSAGGIO DI CHAT
     COMMAND,    //Il pacchetto ricevuto è un comando client/server
     ERROR,      //Il pacchetto ricevuto è una notifica di errore
-    GRAPHICS, // ?? (grafica e pulsanti)
-    GRAPHICSUPDATE, // ?? (Ridisegno forzato)
     CAMBIAARMATETERRITORIO, //Il pacchetto ricevuto notifica un cambiamento di armate in un territorio
     CAMBIAARMATEGIOCATORE,  //Il pacchetto ricevuto notifica un cambiamento di armate del giocatore
     AGGIORNADATIGIOCATORE,  //Il pacchetto ricevuto notifica un cambiamento nei dati giocatore
