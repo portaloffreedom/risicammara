@@ -12,8 +12,8 @@ import risicammaraJava.playerManage.Giocatore;
  */
 public class Giocatore_Net extends Giocatore {
 
-    private Socket comunicatore;
-    private Thread thread_player;
+    transient private Socket comunicatore;
+    transient private Thread thread_player;
     
     public Giocatore_Net(Socket comunicatore){
         super(null, Colore_t.NULLO);

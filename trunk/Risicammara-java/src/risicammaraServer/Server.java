@@ -5,7 +5,6 @@
 
 package risicammaraServer;
 
-import java.net.*;
 import risicammaraClient.Client;
 import risicammaraJava.playerManage.ListaPlayers;
 
@@ -40,7 +39,7 @@ public static void main(String[] args) {
     public void run() {
         Lobby server = new Lobby(porta);
         listaGiocatori = server.start();
-        this.startPartita();
+        startPartita();
     }
 
 
