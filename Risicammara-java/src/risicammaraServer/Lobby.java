@@ -51,7 +51,10 @@ public class Lobby {
                     Giocatore_Net gioctemp = new Giocatore_Net(mgio.getConnessioneGiocatore());
                     gioctemp.setArmyColour(Colore_t.NULLO); //TODO probabilmente si può togliere perché non fa niente (è già nullo il colore)
                     int plynumb = listaGiocatori.addPlayer(gioctemp);
-                    gioctemp.AssignThread(new Thread(new PlayerThread(coda,mgio.getConnessioneGiocatore(),plynumb)));
+                    PlayerThread gioth = new PlayerThread(coda,mgio.getConnessioneGiocatore(),plynumb);
+                    gioth.start();
+                    gioctemp.setNome("Giocatore"+plynumb);
+                    gioctemp.AssignThread(gioth);
                     try {
                         ObjectOutputStream os = new ObjectOutputStream(mgio.getConnessioneGiocatore().getOutputStream());
                         os.writeObject(new MessaggioConfermaNuovoGiocatore(listaGiocatori,plynumb));
@@ -85,7 +88,7 @@ public class Lobby {
                     try {
                         broadcastMessage(ctt, cl);
                     } catch (IOException ex) {
-                        System.err.println("Errore broadcast: "+ex.getStackTrace());
+                        System.err.println("Errore broadcast: "+ex.getMessage());
                         System.exit(-1);
                     }
                 }
@@ -120,12 +123,9 @@ private MessaggioChat CommandHandling(MessaggioComandi cmdMsg){
             String nomegioc = tempgioc.getNome();
             listaGiocatori.remPlayer(cmdMsg.getSender());
             try {
-                ObjectOutputStream os = new ObjectOutputStream(giosock.getOutputStream());
-                os.writeObject(new MessaggioComandi(comandi_t.DISCONNECT, -1));
-                os.writeObject(new MessaggioChat(-1, "sei stato disconnesso"));
                 giosock.close();
-            } catch (IOException ex) {
-                System.err.println("Errore socket: "+ex.getStackTrace());
+            } catch (Exception ex) {
+                System.err.println("Errore socket Disconnessione: "+ex.getMessage());
             }
             return new MessaggioChat(-1,"Giocatore "+nomegioc+" disconnesso.");
         default:

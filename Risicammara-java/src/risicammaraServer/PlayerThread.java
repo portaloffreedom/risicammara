@@ -11,6 +11,8 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import risicammaraServer.MessageManage.Messaggio;
+import risicammaraServer.MessageManage.MessaggioComandi;
+import risicammaraServer.MessageManage.comandi_t;
 
 /**
  *
@@ -41,7 +43,7 @@ public class PlayerThread extends Thread{
             try {
                 coda.Send((Messaggio)is.readObject());
             } catch (Exception ex) {
-                System.err.println("Errore: "+ex.getStackTrace());
+                System.err.println("Giocatore non raggiungibile: "+ex.getMessage());
                 System.exit(-1);
             }
         }

@@ -58,6 +58,7 @@ public class ListaPlayers implements Serializable {
      * @return L'oggetto Giocatore indicato dall'indice
      */
     public Giocatore get(int index){
+        // (listaPlayers.isEmpty() || index < 0) return null;
         return listaPlayers.get(index);
     }
     
@@ -66,8 +67,8 @@ public class ListaPlayers implements Serializable {
     }
 
     public String getNomeByIndex(int index){
-        if(index < -1 || listaPlayers.get(index) == null) return "NAME_ERROR";
-        if(index < 0  ) return "SERVER";
+        if(index == -1  ) return "SERVER";
+        if(listaPlayers.isEmpty() || index < 0 || listaPlayers.get(index) == null) return "NAME_ERROR";
         return listaPlayers.get(index).getNome();
     }
 

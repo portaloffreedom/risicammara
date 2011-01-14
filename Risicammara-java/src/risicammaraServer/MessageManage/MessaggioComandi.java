@@ -18,7 +18,7 @@ public class MessaggioComandi implements Messaggio{
     /**
      * Costruttore del pacchetto
      * @param cmd Il comando desiderato
-     * @param inviante  il nome del giocatore che lo ha inviato (SERVER se è di sistema)
+     * @param inviante  il nome del giocatore che lo ha inviato (-1 se è di sistema)
      */
     public MessaggioComandi(comandi_t cmd, int inviante){
         this(cmd, inviante, -2);
