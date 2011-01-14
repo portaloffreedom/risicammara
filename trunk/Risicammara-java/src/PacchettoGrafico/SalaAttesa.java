@@ -32,6 +32,7 @@ import javax.swing.plaf.metal.MetalBorders.TextFieldBorder;
 import risicammaraServer.MessageManage.MessaggioComandi;
 import risicammaraServer.MessageManage.comandi_t;
 import risicammaraClient.Colore_t;
+import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraServer.MessageManage.Messaggio;
 import risicammaraServer.MessageManage.MessaggioConfermaNuovoGiocatore;
@@ -171,19 +172,44 @@ public class SalaAttesa extends JFrame implements WindowListener {
     }
 
     private void personalizza() {
+        int i=0;
         
+        for (; i<this.listaGiocatori.getSize(); i++) {
+            if ( this.listaGiocatori.get(i) == null )
+                this.giocatori[i].setNome("sconnesso ø");
+            else {
+                this.giocatori[i].setNome(this.listaGiocatori.getNomeByIndex(i));
+                this.giocatori[i].setColore(this.listaGiocatori.get(i).getArmyColour());
+            }
+
+        }
+        for (; i<this.giocatori.length; i++){
+            this.giocatori[i].setNome("sconnesso þ");
+            this.giocatori[i].setColore(Colore_t.NERO);
+        }
+
+        /*
+        for (int j=0; j<this.giocatori.length; j++){
+            if (j==this.indexGiocatore)
+                this.giocatori[j].setColore(Colore_t.BLU);
+            else
+                this.giocatori[j].setColore(Colore_t.ROSSO);
+        }*/
+
+        this.pronti[this.indexGiocatore].setEnabled(true);
+
 
 
     }
 
     private QuadratoGiocatori quadratoInterfacciaLeader(JPanel pannello, int i){
-        BottoneGiocatori bottone = new BottoneGiocatori("Giocatore "+(i+1));
+        BottoneGiocatori bottone = new BottoneGiocatori(/*"Giocatore "+(i+1)*/);
         pannello.add(bottone);
         return bottone;
     }
 
     private QuadratoGiocatori quadratoInterfaccia(JPanel pannello, int i) {
-        labelGiocatori label = new labelGiocatori("Giocatore "+(i+1));
+        labelGiocatori label = new labelGiocatori(/*"Giocatore "+(i+1)*/);
         label.setBorder(new TextFieldBorder());
         pannello.add(label);
         return label;
@@ -242,12 +268,15 @@ public class SalaAttesa extends JFrame implements WindowListener {
 
     private class BottoneGiocatori extends JButton implements QuadratoGiocatori {
 
+        public BottoneGiocatori() {
+        }
+
         public BottoneGiocatori(String text) {
             super(text);
         }
 
         public void setNome(String testo) {
-            this.setName(testo);
+            this.setText(testo);
         }
 
         public void setColore(Colore_t colore) {
@@ -256,6 +285,9 @@ public class SalaAttesa extends JFrame implements WindowListener {
     }
 
     private class labelGiocatori extends JLabel implements QuadratoGiocatori {
+
+        public labelGiocatori() {
+        }
 
         public labelGiocatori(String text) {
             super(text, CENTER);
