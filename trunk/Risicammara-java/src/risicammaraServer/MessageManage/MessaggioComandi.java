@@ -9,7 +9,7 @@ package risicammaraServer.MessageManage;
  * Rappresenta l'invio di un comando client/server.
  * @author Sten_Gun
  */
-public class Messaggio_Comandi implements Messaggio{
+public class MessaggioComandi implements Messaggio{
 
     private comandi_t comando;
     private int sender;
@@ -20,7 +20,7 @@ public class Messaggio_Comandi implements Messaggio{
      * @param cmd Il comando desiderato
      * @param inviante  il nome del giocatore che lo ha inviato (SERVER se è di sistema)
      */
-    public Messaggio_Comandi(comandi_t cmd, int inviante){
+    public MessaggioComandi(comandi_t cmd, int inviante){
         this(cmd, inviante, -2);
     }
 
@@ -30,7 +30,7 @@ public class Messaggio_Comandi implements Messaggio{
      * @param inviante l'indice del giocatore che invia il comando (-1 se è il sistema,-2 se null)
      * @param who l'indice di chi riceve questa azione(non può essere -1)
      */
-    public Messaggio_Comandi(comandi_t cmd, int inviante, int who){
+    public MessaggioComandi(comandi_t cmd, int inviante, int who){
         this.comando = cmd;
         this.sender = inviante;
         if((who < -1) && (who < 0)) who=-2;

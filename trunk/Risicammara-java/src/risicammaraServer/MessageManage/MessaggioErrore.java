@@ -9,11 +9,11 @@ package risicammaraServer.MessageManage;
  *
  * @author Sten_Gun
  */
-public class Messaggio_Errore implements Messaggio{
+public class MessaggioErrore implements Messaggio{
     private errori_t errore;
     private int sender;
 
-    public Messaggio_Errore(errori_t err,int sender){
+    public MessaggioErrore(errori_t err,int sender){
         this.errore = err;
         this.sender = sender;
     }
