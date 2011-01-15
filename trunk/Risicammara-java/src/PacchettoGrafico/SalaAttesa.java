@@ -166,8 +166,9 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
             System.err.println("Il server non permette di scrivere su di lui");
         }
 
-        this.leggiServer  = new ObjectInputStream(new BufferedInputStream(this.server.getInputStream()));
         this.scriviServer = new ObjectOutputStream(new BufferedOutputStream(this.server.getOutputStream()));
+        this.scriviServer.flush();
+        this.leggiServer  = new ObjectInputStream(new BufferedInputStream(this.server.getInputStream()));
         MessaggioConfermaNuovoGiocatore msg = (MessaggioConfermaNuovoGiocatore) leggiServer.readObject();
         this.indexGiocatore = msg.getPlyIndex();
         this.listaGiocatori = msg.getPlyList();
