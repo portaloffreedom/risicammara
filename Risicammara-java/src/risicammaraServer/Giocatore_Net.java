@@ -27,14 +27,20 @@ public class Giocatore_Net extends Giocatore {
     
     public Giocatore_Net(Socket comunicatore){
         super(null, Colore_t.NULLO);
-        try {
-            this.comunicatore = comunicatore;
-            this.clientOut = new ObjectOutputStream(new BufferedOutputStream(comunicatore.getOutputStream()));
-            this.clientIn = new ObjectInputStream(new BufferedInputStream(comunicatore.getInputStream()));
-            thread_player = null;
+        this.comunicatore = comunicatore;
+        thread_player = null;
+
+        try {    
+            this.inizializzaStream();
         } catch (IOException ex) {
             System.err.println("Errore nell'apertura delle comunicazioni con il nuovo giocatore_net creato"+ex.getLocalizedMessage());
         }
+    }
+
+    private synchronized void inizializzaStream() throws IOException {
+            this.clientOut = new ObjectOutputStream(new BufferedOutputStream(comunicatore.getOutputStream()));
+            this.clientOut.flush();
+            this.clientIn = new ObjectInputStream(new BufferedInputStream(comunicatore.getInputStream()));
     }
 
     @Deprecated
