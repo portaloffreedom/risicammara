@@ -97,13 +97,15 @@ public class Lobby {
                     }*/
                     Giocatore_Net gioctemp = new Giocatore_Net(mgio.getConnessioneGiocatore());
                     gioctemp.setArmyColour(Colore_t.NULLO); //TODO probabilmente si può togliere perché non fa niente (è già nullo il colore)
+                    // Indice nel quale viene inserito il giocatore
                     int plynumb = listaGiocatori.addPlayer(gioctemp);
-                    PlayerThread gioth = new PlayerThread(coda,((Giocatore_Net) listaGiocatori.get(plynumb)).getClientIn(),plynumb);
-                    if(!gioth.isAlive()) gioth.start();
+                    PlayerThread gioth = new PlayerThread(coda,gioctemp.getClientIn(),plynumb);
+                    
                     gioctemp.setNome("Giocatore"+plynumb);
                     gioctemp.AssignThread(gioth);
+                    if(!gioth.isAlive()) gioth.start();
                     try {
-                        ObjectOutputStream os = (((Giocatore_Net)listaGiocatori.get(plynumb)).getClientOut());
+                        ObjectOutputStream os = (gioctemp.getClientOut());
                         os.writeObject(new MessaggioConfermaNuovoGiocatore(listaGiocatori,plynumb));
                         os.flush();
                     } catch (IOException ex) {
@@ -120,7 +122,8 @@ public class Lobby {
                     break;
                 case CHAT:
                     ctt = msg;
-                    
+
+                    /* Questo codice è completamente inutile!
                     //codice temporaneo
                     MessaggioChat messaggioChat = (MessaggioChat) msg;
                     Giocatore_Net giocatore_Net = (Giocatore_Net) listaGiocatori.get(0);
@@ -132,7 +135,7 @@ public class Lobby {
                         System.err.println("errore invio messaggio: "+ex);
                     }
                     //codice temporaneo
-
+                    */
 
                     break;
                 default:
@@ -152,12 +155,13 @@ public class Lobby {
              //Questo codice faceva andare in crash il Client: hai equivocato il
              // significato della funzione .isClosed();
              /*Socket cl = giotmp.getSocket();
-             if(cl.isClosed()) continue;
+             if(cl.isClosed()) continue;*/
+             
                     try {
-                        broadcastMessage(ctt, cl);
+                        broadcastMessage(ctt, giotmp.getClientOut());
                     } catch (IOException ex) {
                         System.err.println("Errore broadcast: "+ex.getMessage());
-                    }*/
+                    }
                 }
         }
         return listaGiocatori;
@@ -207,12 +211,11 @@ private Messaggio CommandHandling(MessaggioComandi cmdMsg){
      * @param cl il client da notificare
      * @throws IOException Eccezione di I/O dovuta ai socket
      */
-   private void broadcastMessage(Messaggio recMsg, Socket cl) throws IOException
+   private void broadcastMessage(Messaggio recMsg, ObjectOutputStream cl) throws IOException
    {
-         ObjectOutputStream os = new ObjectOutputStream(cl.getOutputStream());
-         os.writeObject(recMsg);
-         os.flush();
-         System.out.println("messaggio "+recMsg.toString()+" inviato!");
+        cl.writeObject(recMsg);
+        cl.flush();
+        System.out.println("messaggio "+recMsg.toString()+" inviato!");
    }
 
 }

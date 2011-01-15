@@ -30,6 +30,7 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.plaf.metal.MetalBorders.TextFieldBorder;
 import risicammaraClient.Colore_t;
+import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraServer.Giocatore_Net;
 import risicammaraServer.MessageManage.Messaggio;
@@ -142,13 +143,16 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
             switch (arrivo.getType()) {
                 case CHAT:
                     MessaggioChat msgChat = (MessaggioChat) arrivo;
-                    //TODO Visualizzare i messaggi di chat
+                    cronologiaChat.append(msgChat.toString(listaGiocatori));
+                    cronologiaChat.repaint();
                     System.out.println("Messaggio Chat| "+msgChat.toString(listaGiocatori));
                     break;
 
                 case AGGIORNADATIGIOCATORE:
                     MessaggioAggiornaDatiGiocatore msgUpdateGiocatore = (MessaggioAggiornaDatiGiocatore) arrivo;
-                    //TODO codice per aggiornare la lista giocatori
+                    Giocatore tmp = listaGiocatori.get(msgUpdateGiocatore.getSender());
+                    tmp.setNome(msgUpdateGiocatore.getNick());
+                    tmp.setArmyColour(msgUpdateGiocatore.getColor());
                     break;
                     
                 default:

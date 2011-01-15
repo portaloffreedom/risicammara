@@ -29,7 +29,7 @@ public class MessaggioChat implements Messaggio {
     }
 
     public String toString(ListaPlayers list){
-        return list.getNomeByIndex(sender)+": "+messaggio;
+        return list.getNomeByIndex(sender)+": "+messaggio+'\n';
     }
 
     public String getMessaggio(){
