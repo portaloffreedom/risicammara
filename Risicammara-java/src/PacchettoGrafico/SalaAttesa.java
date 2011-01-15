@@ -115,8 +115,6 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
         disegnaGiocatori(pannello);
 
         personalizza();
-
-        this.setVisible(true);
     }
 
     public SalaAttesa(Socket server) {
@@ -124,6 +122,8 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
     }
 
     public void run() {
+        this.setVisible(true);
+        
         Messaggio arrivo = null;
 
         while (lobby) {
@@ -131,6 +131,7 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
                 arrivo = (Messaggio) leggiServer.readObject();
             } catch (IOException ex) {
                 System.err.println("Errore! Client disconnesso :"+ex);
+                System.err.println(ex.getStackTrace());
                 System.exit(15);
             } catch (ClassNotFoundException ex) {
                 System.err.println("Attenzione! messaggio arrivato irriconoscibile: "+ex);
@@ -158,6 +159,13 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
     }
 
     private void creaConnessione() throws IOException, ClassNotFoundException {
+        if (server.isInputShutdown()) {
+            System.err.println("Il server non permette di leggere da lui");
+        }
+        if (server.isOutputShutdown()) {
+            System.err.println("Il server non permette di scrivere su di lui");
+        }
+
         this.scriviServer = new ObjectOutputStream(new BufferedOutputStream(this.server.getOutputStream()));
         this.leggiServer  = new ObjectInputStream(new BufferedInputStream(this.server.getInputStream()));
         MessaggioConfermaNuovoGiocatore msg = (MessaggioConfermaNuovoGiocatore) leggiServer.readObject();
