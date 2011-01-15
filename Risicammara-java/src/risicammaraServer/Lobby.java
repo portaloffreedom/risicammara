@@ -131,12 +131,15 @@ public class Lobby {
              Giocatore_Net giotmp = (Giocatore_Net)listaGiocatori.get(i);
              if(giotmp == null) continue;
              Socket cl = giotmp.getSocket();
-             if(cl.isClosed()) continue;
+
+             //Questo codice faceva andare in crash il Client: hai equivocato il
+             // significato della funzione .isClosed();
+             /*if(cl.isClosed()) continue;
                     try {
                         broadcastMessage(ctt, cl);
                     } catch (IOException ex) {
                         System.err.println("Errore broadcast: "+ex.getMessage());
-                    }
+                    }*/
                 }
         }
         return listaGiocatori;
