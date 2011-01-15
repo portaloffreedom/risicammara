@@ -7,7 +7,7 @@ package risicammaraClient;
 
 import PacchettoGrafico.CollegatiPartita;
 import PacchettoGrafico.PannelloSpeciale;
-import PacchettoGrafico.SalaAttesa;
+import PacchettoGrafico.salaAttesa.SalaAttesa;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;

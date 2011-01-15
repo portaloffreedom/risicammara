@@ -3,9 +3,8 @@
  * and open the template in the editor.
  */
 
-package PacchettoGrafico;
+package PacchettoGrafico.salaAttesa;
 
-import PacchettoGrafico.salaAttesa.CronologiaChat;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -24,16 +23,13 @@ import java.net.Socket;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.plaf.metal.MetalBorders.TextFieldBorder;
 import risicammaraClient.Colore_t;
 import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
-import risicammaraServer.Giocatore_Net;
 import risicammaraServer.MessageManage.Messaggio;
 import risicammaraServer.MessageManage.MessaggioAddPlayer;
 import risicammaraServer.MessageManage.MessaggioAggiornaDatiGiocatore;
@@ -190,7 +186,7 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
     }
 
     private void disegnaGiocatori(JPanel pannello) {
-        for (int i=0; i<listaGiocatori.MAXPLAYERS; i++) {
+        for (int i=0; i<ListaPlayers.MAXPLAYERS; i++) {
 
             this.pronti[i] = new JToggleButton("Ω");
             pannello.add(this.pronti[i]);
@@ -307,6 +303,7 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
         //    System.err.println("Errore nel mandare il messaggio di \"hang-up\": "+ex);
         //}
         try {
+            scriviServer.flush();
             server.close();
         } catch (IOException ex) {
             System.err.println("Errore nel chiudere il collegamento col server: "+ex);
@@ -335,53 +332,6 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Classi e interfacce interne al funzionamento della Sala d'Attesa">
-    private interface QuadratoGiocatori {
-
-        public void setNome(String testo);
-
-        public void setColore(Colore_t colore);
-
-        public void setVisible(boolean visible);
-
-        public void setBounds(int x, int y, int width, int height);
-    }
-
-    private class BottoneGiocatori extends JButton implements QuadratoGiocatori {
-
-        public BottoneGiocatori() {
-        }
-
-        public BottoneGiocatori(String text) {
-            super(text);
-        }
-
-        public void setNome(String testo) {
-            this.setText(testo);
-        }
-
-        public void setColore(Colore_t colore) {
-            this.setForeground(colore.getColor());
-        }
-    }
-
-    private class labelGiocatori extends JLabel implements QuadratoGiocatori {
-
-        public labelGiocatori() {
-        }
-
-        public labelGiocatori(String text) {
-            super(text, CENTER);
-        }
-
-        public void setNome(String testo) {
-            this.setText(testo);
-        }
-
-        public void setColore(Colore_t colore) {
-            this.setForeground(colore.getColor());
-        }
-    }
-
     static class LayoutManagerMatteo implements LayoutManager {
 
         public LayoutManagerMatteo() {
