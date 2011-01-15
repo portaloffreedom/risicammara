@@ -18,7 +18,6 @@ public enum messaggio_t {
      */
     MODIFICANICKCOLORE, // Pacchetto che segnala una modifica di nick e colore.
     OKADD,              // Pacchetto di "ok" ad una aggiunta giocatore.
-    DISCONNECTED,       // Informa il server dell'avvenuta disconnessione di un giocatore
     /**
      * Se ricevuto dal server aggiunge un giocatore con il socket
      * @see risicammaraServer.MessageManage.MessaggioNuovoGiocatore
