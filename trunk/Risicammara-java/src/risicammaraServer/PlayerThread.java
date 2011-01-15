@@ -39,6 +39,9 @@ public class PlayerThread extends Thread{
                 coda.Send(new MessaggioComandi(comandi_t.DISCONNECT, playerIndex));
             } catch (ClassNotFoundException ex) {
                 System.err.println("Messaggio non riconosciuto: "+ex);
+            } catch (Exception ex){
+                System.err.println("Eccezione: "+ex.getMessage());
+                stop = true;
             }
         }
         System.out.println("Thread giocatore "+ playerIndex+" stoppato");
