@@ -5,6 +5,7 @@
 
 package PacchettoGrafico;
 
+import PacchettoGrafico.salaAttesa.CronologiaChat;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -34,6 +35,7 @@ import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraServer.Giocatore_Net;
 import risicammaraServer.MessageManage.Messaggio;
+import risicammaraServer.MessageManage.MessaggioAddPlayer;
 import risicammaraServer.MessageManage.MessaggioAggiornaDatiGiocatore;
 import risicammaraServer.MessageManage.MessaggioChat;
 import risicammaraServer.MessageManage.MessaggioConfermaNuovoGiocatore;
@@ -78,7 +80,7 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
     private JButton conferma;
     private JTextField immissioneChat;
     private JButton invioChat;
-    private JTextArea cronologiaChat;
+    private CronologiaChat cronologiaChat;
 
     public SalaAttesa(Socket server, boolean leader) {
         super("Sala d'Attesa");
@@ -143,8 +145,7 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
             switch (arrivo.getType()) {
                 case CHAT:
                     MessaggioChat msgChat = (MessaggioChat) arrivo;
-                    cronologiaChat.append(msgChat.toString(listaGiocatori));
-                    cronologiaChat.repaint();
+                    cronologiaChat.stampaMessaggio(msgChat.toString(listaGiocatori));
                     System.out.println("Messaggio Chat| "+msgChat.toString(listaGiocatori));
                     break;
 
@@ -154,10 +155,13 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
                     tmp.setNome(msgUpdateGiocatore.getNick());
                     tmp.setArmyColour(msgUpdateGiocatore.getColor());
                     break;
+
+                case AGGIUNGIGIOCATORE:
+                    MessaggioAddPlayer msgAddPlayer = (MessaggioAddPlayer) arrivo;
                     
                 default:
                     System.err.println("Messaggio ignorato (il programma potrebbe non funzionare più bene)");
-                    System.err.println("Il messaggio ignorato era "+arrivo.getType()+":"+arrivo);
+                    System.err.println("Il messaggio ignorato era "+arrivo.getType()+":\""+arrivo+"\"");
             }
 
         }
@@ -180,7 +184,7 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
     }
 
     private void disegnaGiocatori(JPanel pannello) {
-        for (int i=0; i<6; i++) {
+        for (int i=0; i<listaGiocatori.MAXPLAYERS; i++) {
 
             this.pronti[i] = new JToggleButton("Ω");
             pannello.add(this.pronti[i]);
@@ -223,7 +227,7 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
             }
         });
 
-        this.cronologiaChat = new JTextArea();
+        this.cronologiaChat = new CronologiaChat();
         this.cronologiaChat.setBounds(cronologiaR);
         this.cronologiaChat.setEditable(false);
 
@@ -238,37 +242,26 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
     }
 
     private void personalizza() {
-        int i=0;
 
-        //TODO rendere più efficente memorizzando il riferimento nell'array in un riferimento temporaneo
-        for (; i<this.listaGiocatori.getSize(); i++) {
-            if ( this.listaGiocatori.get(i) == null ) {
-                this.giocatori[i].setNome("sconnesso ø");
-                this.giocatori[i].setColore(Colore_t.NERO);
+        QuadratoGiocatori quadratoGiocatori = null;
+        Giocatore giocatore = null;
+        for (int i=0; i<listaGiocatori.MAXPLAYERS; i++){
+            quadratoGiocatori = this.giocatori[i];
+            giocatore = listaGiocatori.get(i);
+            if ( giocatore == null){
+                aggiornaQuadratoGiocatori(quadratoGiocatori, "sconnesso", Colore_t.NERO);
             }
             else {
-                this.giocatori[i].setNome(this.listaGiocatori.getNomeByIndex(i));
-                this.giocatori[i].setColore(this.listaGiocatori.get(i).getArmyColour());
+                aggiornaQuadratoGiocatori(quadratoGiocatori, giocatore.getNome(), giocatore.getArmyColour());
             }
-
         }
-        for (; i<this.giocatori.length; i++){
-            this.giocatori[i].setNome("sconnesso þ");
-            this.giocatori[i].setColore(Colore_t.NERO);
-        }
-
-        /*
-        for (int j=0; j<this.giocatori.length; j++){
-            if (j==this.indexGiocatore)
-                this.giocatori[j].setColore(Colore_t.BLU);
-            else
-                this.giocatori[j].setColore(Colore_t.ROSSO);
-        }*/
 
         this.pronti[this.indexGiocatore].setEnabled(true);
+    }
 
-
-
+    private void aggiornaQuadratoGiocatori (QuadratoGiocatori quadratoGiocatori, String nome, Colore_t colore){
+        quadratoGiocatori.setNome(nome);
+        quadratoGiocatori.setColore(colore);
     }
 
     public void mandaMessaggioChat () throws IOException {
