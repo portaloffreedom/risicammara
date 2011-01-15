@@ -82,10 +82,11 @@ public class Lobby {
                     break;
                 case AGGIUNGIGIOCATORE:
                     MessaggioNuovoGiocatore mgio = (MessaggioNuovoGiocatore)msg;
-                    /*if(listaGiocatori.getSize() > 5){
+                    Giocatore_Net gioctemp = new Giocatore_Net(mgio.getConnessioneGiocatore());
+                    if(listaGiocatori.getSize() > 5){
                         try {
                             //TODO controllare questa sezione apre troppi stream di output
-                            broadcastMessage(new MessaggioErrore(errori_t.CONNECTIONREFUSED, -1), mgio.getConnessioneGiocatore());
+                            broadcastMessage(new MessaggioErrore(errori_t.CONNECTIONREFUSED, -1),gioctemp.getClientOut() );
                             mgio.getConnessioneGiocatore().close();
                         } catch (IOException ex) {
                             System.err.println("Errore di invio errore connessione: "+ex.getMessage());
@@ -94,8 +95,7 @@ public class Lobby {
                             ctt = null;
                         }
                         break;
-                    }*/
-                    Giocatore_Net gioctemp = new Giocatore_Net(mgio.getConnessioneGiocatore());
+                    }
                     gioctemp.setArmyColour(Colore_t.NULLO); //TODO probabilmente si può togliere perché non fa niente (è già nullo il colore)
                     // Indice nel quale viene inserito il giocatore
                     int plynumb = listaGiocatori.addPlayer(gioctemp);
@@ -113,6 +113,7 @@ public class Lobby {
                         System.exit(-1);
                     }
                     escludi = plynumb;
+                    attendiConnessioni.setNumeroGiocatori(listaGiocatori.getSize());
                     ctt = new MessaggioAddPlayer(gioctemp);
                     break;
                 case COMMAND:
