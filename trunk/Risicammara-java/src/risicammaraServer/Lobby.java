@@ -192,6 +192,7 @@ private Messaggio CommandHandling(MessaggioComandi cmdMsg){
          ObjectOutputStream os = new ObjectOutputStream(cl.getOutputStream());
          os.writeObject(recMsg);
          os.flush();
+         System.out.println("messaggio "+recMsg.toString()+" inviato!");
    }
 
 }
