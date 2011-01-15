@@ -146,7 +146,7 @@ public class Lobby {
                 }
                 //Stampa il messaggio di chat corrispondente e lo invia a tutti.
                     System.out.println(ctt.toString());
-          if(ctt!= null) for(int i = 0;i<listaGiocatori.getSize();i++)
+          if(ctt!= null) for(int i = 0;i<ListaPlayers.MAXPLAYERS;i++)
           {
              if(i == escludi) continue;
               //System.out.println("cl: "+all);
