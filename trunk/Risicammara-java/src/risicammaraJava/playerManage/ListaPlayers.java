@@ -17,7 +17,8 @@ public class ListaPlayers implements Serializable {
 
     public ListaPlayers(){
         listaPlayers = new ArrayList<Giocatore>();
-        this.nullnumber = 0;
+        for(int i=0;i<6;i++) listaPlayers.add(null);
+        this.nullnumber = 6;
     }
     /**
      * Aggiunge un giocatore direttamente in lista.
