@@ -29,8 +29,8 @@ public class Giocatore_Net extends Giocatore {
         super(null, Colore_t.NULLO);
         try {
             this.comunicatore = comunicatore;
-            this.clientIn = new ObjectInputStream(new BufferedInputStream(comunicatore.getInputStream()));
             this.clientOut = new ObjectOutputStream(new BufferedOutputStream(comunicatore.getOutputStream()));
+            this.clientIn = new ObjectInputStream(new BufferedInputStream(comunicatore.getInputStream()));
             thread_player = null;
         } catch (IOException ex) {
             System.err.println("Errore nell'apertura delle comunicazioni con il nuovo giocatore_net creato"+ex.getLocalizedMessage());

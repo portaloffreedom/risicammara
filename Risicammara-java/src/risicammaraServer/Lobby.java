@@ -82,8 +82,9 @@ public class Lobby {
                     break;
                 case AGGIUNGIGIOCATORE:
                     MessaggioNuovoGiocatore mgio = (MessaggioNuovoGiocatore)msg;
-                    if(listaGiocatori.getSize() > 5){
+                    /*if(listaGiocatori.getSize() > 5){
                         try {
+                            //TODO controllare questa sezione apre troppi stream di output
                             broadcastMessage(new MessaggioErrore(errori_t.CONNECTIONREFUSED, -1), mgio.getConnessioneGiocatore());
                             mgio.getConnessioneGiocatore().close();
                         } catch (IOException ex) {
@@ -93,11 +94,11 @@ public class Lobby {
                             ctt = null;
                         }
                         break;
-                    }
+                    }*/
                     Giocatore_Net gioctemp = new Giocatore_Net(mgio.getConnessioneGiocatore());
                     gioctemp.setArmyColour(Colore_t.NULLO); //TODO probabilmente si può togliere perché non fa niente (è già nullo il colore)
                     int plynumb = listaGiocatori.addPlayer(gioctemp);
-                    PlayerThread gioth = new PlayerThread(coda,mgio.getConnessioneGiocatore(),plynumb);
+                    PlayerThread gioth = new PlayerThread(coda,((Giocatore_Net) listaGiocatori.get(plynumb)).getClientIn(),plynumb);
                     if(!gioth.isAlive()) gioth.start();
                     gioctemp.setNome("Giocatore"+plynumb);
                     gioctemp.AssignThread(gioth);

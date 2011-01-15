@@ -7,7 +7,6 @@ package risicammaraServer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.net.Socket;
 import risicammaraServer.MessageManage.Messaggio;
 import risicammaraServer.MessageManage.MessaggioComandi;
 import risicammaraServer.MessageManage.comandi_t;
@@ -18,36 +17,31 @@ import risicammaraServer.MessageManage.comandi_t;
  */
 public class PlayerThread extends Thread{
     private boolean stop;
-    private Socket player_socket;
-    private int player_index;
+    private ObjectInputStream playerInput;
+    private int playerIndex;
     private CodaMsg coda;
-    public PlayerThread(CodaMsg coda,Socket playerSocket,int player_index){
+    public PlayerThread(CodaMsg coda,ObjectInputStream playerInput,int playerIndex){
         this.coda = coda;
-        this.player_index = player_index;
-        this.player_socket = playerSocket;
+        this.playerIndex = playerIndex;
+        this.playerInput = playerInput;
     }
 
     @Override
     public void run() {
         this.stop = false;
-        ObjectInputStream is = null;
-        try {
-            is = new ObjectInputStream(player_socket.getInputStream());
-        } catch (IOException ex) {
-            System.err.println("Errore input thread Giocatore " + player_index+": "+ex.getMessage());
-        }
+        
         while(!stop){
             try {
-                coda.Send((Messaggio) is.readObject());
+                coda.Send((Messaggio) this.playerInput.readObject());
             } catch (IOException ex) {
-                System.err.println("Giocatore "+player_index+" non raggiungibile: "+ex.getMessage());
+                System.err.println("Giocatore "+playerIndex+" non raggiungibile: "+ex.getMessage());
                 stop = true;
-                coda.Send(new MessaggioComandi(comandi_t.DISCONNECT, player_index));
+                coda.Send(new MessaggioComandi(comandi_t.DISCONNECT, playerIndex));
             } catch (ClassNotFoundException ex) {
                 System.err.println("Messaggio non riconosciuto: "+ex);
             }
         }
-        System.out.println("Thread giocatore "+ player_index+" stoppato");
+        System.out.println("Thread giocatore "+ playerIndex+" stoppato");
     }
 
     public void setStop(boolean stop) {
