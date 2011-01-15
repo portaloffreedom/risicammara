@@ -14,11 +14,13 @@ import risicammaraClient.Colore_t;
 public class ListaPlayers implements Serializable {
     private ArrayList <Giocatore> listaPlayers;
     private int nullnumber;
+    public static int MAXPLAYERS = 6;
 
     public ListaPlayers(){
         listaPlayers = new ArrayList<Giocatore>();
-        for(int i=0;i<6;i++) listaPlayers.add(null);
-        this.nullnumber = 6;
+        for(int i=0;i<MAXPLAYERS;i++) listaPlayers.add(null);
+        listaPlayers.trimToSize();
+        this.nullnumber = MAXPLAYERS;
     }
     /**
      * Aggiunge un giocatore direttamente in lista.
