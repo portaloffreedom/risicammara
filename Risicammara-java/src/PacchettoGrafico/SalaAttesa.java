@@ -156,7 +156,8 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
                     break;
                     
                 default:
-                    System.err.println("Messaggio ignorato (il programma potrebbe non funzionare più bene");
+                    System.err.println("Messaggio ignorato (il programma potrebbe non funzionare più bene)");
+                    System.err.println("Il messaggio ignorato era "+arrivo.getType()+":"+arrivo);
             }
 
         }
