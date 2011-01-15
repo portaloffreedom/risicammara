@@ -71,12 +71,19 @@ public class ListaPlayers implements Serializable {
         // (listaPlayers.isEmpty() || index < 0) return null;
         return listaPlayers.get(index);
     }
-    
+    /**
+     * Rimuove un giocatore dalla lista
+     * @param index l'indice assegnato al giocatore
+     */
     public void remPlayer(int index){
         this.listaPlayers.set(index, null);
         this.nullnumber++;
     }
-
+/**
+ * Il nickname del giocatore con un dato indice
+ * @param index l'indice del giocatore
+ * @return il nick del giocatore
+ */
     public String getNomeByIndex(int index){
         if(index == -1  ) return "SERVER";
         if(listaPlayers.isEmpty() || index < 0 || listaPlayers.get(index) == null) return "NAME_ERROR";
