@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -231,11 +233,7 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
         this.invioChat.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                try {
-                    mandaMessaggioChat();
-                } catch (IOException ex) {
-                    System.err.println("Errore! Messaggio non inviato: "+ex);
-                }
+            mandaMessaggioChat();
             }
         });
 
@@ -280,12 +278,27 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
         quadratoGiocatori.setColore(colore);
     }
 
-    public void mandaMessaggioChat () throws IOException {
-        //TODO prendi il messaggio dal riquadro apposta
-        //TODO resetta il riquadro del messaggio
-        //TODO scrivi il messaggio sulla cronologia principale
-        scriviServer.writeObject(new MessaggioChat(this.indexGiocatore, "Prova_ciccia"));
-        scriviServer.flush();
+    /**
+     * Gestisce l'intero invio dei messaggi. Prende il messaggio dalla casella di
+     * testo e se manda il messaggio con successo sulla rete resetta il campo di
+     * testo di immissioneChat.
+     */
+    public void mandaMessaggioChat () {
+        String messaggio = this.immissioneChat.getText();
+            //feedback più realistico se aspetta il messaggio dal server
+        //this.cronologiaChat.stampaMessaggio("Me: "+messaggio);
+
+        
+        try {
+            scriviServer.writeObject(new MessaggioChat(this.indexGiocatore, messaggio));
+            scriviServer.flush();
+            immissioneChat.setText("");
+        } catch (IOException ex) {
+            String errore = "Attenzione messaggio \""+messaggio+"\" non inviato";
+            System.err.println(errore+"|Motivazione: "+ex.getLocalizedMessage());
+            this.cronologiaChat.stampaMessaggio(errore);
+        }
+        return;
     }
 
     private QuadratoGiocatori quadratoInterfacciaLeader(JPanel pannello, int i){
