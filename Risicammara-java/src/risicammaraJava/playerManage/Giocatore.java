@@ -128,4 +128,12 @@ public class Giocatore implements Serializable {
     public String toString(){
         return this.nome;
     }
+
+    public void setNome(String nom){
+        this.nome = nom;
+    }
+
+    public void setArmyColour(Colore_t col){
+        this.colore_armate = col;
+    }
 }
