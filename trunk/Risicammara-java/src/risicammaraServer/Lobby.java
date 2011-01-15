@@ -5,6 +5,7 @@
 
 package risicammaraServer;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -101,8 +102,9 @@ public class Lobby {
                     gioctemp.setNome("Giocatore"+plynumb);
                     gioctemp.AssignThread(gioth);
                     try {
-                        ObjectOutputStream os = new ObjectOutputStream(mgio.getConnessioneGiocatore().getOutputStream());
+                        ObjectOutputStream os = (((Giocatore_Net)listaGiocatori.get(plynumb)).getClientOut());
                         os.writeObject(new MessaggioConfermaNuovoGiocatore(listaGiocatori,plynumb));
+                        os.flush();
                     } catch (IOException ex) {
                         System.out.println("Errore nel creare lo Stream di output verso il nuovo utente o di invio del messaggio: "+ex);
                         System.exit(-1);
@@ -117,6 +119,20 @@ public class Lobby {
                     break;
                 case CHAT:
                     ctt = msg;
+                    
+                    //codice temporaneo
+                    MessaggioChat messaggioChat = (MessaggioChat) msg;
+                    Giocatore_Net giocatore_Net = (Giocatore_Net) listaGiocatori.get(0);
+                    try {
+                        ObjectOutputStream stream = giocatore_Net.getClientOut();
+                        stream.writeObject(messaggioChat);
+                        stream.flush();
+                    } catch (IOException ex) {
+                        System.err.println("errore invio messaggio: "+ex);
+                    }
+                    //codice temporaneo
+
+
                     break;
                 default:
                     ctt = new MessaggioChat(-1, "Messaggio non ancora gestito");
@@ -130,11 +146,12 @@ public class Lobby {
               //System.out.println("cl: "+all);
              Giocatore_Net giotmp = (Giocatore_Net)listaGiocatori.get(i);
              if(giotmp == null) continue;
-             Socket cl = giotmp.getSocket();
+             
 
              //Questo codice faceva andare in crash il Client: hai equivocato il
              // significato della funzione .isClosed();
-             /*if(cl.isClosed()) continue;
+             /*Socket cl = giotmp.getSocket();
+             if(cl.isClosed()) continue;
                     try {
                         broadcastMessage(ctt, cl);
                     } catch (IOException ex) {
@@ -170,11 +187,10 @@ private Messaggio CommandHandling(MessaggioComandi cmdMsg){
             Giocatore_Net tempgioc = (Giocatore_Net)listaGiocatori.get(cmdMsg.getSender());
             PlayerThread th = (PlayerThread)tempgioc.getThread();
             if(th.isAlive()) th.setStop(true);
-            Socket giosock = tempgioc.getSocket();
             listaGiocatori.remPlayer(cmdMsg.getSender());
             attendiConnessioni.setNumeroGiocatori(listaGiocatori.getSize());
             try {
-                giosock.close();
+                tempgioc.closeSocket();
             } catch (Exception ex) {
                 System.err.println("Errore socket Disconnessione: "+ex.getMessage());
             }
