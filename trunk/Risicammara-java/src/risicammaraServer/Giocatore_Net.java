@@ -38,12 +38,4 @@ public class Giocatore_Net extends Giocatore {
         return comunicatore;
     }
 
-    public void setNome(String nom){
-        super.nome = nom;
-    }
-
-    public void setArmyColour(Colore_t col){
-        super.colore_armate = col;
-    }
-
 }

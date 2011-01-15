@@ -189,7 +189,9 @@ private Messaggio CommandHandling(MessaggioComandi cmdMsg){
      */
    private void broadcastMessage(Messaggio recMsg, Socket cl) throws IOException
    {
-         new ObjectOutputStream(cl.getOutputStream()).writeObject(recMsg);
+         ObjectOutputStream os = new ObjectOutputStream(cl.getOutputStream());
+         os.writeObject(recMsg);
+         os.flush();
    }
 
 }
