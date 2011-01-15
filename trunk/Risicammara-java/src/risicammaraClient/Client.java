@@ -8,23 +8,14 @@ package risicammaraClient;
 import PacchettoGrafico.CollegatiPartita;
 import PacchettoGrafico.PannelloSpeciale;
 import PacchettoGrafico.SalaAttesa;
-import com.sun.java.swing.plaf.motif.MotifLookAndFeel;
-import com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import risicammaraServer.MessageManage.MessaggioComandi;
-import risicammaraServer.MessageManage.MessaggioChat;
-import risicammaraServer.MessageManage.comandi_t;
-import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraJava.turnManage.Partita;
 
 
@@ -40,6 +31,15 @@ public class Client implements WindowListener, Runnable {
     public static void main(String[] args) {
         boolean debug = false;
         if (args.length>= 1 && (args[0].equals("--debug") || args[0].equals("-d"))) debug=true;
+
+        /*for (String string : args) {
+            switch (string.hashCode()) {
+                case "--debug".hashCode():
+                case "-d".hashCode():
+
+            }
+
+        }*/
 
         Client client = new Client(debug, Client.PORT);
         client.run(); //Attenzione non viene creato un Thread, viene solo
