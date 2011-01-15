@@ -112,6 +112,7 @@ public class Lobby {
                         System.out.println("Errore nel creare lo Stream di output verso il nuovo utente o di invio del messaggio: "+ex);
                         System.exit(-1);
                     }
+                    escludi = plynumb;
                     ctt = new MessaggioAddPlayer(gioctemp);
                     break;
                 case COMMAND:
