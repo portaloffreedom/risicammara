@@ -5,6 +5,7 @@
 
 package risicammaraJava.playerManage;
 import java.io.Serializable;
+import java.lang.IndexOutOfBoundsException;
 import java.util.ArrayList;
 import risicammaraClient.Colore_t;
 /**
@@ -37,10 +38,9 @@ public class ListaPlayers implements Serializable {
     public int addPlayer(Giocatore player){
         int index = listaPlayers.indexOf(null);
         if(index < 0) {
-            index = listaPlayers.size();
-            listaPlayers.add(null);
+            throw new IndexOutOfBoundsException();
         }
-        else nullnumber--;
+        nullnumber--;
         listaPlayers.set(index,player);
         return index;
     }
