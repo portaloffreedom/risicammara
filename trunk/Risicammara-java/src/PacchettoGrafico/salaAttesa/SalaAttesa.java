@@ -30,11 +30,7 @@ import javax.swing.plaf.metal.MetalBorders.TextFieldBorder;
 import risicammaraClient.Colore_t;
 import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
-import risicammaraServer.MessageManage.Messaggio;
-import risicammaraServer.MessageManage.MessaggioAddPlayer;
-import risicammaraServer.MessageManage.MessaggioAggiornaDatiGiocatore;
-import risicammaraServer.MessageManage.MessaggioChat;
-import risicammaraServer.MessageManage.MessaggioConfermaNuovoGiocatore;
+import risicammaraServer.MessageManage.*;
 
 /**
  *
@@ -161,6 +157,20 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
                     aggiornaQuadratoGiocatori(msgAddPlayer.getPlayer(), indexNewG);
                     break;
 
+                case COMMAND:
+                    MessaggioComandi msgComando = (MessaggioComandi) arrivo;
+                    switch (msgComando.getComando()) {
+                        case DISCONNECT:
+                            int indexRimozione = msgComando.getSender();
+                            listaGiocatori.remPlayer(indexRimozione);
+                            aggiornaQuadratoGiocatori(new Giocatore("disconnesso", Colore_t.NERO), indexRimozione);
+                            break;
+
+                        default:
+                            System.err.println("Comando non riconosciuto: "+msgComando.getComando());
+                            //lasciare continuare così ricade nel caso default dello swich sopra
+                    }
+                    //Non aggiungere casi qua
                 default:
                     System.err.println("Messaggio ignorato (il programma potrebbe non funzionare più bene)\n"
                                       +"Il messaggio ignorato era "+arrivo.getType()+":\""+arrivo+"\"");
@@ -251,7 +261,7 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
             quadratoGiocatori = this.giocatori[i];
             giocatore = listaGiocatori.get(i);
             if ( giocatore == null){
-                aggiornaQuadratoGiocatori(quadratoGiocatori, "sconnesso", Colore_t.NERO);
+                aggiornaQuadratoGiocatori(quadratoGiocatori, "disconnesso", Colore_t.NERO);
             }
             else {
                 aggiornaQuadratoGiocatori(quadratoGiocatori, giocatore.getNome(), giocatore.getArmyColour());
