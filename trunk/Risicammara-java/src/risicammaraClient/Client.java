@@ -86,6 +86,7 @@ public class Client implements WindowListener, Runnable {
 
 
         SalaAttesa finestraSalaAttesa = new SalaAttesa(server, true);
+        finestraSalaAttesa.run();
 
 
         /*
