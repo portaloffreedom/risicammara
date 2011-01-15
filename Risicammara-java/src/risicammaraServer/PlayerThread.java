@@ -38,11 +38,13 @@ public class PlayerThread extends Thread{
         }
         while(!stop){
             try {
-                coda.Send((Messaggio)is.readObject());
-            } catch (Exception ex) {
+                coda.Send((Messaggio) is.readObject());
+            } catch (IOException ex) {
                 System.err.println("Giocatore "+player_index+" non raggiungibile: "+ex.getMessage());
                 stop = true;
                 coda.Send(new MessaggioComandi(comandi_t.DISCONNECT, player_index));
+            } catch (ClassNotFoundException ex) {
+                System.err.println("Messaggio non riconosciuto: "+ex);
             }
         }
         System.out.println("Thread giocatore "+ player_index+" stoppato");
