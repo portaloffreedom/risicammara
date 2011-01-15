@@ -69,7 +69,9 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
     private boolean lobby;
 
     //roba ricevuta dal sever
+    /** Indice del Giocatore che sta utilizzando l'attuale Client */
     private int indexGiocatore;
+    /** Intera lista dei giocatori */
     private ListaPlayers listaGiocatori;
 
     //Oggetti disegnati sul pannello
@@ -154,14 +156,18 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
                     Giocatore tmp = listaGiocatori.get(msgUpdateGiocatore.getSender());
                     tmp.setNome(msgUpdateGiocatore.getNick());
                     tmp.setArmyColour(msgUpdateGiocatore.getColor());
+                    aggiornaQuadratoGiocatori(tmp, msgUpdateGiocatore.getSender());
                     break;
 
                 case AGGIUNGIGIOCATORE:
                     MessaggioAddPlayer msgAddPlayer = (MessaggioAddPlayer) arrivo;
-                    
+                    int indexNewG = listaGiocatori.addPlayer(msgAddPlayer.getPlayer());
+                    aggiornaQuadratoGiocatori(msgAddPlayer.getPlayer(), indexNewG);
+                    break;
+
                 default:
-                    System.err.println("Messaggio ignorato (il programma potrebbe non funzionare più bene)");
-                    System.err.println("Il messaggio ignorato era "+arrivo.getType()+":\""+arrivo+"\"");
+                    System.err.println("Messaggio ignorato (il programma potrebbe non funzionare più bene)\n"
+                                      +"Il messaggio ignorato era "+arrivo.getType()+":\""+arrivo+"\"");
             }
 
         }
@@ -257,6 +263,10 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
         }
 
         this.pronti[this.indexGiocatore].setEnabled(true);
+    }
+
+    private void aggiornaQuadratoGiocatori (Giocatore giocatore, int index){
+        this.aggiornaQuadratoGiocatori(this.giocatori[index], giocatore.getNome(), giocatore.getArmyColour());
     }
 
     private void aggiornaQuadratoGiocatori (QuadratoGiocatori quadratoGiocatori, String nome, Colore_t colore){
