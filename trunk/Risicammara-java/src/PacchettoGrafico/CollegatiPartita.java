@@ -123,7 +123,7 @@ public class CollegatiPartita extends JFrame implements WindowListener {
         }
 
         public void actionPerformed(ActionEvent e) {
-            memoria.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+            setWorking(true);
 
             InetAddress ip = null;
             try {
@@ -135,7 +135,7 @@ public class CollegatiPartita extends JFrame implements WindowListener {
                 }
             } catch (UnknownHostException ex) {
                     System.err.println("UnknowHostException: "+ex);
-                    memoria.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                    setWorking(false);
                     return;
             }
 
@@ -143,12 +143,28 @@ public class CollegatiPartita extends JFrame implements WindowListener {
                 memoria.server = new Socket(ip, this.porta);
             } catch (IOException ex) {
                 System.err.println("Errore col server "+ip+": "+ex.getLocalizedMessage());
-                memoria.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                setWorking(false);
                 return;
             }
 
             memoria.setVisible(false);
             memoria.main.salaAttesa(memoria.getServer());
+        }
+
+        private void setWorking (boolean lavorante){
+            //preparazione
+            Cursor cursore = null;
+            if (lavorante)
+                cursore = new Cursor(Cursor.WAIT_CURSOR);
+            else
+                cursore = new Cursor(Cursor.DEFAULT_CURSOR);
+
+            //imposta gli oggetti grafici
+            memoria.stringaIndirizzo.setEnabled(!lavorante);
+            memoria.stringaIndirizzo.setCursor(cursore);
+            memoria.setCursor(cursore);
+
+
         }
     }
 
