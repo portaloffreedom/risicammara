@@ -6,6 +6,7 @@
 package PacchettoGrafico;
 
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -122,6 +123,7 @@ public class CollegatiPartita extends JFrame implements WindowListener {
         }
 
         public void actionPerformed(ActionEvent e) {
+            memoria.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
             InetAddress ip = null;
             try {
@@ -133,6 +135,7 @@ public class CollegatiPartita extends JFrame implements WindowListener {
                 }
             } catch (UnknownHostException ex) {
                     System.err.println("UnknowHostException: "+ex);
+                    memoria.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                     return;
             }
 
@@ -140,6 +143,7 @@ public class CollegatiPartita extends JFrame implements WindowListener {
                 memoria.server = new Socket(ip, this.porta);
             } catch (IOException ex) {
                 System.err.println("Errore col server "+ip+": "+ex.getLocalizedMessage());
+                memoria.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 return;
             }
 

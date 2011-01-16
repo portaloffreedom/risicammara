@@ -65,4 +65,11 @@ public class MessaggioComandi implements Messaggio{
     public int getReceiver(){
         return receiver;
     }
+
+    @Override
+    public String toString() {
+        return getType()+"|"+getComando();
+    }
+
+
 }
