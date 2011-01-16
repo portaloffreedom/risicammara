@@ -31,6 +31,15 @@ public class CronologiaChat extends JTextArea {
         testoInRighe = new ArrayList<String>(maxRighe+1);
     }
 
+    public CronologiaChat(int maxRighe){
+        this.setEditable(false);
+        this.maxRighe = maxRighe;
+        testoInRighe = new ArrayList<String>(maxRighe+1);
+        
+        //this.setFont(Font.decode("Droid Serif"));
+
+    }
+
 
     public void stampaMessaggio(String messaggio) {
 
@@ -46,8 +55,14 @@ public class CronologiaChat extends JTextArea {
         for (String riga : testoInRighe) {
             testoCompleto = testoCompleto+riga+'\n';
         }
+        testoCompleto = testoCompleto.substring(0, testoCompleto.length()-1);
 
         this.setText(testoCompleto);
+        Rectangle bordi = this.getBounds();
+        System.out.println(bordi);
+        bordi.y = bordi.height;
+        bordi.height = 0;
+        this.scrollRectToVisible(bordi);
 
         //append(messaggio);
         //append("\n");
@@ -85,6 +100,7 @@ public class CronologiaChat extends JTextArea {
 
         //imposta italico e stampa messaggio su CronologiaChat
         this.setFont(new Font(tmp.getName(), Font.ITALIC, tmp.getSize()));
+        //this.setFont(Font.decode("Droid Serif Bold Italic"));
         stampaMessaggio(messaggio);
 
         //ripristino Font
