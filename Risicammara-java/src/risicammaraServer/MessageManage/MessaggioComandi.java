@@ -15,6 +15,10 @@ public class MessaggioComandi implements Messaggio{
     private int sender;
     private int receiver;
 
+    public static MessaggioComandi creaMSGconnected(int giocatoreConnesso){
+        return new MessaggioComandi(comandi_t.CONNECTED, giocatoreConnesso);
+    }
+
     /**
      * Costruttore del pacchetto
      * @param cmd Il comando desiderato
