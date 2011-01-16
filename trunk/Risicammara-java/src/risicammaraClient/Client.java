@@ -62,8 +62,8 @@ public class Client implements WindowListener, Runnable {
 
         try {
             if (System.getProperties().getProperty("os.name").equalsIgnoreCase("linux")) {
-
-                UIManager.setLookAndFeel(new com.sun.java.swing.plaf.gtk.GTKLookAndFeel());//new GTKLookAndFeel());
+                //UIManager.setLookAndFeel(new com.sun.java.swing.plaf.gtk.GTKLookAndFeel());
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
             }
             else {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
