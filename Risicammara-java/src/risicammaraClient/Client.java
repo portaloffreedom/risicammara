@@ -8,6 +8,7 @@ package risicammaraClient;
 import PacchettoGrafico.CollegatiPartita;
 import PacchettoGrafico.PannelloSpeciale;
 import PacchettoGrafico.salaAttesa.SalaAttesa;
+import com.sun.java.swing.plaf.gtk.GTKLookAndFeel;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
@@ -57,9 +58,16 @@ public class Client implements WindowListener, Runnable {
         super();
         this.debug= debug;
         this.porta = porta;
-        
+
+
+
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            if (System.getProperties().getProperty("os.name").equalsIgnoreCase("linux")) {
+                UIManager.setLookAndFeel(new GTKLookAndFeel());
+            }
+            else {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            }
         } catch (ClassNotFoundException ex) {
             System.err.println("Look and feel error: "+ex);
         } catch (InstantiationException ex) {

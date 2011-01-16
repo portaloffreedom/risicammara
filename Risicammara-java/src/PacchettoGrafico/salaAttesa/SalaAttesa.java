@@ -20,8 +20,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -76,7 +74,7 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
     private JButton conferma;
     private JTextField immissioneChat;
     private JButton invioChat;
-    private CronologiaChat cronologiaChat;
+    private CronologiaChat konsole;
 
     public SalaAttesa(Socket server, boolean leader) {
         super("Sala d'Attesa");
@@ -141,22 +139,19 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
             switch (arrivo.getType()) {
                 case CHAT:
                     MessaggioChat msgChat = (MessaggioChat) arrivo;
-                    cronologiaChat.stampaMessaggio(msgChat.toString(listaGiocatori));
+                    konsole.stampaMessaggio(msgChat.toString(listaGiocatori));
                     System.out.println("Messaggio Chat| "+msgChat.toString(listaGiocatori));
                     break;
 
                 case AGGIORNADATIGIOCATORE:
                     MessaggioAggiornaDatiGiocatore msgUpdateGiocatore = (MessaggioAggiornaDatiGiocatore) arrivo;
-                    Giocatore tmp = listaGiocatori.get(msgUpdateGiocatore.getSender());
-                    tmp.setNome(msgUpdateGiocatore.getNick());
-                    tmp.setArmyColour(msgUpdateGiocatore.getColor());
-                    aggiornaQuadratoGiocatori(tmp, msgUpdateGiocatore.getSender());
+                    aggiornaQuadratoGiocatori(msgUpdateGiocatore.getWho(), msgUpdateGiocatore.getNick(), msgUpdateGiocatore.getColor());
                     break;
 
                 case AGGIUNGIGIOCATORE:
                     MessaggioAddPlayer msgAddPlayer = (MessaggioAddPlayer) arrivo;
                     int indexNewG = listaGiocatori.addPlayer(msgAddPlayer.getPlayer());
-                    aggiornaQuadratoGiocatori(msgAddPlayer.getPlayer(), indexNewG);
+                    aggiornaQuadratoGiocatori(indexNewG, msgAddPlayer.getPlayer().getNome(), msgAddPlayer.getPlayer().getArmyColour());
                     break;
 
                 case COMMAND:
@@ -165,7 +160,7 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
                         case DISCONNECT:
                             int indexRimozione = msgComando.getSender();
                             listaGiocatori.remPlayer(indexRimozione);
-                            aggiornaQuadratoGiocatori(new Giocatore("disconnesso", Colore_t.NERO), indexRimozione);
+                            aggiornaQuadratoGiocatori(indexRimozione, "disconnesso", Colore_t.NULLO);
                             break;
 
                         default:
@@ -224,6 +219,12 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
         
         this.conferma = new JButton("conferma");
         this.conferma.setBounds(confermaR);
+        this.conferma.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                aggiornaNomeColore();
+            }
+        });
 
         this.immissioneChat = new JTextField();
         immissioneChat.setBounds(immissioneR);
@@ -237,17 +238,14 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
             }
         });
 
-        this.cronologiaChat = new CronologiaChat();
-        this.cronologiaChat.setBounds(cronologiaR);
-        this.cronologiaChat.setEditable(false);
-
+        this.konsole = new CronologiaChat(cronologiaR);
 
         pannello.add(this.nomeGiocatore);
         pannello.add(this.colore);
         pannello.add(this.conferma);
         pannello.add(this.immissioneChat);
         pannello.add(this.invioChat);
-        pannello.add(this.cronologiaChat);
+        pannello.add(this.konsole);
 
     }
 
@@ -255,27 +253,79 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
 
         QuadratoGiocatori quadratoGiocatori = null;
         Giocatore giocatore = null;
-        for (int i=0; i<listaGiocatori.MAXPLAYERS; i++){
-            quadratoGiocatori = this.giocatori[i];
+        for (int i=0; i<ListaPlayers.MAXPLAYERS; i++){
+            //quadratoGiocatori = this.giocatori[i];
             giocatore = listaGiocatori.get(i);
             if ( giocatore == null){
-                aggiornaQuadratoGiocatori(quadratoGiocatori, "disconnesso", Colore_t.NERO);
+                aggiornaQuadratoGiocatori(i, "disconnesso", Colore_t.NULLO);
             }
             else {
-                aggiornaQuadratoGiocatori(quadratoGiocatori, giocatore.getNome(), giocatore.getArmyColour());
+                aggiornaQuadratoGiocatori(i, giocatore.getNome(), giocatore.getArmyColour());
             }
         }
 
         this.pronti[this.indexGiocatore].setEnabled(true);
     }
 
-    private void aggiornaQuadratoGiocatori (Giocatore giocatore, int index){
-        this.aggiornaQuadratoGiocatori(this.giocatori[index], giocatore.getNome(), giocatore.getArmyColour());
+    private void aggiornaQuadratoGiocatori (int index, String nome, Colore_t colore){
+        Giocatore giocatore = this.listaGiocatori.get(index);
+        if (giocatore != null) {
+            giocatore.setNome(nome);
+        }
+        this.giocatori[index].setNome(nome);
+        setColoreGiocatore(index, colore);
     }
 
-    private void aggiornaQuadratoGiocatori (QuadratoGiocatori quadratoGiocatori, String nome, Colore_t colore){
-        quadratoGiocatori.setNome(nome);
-        quadratoGiocatori.setColore(colore);
+    private void setColoreGiocatore(int index, Colore_t nuovoColore){
+        Giocatore giocatore = this.listaGiocatori.get(index);
+        Colore_t vecchioColore = Colore_t.NULLO;
+        if (giocatore != null ) {
+            vecchioColore = giocatore.getArmyColour();
+            giocatore.setArmyColour(nuovoColore);
+        }
+
+        if (index != indexGiocatore) {
+            if (!(vecchioColore.equals(Colore_t.NULLO)) && !nuovoColore.equals(vecchioColore))
+                    this.colore.addItem(vecchioColore);
+            if (!(nuovoColore.equals(Colore_t.NULLO)))
+                    this.colore.removeItem(nuovoColore);
+        }
+
+        this.giocatori[index].setColore(nuovoColore);
+    }
+
+    /**
+     * Manda il messaggio di cambio nome e colore, poi chiama la funzione di
+     * cambio nome e colore
+     * @see MessaggioCambiaNickColore
+     */
+    private void aggiornaNomeColore() {
+        //TODO cercare la stringa nome se non è già posseduta da qualcun'altro
+        String nuovoNome = this.nomeGiocatore.getText();
+        if (nuovoNome.equals("")) return;
+
+        Colore_t nuovoColore = (Colore_t) this.colore.getSelectedItem();
+        try {
+            this.scriviServer.writeObject(new MessaggioCambiaNickColore(nuovoNome, nuovoColore, this.indexGiocatore));
+            this.scriviServer.flush();
+        } catch (IOException ex) {
+            this.konsole.stampaMessaggioErrore("Cambio colore e/o nuck non riuscito", ex);
+            return;
+        }
+        cambiaInfoGiocatore(indexGiocatore, nuovoNome, nuovoColore);
+    }
+
+    private void cambiaInfoGiocatore(int indexG, String nuovoNome, Colore_t nuovoColore) {
+        
+        //parte grafica
+        this.nomeGiocatore.setText(nuovoNome);
+        aggiornaQuadratoGiocatori(indexG, nuovoNome, nuovoColore);
+
+        //parte memoria
+        Giocatore giocatore = this.listaGiocatori.get(indexG);
+        giocatore.setNome(nuovoNome);
+        giocatore.setArmyColour(nuovoColore);
+        
     }
 
     /**
@@ -283,8 +333,9 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
      * testo e se manda il messaggio con successo sulla rete resetta il campo di
      * testo di immissioneChat.
      */
-    public void mandaMessaggioChat () {
+    private void mandaMessaggioChat () {
         String messaggio = this.immissioneChat.getText();
+        
             //feedback più realistico se aspetta il messaggio dal server
         //this.cronologiaChat.stampaMessaggio("Me: "+messaggio);
 
@@ -294,9 +345,7 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
             scriviServer.flush();
             immissioneChat.setText("");
         } catch (IOException ex) {
-            String errore = "Attenzione messaggio \""+messaggio+"\" non inviato";
-            System.err.println(errore+"|Motivazione: "+ex.getLocalizedMessage());
-            this.cronologiaChat.stampaMessaggio(errore);
+            this.konsole.stampaMessaggioErrore("Attenzione messaggio \""+messaggio+"\" non inviato", ex);
         }
         return;
     }
