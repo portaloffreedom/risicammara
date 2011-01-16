@@ -24,6 +24,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.plaf.metal.MetalBorders.TextFieldBorder;
@@ -108,7 +109,7 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
 
         JPanel pannello = new JPanel(new LayoutManagerMatteo());
         this.getContentPane().add(pannello);
-
+        
         disegnaGiocatori(pannello);
 
         personalizza();
@@ -144,14 +145,42 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
                     break;
 
                 case AGGIORNADATIGIOCATORE:
-                    MessaggioAggiornaDatiGiocatore msgUpdateGiocatore = (MessaggioAggiornaDatiGiocatore) arrivo;
-                    setInfoGiocatore(msgUpdateGiocatore.getWho(), msgUpdateGiocatore.getNick(), msgUpdateGiocatore.getColor());
+                    MessaggioAggiornaDatiGiocatore msgUpdateGioct = (MessaggioAggiornaDatiGiocatore) arrivo;
+                    Giocatore gioctAggiornato = listaGiocatori.get(msgUpdateGioct.getWho());
+
+                    String messaggio = "Il Giocatore \""+gioctAggiornato.getNome()+"\" ha cambiato ";
+                    boolean nomeCambiato = false;
+                    boolean coloreCambiato = false;
+                    if (!gioctAggiornato.getNome().equals(msgUpdateGioct.getNick()))         nomeCambiato = true;
+                    if (!gioctAggiornato.getArmyColour().equals(msgUpdateGioct.getColor()))  coloreCambiato = true;
+
+                    if (!coloreCambiato && !nomeCambiato){
+                        break;
+                    }
+                    if (nomeCambiato) {
+                        messaggio = messaggio+"il nome in \""+msgUpdateGioct.getNick()+'"';
+                    }
+                    if (nomeCambiato && coloreCambiato) {
+                        messaggio = messaggio+" e ";
+                    }
+                    if (coloreCambiato) {
+                        messaggio = messaggio+"colore in "+msgUpdateGioct.getColor();
+                    }
+                    messaggio= messaggio+".";
+                    
+                    konsole.stampaMessaggioComando(messaggio);
+
+                    //if (gioctrAggiornato.equals(lobby))
+                    setInfoGiocatore(msgUpdateGioct.getWho(), msgUpdateGioct.getNick(), msgUpdateGioct.getColor());
                     break;
 
                 case AGGIUNGIGIOCATORE:
                     MessaggioAddPlayer msgAddPlayer = (MessaggioAddPlayer) arrivo;
-                    int indexNewG = listaGiocatori.addPlayer(msgAddPlayer.getPlayer());
-                    setInfoGiocatore(indexNewG, msgAddPlayer.getPlayer().getNome(), msgAddPlayer.getPlayer().getArmyColour());
+                    Giocatore nuovoGiocatore = msgAddPlayer.getPlayer();
+                    int indexNewG = listaGiocatori.addPlayer(nuovoGiocatore);
+                    setInfoGiocatore(indexNewG, nuovoGiocatore.getNome(), nuovoGiocatore.getArmyColour());
+                    giocatoreVisible(indexNewG, true);
+                    konsole.stampaMessaggioComando("Entrato nuovo Giocatore.");
                     break;
 
                 case COMMAND:
@@ -159,18 +188,21 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
                     switch (msgComando.getComando()) {
                         case DISCONNECT:
                             int indexRimozione = msgComando.getSender();
+                            String nomeGiocatore = listaGiocatori.getNomeByIndex(indexRimozione);
                             listaGiocatori.remPlayer(indexRimozione);
-                            setInfoGiocatore(indexRimozione, "disconnesso", Colore_t.NULLO);
+                            giocatoreVisible(indexRimozione, false);
+                            konsole.stampaMessaggioComando("Giocatore "+nomeGiocatore+" uscito.");
                             break;
 
                         default:
                             System.err.println("Comando non riconosciuto: "+msgComando.getComando());
-                            //lasciare continuare così ricade nel caso default dello swich sopra
+                            break;
                     }
-                    //Non aggiungere casi qua
+                    break;
                 default:
                     System.err.println("Messaggio ignorato (il programma potrebbe non funzionare più bene)\n"
                                       +"Il messaggio ignorato era "+arrivo.getType()+":\""+arrivo+"\"");
+                    break;
             }
 
         }
@@ -235,14 +267,17 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
         this.invioChat.setBounds(invioR);
         this.invioChat.addActionListener(mandaChat);
 
-        this.konsole = new CronologiaChat(cronologiaR);
+        this.konsole = new CronologiaChat(20);
+        JScrollPane konsoleScorrimento = new JScrollPane(konsole);
+        konsoleScorrimento.setBounds(cronologiaR);
 
         pannello.add(this.nomeGiocatore);
         pannello.add(this.colore);
         pannello.add(this.conferma);
         pannello.add(this.immissioneChat);
         pannello.add(this.invioChat);
-        pannello.add(this.konsole);
+        //pannello.add(this.konsole);
+        pannello.add(konsoleScorrimento);
 
     }
 
@@ -254,7 +289,7 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
             //quadratoGiocatori = this.giocatori[i];
             giocatore = listaGiocatori.get(i);
             if ( giocatore == null){
-                setInfoGiocatore(i, "disconnesso", Colore_t.NULLO);
+                giocatoreVisible(i, false);
             }
             else {
                 setInfoGiocatore(i, giocatore.getNome(), giocatore.getArmyColour());
@@ -262,6 +297,11 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
         }
 
         this.pronti[this.indexGiocatore].setEnabled(true);
+    }
+
+    private void giocatoreVisible (int index, boolean visibile){
+        this.giocatori[index].setVisible(visibile);
+        this.pronti[index].setVisible(visibile);
     }
 
     private void setInfoGiocatore (int index, String nome, Colore_t colore){
