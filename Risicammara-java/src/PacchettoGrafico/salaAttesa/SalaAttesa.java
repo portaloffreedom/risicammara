@@ -220,23 +220,20 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
         this.conferma = new JButton("conferma");
         this.conferma.setBounds(confermaR);
         this.conferma.addActionListener(new ActionListener() {
-
+        
             public void actionPerformed(ActionEvent e) {
                 aggiornaNomeColore();
             }
         });
 
         this.immissioneChat = new JTextField();
-        immissioneChat.setBounds(immissioneR);
+        this.immissioneChat.setBounds(immissioneR);
+        ActionListener mandaChat = new MandaChat();
+        this.immissioneChat.addActionListener(mandaChat);
         
         this.invioChat = new JButton("Invia");
         this.invioChat.setBounds(invioR);
-        this.invioChat.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-            mandaMessaggioChat();
-            }
-        });
+        this.invioChat.addActionListener(mandaChat);
 
         this.konsole = new CronologiaChat(cronologiaR);
 
@@ -337,6 +334,9 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
         
             //feedback più realistico se aspetta il messaggio dal server
         //this.cronologiaChat.stampaMessaggio("Me: "+messaggio);
+
+        immissioneChat.requestFocusInWindow();
+        if (messaggio.equals("")) return;
         
         try {
             scriviServer.writeObject(new MessaggioChat(this.indexGiocatore, messaggio));
@@ -399,6 +399,14 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
 
     public void windowDeactivated(WindowEvent e) {
         //throw new UnsupportedOperationException("Not supported yet.");
+    }// </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="MandaChatListener">
+    private class MandaChat implements ActionListener {
+
+        public void actionPerformed(ActionEvent e) {
+            mandaMessaggioChat();
+        }
     }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Classi e interfacce interne al funzionamento della Sala d'Attesa">
