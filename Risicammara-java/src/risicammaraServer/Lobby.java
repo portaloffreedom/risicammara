@@ -5,10 +5,8 @@
 
 package risicammaraServer;
 
-import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import risicammaraClient.Colore_t;
@@ -85,7 +83,6 @@ public class Lobby {
                     Giocatore_Net gioctemp = new Giocatore_Net(mgio.getConnessioneGiocatore());
                     if(listaGiocatori.getSize() > 5){
                         try {
-                            //TODO controllare questa sezione apre troppi stream di output
                             broadcastMessage(new MessaggioErrore(errori_t.CONNECTIONREFUSED, -1),gioctemp.getClientOut() );
                             mgio.getConnessioneGiocatore().close();
                         } catch (IOException ex) {
@@ -118,6 +115,7 @@ public class Lobby {
                     break;
                 case COMMAND:
                     ctt = CommandHandling((MessaggioComandi)msg);
+                    escludi = msg.getSender();
                     break;
                 case ERROR:
                     ctt = ErrorHandling((MessaggioErrore)msg);
@@ -187,24 +185,31 @@ public class Lobby {
     */
 private Messaggio CommandHandling(MessaggioComandi cmdMsg){
     //TODO Completare il codice di Exit.
-    //TODO Completare il codice di KICKPLAYER
+    //TODO Testare Kickplayer
     //TODO Completare il codice di NUOVAPARTITA
     switch(cmdMsg.getComando()){
+        case KICKPLAYER:
+            serverPlayerRemove(cmdMsg.getReceiver());
+            return cmdMsg;
         case DISCONNECT:
-            Giocatore_Net tempgioc = (Giocatore_Net)listaGiocatori.get(cmdMsg.getSender());
-            PlayerThread th = (PlayerThread)tempgioc.getThread();
-            if(th.isAlive()) th.setStop(true);
-            listaGiocatori.remPlayer(cmdMsg.getSender());
-            attendiConnessioni.setNumeroGiocatori(listaGiocatori.getSize());
-            try {
-                tempgioc.closeSocket();
-            } catch (Exception ex) {
-                System.err.println("Errore socket Disconnessione: "+ex.getMessage());
-            }
-            return new MessaggioComandi(comandi_t.DISCONNECT, cmdMsg.getSender());
+            serverPlayerRemove(cmdMsg.getSender());
+            return cmdMsg;
         default:
             return new MessaggioChat(-1,"comando non riconosciuto.");
     }
+}
+
+private void serverPlayerRemove(int index){
+        Giocatore_Net tempgioc = (Giocatore_Net)listaGiocatori.get(index);
+        PlayerThread th = (PlayerThread)tempgioc.getThread();
+        if(th.isAlive()) th.setStop(true);
+        listaGiocatori.remPlayer(index);
+        attendiConnessioni.setNumeroGiocatori(listaGiocatori.getSize());
+        try {
+            tempgioc.closeSocket();
+        } catch (Exception ex) {
+            System.err.println("Errore socket Disconnessione: "+ex.getMessage());
+        }
 }
 
     /**
