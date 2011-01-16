@@ -191,7 +191,7 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
                             String nomeGiocatore = listaGiocatori.getNomeByIndex(indexRimozione);
                             listaGiocatori.remPlayer(indexRimozione);
                             giocatoreVisible(indexRimozione, false);
-                            konsole.stampaMessaggioComando("Giocatore "+nomeGiocatore+" uscito.");
+                            konsole.stampaMessaggioComando("Giocatore \""+nomeGiocatore+"\" uscito.");
                             break;
 
                         default:

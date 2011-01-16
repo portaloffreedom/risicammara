@@ -9,20 +9,20 @@ import java.awt.Font;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JTextArea;
+import javax.swing.JLabel;
 
 /**
  *
  * @author matteo
  */
-public class CronologiaChat extends JTextArea {
+public class CronologiaChat extends JLabel {
 
     private int maxRighe;
     private List<String> testoInRighe;
 
+    @Deprecated
     public CronologiaChat(Rectangle cronologiaR) {
         this.setBounds(cronologiaR);
-        this.setEditable(false);
 
 
         //Calcola il numero massimo di righe dato dallo spazio vertivale diviso
@@ -32,9 +32,9 @@ public class CronologiaChat extends JTextArea {
     }
 
     public CronologiaChat(int maxRighe){
-        this.setEditable(false);
         this.maxRighe = maxRighe;
         testoInRighe = new ArrayList<String>(maxRighe+1);
+        setVerticalAlignment(TOP);
         
         //this.setFont(Font.decode("Droid Serif"));
 
@@ -45,7 +45,7 @@ public class CronologiaChat extends JTextArea {
 
         testoInRighe.add(messaggio);
 
-        String testoCompleto = "";
+        String testoCompleto = "<html><body>";
         int to  = testoInRighe.size();
         int from=to-maxRighe;
         if (from<0) from = 0;
@@ -53,9 +53,11 @@ public class CronologiaChat extends JTextArea {
         testoInRighe = testoInRighe.subList(from, to);
 
         for (String riga : testoInRighe) {
-            testoCompleto = testoCompleto+riga+'\n';
+            testoCompleto = testoCompleto+riga+"<br>";
         }
-        testoCompleto = testoCompleto.substring(0, testoCompleto.length()-1);
+        testoCompleto = testoCompleto.substring(0, testoCompleto.length()-4);
+
+        testoCompleto = testoCompleto+"</body></html>";
 
         this.setText(testoCompleto);
         Rectangle bordi = this.getBounds();
@@ -95,16 +97,9 @@ public class CronologiaChat extends JTextArea {
     }
 
     private void stampaMessaggioImportante(String messaggio) {
-        //Backup Font
-        Font tmp = this.getFont();
+        //imposta italico, colore rosso e stampa messaggio su CronologiaChat
+        stampaMessaggio("<font style=\"font-style:italic;color:red\">"+messaggio+"</font>");
 
-        //imposta italico e stampa messaggio su CronologiaChat
-        this.setFont(new Font(tmp.getName(), Font.ITALIC, tmp.getSize()));
-        //this.setFont(Font.decode("Droid Serif Bold Italic"));
-        stampaMessaggio(messaggio);
-
-        //ripristino Font
-        this.setFont(tmp);
     }
 
 }
