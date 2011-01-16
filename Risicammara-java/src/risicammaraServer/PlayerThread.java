@@ -20,10 +20,13 @@ public class PlayerThread extends Thread{
     private ObjectInputStream playerInput;
     private int playerIndex;
     private CodaMsg coda;
+    private boolean ready;
+
     public PlayerThread(CodaMsg coda,ObjectInputStream playerInput,int playerIndex){
         this.coda = coda;
         this.playerIndex = playerIndex;
         this.playerInput = playerInput;
+        this.ready = false;
     }
 
     @Override
@@ -49,6 +52,14 @@ public class PlayerThread extends Thread{
 
     public void setStop(boolean stop) {
         this.stop = stop;
+    }
+
+    public void setReady(boolean isready) {
+        this.ready = isready;
+    }
+
+    public boolean isReady() {
+        return ready;
     }
 
     

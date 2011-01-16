@@ -35,6 +35,7 @@ public class Lobby {
     private ListaPlayers listaGiocatori;
     private CodaMsg coda;
     private int porta;
+    private boolean inizia;
     AscoltatoreLobby attendiConnessioni;
 
 /**
@@ -46,6 +47,7 @@ public class Lobby {
         this.porta = porta;
         this.coda = coda;
         this.listaGiocatori = new ListaPlayers();
+        this.inizia = false;
     }
 
     /**
@@ -60,7 +62,6 @@ public class Lobby {
     public ListaPlayers start(){
         attendiConnessioni = new AscoltatoreLobby(this.porta, this.coda);
         attendiConnessioni.start();
-        boolean inizia = false;
         Messaggio msg = null;
         while (!inizia) {
          msg = coda.get();
@@ -151,12 +152,6 @@ public class Lobby {
              Giocatore_Net giotmp = (Giocatore_Net)listaGiocatori.get(i);
              if(giotmp == null) continue;
              
-
-             //Questo codice faceva andare in crash il Client: hai equivocato il
-             // significato della funzione .isClosed();
-             /*Socket cl = giotmp.getSocket();
-             if(cl.isClosed()) continue;*/
-             
                     try {
                         broadcastMessage(ctt, giotmp.getClientOut());
                     } catch (IOException ex) {
@@ -166,6 +161,7 @@ public class Lobby {
         }
         return listaGiocatori;
     }
+    
    /**
     * Funzione che gestisce i messaggi di tipo MessaggioErrore per
     * la funzione receiveMessage
@@ -188,17 +184,41 @@ private Messaggio CommandHandling(MessaggioComandi cmdMsg){
     //TODO Testare Kickplayer
     //TODO Completare il codice di NUOVAPARTITA
     switch(cmdMsg.getComando()){
+        case SETNOPRONTO:
+            serverSetPronto(cmdMsg.getSender(), false);
+            break;
+        case SETPRONTO:
+            serverSetPronto(cmdMsg.getSender(), true);
+            if(allReady()) this.inizia = true;
+            break;
         case KICKPLAYER:
             serverPlayerRemove(cmdMsg.getReceiver());
-            return cmdMsg;
+            break;
         case DISCONNECT:
             serverPlayerRemove(cmdMsg.getSender());
-            return cmdMsg;
+            break;
         default:
             return new MessaggioChat(-1,"comando non riconosciuto.");
     }
+    return cmdMsg;
+}
+/**
+ * Processa un messaggio di tipo "SETPRONTO" e "SETNOPRONTO"
+ * impostando il thread al corretto valore
+ * @param sender Chi ha inviato il messaggio
+ * @param ready Se sei pronto o meno.
+ */
+private void serverSetPronto(int sender,boolean ready){
+        Giocatore_Net giotmp = (Giocatore_Net)listaGiocatori.get(sender);
+        PlayerThread th = (PlayerThread)giotmp.getThread();
+        th.setReady(ready);
 }
 
+/**
+ * Processa un messaggio che implica la rimozione di un giocatore.
+ * Questa funzione è valida anche per un messaggio di tipo "Kickplayer" e "Disconnect"
+ * @param index Il giocatore da eliminare.
+ */
 private void serverPlayerRemove(int index){
         Giocatore_Net tempgioc = (Giocatore_Net)listaGiocatori.get(index);
         PlayerThread th = (PlayerThread)tempgioc.getThread();
@@ -210,6 +230,17 @@ private void serverPlayerRemove(int index){
         } catch (Exception ex) {
             System.err.println("Errore socket Disconnessione: "+ex.getMessage());
         }
+}
+
+private boolean allReady(){
+    for(int i=0;i<listaGiocatori.getSize();i++){
+        Giocatore_Net temp = (Giocatore_Net)listaGiocatori.get(i);
+        if(temp == null) continue;
+        PlayerThread th = (PlayerThread)temp.getThread();
+        if(th.isReady()) continue;
+        return false;
+    }
+    return true;
 }
 
     /**
