@@ -93,7 +93,7 @@ public class Client implements WindowListener, Runnable {
         this.server=server;
 
 
-        SalaAttesa finestraSalaAttesa = new SalaAttesa(server, true);
+        SalaAttesa finestraSalaAttesa = new SalaAttesa(server);
         Thread salaAttesa = new Thread(finestraSalaAttesa);
         salaAttesa.start();
 

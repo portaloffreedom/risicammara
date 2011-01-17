@@ -15,10 +15,12 @@ import risicammaraClient.Colore_t;
 public class labelGiocatori extends JLabel implements QuadratoGiocatori {
 
     public labelGiocatori() {
+        this.setHorizontalAlignment(CENTER);
     }
 
     public labelGiocatori(String text) {
-        super(text, CENTER);
+        super(text);
+        this.setHorizontalAlignment(CENTER);
     }
 
     public void setNome(String testo) {

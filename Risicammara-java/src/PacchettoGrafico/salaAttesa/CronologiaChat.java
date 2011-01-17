@@ -5,11 +5,13 @@
 
 package PacchettoGrafico.salaAttesa;
 
-import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -29,6 +31,14 @@ public class CronologiaChat extends JLabel {
         ///l'altezza di ogni riga
         maxRighe = ( cronologiaR.height ) / ( getFontMetrics(this.getFont()).getHeight() );
         testoInRighe = new ArrayList<String>(maxRighe+1);
+    }
+
+    public JScrollPane inscatolaInScrollPane(Rectangle dimensioniScrollPane){
+        JScrollPane konsoleScorrimento = new JScrollPane(this);
+        konsoleScorrimento.setBounds(dimensioniScrollPane);
+        konsoleScorrimento.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        return konsoleScorrimento;
     }
 
     public CronologiaChat(int maxRighe){
@@ -60,16 +70,17 @@ public class CronologiaChat extends JLabel {
         testoCompleto = testoCompleto+"</body></html>";
 
         this.setText(testoCompleto);
-        Rectangle bordi = this.getBounds();
-        System.out.println(bordi);
-        bordi.y = bordi.height;
-        bordi.height = 0;
-        this.scrollRectToVisible(bordi);
-
-        //append(messaggio);
-        //append("\n");
-        //repaint();
     }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        Rectangle bordi = this.getBounds();
+        Rectangle bordiNuovi = new Rectangle(0, bordi.height,0,0);
+        this.scrollRectToVisible(bordiNuovi);
+    }
+
+
 
     /**
      * Stampa l'errore sulla cronologia di char e su stdERR. Nella chat imposta

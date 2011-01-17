@@ -268,8 +268,7 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
         this.invioChat.addActionListener(mandaChat);
 
         this.konsole = new CronologiaChat(20);
-        JScrollPane konsoleScorrimento = new JScrollPane(konsole);
-        konsoleScorrimento.setBounds(cronologiaR);
+        JScrollPane konsoleScorrimento = konsole.inscatolaInScrollPane(cronologiaR);
 
         pannello.add(this.nomeGiocatore);
         pannello.add(this.colore);
