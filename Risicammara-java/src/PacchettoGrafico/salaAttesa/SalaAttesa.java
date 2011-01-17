@@ -156,6 +156,9 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
                             pannello.stampaMessaggioComando("Giocatore \""+nomeGiocatore+"\" uscito.");
                             break;
 
+                        case LEADER:
+                            diventaLeader();
+
                         default:
                             System.err.println("Comando non riconosciuto: "+msgComando.getComando());
                             break;

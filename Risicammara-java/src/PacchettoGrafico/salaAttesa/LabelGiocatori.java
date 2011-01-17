@@ -6,19 +6,21 @@
 package PacchettoGrafico.salaAttesa;
 
 import javax.swing.JLabel;
+import javax.swing.plaf.metal.MetalBorders.TextFieldBorder;
 import risicammaraClient.Colore_t;
 
 /**
  *
  * @author matteo
  */
-public class labelGiocatori extends JLabel implements QuadratoGiocatori {
+public class LabelGiocatori extends JLabel implements QuadratoGiocatori {
 
-    public labelGiocatori() {
+    public LabelGiocatori() {
         this.setHorizontalAlignment(CENTER);
+        this.setBorder(new TextFieldBorder());
     }
 
-    public labelGiocatori(String text) {
+    public LabelGiocatori(String text) {
         super(text);
         this.setHorizontalAlignment(CENTER);
     }

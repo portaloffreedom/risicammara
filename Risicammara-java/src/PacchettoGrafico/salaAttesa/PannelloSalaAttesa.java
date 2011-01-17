@@ -18,8 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
-import javax.swing.plaf.metal.MetalBorders.TextFieldBorder;
-import javax.swing.text.BadLocationException;
 import risicammaraClient.Colore_t;
 import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
@@ -44,6 +42,8 @@ public class PannelloSalaAttesa extends JPanel {
 
 
     private QuadratoGiocatori giocatori[];
+    private LabelGiocatori giocatoriLabel[];
+    private BottoneGiocatori giocatoriBottoni[];
     private JToggleButton pronti[];
     private JTextField nomeGiocatore;
     private JComboBox colore;
@@ -65,9 +65,7 @@ public class PannelloSalaAttesa extends JPanel {
         this.listaGiocatori = listaGiocatori;
         this.salaAttesa = salaAttesa;
         
-        
-        this.giocatori= new QuadratoGiocatori[6];
-        this.pronti = new JToggleButton[6];
+
 
         disegnaGiocatori();
         personalizza();
@@ -75,9 +73,15 @@ public class PannelloSalaAttesa extends JPanel {
 
     public void diventaLeader() {
         for(int i=0; i<ListaPlayers.MAXPLAYERS; i++) {
-            //this.giocatori[i] = quadratoInterfacciaLeader(pannello, i);
-            this.giocatori[i].setBounds(giocatoriR.x, margine+(margine+altezza)*i, giocatoriR.width, giocatoriR.height);
+            if (this.giocatoriLabel[i].isVisible()) {
+                this.giocatoriLabel[i].setVisible(false);
+                this.giocatoriBottoni[i].setVisible(true);
+                this.giocatoriBottoni[i].setColore(listaGiocatori.get(i).getArmyColour());
+                this.giocatoriBottoni[i].setText(listaGiocatori.getNomeByIndex(i));
+            }
         }
+
+        this.giocatori = this.giocatoriBottoni;
     }
 
     public String nomeGiocatore_getText(){
@@ -124,27 +128,36 @@ public class PannelloSalaAttesa extends JPanel {
     }
 
     //#############PARTE PRIVATA#############################################################################################################
-     private void disegnaGiocatori() {
+    private void disegnaGiocatori() {
+         
+        this.pronti = new JToggleButton[6];
+        this.giocatoriBottoni = new BottoneGiocatori[ListaPlayers.MAXPLAYERS];
+        this.giocatoriLabel = new LabelGiocatori[ListaPlayers.MAXPLAYERS];
+        this.giocatori = giocatoriLabel;
+
         for (int i=0; i<ListaPlayers.MAXPLAYERS; i++) {
 
             this.pronti[i] = new JToggleButton("Ω");
-            this.add(this.pronti[i]);
-
-            //if (this.leader)
-            //        this.giocatori[i] = quadratoInterfacciaLeader(pannello, i);
-            //else
-                    this.giocatori[i] = quadratoInterfaccia(this, i);
-
-
             this.pronti[i].setBounds(prontiR.x, margine+(margine+altezza)*i, prontiR.width, prontiR.height);
             this.pronti[i].setEnabled(false);
+            this.add(this.pronti[i]);
 
-            this.giocatori[i].setColore(Colore_t.NULLO);
-            this.giocatori[i].setBounds(giocatoriR.x, margine+(margine+altezza)*i, giocatoriR.width, giocatoriR.height);
+            Rectangle posizioneQuadratoGiocatore = new Rectangle(giocatoriR.x, margine+(margine+altezza)*i, giocatoriR.width, giocatoriR.height);
+
+            this.giocatoriBottoni[i] = new BottoneGiocatori();
+            this.giocatoriBottoni[i].setBounds(posizioneQuadratoGiocatore);
+            this.giocatoriBottoni[i].setVisible(false);
+            this.add(this.giocatoriBottoni[i]);
+            
+            this.giocatoriLabel[i] = new LabelGiocatori();
+            this.giocatoriLabel[i].setBounds(posizioneQuadratoGiocatore);
+            this.giocatoriLabel[i].setVisible(true);
+            this.add(this.giocatoriLabel[i]);
+
         }
 
         this.nomeGiocatore = new JTextField();
-        nomeGiocatore.setBounds(nomeGiocatoreR);
+        this.nomeGiocatore.setBounds(nomeGiocatoreR);
 
         this.colore = new JComboBox(Colore_t.values());
         this.colore.setBounds(coloreR);
@@ -170,7 +183,6 @@ public class PannelloSalaAttesa extends JPanel {
         this.add(this.conferma);
         this.add(this.immissioneChat);
         this.add(this.invioChat);
-        //pannello.add(this.konsole);
         this.add(konsoleScorrimento);
 
     }
@@ -195,14 +207,11 @@ public class PannelloSalaAttesa extends JPanel {
 
     private QuadratoGiocatori quadratoInterfacciaLeader(int i){
         BottoneGiocatori bottone = new BottoneGiocatori();
-        this.add(bottone);
         return bottone;
     }
 
-    private QuadratoGiocatori quadratoInterfaccia(JPanel pannello, int i) {
-        labelGiocatori label = new labelGiocatori();
-        label.setBorder(new TextFieldBorder());
-        this.add(label);
+    private QuadratoGiocatori quadratoInterfaccia(int i) {
+        LabelGiocatori label = new LabelGiocatori();
         return label;
     }
 
