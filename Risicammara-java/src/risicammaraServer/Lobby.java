@@ -98,7 +98,14 @@ public class Lobby {
                     // Indice nel quale viene inserito il giocatore
                     int plynumb = listaGiocatori.addPlayer(gioctemp);
                     PlayerThread gioth = new PlayerThread(coda,gioctemp.getClientIn(),plynumb);
-                    if(listaGiocatori.getSize() == 1) gioth.setLeader(true);
+                    if(listaGiocatori.getSize() == 1){
+                        gioth.setLeader(true);
+                        try {
+                            broadcastMessage(MessaggioComandi.creaMsgLeader(plynumb), gioctemp.getClientOut());
+                        } catch (IOException ex) {
+                            Logger.getLogger(Lobby.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                     gioctemp.setNome("Giocatore"+plynumb);
                     gioctemp.AssignThread(gioth);
                     if(!gioth.isAlive()) gioth.start();
