@@ -146,11 +146,13 @@ public class Lobby {
             if(listaGiocatori.getSize() == 1){
                         Giocatore_Net gtmp = (Giocatore_Net)listaGiocatori.getFirst();
                         PlayerThread th = (PlayerThread)gtmp.getThread();
-                        th.setLeader(true);
-                        try {
-                            broadcastMessage(MessaggioComandi.creaMsgLeader(th.getPlayerIndex()), gtmp.getClientOut());
-                        } catch (IOException ex) {
-                            Logger.getLogger(Lobby.class.getName()).log(Level.SEVERE, null, ex);
+                        if(!th.isLeader()){
+                            th.setLeader(true);
+                            try {
+                                broadcastMessage(MessaggioComandi.creaMsgLeader(th.getPlayerIndex()), gtmp.getClientOut());
+                            } catch (IOException ex) {
+                                Logger.getLogger(Lobby.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
             }
         }
