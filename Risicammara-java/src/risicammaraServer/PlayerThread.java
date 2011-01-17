@@ -41,7 +41,7 @@ public class PlayerThread extends Thread{
             } catch (IOException ex) {
                 System.err.println("Giocatore "+playerIndex+" non raggiungibile: "+ex.getMessage());
                 stop = true;
-                coda.Send(new MessaggioComandi(comandi_t.DISCONNECT, playerIndex));
+                coda.Send(MessaggioComandi.creaMsgDisconnect(playerIndex));
             } catch (ClassNotFoundException ex) {
                 System.err.println("Messaggio non riconosciuto: "+ex);
             } catch (Exception ex){
