@@ -6,17 +6,25 @@
 package risicammaraServer.turnManage;
 
 import risicammaraJava.playerManage.ListaPlayers;
+import risicammaraJava.turnManage.Partita;
 import risicammaraServer.CodaMsg;
+import risicammaraServer.Giocatore_Net;
 
 /**
  *
  * @author Sten_Gun
  */
 public class SuccessioneTurni {
-    public SuccessioneTurni(ListaPlayers listaGiocatori,CodaMsg coda){
+    private CodaMsg coda;
+    private ListaPlayers listaGiocatori;
 
+    public SuccessioneTurni(ListaPlayers listaGiocatori,CodaMsg coda){
+        this.coda = coda;
+        this.listaGiocatori = listaGiocatori;
     };
-    public boolean start(){
-        return true;
+    public Giocatore_Net start(){
+        Partita partita = new Partita(listaGiocatori);
+        
+        return null;
     }
 }

@@ -84,7 +84,8 @@ public class Lobby {
                     Giocatore_Net gioctemp = new Giocatore_Net(mgio.getConnessioneGiocatore());
                     if(listaGiocatori.getSize() > 5){
                         try {
-                            broadcastMessage(new MessaggioErrore(errori_t.CONNECTIONREFUSED, -1),gioctemp.getClientOut() );
+                            //TODO fare il costruttore di MessaggioErrore connection refused
+                            Server.broadcastMessage(new MessaggioErrore(errori_t.CONNECTIONREFUSED, -1),gioctemp.getClientOut() );
                             mgio.getConnessioneGiocatore().close();
                         } catch (IOException ex) {
                             System.err.println("Errore di invio errore connessione: "+ex.getMessage());
@@ -129,19 +130,14 @@ public class Lobby {
                 }
                 //Stampa il messaggio di chat corrispondente e lo invia a tutti.
                     System.out.println(ctt.toString());
-          if(ctt!= null) for(int i = 0;i<ListaPlayers.MAXPLAYERS;i++)
-          {
-             if(i == escludi) continue;
-              //System.out.println("cl: "+all);
-             Giocatore_Net giotmp = (Giocatore_Net)listaGiocatori.get(i);
-             if(giotmp == null) continue;
-             
-                    try {
-                        broadcastMessage(ctt, giotmp.getClientOut());
-                    } catch (IOException ex) {
-                        System.err.println("Errore broadcast: "+ex.getMessage());
-                    }
-            }
+          if(ctt!= null){
+                try {
+                    Server.spedisciMsgTutti(ctt, listaGiocatori, escludi);
+                } catch (IOException ex) {
+                    System.err.println("Errore nell'invio messaggio a tutti i giocatori (Lobby) "+ex.getMessage());
+                }
+          }
+                    
                     // Quando c'è un solo giocatore quello è il leader della lobby
             if(listaGiocatori.getSize() == 1){
                         Giocatore_Net gtmp = (Giocatore_Net)listaGiocatori.getFirst();
@@ -149,9 +145,9 @@ public class Lobby {
                         if(!th.isLeader()){
                             th.setLeader(true);
                             try {
-                                broadcastMessage(MessaggioComandi.creaMsgLeader(th.getPlayerIndex()), gtmp.getClientOut());
+                                Server.broadcastMessage(MessaggioComandi.creaMsgLeader(th.getPlayerIndex()), gtmp.getClientOut());
                             } catch (IOException ex) {
-                                Logger.getLogger(Lobby.class.getName()).log(Level.SEVERE, null, ex);
+                                System.err.println("Errore nell'invio di \"LEADER\" al primo giocatore "+ex.getMessage());
                             }
                         }
             }
@@ -220,21 +216,23 @@ private void serverSetPronto(int sender){
 private void serverPlayerRemove(int index){
         Giocatore_Net tempgioc = (Giocatore_Net)listaGiocatori.get(index);
         PlayerThread th = (PlayerThread)tempgioc.getThread();
-        if(th.isLeader())
+        boolean canc = false;
+        if(th.isLeader()) canc = true;
+        if(th.isAlive()) th.setStop(true);
+        listaGiocatori.remPlayer(index);
+        if(canc)
         {
                 Giocatore_Net gtm = ((Giocatore_Net)listaGiocatori.getFirst());
                 if(!(gtm == null)){
                     PlayerThread threadtemp = (PlayerThread)gtm.getThread();
                     threadtemp.setLeader(true);
                     try {
-                        broadcastMessage(MessaggioComandi.creaMsgLeader(threadtemp.getPlayerIndex()), gtm.getClientOut());
+                        Server.broadcastMessage(MessaggioComandi.creaMsgLeader(threadtemp.getPlayerIndex()), gtm.getClientOut());
                     } catch (IOException ex) {
                         System.err.println("Errore nell'invio leader "+ex.getMessage());
                     }
                 }
-            }
-        if(th.isAlive()) th.setStop(true);
-        listaGiocatori.remPlayer(index);
+        }
         attendiConnessioni.setNumeroGiocatori(listaGiocatori.getSize());
         try {
             tempgioc.closeSocket();
@@ -243,6 +241,10 @@ private void serverPlayerRemove(int index){
         }
 }
 
+/**
+ * Controlla se tutti i giocatori hanno premuto ready
+ * @return True se tutti sono pronti, false altrimenti
+ */
 private boolean allReady(){
     for(int i=0;i<listaGiocatori.getSize();i++){
         Giocatore_Net temp = (Giocatore_Net)listaGiocatori.get(i);
@@ -253,18 +255,5 @@ private boolean allReady(){
     }
     return true;
 }
-
-    /**
-     * Spedisce un pacchetto ad un client.
-     * @param recMsg Il messaggio di chat
-     * @param cl il client da notificare
-     * @throws IOException Eccezione di I/O dovuta ai socket
-     */
-   private void broadcastMessage(Messaggio recMsg, ObjectOutputStream cl) throws IOException
-   {
-        cl.writeObject(recMsg);
-        cl.flush();
-        System.out.println("messaggio "+recMsg.toString()+" inviato!");
-   }
 
 }

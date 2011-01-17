@@ -5,8 +5,11 @@
 
 package risicammaraServer;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import risicammaraClient.Client;
 import risicammaraJava.playerManage.ListaPlayers;
+import risicammaraServer.MessageManage.Messaggio;
 import risicammaraServer.turnManage.SuccessioneTurni;
 
 /**
@@ -43,19 +46,35 @@ public static void main(String[] args) {
         listaGiocatori = server.start();
         boolean vincitore = false;
         SuccessioneTurni svolgimento = new SuccessioneTurni(listaGiocatori,coda);
-        while(!vincitore){
-            vincitore = svolgimento.start();
-        }
     }
 
 
-/*
-    Lobby lobserv = new Lobby(Thread.currentThread());
-    try {
-    lobserv.start();
-    } catch (IOException ex) {
-    System.err.print(ex.getStackTrace());
-    }
+    /**
+     * Spedisce un pacchetto ad un client.
+     * @param recMsg Il messaggio di chat
+     * @param cl il client da notificare
+     * @throws IOException Eccezione di I/O dovuta ai socket
      */
+   public static void broadcastMessage(Messaggio recMsg, ObjectOutputStream cl) throws IOException
+   {
+        cl.writeObject(recMsg);
+        cl.flush();
+        System.out.println("messaggio "+recMsg.toString()+" inviato!");
+   }
+
+   /**
+    * Spedisce un messaggio a tutti i client con possibilità di escluderne uno in particolare.
+    * @param recMsg Il messaggio da spedire
+    * @param listaGiocatori La lista dei client a cui inviare
+    * @param escludi L'indice del client da escludere
+    */
+   public static void spedisciMsgTutti(Messaggio recMsg,ListaPlayers listaGiocatori,int escludi) throws IOException{
+       for(int i=0;i<ListaPlayers.MAXPLAYERS;i++){
+           if(i==escludi) continue;
+           Giocatore_Net gtmp = (Giocatore_Net)listaGiocatori.get(i);
+           if(gtmp == null)continue;
+           broadcastMessage(recMsg,gtmp.getClientOut());
+       }
+   }
 }
 
