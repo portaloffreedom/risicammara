@@ -98,14 +98,6 @@ public class Lobby {
                     // Indice nel quale viene inserito il giocatore
                     int plynumb = listaGiocatori.addPlayer(gioctemp);
                     PlayerThread gioth = new PlayerThread(coda,gioctemp.getClientIn(),plynumb);
-                    if(listaGiocatori.getSize() == 1){
-                        gioth.setLeader(true);
-                        try {
-                            broadcastMessage(MessaggioComandi.creaMsgLeader(plynumb), gioctemp.getClientOut());
-                        } catch (IOException ex) {
-                            Logger.getLogger(Lobby.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
                     gioctemp.setNome("Giocatore"+plynumb);
                     gioctemp.AssignThread(gioth);
                     if(!gioth.isAlive()) gioth.start();
@@ -149,7 +141,18 @@ public class Lobby {
                     } catch (IOException ex) {
                         System.err.println("Errore broadcast: "+ex.getMessage());
                     }
-                }
+            }
+                    // Quando c'è un solo giocatore quello è il leader della lobby
+            if(listaGiocatori.getSize() == 1){
+                        Giocatore_Net gtmp = (Giocatore_Net)listaGiocatori.getFirst();
+                        PlayerThread th = (PlayerThread)gtmp.getThread();
+                        th.setLeader(true);
+                        try {
+                            broadcastMessage(MessaggioComandi.creaMsgLeader(th.getPlayerIndex()), gtmp.getClientOut());
+                        } catch (IOException ex) {
+                            Logger.getLogger(Lobby.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+            }
         }
         return listaGiocatori;
     }
@@ -216,16 +219,17 @@ private void serverPlayerRemove(int index){
         Giocatore_Net tempgioc = (Giocatore_Net)listaGiocatori.get(index);
         PlayerThread th = (PlayerThread)tempgioc.getThread();
         if(th.isLeader())
-            for(int i= 0;i<ListaPlayers.MAXPLAYERS;i++){
-                Giocatore_Net gtm = ((Giocatore_Net)listaGiocatori.get(i));
-                if(gtm == null) continue;
-                ((PlayerThread)gtm.getThread()).setReady(true);
-                try {
-                    broadcastMessage(MessaggioComandi.creaMsgLeader(i), gtm.getClientOut());
-                } catch (IOException ex) {
-                    System.err.println("Errore nell'invio leader "+ex.getMessage());
+        {
+                Giocatore_Net gtm = ((Giocatore_Net)listaGiocatori.getFirst());
+                if(!(gtm == null)){
+                    PlayerThread threadtemp = (PlayerThread)gtm.getThread();
+                    threadtemp.setLeader(true);
+                    try {
+                        broadcastMessage(MessaggioComandi.creaMsgLeader(threadtemp.getPlayerIndex()), gtm.getClientOut());
+                    } catch (IOException ex) {
+                        System.err.println("Errore nell'invio leader "+ex.getMessage());
+                    }
                 }
-                break;
             }
         if(th.isAlive()) th.setStop(true);
         listaGiocatori.remPlayer(index);

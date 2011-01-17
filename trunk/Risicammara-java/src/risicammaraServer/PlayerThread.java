@@ -72,6 +72,10 @@ public class PlayerThread extends Thread{
         this.leader = leader;
     }
 
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
     
 
 }

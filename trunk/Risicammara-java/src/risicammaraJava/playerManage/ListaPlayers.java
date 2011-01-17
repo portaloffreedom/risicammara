@@ -23,6 +23,15 @@ public class ListaPlayers implements Serializable {
         listaPlayers.trimToSize();
         this.nullnumber = MAXPLAYERS;
     }
+
+    public Giocatore getFirst(){
+        for(int i=0;i<MAXPLAYERS;i++){
+            Giocatore gio = listaPlayers.get(i);
+            if(gio==null)continue;
+            return gio;
+        }
+        return null;
+    }
     /**
      * Aggiunge un giocatore direttamente in lista.
      * @param nome Stringa contenente il nome giocatore
