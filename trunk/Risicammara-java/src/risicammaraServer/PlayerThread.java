@@ -21,12 +21,14 @@ public class PlayerThread extends Thread{
     private int playerIndex;
     private CodaMsg coda;
     private boolean ready;
+    private boolean leader;
 
     public PlayerThread(CodaMsg coda,ObjectInputStream playerInput,int playerIndex){
         this.coda = coda;
         this.playerIndex = playerIndex;
         this.playerInput = playerInput;
         this.ready = false;
+        this.leader = false;
     }
 
     @Override
@@ -60,6 +62,14 @@ public class PlayerThread extends Thread{
 
     public boolean isReady() {
         return ready;
+    }
+
+    public boolean isLeader() {
+        return leader;
+    }
+
+    public void setLeader(boolean leader) {
+        this.leader = leader;
     }
 
     

@@ -19,6 +19,14 @@ public class MessaggioComandi implements Messaggio{
     //TODO sostituire tutto il codice di creazione comandi con questi costruttori.
 
     /**
+     * Da ad un giocatore il potere di leader
+     * @param giocatoreLeader il giocatore da far diventare leader
+     * @return l'oggetto messaggioComandi con comando LEADER
+     */
+    public static MessaggioComandi creaMsgLeader(int giocatoreLeader){
+        return new MessaggioComandi(comandi_t.LEADER, -1,giocatoreLeader);
+    }
+    /**
      * Crea un messaggioComandi per i giocatori che si connettono.
      * @param giocatoreConnesso l'indice del giocatore connesso
      * @return l'oggetto MessaggioComandi con comando CONNECTED

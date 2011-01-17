@@ -5,6 +5,7 @@ package risicammaraServer.MessageManage;
  * @author Sten_Gun
  */
 public enum comandi_t {
+    LEADER,         //Fa diventare leader della lobby un giocatore
 
     @Deprecated
     SETNOPRONTO,     // Informa che il giocatore non è pronto per partire

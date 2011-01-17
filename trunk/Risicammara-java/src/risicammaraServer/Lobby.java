@@ -98,7 +98,7 @@ public class Lobby {
                     // Indice nel quale viene inserito il giocatore
                     int plynumb = listaGiocatori.addPlayer(gioctemp);
                     PlayerThread gioth = new PlayerThread(coda,gioctemp.getClientIn(),plynumb);
-                    
+                    if(listaGiocatori.getSize() == 1) gioth.setLeader(true);
                     gioctemp.setNome("Giocatore"+plynumb);
                     gioctemp.AssignThread(gioth);
                     if(!gioth.isAlive()) gioth.start();
@@ -123,21 +123,6 @@ public class Lobby {
                     break;
                 case CHAT:
                     ctt = msg;
-
-                    /* Questo codice è completamente inutile!
-                    //codice temporaneo
-                    MessaggioChat messaggioChat = (MessaggioChat) msg;
-                    Giocatore_Net giocatore_Net = (Giocatore_Net) listaGiocatori.get(0);
-                    try {
-                        ObjectOutputStream stream = giocatore_Net.getClientOut();
-                        stream.writeObject(messaggioChat);
-                        stream.flush();
-                    } catch (IOException ex) {
-                        System.err.println("errore invio messaggio: "+ex);
-                    }
-                    //codice temporaneo
-                    */
-
                     break;
                 default:
                     ctt = new MessaggioChat(-1, "Messaggio non ancora gestito");
@@ -223,6 +208,18 @@ private void serverSetPronto(int sender){
 private void serverPlayerRemove(int index){
         Giocatore_Net tempgioc = (Giocatore_Net)listaGiocatori.get(index);
         PlayerThread th = (PlayerThread)tempgioc.getThread();
+        if(th.isLeader())
+            for(int i= 0;i<ListaPlayers.MAXPLAYERS;i++){
+                Giocatore_Net gtm = ((Giocatore_Net)listaGiocatori.get(i));
+                if(gtm == null) continue;
+                ((PlayerThread)gtm.getThread()).setReady(true);
+                try {
+                    broadcastMessage(MessaggioComandi.creaMsgLeader(i), gtm.getClientOut());
+                } catch (IOException ex) {
+                    System.err.println("Errore nell'invio leader "+ex.getMessage());
+                }
+                break;
+            }
         if(th.isAlive()) th.setStop(true);
         listaGiocatori.remPlayer(index);
         attendiConnessioni.setNumeroGiocatori(listaGiocatori.getSize());
