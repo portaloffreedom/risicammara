@@ -7,13 +7,14 @@ package risicammaraServer;
 
 import risicammaraClient.Client;
 import risicammaraJava.playerManage.ListaPlayers;
+import risicammaraServer.turnManage.SuccessioneTurni;
 
 /**
  * Lato server di Risicammara.
  * @author Sten_Gun
  */
 public class Server implements Runnable {
-    private static ListaPlayers listaGiocatori;
+    private ListaPlayers listaGiocatori;
     private CodaMsg coda;
     private int porta;
     //TODO riferimento al numero giocatori (probabilmente inutile avendo il riferimento del thread.)
@@ -40,12 +41,11 @@ public static void main(String[] args) {
 
         Lobby server = new Lobby(porta,coda);
         listaGiocatori = server.start();
-        startPartita();
-    }
-
-
-    public static void startPartita(){
-
+        boolean vincitore = false;
+        SuccessioneTurni svolgimento = new SuccessioneTurni(listaGiocatori,coda);
+        while(!vincitore){
+            vincitore = svolgimento.start();
+        }
     }
 
 
