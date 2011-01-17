@@ -169,6 +169,7 @@ public class Lobby {
     */
    private Messaggio ErrorHandling(MessaggioErrore errorMsg){
        switch(errorMsg.getError()){
+           //TODO completare la gestione messaggioErrore del server
            default:
                return new MessaggioChat(-1,"Errore non gestito.");
        }
@@ -181,15 +182,10 @@ public class Lobby {
     */
 private Messaggio CommandHandling(MessaggioComandi cmdMsg){
     //TODO Completare il codice di Exit.
-    //TODO Testare Kickplayer
     //TODO Completare il codice di NUOVAPARTITA
     switch(cmdMsg.getComando()){
-        case SETNOPRONTO:
-            serverSetPronto(cmdMsg.getSender(), false);
-            break;
         case SETPRONTO:
-            serverSetPronto(cmdMsg.getSender(), true);
-            if(allReady()) this.inizia = true;
+            serverSetPronto(cmdMsg.getSender());
             break;
         case KICKPLAYER:
             serverPlayerRemove(cmdMsg.getReceiver());
@@ -208,10 +204,15 @@ private Messaggio CommandHandling(MessaggioComandi cmdMsg){
  * @param sender Chi ha inviato il messaggio
  * @param ready Se sei pronto o meno.
  */
-private void serverSetPronto(int sender,boolean ready){
+private void serverSetPronto(int sender){
         Giocatore_Net giotmp = (Giocatore_Net)listaGiocatori.get(sender);
         PlayerThread th = (PlayerThread)giotmp.getThread();
-        th.setReady(ready);
+        if(th.isReady()) th.setReady(false);
+        else
+        {
+            th.setReady(true);
+            if(allReady()) this.inizia = true;
+        }
 }
 
 /**

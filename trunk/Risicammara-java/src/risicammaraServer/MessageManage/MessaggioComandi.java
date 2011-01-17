@@ -14,11 +14,61 @@ public class MessaggioComandi implements Messaggio{
     private comandi_t comando;
     private int sender;
     private int receiver;
+// Qua ci vanno tutti i costruttori static per ogni tipo di messaggio, in modo da
+    //facilitare la vita a chi crea i messaggi.
+    //TODO sostituire tutto il codice di creazione comandi con questi costruttori.
 
+    /**
+     * Crea un messaggioComandi per i giocatori che si connettono.
+     * @param giocatoreConnesso l'indice del giocatore connesso
+     * @return l'oggetto MessaggioComandi con comando CONNECTED
+     */
     public static MessaggioComandi creaMSGconnected(int giocatoreConnesso){
         return new MessaggioComandi(comandi_t.CONNECTED, giocatoreConnesso);
     }
 
+    /**
+     * crea un MessaggioComandi per i giocaotri che si disconnettono dal server
+     * @param giocatoreDisconnesso il giocatore che è uscito dal server
+     * @return l'oggetto MessaggioComandi con comando DISCONNECT
+     */
+    public static MessaggioComandi creaMsgDisconnect(int giocatoreDisconnesso){
+        return new MessaggioComandi(comandi_t.DISCONNECT, giocatoreDisconnesso);
+    }
+    /**
+     * Costruisce un messaggioComandi per espellere un giocatore
+     * @param giocatoreCheCalcia Chi toglie il giocatore (solo lobbymaster)
+     * @param giocatoreEspulso Chi viene espulso
+     * @return oggetto MessaggioComandi con comando KICKPLAYER
+     */
+    public static MessaggioComandi creaMsgKickplayer(int giocatoreCheCalcia, int giocatoreEspulso){
+        return new MessaggioComandi(comandi_t.KICKPLAYER, giocatoreCheCalcia, giocatoreEspulso);
+    }
+    /**
+     * Costruisce un messaggioComandi per una NuovaPartita
+     * @param giocatoreCheCrea Chi fa partire il server prima che siano tutti pronti (se non sei il lobby master il server rifiuterà il messaggio)
+     * @return l'oggetto MessaggioComandi con comando NUOVAPARTITA
+     */
+    public static MessaggioComandi creaMsgNuovaPartita(int giocatoreCheCrea){
+        return new MessaggioComandi(comandi_t.NUOVAPARTITA, giocatoreCheCrea);
+    }
+    /**
+     * Ritorna un nuovo messaggio comando EXIT
+     * @param giocatoreCheToglieLobby il giocatore che lancia il comando (non funzionerà se non è il lobby master)
+     * @return  l'oggetto MessaggioComandi con comando EXIT
+     */
+    public static MessaggioComandi creaMsgExit(int giocatoreCheToglieLobby){
+        return new MessaggioComandi(comandi_t.EXIT, giocatoreCheToglieLobby);
+    }
+
+    /**
+     * Ritorna un nuovo messaggio comando "SETPRONTO"
+     * @param giocatorePronto il giocatore che è pronto.
+     * @return oggetto MessaggioComandi con comando SETPRONTO
+     */
+    public static MessaggioComandi creaMsgSetPronto(int giocatorePronto){
+        return new MessaggioComandi(comandi_t.SETPRONTO, giocatorePronto);
+    }
     /**
      * Costruttore del pacchetto
      * @param cmd Il comando desiderato

@@ -1,6 +1,8 @@
 package risicammaraJava.deckManage;
 
-public interface Carta {
+import java.io.Serializable;
+
+public interface Carta extends Serializable{
 
     /**
      *

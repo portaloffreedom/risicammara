@@ -38,29 +38,9 @@ public class Partita {
         this.listagiocatori = listagiocatori;
         this.planciadigioco = new Plancia();
         this.mazzo = new MazzoTerritori();
-        territori_t car;// = car = mazzo.getCard(1);
-        int mult = 0;
-        int jolly = 0;
+        //Distribuzione territori per i giocatori
+        territori_t car;
         int numgioc = listagiocatori.getSize();
-        //Distribuzione territori e armate
-//        for(int i=numgioc-1;i>=0;i--){
-//            car = mazzo.getCard(1+i+mult);
-//            Giocatore giocatorediturno = listagiocatori.get(i);
-//            while(car!=null){
-//                 if(!((car == territori_t.Jolly1)||(car == territori_t.Jolly2))){
-//                     mult+=numgioc;
-//                    giocatorediturno.addTerr(car);
-//                     planciadigioco.getTerritorio(car).setProprietario(giocatorediturno);
-//                 }
-//                 else{
-//                     mult+=1;
-//                     jolly+=1;
-//                 }
-//                 car = mazzo.getCard(1+i+mult);
-//             }
-//             mult = jolly;
-//            giocatorediturno.setArmatedisponibili(NumeroArmate(numgioc)-giocatorediturno.getNumTerritori());
-//        }
         int gio = numgioc-1;
         int inc = 1;
                 while(mazzo.getCard(inc)!= null){
@@ -117,6 +97,11 @@ public class Partita {
         }
         return null;
     };
+    /**
+     * Restituisce il numero di armate iniziali in base al numero giocatori.
+     * @param numerogiocatori Il numero dei giocanti alla partita
+     * @return Il numero di armate disponibili
+     */
     private int NumeroArmate(int numerogiocatori){
         switch(numerogiocatori){
             case 6:
@@ -163,6 +148,7 @@ public class Partita {
         return false;
     };
 
+    @Deprecated
     public ListaPlayers getListaGiocatori() {
         return this.listagiocatori;
     }
