@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package risicammaraServer.MessageManage;
 
 /**
@@ -16,7 +11,6 @@ public class MessaggioComandi implements Messaggio{
     private int receiver;
 // Qua ci vanno tutti i costruttori static per ogni tipo di messaggio, in modo da
     //facilitare la vita a chi crea i messaggi.
-    //TODO sostituire tutto il codice di creazione comandi con questi costruttori.
 
     /**
      * Da ad un giocatore il potere di leader
@@ -82,7 +76,7 @@ public class MessaggioComandi implements Messaggio{
      * @param cmd Il comando desiderato
      * @param inviante  il nome del giocatore che lo ha inviato (-1 se è di sistema)
      */
-    public MessaggioComandi(comandi_t cmd, int inviante){
+    private MessaggioComandi(comandi_t cmd, int inviante){
         this(cmd, inviante, -2);
     }
 
@@ -92,7 +86,7 @@ public class MessaggioComandi implements Messaggio{
      * @param inviante l'indice del giocatore che invia il comando (-1 se è il sistema,-2 se null)
      * @param who l'indice di chi riceve questa azione(non può essere -1)
      */
-    public MessaggioComandi(comandi_t cmd, int inviante, int who){
+    private MessaggioComandi(comandi_t cmd, int inviante, int who){
         this.comando = cmd;
         this.sender = inviante;
         if((who < -1) && (who < 0)) who=-2;
