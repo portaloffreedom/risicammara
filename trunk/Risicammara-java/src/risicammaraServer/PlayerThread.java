@@ -7,9 +7,8 @@ package risicammaraServer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import risicammaraServer.MessageManage.Messaggio;
-import risicammaraServer.MessageManage.MessaggioComandi;
-import risicammaraServer.MessageManage.comandi_t;
+import risicammaraServer.messaggiManage.Messaggio;
+import risicammaraServer.messaggiManage.MessaggioComandi;
 
 /**
  *

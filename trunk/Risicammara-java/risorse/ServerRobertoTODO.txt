@@ -1,0 +1,76 @@
+partita
+	IN
+-aggiornamenti vari territori (armate)
+-Giocate tris
+-Dichiarazioni di attacco
+-Se continuare o ritirarsi da un attacco (l'attacco finisce se ci si ritira o se perde uno dei due)
+	IN GLOBALE(tutti i giocatori)
+-inviare messaggi di chat
+
+	OUT GLOBALE
+-Aggiornamenti ai territori
+-Giocate di tris
+-Dichiarazioni di attacco
+-cambi di turno
+-Pescaggio Carte	(Giocatore ha pescato una carta)
+-Numero di carte dei giocatori
+-Messaggi di Chat
+-Giocatori eliminati	(se viene fatto un obbiettivo Gicoatore si vince)
+	OUT
+-Carta pescata
+-Assegnamento armate
+
+---- 
+MESSAGGI IN USCITA E IN ENTRATA IN TUTTE LE FASI:
+-Messaggi di Chat
+
+->Pre partita
+All'inizio della partita il server costruisce la plancia, aggiorna tutti i giocatori
+e da il segnale di VIA per giocare.
+MESSAGGI IN USCITA DAL SERVER
+-Plancia di gioco
+-Aggiornamento dati personali (Ogni giocatore il suo)??
+-Giocatore di turno	(TUTTI)
+-messaggio di START al giocatore di turno.	(TUTTI)
+
+->fase 1 (RINFORZO)
+Inizia quindi la prima fase. La prima fase finisce sempre quando il giocatore
+non ha più armate da mettere.
+MESSAGGI IN USCITA DAL SERVER
+-Numero di armate disponibili (Solo giocatore di turno)
+-Aggiornamenti ai territori (Aggiunta Armate) (TUTTI escluso turno)
+-Giocate di tris (TUTTI escluso turno)
+-Modifica numero carte giocatore (TUTTI escluso turno)
+-Cambio di fase (TUTTI I GIOCATORI)
+MESSAGGI IN ENTRATA AL SERVER
+-Aggiornamenti ai territori (Aggiunta armate) (SOLO GIOCATORE DI TURNO)
+-Giocare un tris (SOLO GIOCATORE DI TURNO)
+
+->Fase 2 (ATTACCO)
+La seconda fase è opzionale: finisce se il giocatore preme "Passa alla prossima fase" o preme "fine turno". Fine turno non permette di fare lo spostamento.
+MESSAGGI IN USCITA DAL SERVER
+-Dichiarazione di attacco (TUTTI esluso turno)
+-Aggiornamenti ai territori (Modifica di proprietario, numero armate) (TUTTI)
+-Informazioni sull'attacco (Risultato dei dadi,ritiro) (TUTTI)
+-Cambio di fase (TUTTI)
+MESSAGGI IN ENTRATA AL SERVER
+-Dichiarazione di attacco (SOLO GIOCATORE DI TURNO)
+-Dichiarazione ritiro (SOLO TURNO)
+-Passa alla fase successiva (SOLO GIOCATORE (TURNO)
+-finisci il turno (SOLO GIOCATORE DI TURNO)
+
+->Fase 3 (SPOSTAMENTO)
+La terza fase è opzionale: Finisce se il giocatore preme "Fine turno" o fa UNO spostamento.
+MESSAGGI IN USCITA DAL SERVER
+-Aggiornamento ai Territori (Spostamento armate) (TUTTI)
+-Cambio fase (skip fase ha lo stesso risultato) (TUTTI)
+MESSAGGI IN ENTRATA AL SERVER
+-Aggiornamento ai territori (Spostamento armate) (SOLO GIOCATORE TURNO)
+-Fine Fase (SOLO GIOCATORE TURNO)
+
+->fase 4 (FINE TURNO)
+La fine del turno fa pescare una carta se il giocatore ha conquistato uno o più territori.
+MESSAGGI IN USCITA DAL SERVER
+-Aggiornamento numero carte di un giocatore (TUTTI)
+-Carta pescata (SOLO GIOCATORE DI TURNO)
+-Cambio turno (TUTTI)

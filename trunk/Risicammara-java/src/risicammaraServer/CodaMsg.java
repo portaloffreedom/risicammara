@@ -8,10 +8,11 @@ package risicammaraServer;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import risicammaraServer.MessageManage.Messaggio;
+import risicammaraServer.messaggiManage.Messaggio;
+import risicammaraServer.messaggiManage.messaggio_t;
 
 /**
- *
+ *  Rappresenta una semlpice coda di messaggi
  * @author Sten_Gun
  */
 public class CodaMsg {
@@ -49,4 +50,5 @@ public class CodaMsg {
         notify();
         return ms;
     }
+ 
 }

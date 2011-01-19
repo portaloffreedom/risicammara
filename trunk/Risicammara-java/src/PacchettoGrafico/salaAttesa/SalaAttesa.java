@@ -18,7 +18,7 @@ import javax.swing.JFrame;
 import risicammaraClient.Colore_t;
 import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
-import risicammaraServer.MessageManage.*;
+import risicammaraServer.messaggiManage.*;
 
 /**
  *

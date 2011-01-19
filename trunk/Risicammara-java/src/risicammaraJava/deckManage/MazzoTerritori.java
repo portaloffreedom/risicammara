@@ -13,7 +13,7 @@ import risicammaraClient.territori_t;
  * @author Sten_Gun
  */
 public final class MazzoTerritori extends Mazzo {
-    private Carta[] scarti;
+    private Carta scarti[];
     private int inizio_scarti;
 
     public MazzoTerritori(){
@@ -56,13 +56,14 @@ public final class MazzoTerritori extends Mazzo {
 
 /**
  * Gli scarti diventano il mazzo da cui pescare le carte
- * e il mazzo degil scarti viene "distrutto" (null pointer)
+ * e il mazzo degli scarti viene "distrutto" (null pointer)
  */
     private void ScambiaMazzi(){
         deck = scarti;
         scarti = null;
         inizio_mazzo = inizio_scarti;
         inizio_scarti = 0;
+        this.Mischia();
         this.Mischia();
     }
 

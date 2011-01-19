@@ -8,7 +8,7 @@ package risicammaraServer;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import risicammaraServer.MessageManage.MessaggioNuovoGiocatore;
+import risicammaraServer.messaggiManage.MessaggioNuovoGiocatore;
 
 /**
  * Classe (implementata come Thread) che rimane in ascolto di nuove connessioni,

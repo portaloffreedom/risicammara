@@ -13,6 +13,8 @@ import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraClient.territori_t;
 import risicammaraClient.tipovittoria_t;
+import risicammaraJava.boardManage.Territorio_plancia;
+import risicammaraJava.deckManage.Carta;
 
 /**
  * Questa classe ha il compito di inizializzare tutti gli oggetti che servono per
@@ -27,8 +29,9 @@ public class Partita {
     private ListaPlayers listagiocatori;
     private MazzoTerritori mazzo;
     private int giocturno;
-    private Fasi_t[] fasi;
+    private Fasi_t fasi[];
     private int fase_attuale;
+    private boolean giocato_tris;
 
     /**
      * Costruttore ::Partita che inizializza tutti gli oggetti
@@ -38,6 +41,7 @@ public class Partita {
         this.listagiocatori = listagiocatori;
         this.planciadigioco = new Plancia();
         this.mazzo = new MazzoTerritori();
+        this.giocato_tris = false;
         //Distribuzione territori per i giocatori
         territori_t car;
         int numgioc = listagiocatori.getSize();
@@ -67,15 +71,54 @@ public class Partita {
         this.fase_attuale = 0;
     }
 
+    //Metodi di partita
+    public int getNumeroGiocatori(){
+        return listagiocatori.getSize();
+    }
     public Plancia getPlancia(){
         return planciadigioco;
-    };
+    }
+    public int getNumTerritoriGiocatoreTurno(){
+        return listagiocatori.get(giocturno).getNumTerritori();
+    }
+    public boolean playedTris(){
+        return giocato_tris;
+    }
+    public void setPlayedTris(boolean value){
+        giocato_tris = value;
+    }
+    public void addArmateTerritorio(territori_t territorio,int armate){
+        Territorio_plancia terpla = planciadigioco.getTerritorio(territorio);
+        int armate_attuali = terpla.getArmate();
+        terpla.setArmate(armate+armate_attuali);
+    }
+
+    //metodi per azioni di gioco
+    public Carta getCarta(){
+        return mazzo.Pesca();
+    }
+    public void discardCarta(Carta scarti[]){
+        for(Carta c : scarti) mazzo.AddDiscardedCard(c);
+    }
+
+    //Metodi per le fasi
+    public Fasi_t getFase(){
+        return fasi[fase_attuale];
+    }
     public Giocatore getGiocatoreDiTurno(){
         return listagiocatori.get(giocturno);
     };
+    public int getGiocatoreTurnoIndice(){
+        return giocturno;
+    }
     public void ProssimoGiocatore(){
-        if(giocturno == listagiocatori.getSize()) giocturno = 0;
-        else giocturno++;
+        for(int i=giocturno;i<ListaPlayers.MAXPLAYERS;++i){
+            Giocatore tmp = listagiocatori.get(i);
+            if(tmp == null)continue;
+            giocturno = i;
+            return;
+        }
+        giocturno = 0;
         return;
     };
     public void ProssimaFase(){
@@ -83,7 +126,9 @@ public class Partita {
         else fase_attuale = 0;
         return;
     };
-    private Giocatore Vincitore(){
+
+
+    public Giocatore Vincitore(){
         int numpl = listagiocatori.getSize();
         for(int i = 0;i<numpl;i++){
             Giocatore giocat = listagiocatori.get(i);
@@ -97,6 +142,8 @@ public class Partita {
         }
         return null;
     };
+
+    //METODI PRIVATI
     /**
      * Restituisce il numero di armate iniziali in base al numero giocatori.
      * @param numerogiocatori Il numero dei giocanti alla partita
