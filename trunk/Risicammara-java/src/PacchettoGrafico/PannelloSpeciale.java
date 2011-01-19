@@ -11,7 +11,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.geom.Line2D;
 import javax.swing.JPanel;
 import risicammaraJava.turnManage.Partita;
 
@@ -96,10 +95,7 @@ public class PannelloSpeciale extends JPanel{
                 System.err.println("Errore: "+ex);
             }
         }
-        
     }
-
-
 }
 
 
