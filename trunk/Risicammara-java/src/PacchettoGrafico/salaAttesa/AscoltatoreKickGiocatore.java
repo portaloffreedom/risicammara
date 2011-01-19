@@ -36,7 +36,7 @@ public class AscoltatoreKickGiocatore implements ActionListener {
                 try {
                     salaAttesa.mandaMessaggio((Messaggio) MessaggioComandi.creaMsgKickplayer(salaAttesa.indexGiocatore, index));
                     pannello.stampaMessaggioComando("Kickato giocatore "+index+" \""+salaAttesa.listaGiocatori.getNomeByIndex(index)+"\"");
-                    salaAttesa.eliminaGiocatore(index);
+                    //salaAttesa.eliminaGiocatore(index);
                 } catch (IOException ex) {
                     pannello.stampaMessaggioErrore("Messaggio di kick non eliminato", ex);
 
