@@ -152,10 +152,12 @@ public class SalaAttesa extends JFrame implements Runnable {
 
                         case LEADER:
                             diventaLeader();
+                            break;
 
                         case KICKPLAYER:
                             pannello.stampaMessaggio("Giocatore \""+listaGiocatori.getNomeByIndex(msgComando.getReceiver())+
                                     "\" è stato kickato da \""+listaGiocatori.getNomeByIndex(msgComando.getSender())+"\"");
+                            break;
 
                         default:
                             System.err.println("Comando non riconosciuto: "+msgComando.getComando());
