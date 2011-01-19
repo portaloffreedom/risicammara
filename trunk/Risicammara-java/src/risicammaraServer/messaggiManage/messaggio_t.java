@@ -10,7 +10,7 @@ package risicammaraServer.messaggiManage;
  * @author Sten_Gun
  */
 public enum messaggio_t {
-
+    DICHIARAATTACCO, // Dichiara un attacco
     GIOCATRIS,  //Messaggio che indica la giocata di un tris
     PLANCIA,    //Messaggio plancia per inizio partita
     PLAYERLIST, //Messaggio lista iniziale per tutti i giocatori

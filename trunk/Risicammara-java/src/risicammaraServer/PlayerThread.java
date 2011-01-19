@@ -51,10 +51,6 @@ public class PlayerThread extends Thread{
         System.out.println("Thread giocatore "+ playerIndex+" stoppato");
     }
 
-    public void setStop(boolean stop) {
-        this.stop = stop;
-    }
-
     public void setReady(boolean isready) {
         this.ready = isready;
     }
