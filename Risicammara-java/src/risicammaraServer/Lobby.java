@@ -7,21 +7,18 @@ package risicammaraServer;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import risicammaraClient.Colore_t;
 import risicammaraJava.playerManage.ListaPlayers;
-import risicammaraServer.MessageManage.Messaggio;
-import risicammaraServer.MessageManage.MessaggioAddPlayer;
-import risicammaraServer.MessageManage.MessaggioAggiornaDatiGiocatore;
-import risicammaraServer.MessageManage.MessaggioCambiaNickColore;
-import risicammaraServer.MessageManage.MessaggioChat;
-import risicammaraServer.MessageManage.MessaggioConfermaNuovoGiocatore;
-import risicammaraServer.MessageManage.MessaggioNuovoGiocatore;
-import risicammaraServer.MessageManage.MessaggioComandi;
-import risicammaraServer.MessageManage.MessaggioErrore;
-import risicammaraServer.MessageManage.comandi_t;
-import risicammaraServer.MessageManage.errori_t;
+import risicammaraServer.messaggiManage.Messaggio;
+import risicammaraServer.messaggiManage.MessaggioAddPlayer;
+import risicammaraServer.messaggiManage.MessaggioAggiornaDatiGiocatore;
+import risicammaraServer.messaggiManage.MessaggioCambiaNickColore;
+import risicammaraServer.messaggiManage.MessaggioChat;
+import risicammaraServer.messaggiManage.MessaggioConfermaNuovoGiocatore;
+import risicammaraServer.messaggiManage.MessaggioNuovoGiocatore;
+import risicammaraServer.messaggiManage.MessaggioComandi;
+import risicammaraServer.messaggiManage.MessaggioErrore;
+import risicammaraServer.messaggiManage.errori_t;
 
 /**
  * La classe che rappresenta un oggetto "lobby" (sala d'attesa)
@@ -85,7 +82,7 @@ public class Lobby {
                     if(listaGiocatori.getSize() > 5){
                         try {
                             //TODO fare il costruttore di MessaggioErrore connection refused
-                            Server.broadcastMessage(new MessaggioErrore(errori_t.CONNECTIONREFUSED, -1),gioctemp.getClientOut() );
+                            Server.BroadcastMessage(new MessaggioErrore(errori_t.CONNECTIONREFUSED, -1),gioctemp.getClientOut() );
                             mgio.getConnessioneGiocatore().close();
                         } catch (IOException ex) {
                             System.err.println("Errore di invio errore connessione: "+ex.getMessage());
@@ -132,7 +129,7 @@ public class Lobby {
                     System.out.println(ctt.toString());
           if(ctt!= null){
                 try {
-                    Server.spedisciMsgTutti(ctt, listaGiocatori, escludi);
+                    Server.SpedisciMsgTutti(ctt, listaGiocatori, escludi);
                 } catch (IOException ex) {
                     System.err.println("Errore nell'invio messaggio a tutti i giocatori (Lobby) "+ex.getMessage());
                 }
@@ -145,7 +142,7 @@ public class Lobby {
                         if(!th.isLeader()){
                             th.setLeader(true);
                             try {
-                                Server.broadcastMessage(MessaggioComandi.creaMsgLeader(th.getPlayerIndex()), gtmp.getClientOut());
+                                Server.BroadcastMessage(MessaggioComandi.creaMsgLeader(th.getPlayerIndex()), gtmp.getClientOut());
                             } catch (IOException ex) {
                                 System.err.println("Errore nell'invio di \"LEADER\" al primo giocatore "+ex.getMessage());
                             }
@@ -227,7 +224,7 @@ private void serverPlayerRemove(int index){
                     PlayerThread threadtemp = (PlayerThread)gtm.getThread();
                     threadtemp.setLeader(true);
                     try {
-                        Server.broadcastMessage(MessaggioComandi.creaMsgLeader(threadtemp.getPlayerIndex()), gtm.getClientOut());
+                        Server.BroadcastMessage(MessaggioComandi.creaMsgLeader(threadtemp.getPlayerIndex()), gtm.getClientOut());
                     } catch (IOException ex) {
                         System.err.println("Errore nell'invio leader "+ex.getMessage());
                     }
