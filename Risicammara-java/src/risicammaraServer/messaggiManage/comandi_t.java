@@ -6,6 +6,8 @@ package risicammaraServer.messaggiManage;
  */
 public enum comandi_t {
 
+    PASSAFASE,      //Passa la fase corrente.
+
     STARTYOURTURN,  // Il giocatore a cui viene inviato questo messaggio inizia il suo turno
     TURNOFPLAYER,   // Indica che il giocatore ricevente è quello di turno.
 

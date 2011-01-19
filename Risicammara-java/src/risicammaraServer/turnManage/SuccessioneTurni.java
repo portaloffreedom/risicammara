@@ -128,7 +128,12 @@ public class SuccessioneTurni {
                 }
                 return;
             case ATTACCO:
-                //Se il giocatore non attacca passa alla prossima fase
+                // Se il messaggio non è permesso RETURN.
+                if(!parseMsgAttacco(msgReceived)) return;
+                // Quando il messaggio è comando può essere solo il passa fase, quindi break.
+                if(msgReceived.getType() != messaggio_t.DICHIARAATTACCO) break;
+
+
                 //Dichiara di attaccare un territorio e gestisce tutte la
                 //parte di attacco. Finché il giocatore non dichiara di aver finito l'attacco
                 //si continua in questa fase, altrimenti si passa alla prossima.
@@ -160,6 +165,25 @@ public class SuccessioneTurni {
         //messaggi per il cambio di fase
     }
 
+    private boolean parseMsgAttacco(Messaggio msg){
+        switch(msg.getType()){
+            case COMMAND:
+                return parseCommandAttacco((MessaggioComandi)msg);
+            case DICHIARAATTACCO:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private boolean parseCommandAttacco(MessaggioComandi msg){
+        switch(msg.getComando()){
+            case PASSAFASE:
+                return true;
+            default:
+                return false;
+        }
+    }
     //TODO completare la funzinoe ceh torna il numero di armate bonus ottenute dai tris
     private int getBonusFromTris(Messaggio msg){
         return 1;

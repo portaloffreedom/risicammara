@@ -11,7 +11,9 @@ public class MessaggioComandi implements Messaggio{
     private int receiver;
 // Qua ci vanno tutti i costruttori static per ogni tipo di messaggio, in modo da
     //facilitare la vita a chi crea i messaggi.
-
+    public static MessaggioComandi creaMsgProssimaFase(int giocatoreChePassa){
+        return new MessaggioComandi(comandi_t.PASSAFASE, giocatoreChePassa);
+    }
     /**
      * Comando che informa il giocatore che può iniziare il suo turno.
      * @param giocatoreChePuoGiocare l'indice del giocatore che sta giocando e che può iniziare il turno.

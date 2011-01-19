@@ -182,6 +182,7 @@ private Messaggio CommandHandling(MessaggioComandi cmdMsg){
             break;
         case DISCONNECT:
             serverPlayerRemove(cmdMsg.getSender());
+            listaGiocatori.remPlayer(cmdMsg.getSender());
             break;
         default:
             return new MessaggioChat(-1,"comando non riconosciuto.");
@@ -215,8 +216,6 @@ private void serverPlayerRemove(int index){
         PlayerThread th = (PlayerThread)tempgioc.getThread();
         boolean canc = false;
         if(th.isLeader()) canc = true;
-        if(th.isAlive()) th.setStop(true);
-        listaGiocatori.remPlayer(index);
         if(canc)
         {
                 Giocatore_Net gtm = ((Giocatore_Net)listaGiocatori.getFirst());
