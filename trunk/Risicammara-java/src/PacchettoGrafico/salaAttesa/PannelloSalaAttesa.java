@@ -52,6 +52,8 @@ public class PannelloSalaAttesa extends JPanel {
     private JButton invioChat;
     private CronologiaChat konsole;
 
+    private AscoltatoreKickGiocatore ascoltatoreKick;
+
     /** Indice del Giocatore che sta utilizzando l'attuale Client */
     private int indexGiocatore;
     /** Intera lista dei giocatori */
@@ -72,6 +74,8 @@ public class PannelloSalaAttesa extends JPanel {
     }
 
     public void diventaLeader() {
+        this.ascoltatoreKick = new AscoltatoreKickGiocatore(salaAttesa,this);
+
         for(int i=0; i<ListaPlayers.MAXPLAYERS; i++) {
             if (this.giocatoriLabel[i].isVisible()) {
                 this.giocatoriLabel[i].setVisible(false);
@@ -79,6 +83,7 @@ public class PannelloSalaAttesa extends JPanel {
                 this.giocatoriBottoni[i].setColore(listaGiocatori.get(i).getArmyColour());
                 this.giocatoriBottoni[i].setText(listaGiocatori.getNomeByIndex(i));
             }
+                this.giocatoriBottoni[i].addActionListener(ascoltatoreKick);
         }
 
         this.giocatori = this.giocatoriBottoni;
@@ -144,7 +149,7 @@ public class PannelloSalaAttesa extends JPanel {
 
             Rectangle posizioneQuadratoGiocatore = new Rectangle(giocatoriR.x, margine+(margine+altezza)*i, giocatoriR.width, giocatoriR.height);
 
-            this.giocatoriBottoni[i] = new BottoneGiocatori();
+            this.giocatoriBottoni[i] = new BottoneGiocatori(i);
             this.giocatoriBottoni[i].setBounds(posizioneQuadratoGiocatore);
             this.giocatoriBottoni[i].setVisible(false);
             this.add(this.giocatoriBottoni[i]);
@@ -164,11 +169,11 @@ public class PannelloSalaAttesa extends JPanel {
 
         this.conferma = new JButton("conferma");
         this.conferma.setBounds(confermaR);
-        this.conferma.addActionListener(new CambiaNomeColore());
+        this.conferma.addActionListener(new AscoltatoreCambiaNomeColore(salaAttesa, this));//new CambiaNomeColore();
 
         this.immissioneChat = new JTextField();
         this.immissioneChat.setBounds(immissioneR);
-        ActionListener mandaChat = new MandaChat();
+        ActionListener mandaChat = new AscoltatoreMandaChat(salaAttesa, this);
         this.immissioneChat.addActionListener(mandaChat);
 
         this.invioChat = new JButton("Invia");
@@ -205,16 +210,6 @@ public class PannelloSalaAttesa extends JPanel {
         this.nomeGiocatore.setText(this.listaGiocatori.getNomeByIndex(this.indexGiocatore));
     }
 
-    private QuadratoGiocatori quadratoInterfacciaLeader(int i){
-        BottoneGiocatori bottone = new BottoneGiocatori();
-        return bottone;
-    }
-
-    private QuadratoGiocatori quadratoInterfaccia(int i) {
-        LabelGiocatori label = new LabelGiocatori();
-        return label;
-    }
-
     private void setNomeGiocatore(int index, String nuovoNome){
         Giocatore giocatore = this.listaGiocatori.get(index);
 
@@ -248,21 +243,10 @@ public class PannelloSalaAttesa extends JPanel {
         this.giocatori[index].setColore(nuovoColore);
     }
 
-
-    // <editor-fold defaultstate="collapsed" desc="Ascoltatori dei pulsanti">
-    private class MandaChat implements ActionListener {
-
-        public void actionPerformed(ActionEvent e) {
-            salaAttesa.mandaMessaggioChat();
-        }
+    public void eliminaGiocatore (int index) {
+        this.giocatori[index].setVisible(false);
+        this.pronti[index].setVisible(false);
     }
-
-    private class CambiaNomeColore implements ActionListener {
-
-        public void actionPerformed(ActionEvent e) {
-            salaAttesa.aggiornaNomeColore();
-        }
-    }// </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Classi e interfacce interne al funzionamento della Sala d'Attesa">
     static class LayoutManagerMatteo implements LayoutManager {

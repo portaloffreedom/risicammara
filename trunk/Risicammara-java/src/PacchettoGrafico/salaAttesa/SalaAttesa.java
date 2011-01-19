@@ -15,7 +15,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import javax.swing.JFrame;
-import risicammaraClient.Colore_t;
 import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraServer.messaggiManage.*;
@@ -24,31 +23,30 @@ import risicammaraServer.messaggiManage.*;
  *
  * @author matteo
  */
-public class SalaAttesa extends JFrame implements WindowListener, Runnable {
+public class SalaAttesa extends JFrame implements Runnable {
     
     /** Dimensioni iniziali e posizione della finestra */
     final static Rectangle finestraR = new Rectangle(100, 100, 600, 305);
     
     // variabili locali per il funzionamento interno
-    private boolean leader;
     private Socket server;
     private ObjectOutputStream scriviServer;
     private ObjectInputStream  leggiServer;
     /** Variabile che serve per decidere quando deve smettere la sala d'attesa e
      * cominciare la partita */
     private boolean lobby;
-    private PannelloSalaAttesa pannello;
+    PannelloSalaAttesa pannello;
 
     //roba ricevuta dal sever
     /** Indice del Giocatore che sta utilizzando l'attuale Client */
-    private int indexGiocatore;
+    int indexGiocatore;
     /** Intera lista dei giocatori */
-    private ListaPlayers listaGiocatori;
+    ListaPlayers listaGiocatori;
 
-    public SalaAttesa(Socket server, boolean leader) {
+    public SalaAttesa(Socket server) {
         super("Sala d'Attesa");
         this.server=server;
-        this.leader=leader;
+        //this.leader=leader;
         this.lobby = true; //imposta lo "stato" come lobby
 
         this.indexGiocatore = -2;
@@ -69,16 +67,12 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
         }
 
 
-        this.addWindowListener(this);
+        this.addWindowListener(new WindowListenerSalaAttesa(this));
         this.setBounds(finestraR);
         this.setResizable(false);  //TODO implementare coi pannelli invece che hard coding in modo che sia resizable
 
         this.pannello = new PannelloSalaAttesa(indexGiocatore, listaGiocatori, this);
         this.getContentPane().add(pannello);
-    }
-
-    public SalaAttesa(Socket server) {
-        this(server, false);
     }
 
     public void run() {
@@ -159,6 +153,10 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
                         case LEADER:
                             diventaLeader();
 
+                        case KICKPLAYER:
+                            pannello.stampaMessaggio("Giocatore \""+listaGiocatori.getNomeByIndex(msgComando.getReceiver())+
+                                    "\" è stato kickato da \""+listaGiocatori.getNomeByIndex(msgComando.getSender())+"\"");
+
                         default:
                             System.err.println("Comando non riconosciuto: "+msgComando.getComando());
                             break;
@@ -191,93 +189,71 @@ public class SalaAttesa extends JFrame implements WindowListener, Runnable {
 
     /** Funzione da chiamare per fare diventare leader il giocatore */
     private void diventaLeader() {
-        this.leader = true;
+        //this.leader = true;
         pannello.diventaLeader();
     }
 
-    /**
-     * Manda il messaggio di cambio nome e colore, poi chiama la funzione di
-     * cambio nome e colore
-     * @see MessaggioCambiaNickColore
-     */
-    void aggiornaNomeColore() {
-        //TODO cercare la stringa nome se non è già posseduta da qualcun'altro
-        String nuovoNome = pannello.nomeGiocatore_getText();
-        if (nuovoNome.equals("")) return;
+    public void mandaMessaggio (Messaggio messaggio) throws IOException {
+        scriviServer.writeObject(messaggio);
+        scriviServer.flush();
+    }
 
-        Colore_t nuovoColore = pannello.colore_getSelectedItem();
-        try {
-            this.scriviServer.writeObject(new MessaggioCambiaNickColore(nuovoNome, nuovoColore, this.indexGiocatore));
-            this.scriviServer.flush();
-        } catch (IOException ex) {
-            pannello.stampaMessaggioErrore("Cambio colore e/o nuck non riuscito", ex);
-            return;
+    public void chiudiServer () throws IOException {
+        scriviServer.flush();
+        scriviServer.close();
+        server.close();
+    }
+
+    public void eliminaGiocatore(int index) {
+        listaGiocatori.remPlayer(index);
+        pannello.eliminaGiocatore(index);
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="WindowListener">
+    private static class WindowListenerSalaAttesa implements WindowListener {
+
+        private SalaAttesa salaAttesa;
+
+        public WindowListenerSalaAttesa(SalaAttesa salaAttesa) {
+            this.salaAttesa = salaAttesa;
         }
-        pannello.setInfoGiocatore(indexGiocatore, nuovoNome, nuovoColore);
-    }
 
-    /**
-     * Gestisce l'intero invio dei messaggi. Prende il messaggio dalla casella di
-     * testo e se manda il messaggio con successo sulla rete resetta il campo di
-     * testo di immissioneChat.
-     */
-    void mandaMessaggioChat () {
-        String messaggio = pannello.immissioneChat_getText();
-        
-            //feedback più realistico se aspetta il messaggio dal server
-        //this.cronologiaChat.stampaMessaggio("Me: "+messaggio);
-
-        pannello.immissioneChat_requestFocus();
-        if (messaggio.equals("")) return;
-        
-        try {
-            scriviServer.writeObject(new MessaggioChat(this.indexGiocatore, messaggio));
-            scriviServer.flush();
-            pannello.immissioneChat_resetText();
-        } catch (IOException ex) {
-            pannello.stampaMessaggioErrore("Attenzione messaggio \""+messaggio+"\" non inviato", ex);
+        public void windowOpened(WindowEvent e) {
+            //throw new UnsupportedOperationException("Not supported yet.");
         }
-        return;
-    }
 
-    // <editor-fold defaultstate="collapsed" desc="Window Listener">
-    public void windowOpened(WindowEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void windowClosing(WindowEvent e) {
-        //try {
-        //    new ObjectOutputStream(server.getOutputStream()).writeObject(new MessaggioComandi(comandi_t.DISCONNECT, indexGiocatore));
-        //} catch (IOException ex) {
-        //    System.err.println("Errore nel mandare il messaggio di \"hang-up\": "+ex);
-        //}
-        try {
-            scriviServer.flush();
-            server.close();
-        } catch (IOException ex) {
-            System.err.println("Errore nel chiudere il collegamento col server: "+ex);
+        public void windowClosing(WindowEvent e) {
+            //try {
+            //    new ObjectOutputStream(server.getOutputStream()).writeObject(new MessaggioComandi(comandi_t.DISCONNECT, indexGiocatore));
+            //} catch (IOException ex) {
+            //    System.err.println("Errore nel mandare il messaggio di \"hang-up\": "+ex);
+            //}
+            try {
+                salaAttesa.chiudiServer();
+            } catch (IOException ex) {
+                System.err.println("Errore nel chiudere il collegamento col server: " + ex);
+            }
+            System.exit(0);
         }
-        System.exit(0);
-    }
 
-    public void windowClosed(WindowEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
+        public void windowClosed(WindowEvent e) {
+            //throw new UnsupportedOperationException("Not supported yet.");
+        }
 
-    public void windowIconified(WindowEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
+        public void windowIconified(WindowEvent e) {
+            //throw new UnsupportedOperationException("Not supported yet.");
+        }
 
-    public void windowDeiconified(WindowEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
+        public void windowDeiconified(WindowEvent e) {
+            //throw new UnsupportedOperationException("Not supported yet.");
+        }
 
-    public void windowActivated(WindowEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
+        public void windowActivated(WindowEvent e) {
+            //throw new UnsupportedOperationException("Not supported yet.");
+        }
 
-    public void windowDeactivated(WindowEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
+        public void windowDeactivated(WindowEvent e) {
+            //throw new UnsupportedOperationException("Not supported yet.");
+        }
     }// </editor-fold>
-
 }

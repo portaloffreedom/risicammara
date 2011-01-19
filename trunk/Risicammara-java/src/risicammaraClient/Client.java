@@ -18,6 +18,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import risicammaraJava.turnManage.Partita;
 
+//TODO Stampare un messaggio: "ho cambiato nick"
 
 /**
  *
