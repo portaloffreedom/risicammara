@@ -13,8 +13,10 @@ import risicammaraClient.Colore_t;
  * @author matteo
  */
 public class BottoneGiocatori extends JButton implements QuadratoGiocatori {
+    int index;
 
-    public BottoneGiocatori() {
+    public BottoneGiocatori(int index) {
+        this.index = index;
     }
 
     public BottoneGiocatori(String text) {
@@ -27,5 +29,9 @@ public class BottoneGiocatori extends JButton implements QuadratoGiocatori {
 
     public void setColore(Colore_t colore) {
         this.setForeground(colore.getColor());
+    }
+
+    public int getIndex() {
+        return index;
     }
 }
