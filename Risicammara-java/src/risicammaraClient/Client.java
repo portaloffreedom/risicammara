@@ -7,6 +7,7 @@ package risicammaraClient;
 
 import PacchettoGrafico.CollegatiPartita;
 import PacchettoGrafico.PannelloSpeciale;
+import PacchettoGrafico.RisicammaraLookAndFeel;
 import PacchettoGrafico.salaAttesa.SalaAttesa;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -14,6 +15,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.net.Socket;
 import javax.swing.JFrame;
+import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import risicammaraJava.turnManage.Partita;
@@ -26,48 +28,92 @@ import risicammaraJava.turnManage.Partita;
  */
 public class Client implements WindowListener, Runnable {
 
+    public static int PORT = 12345;
+    private static String laf;
+    private static boolean lafPersonalizzato = false;
+    private static boolean debug = false;
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        boolean debug = false;
-        if (args.length>= 1 && (args[0].equals("--debug") || args[0].equals("-d"))) debug=true;
+        Parser(args);
 
-        /*for (String string : args) {
-            switch (string.hashCode()) {
-                case "--debug".hashCode():
-                case "-d".hashCode():
-
-            }
-
-        }*/
-
-        Client client = new Client(debug, Client.PORT);
+        Client client = new Client(Client.PORT);
         client.run(); //Attenzione non viene creato un Thread, viene solo
                       //eseguito il metodo run
     }
 
-    public static final int PORT = 12345;
+    /**
+     * Parser degli argomenti di debug
+     * @param args argomenti dal main
+     */
+    private static void Parser (String args[]){
+        for (int i=0; i<args.length; i++) {
+
+            //DEBUG
+            if (args[i].equals("-d"))
+                Debug(true);
+            if (args[i].equals("--debug"))
+                Debug(true);
+
+            //LOOK AND FEEL
+            if (args[i].equals("-laf")){
+                i++;
+                Laf(args[i]);
+            }
+
+            //PORTA DA USARE
+            if (args[i].equals("-p")){
+                i++;
+                Port(Integer.getInteger(args[i]));
+            }
+            if (args[i].equals("--port")){
+                i++;
+                Port(Integer.getInteger(args[i]));
+            }
+            
+        }
+    }
+
+    private static void Debug (boolean debug){
+        Client.debug=debug;
+    }
+
+    private static void Laf(String laf){
+        Client.lafPersonalizzato=true;
+        Client.laf=laf;
+    }
+
+    private static void Port(int port){
+        Client.PORT=port;
+    }
+
     private PannelloSpeciale pannello;
     private Partita partita;
-    private boolean debug;
     private Socket server;
     private int porta;
 
-    public Client(boolean debug, int porta) {
+    public Client(int porta) {
         super();
-        this.debug= debug;
         this.porta = porta;
 
-
-
         try {
-            if (System.getProperties().getProperty("os.name").equalsIgnoreCase("linux")) {
-                //UIManager.setLookAndFeel(new com.sun.java.swing.plaf.gtk.GTKLookAndFeel());
-                UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+            if (lafPersonalizzato){
+                if (laf.equals("personal")){
+                    UIManager.setLookAndFeel(new RisicammaraLookAndFeel());
+                }
+                else {
+                    UIManager.setLookAndFeel(laf);
+                }
             }
             else {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                if (System.getProperties().getProperty("os.name").equalsIgnoreCase("linux")) {
+                    UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+                }
+                else {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                }
             }
         } catch (ClassNotFoundException ex) {
             System.err.println("Look and feel error: "+ex);
@@ -105,13 +151,6 @@ public class Client implements WindowListener, Runnable {
         listaGiocatori.addPlayer("Roberto", Colore_t.BLU);
         listaGiocatori.addPlayer("Matteo", Colore_t.GIALLO);
         listaGiocatori.addPlayer("Mandingo", Colore_t.NERO);
-        /*try {
-            new ObjectOutputStream(server.getOutputStream()).writeObject(new MessaggioComandi(comandi_t.CONNECTED, "Giocatore"));
-            new ObjectOutputStream(server.getOutputStream()).writeObject(new MessaggioChat("culo", "messaggiopluffete"));
-            new ObjectOutputStream(server.getOutputStream()).writeObject(new MessaggioChat("culo", "messaggiopluffete2"));
-        } catch (IOException ex) {
-            System.err.println(ex);
-        }
 
         this.inizializzaPartita(new Partita(listaGiocatori));
          /*
@@ -178,4 +217,35 @@ public class Client implements WindowListener, Runnable {
         //throw new UnsupportedOperationException("Not supported yet.");
         System.out.println("windowDeactivated");
     }// </editor-fold>
+
+    private static class LookAndFeelImpl extends LookAndFeel {
+
+        public LookAndFeelImpl() {
+        }
+
+        @Override
+        public String getName() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public String getID() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public String getDescription() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public boolean isNativeLookAndFeel() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public boolean isSupportedLookAndFeel() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+    }
 }
