@@ -10,7 +10,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -132,6 +131,14 @@ public class PannelloSalaAttesa extends JPanel {
         immissioneChat.setText("");
     }
 
+    public void invertiPronto(int indexGiocatore){
+        pronti[indexGiocatore].setSelected(!pronti[indexGiocatore].isSelected());
+    }
+
+    public boolean pronto(int indexGiocatore) {
+        return pronti[indexGiocatore].isSelected();
+    }
+
     //#############PARTE PRIVATA#############################################################################################################
     private void disegnaGiocatori() {
          
@@ -198,7 +205,7 @@ public class PannelloSalaAttesa extends JPanel {
         Giocatore giocatore = null;
         for (int i=0; i<ListaPlayers.MAXPLAYERS; i++){
             giocatore = listaGiocatori.get(i);
-            if ( giocatore == null){
+            if (giocatore == null){
                 giocatoreVisible(i, false);
             }
             else {
@@ -207,6 +214,7 @@ public class PannelloSalaAttesa extends JPanel {
         }
 
         this.pronti[this.indexGiocatore].setEnabled(true);
+        this.pronti[this.indexGiocatore].addActionListener(new AscoltatorePronti(salaAttesa, this));
         this.nomeGiocatore.setText(this.listaGiocatori.getNomeByIndex(this.indexGiocatore));
     }
 

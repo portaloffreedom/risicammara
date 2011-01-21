@@ -52,25 +52,33 @@ public class Client implements WindowListener, Runnable {
         for (int i=0; i<args.length; i++) {
 
             //DEBUG
-            if (args[i].equals("-d"))
+            if (args[i].equals("-d")){
                 Debug(true);
-            if (args[i].equals("--debug"))
+                continue;
+            }
+            if (args[i].equals("--debug")){
                 Debug(true);
+                continue;
+            }
+
 
             //LOOK AND FEEL
             if (args[i].equals("-laf")){
                 i++;
                 Laf(args[i]);
+                continue;
             }
 
             //PORTA DA USARE
             if (args[i].equals("-p")){
                 i++;
                 Port(Integer.getInteger(args[i]));
+                continue;
             }
             if (args[i].equals("--port")){
                 i++;
                 Port(Integer.getInteger(args[i]));
+                continue;
             }
             
         }
