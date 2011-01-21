@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import risicammaraClient.Colore_t;
+import risicammaraServer.messaggiManage.MessaggioComandi;
 import risicammaraServer.messaggiManage.Messaggio;
 import risicammaraServer.messaggiManage.MessaggioCambiaNickColore;
 
@@ -43,6 +44,11 @@ public class AscoltatoreCambiaNomeColore implements ActionListener {
 
         Colore_t nuovoColore = pannello.colore_getSelectedItem();
         try {
+            if (salaAttesa.pronto(salaAttesa.indexGiocatore)){
+                salaAttesa.mandaMessaggio((Messaggio) MessaggioComandi.creaMsgSetPronto(salaAttesa.indexGiocatore));
+                salaAttesa.invertiPronto(salaAttesa.indexGiocatore);
+                pannello.stampaMessaggioComando("Adesso non sei più pronto");
+            }
             salaAttesa.mandaMessaggio((Messaggio) new MessaggioCambiaNickColore(nuovoNome, nuovoColore, salaAttesa.indexGiocatore));
         } catch (IOException ex) {
             pannello.stampaMessaggioErrore("Cambio colore e/o nuck non riuscito", ex);

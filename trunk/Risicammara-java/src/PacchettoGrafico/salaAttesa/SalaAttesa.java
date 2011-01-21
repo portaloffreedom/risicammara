@@ -139,7 +139,7 @@ public class SalaAttesa extends JFrame implements Runnable {
                     pannello.stampaMessaggioComando("Entrato nuovo Giocatore.");
                     break;
 
-                case COMMAND:
+                case COMMAND: {
                     MessaggioComandi msgComando = (MessaggioComandi) arrivo;
                     switch (msgComando.getComando()) {
                         case DISCONNECT:
@@ -159,9 +159,15 @@ public class SalaAttesa extends JFrame implements Runnable {
                                     "\" è stato kickato da \""+listaGiocatori.getNomeByIndex(msgComando.getSender())+"\"");
                             break;
 
+                        case SETPRONTO:
+                            pannello.invertiPronto(msgComando.getSender());
+                            break;
+
+
                         default:
                             System.err.println("Comando non riconosciuto: "+msgComando.getComando());
                             break;
+                    }
                     }
                     break;
                 default:
@@ -209,6 +215,14 @@ public class SalaAttesa extends JFrame implements Runnable {
     public void eliminaGiocatore(int index) {
         listaGiocatori.remPlayer(index);
         pannello.eliminaGiocatore(index);
+    }
+
+    public boolean pronto(int indexGiocatore) {
+        return pannello.pronto(indexGiocatore);
+    }
+
+    public void invertiPronto(int indexGiocatore){
+        pannello.invertiPronto(indexGiocatore);
     }
 
     // <editor-fold defaultstate="collapsed" desc="WindowListener">
