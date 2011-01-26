@@ -9,14 +9,20 @@ import java.lang.IndexOutOfBoundsException;
 import java.util.ArrayList;
 import risicammaraClient.Colore_t;
 /**
- *
+ * Classe che implementa la lista dei giocatori che partecipano alla partita.
  * @author stengun
  */
 public class ListaPlayers implements Serializable {
     private ArrayList <Giocatore> listaPlayers;
     private int nullnumber;
-    public static int MAXPLAYERS = 6;
+    /**
+     * Indicai l massimo numero possibile di giocatori.
+     */
+    public static final int MAXPLAYERS = 6;
 
+    /**
+     * Costruttore che inizializza tutti i componenti della lista come null.
+     */
     public ListaPlayers(){
         listaPlayers = new ArrayList<Giocatore>();
         for(int i=0;i<MAXPLAYERS;i++) listaPlayers.add(null);
@@ -24,6 +30,10 @@ public class ListaPlayers implements Serializable {
         this.nullnumber = MAXPLAYERS;
     }
 
+    /**
+     * Richiede il primo giocatore non nullo partendo dall'inizio.
+     * @return il Giocatore corrispondente
+     */
     public Giocatore getFirst(){
         for(int i=0;i<MAXPLAYERS;i++){
             Giocatore gio = listaPlayers.get(i);
@@ -36,6 +46,7 @@ public class ListaPlayers implements Serializable {
      * Aggiunge un giocatore direttamente in lista.
      * @param nome Stringa contenente il nome giocatore
      * @param colore_armate Colore delle armate del giocatore
+     * @return
      */
     public int addPlayer(String nome,Colore_t colore_armate){
         return this.addPlayer(new Giocatore(nome, colore_armate));
@@ -43,6 +54,7 @@ public class ListaPlayers implements Serializable {
     /**
      * Aggiunge un oggetto giocatore alla lista.
      * @param player L'oggetto giocatore da inserire in lista
+     * @return
      */
     public int addPlayer(Giocatore player){
         int index = listaPlayers.indexOf(null);

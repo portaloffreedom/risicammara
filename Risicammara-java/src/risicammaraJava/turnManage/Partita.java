@@ -100,6 +100,17 @@ public class Partita {
     public void discardCarta(Carta scarti[]){
         for(Carta c : scarti) mazzo.AddDiscardedCard(c);
     }
+    public void spostamento(territori_t inizio,territori_t arrivo,int armate){
+        int armateinizio = planciadigioco.getTerritorio(inizio).getArmate();
+        if(armate >= armateinizio){
+            System.err.println("Errore: armate spostate maggiori del dovuto");
+            return;
+        }
+        Territorio_plancia terrinizio = planciadigioco.getTerritorio(inizio);
+        Territorio_plancia terrarrivo = planciadigioco.getTerritorio(arrivo);
+        terrarrivo.setArmate(terrarrivo.getArmate() + armate);
+        terrinizio.setArmate(terrinizio.getArmate()-armate);
+    }
 
     //Metodi per le fasi
     public Fasi_t getFase(){

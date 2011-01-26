@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package risicammaraJava.boardManage;
 
 import risicammaraClient.territori_t;
@@ -13,7 +8,11 @@ import risicammaraClient.territori_t;
  * @author stengun
  */
 public class Plancia {
+    /** Un array di territorio_plancia che rappresenta tutti i territori.*/
     private Territorio_plancia[] tabellone;
+    /**
+     * Inizializza tutti i territori della plancia.
+     */
     public Plancia(){
         tabellone = new Territorio_plancia[42];
         int i = 0;
@@ -24,6 +23,12 @@ public class Plancia {
         }
     }
 
+    /**
+     * Richiedi il corrispondente territorio della plancia di gioco a partire
+     * dall'enumerato che rappresenta il territorio. (nome).
+     * @param territorio Il nome del territorio richiesto.
+     * @return il Territorio_plancia corrispondente
+     */
     public Territorio_plancia getTerritorio(territori_t territorio){
         territori_t[] terr = territori_t.values();
         for(int i=0;i<terr.length;i++){
