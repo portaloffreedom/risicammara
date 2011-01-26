@@ -20,6 +20,10 @@ public class Dado {
     Dado(int facce){
         this.facce = facce;
     }
+    /**
+     * Effettua un lancio del dado.
+     * @return il valore ottenuto dal lancio.
+     */
     public int RollDice(){
         Random random = new Random();
         return (1 + random.nextInt(facce));

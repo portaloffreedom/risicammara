@@ -13,16 +13,21 @@ import risicammaraJava.deckManage.Carta;
  */
 public class Giocatore implements Serializable {
 
+    /** Nome del giocatore.*/
     protected String nome;
+    /** Numero di armate disponibili per la fase rinforzo.*/
     private int armate_bonus;
+    /** Il colore delle armate di questo giocatore.*/
     protected Colore_t colore_armate;
+    /** Le carte in mano al giocatore */
     private ArrayList<Carta> carte;
+    /** L'obbiettivo del giocatore */
     private Obbiettivi_t obbiettivo;
 
 /**
- * Il costruttore dell'oggetto giocatore. Non viene inizializzato il campo per
- * le armate che il giocatore mette ad ogni turno, poiché si effettua tramite
- * una funzione dedicata.
+ * Inizializza con i valori di default tutti i campi del giocatore eccetto il
+ * nome (inizializzato con nome ) e colore delle armate (inizializzato
+ * con colore_armate )
  * @param nome Il nome del giocatore (String)
  * @param colore_armate Il colore delle armate (Color_t)
  */
@@ -91,11 +96,13 @@ public class Giocatore implements Serializable {
         return obbiettivo;
     }
 
-    /**
-     * Lista dei territori posseduti dal giocatore
-     */
+    /** Lista dei territori posseduti dal giocatore */
     private List<territori_t> listaterr;
 
+    /**
+     * Richiedi la lista dei territori posseduti dal giocatore
+     * @return lista dei territori del giocatore.
+     */
     public List<territori_t> getListaterr(){
         return listaterr;
     }
@@ -129,10 +136,18 @@ public class Giocatore implements Serializable {
         return this.nome;
     }
 
+    /**
+     * Imposta il nome al giocatore (in caso di cambio nome)
+     * @param nom il nuovo nome
+     */
     public void setNome(String nom){
         this.nome = nom;
     }
 
+    /**
+     * Cambia il colore delle armate del giocatore (in caso di cambio colore)
+     * @param col Nuovo colore.
+     */
     public void setArmyColour(Colore_t col){
         this.colore_armate = col;
     }

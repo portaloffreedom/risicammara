@@ -20,6 +20,10 @@ public class Territorio_plancia {
     private Giocatore proprietario;
     private territori_t[] adiacenze;
 
+    /**
+     * Inizializza tutti i dati del territorio.
+     * @param territorio l'enumerato che rappresenta il territorio.
+     */
     public Territorio_plancia(territori_t territorio){
         this.territorio = territorio;
         this.armate_presenti = 1;
@@ -27,30 +31,57 @@ public class Territorio_plancia {
         this.CompletaAdiacenze();
     }
 
+    /**
+     * Imposta il nuovo numero di armate del territorio.
+     * @param num numero di armate.
+     */
     public void setArmate(int num){
         this.armate_presenti = num;
     }
 
+    /**
+     * Imposta il proprietario di questo territorio a "player"
+     * @param player Il nuovo proprietario del territorio.
+     */
     public void setProprietario(Giocatore player){
         this.proprietario = player;
     }
 
+    /**
+     * Richiedi il nome (come dato enum) del territorio.
+     * @return l'oggetto enumerato che rappresenta il territorio.
+     */
     public territori_t getTerritorio(){
         return this.territorio;
     }
 
+    /**
+     * Richiedi il continente di cui fa parte questo territorio
+     * @return continente del territorio.
+     */
     public Continente_t getContinente(){
         return this.territorio.getContinente();
     }
 
+    /**
+     * Richieri il numero di armate presenti nel territorio
+     * @return numero di armate
+     */
     public int getArmate(){
         return this.armate_presenti;
     }
 
+    /**
+     * Richiedi proprietario del territorio
+     * @return riferimento a Giocatore proprietario del territorio
+     */
     public Giocatore getProprietario(){
         return this.proprietario;
     }
-
+/**
+ * Completa la lista di adiacenza di tutti i territori.
+ */
+    //TODO caricamento adiacenze da file.
     private void CompletaAdiacenze(){
         this.adiacenze = new territori_t[territorio.getNumadiacenze()];
         switch(this.territorio){
