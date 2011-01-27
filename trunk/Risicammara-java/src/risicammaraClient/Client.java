@@ -15,86 +15,109 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.net.Socket;
 import javax.swing.JFrame;
-import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import risicammaraJava.turnManage.Partita;
 
 //TODO Stampare un messaggio: "ho cambiato nick"
+//TODO provare ad usare OpenGL
 
 /**
- *
- * @author stengun
+ * Classe che rappresenta l'intera parte client del programma (Possiede anche il
+ * Main per farlo partire)
+ * 
+ * @author matteo
  */
 public class Client implements WindowListener, Runnable {
 
+    /** Rappresenta la Porta di default che deve utilizzare il programma. Viene
+     * utlizzata anche dal lato server come porta di DEFAULT */
     public static int PORT = 12345;
-    private static String laf;
-    private static boolean lafPersonalizzato = false;
+    /** Stringa che codifica il look and feel da utilizzare. Nel caso si voglia
+     * utilizzare il look and feel di sistema, lasciare una stringa vuota ("") */
+    private static String laf = "";
+    /** boolenano che identifica se si sta utilizzando il programma in modalità
+     * di DEBUG */
     private static boolean debug = false;
 
     /**
+     * Main per fare partire il programma lato client
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         Parser(args);
 
-        Client client = new Client(Client.PORT);
+        Client client = new Client(Client.PORT, laf);
         client.run(); //Attenzione non viene creato un Thread, viene solo
-                      //eseguito il metodo run
+        //eseguito il metodo run
     }
 
     /**
      * Parser degli argomenti di debug
      * @param args argomenti dal main
      */
-    private static void Parser (String args[]){
-        for (int i=0; i<args.length; i++) {
+    private static void Parser(String args[]) {
+        for (int i = 0; i < args.length; i++) {
 
             //DEBUG
-            if (args[i].equals("-d")){
+            if (args[i].equals("-d")) {
                 Debug(true);
                 continue;
             }
-            if (args[i].equals("--debug")){
+            if (args[i].equals("--debug")) {
                 Debug(true);
                 continue;
             }
 
 
             //LOOK AND FEEL
-            if (args[i].equals("-laf")){
+            if (args[i].equals("-laf")) {
                 i++;
                 Laf(args[i]);
                 continue;
             }
 
             //PORTA DA USARE
-            if (args[i].equals("-p")){
+            if (args[i].equals("-p")) {
                 i++;
                 Port(Integer.getInteger(args[i]));
                 continue;
             }
-            if (args[i].equals("--port")){
+            if (args[i].equals("--port")) {
                 i++;
                 Port(Integer.getInteger(args[i]));
                 continue;
             }
-            
+
         }
     }
 
-    private static void Debug (boolean debug){
-        Client.debug=debug;
+    /**
+     * Cambia la modalità di debug (attiva o no). Si può utilizzare solo all'inizio
+     * prima che parta la parte grafica, altrimenti non si garantisce il corretto
+     * funzionamento.
+     * @param debug da mettere true o false
+     */
+    private static void Debug(boolean debug) {
+        Client.debug = debug;
     }
 
-    private static void Laf(String laf){
-        Client.lafPersonalizzato=true;
-        Client.laf=laf;
+    /**
+     * Imposta un look and feel personalizzato. 
+     * @param laf Stringa che identifica il laf che si vuole impostare
+     */
+    private static void Laf(String laf) {
+        Client.laf = laf;
     }
 
-    private static void Port(int port){
-        Client.PORT=port;
+    /**
+     * Imposta una porta personalizzata (default 12345). Da utlizzare all'inizio
+     * dell'avvio del programma, altrimenti non si garantisce un corretto
+     * funzionamento del programma stesso.
+     * @param port nuova porta da utilizzare
+     */
+    private static void Port(int port) {
+        Client.PORT = port;
     }
 
     private PannelloSpeciale pannello;
@@ -102,50 +125,55 @@ public class Client implements WindowListener, Runnable {
     private Socket server;
     private int porta;
 
-    public Client(int porta) {
+    /**
+     * Costruttore del Client. Imposta la porta ed il look and feel.
+     * @param porta Porta che deve utilizzare il client per collegarsi
+     * @param laf look and feel che deve utilizzare il client.
+     */
+    public Client(int porta, String laf) {
         super();
         this.porta = porta;
 
         try {
-            if (lafPersonalizzato){
-                if (laf.equals("personal")){
+            if (!laf.equals("")) {
+                if (laf.equals("personal")) {
                     UIManager.setLookAndFeel(new RisicammaraLookAndFeel());
-                }
-                else {
+                } else {
                     UIManager.setLookAndFeel(laf);
                 }
-            }
-            else {
+            } else {
                 if (System.getProperties().getProperty("os.name").equalsIgnoreCase("linux")) {
                     UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-                }
-                else {
+                } else {
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 }
             }
         } catch (ClassNotFoundException ex) {
-            System.err.println("Look and feel error: "+ex);
+            System.err.println("Look and feel error: " + ex);
         } catch (InstantiationException ex) {
-            System.err.println("Look and feel error: "+ex);
+            System.err.println("Look and feel error: " + ex);
         } catch (IllegalAccessException ex) {
-            System.err.println("Look and feel error: "+ex);
+            System.err.println("Look and feel error: " + ex);
         } catch (UnsupportedLookAndFeelException ex) {
-            System.err.println("Look and feel di sistema non supportato: "+ex);
+            System.err.println("Look and feel di sistema non supportato: " + ex);
         }
     }
 
+    /**
+     * Fa partire il client costruito.
+     */
     public void run() {
         //TODO dialogo di "crea partita"
         this.collegatiPartita();
     }
 
-    public void collegatiPartita(){
+    public void collegatiPartita() {
         CollegatiPartita dialogo = new CollegatiPartita(this, this.porta);
         //System.out.println("8===D");
-        }
+    }
 
-    public void salaAttesa(Socket server){
-        this.server=server;
+    public void salaAttesa(Socket server) {
+        this.server = server;
 
 
         SalaAttesa finestraSalaAttesa = new SalaAttesa(server);
@@ -154,21 +182,21 @@ public class Client implements WindowListener, Runnable {
 
 
         /*
-         //prova per vedere se funziona la parte vera del programma "risiko"
+        //prova per vedere se funziona la parte vera del programma "risiko"
         ListaPlayers listaGiocatori = new ListaPlayers();
         listaGiocatori.addPlayer("Roberto", Colore_t.BLU);
         listaGiocatori.addPlayer("Matteo", Colore_t.GIALLO);
         listaGiocatori.addPlayer("Mandingo", Colore_t.NERO);
 
         this.inizializzaPartita(new Partita(listaGiocatori));
-         /*
+        /*
          */
 
     }
 
     public void inizializzaPartita(Partita partita) {
 
-        this.partita=partita;
+        this.partita = partita;
 
         JFrame finestra = new JFrame("Risicammara");
         finestra.setMinimumSize(new Dimension(800, 400));
@@ -226,34 +254,4 @@ public class Client implements WindowListener, Runnable {
         System.out.println("windowDeactivated");
     }// </editor-fold>
 
-    private static class LookAndFeelImpl extends LookAndFeel {
-
-        public LookAndFeelImpl() {
-        }
-
-        @Override
-        public String getName() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
-        public String getID() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
-        public String getDescription() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
-        public boolean isNativeLookAndFeel() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
-        public boolean isSupportedLookAndFeel() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-    }
 }
