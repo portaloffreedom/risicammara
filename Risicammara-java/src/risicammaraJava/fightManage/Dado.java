@@ -17,7 +17,7 @@ public class Dado {
      * Costruttore per creare un dado a n facce
      * @param facce Facce del dado
      */
-    Dado(int facce){
+    public Dado(int facce){
         this.facce = facce;
     }
     /**

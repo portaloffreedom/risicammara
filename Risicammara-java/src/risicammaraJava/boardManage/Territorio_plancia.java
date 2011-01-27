@@ -17,7 +17,7 @@ public class Territorio_plancia {
 
     private territori_t territorio;
     private int armate_presenti;
-    private Giocatore proprietario;
+    private int proprietario;
     private territori_t[] adiacenze;
 
     /**
@@ -27,7 +27,7 @@ public class Territorio_plancia {
     public Territorio_plancia(territori_t territorio){
         this.territorio = territorio;
         this.armate_presenti = 1;
-        this.proprietario = null;
+        this.proprietario = -1;
         this.CompletaAdiacenze();
     }
 
@@ -43,7 +43,7 @@ public class Territorio_plancia {
      * Imposta il proprietario di questo territorio a "player"
      * @param player Il nuovo proprietario del territorio.
      */
-    public void setProprietario(Giocatore player){
+    public void setProprietario(int player){
         this.proprietario = player;
     }
 
@@ -75,7 +75,7 @@ public class Territorio_plancia {
      * Richiedi proprietario del territorio
      * @return riferimento a Giocatore proprietario del territorio
      */
-    public Giocatore getProprietario(){
+    public int getProprietario(){
         return this.proprietario;
     }
 /**

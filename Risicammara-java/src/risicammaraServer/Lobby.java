@@ -37,11 +37,11 @@ public class Lobby {
     private boolean inizia;
     AscoltatoreLobby attendiConnessioni;
 
-/**
- * Inizializza tutte le variabili necessarie.
- * @param porta la porta su cui aprire in ascolto il server
- * @param coda la coda dove verranno immessi i messaggi da processare
- */
+    /**
+     * Inizializza tutte le variabili necessarie.
+     * @param porta la porta su cui aprire in ascolto il server
+     * @param coda la coda dove verranno immessi i messaggi da processare
+     */
     public Lobby (int porta, CodaMsg coda) {
         this.porta = porta;
         this.coda = coda;
@@ -136,7 +136,7 @@ public class Lobby {
                     System.err.println("Errore nell'invio messaggio a tutti i giocatori (Lobby) "+ex.getMessage());
                 }
           }
-                    
+
                     // Quando c'è un solo giocatore quello è il leader della lobby
             if(listaGiocatori.getSize() == 1){
                         Giocatore_Net gtmp = (Giocatore_Net)listaGiocatori.getFirst();
@@ -158,106 +158,106 @@ public class Lobby {
         }
         return listaGiocatori;
     }
-    
-   /**
+
+    /**
     * Funzione che gestisce i messaggi di tipo MessaggioErrore per
     * la funzione receiveMessage
     * @param errorMsg Il pacchetto MessaggioErrore
     */
-   private Messaggio ErrorHandling(MessaggioErrore errorMsg){
+    private Messaggio ErrorHandling(MessaggioErrore errorMsg){
        switch(errorMsg.getError()){
            //TODO completare la gestione messaggioErrore del server
            default:
                return new MessaggioChat(-1,"Errore non gestito.");
        }
-   }
+    }
 
-   /**
+    /**
     * Funzione che gestisce i messaggi di tipo MessaggioComando per la costruzione della risposta.
     * @see risicammaraServer.Lobby
     * @param cmdMsg il pacchetto Messaggio_Comando
     */
-private Messaggio CommandHandling(MessaggioComandi cmdMsg){
-    //TODO Completare il codice di Exit.
-    //TODO Completare il codice di AVVIAPARTITA
-    switch(cmdMsg.getComando()){
-        case SETPRONTO:
-            serverSetPronto(cmdMsg.getSender());
-            break;
-        case KICKPLAYER:
-            serverPlayerRemove(cmdMsg.getReceiver());
-            break;
-        case DISCONNECT:
-            serverPlayerRemove(cmdMsg.getSender());
-            listaGiocatori.remPlayer(cmdMsg.getSender());
-            break;
-        default:
-            return new MessaggioChat(-1,"comando non riconosciuto.");
-    }
-    return cmdMsg;
-}
-/**
- * Processa un messaggio di tipo "SETPRONTO" e "SETNOPRONTO"
- * impostando il thread al corretto valore
- * @param sender Chi ha inviato il messaggio
- * @param ready Se sei pronto o meno.
- */
-private void serverSetPronto(int sender){
-        Giocatore_Net giotmp = (Giocatore_Net)listaGiocatori.get(sender);
-        PlayerThread th = (PlayerThread)giotmp.getThread();
-        if(th.isReady()) th.setReady(false);
-        else
-        {
-            th.setReady(true);
-            if(allReady()) this.inizia = true;
+    private Messaggio CommandHandling(MessaggioComandi cmdMsg){
+        //TODO Completare il codice di Exit.
+        //TODO Completare il codice di AVVIAPARTITA
+        switch(cmdMsg.getComando()){
+            case SETPRONTO:
+                serverSetPronto(cmdMsg.getSender());
+                break;
+            case KICKPLAYER:
+                serverPlayerRemove(cmdMsg.getReceiver());
+                break;
+            case DISCONNECT:
+                serverPlayerRemove(cmdMsg.getSender());
+                listaGiocatori.remPlayer(cmdMsg.getSender());
+                break;
+            default:
+                return new MessaggioChat(-1,"comando non riconosciuto.");
         }
-}
+        return cmdMsg;
+    }
+    /**
+     * Processa un messaggio di tipo "SETPRONTO" e "SETNOPRONTO"
+     * impostando il thread al corretto valore
+     * @param sender Chi ha inviato il messaggio
+     * @param ready Se sei pronto o meno.
+     */
+    private void serverSetPronto(int sender){
+            Giocatore_Net giotmp = (Giocatore_Net)listaGiocatori.get(sender);
+            PlayerThread th = (PlayerThread)giotmp.getThread();
+            if(th.isReady()) th.setReady(false);
+            else
+            {
+                th.setReady(true);
+                if(allReady()) this.inizia = true;
+            }
+    }
 
-/**
- * Processa un messaggio che implica la rimozione di un giocatore.
- * Questa funzione è valida anche per un messaggio di tipo "Kickplayer" e "Disconnect"
- * @param index Il giocatore da eliminare.
- */
-private void serverPlayerRemove(int index){
-        Giocatore_Net tempgioc = (Giocatore_Net)listaGiocatori.get(index);
-        PlayerThread th = (PlayerThread)tempgioc.getThread();
-        boolean canc = false;
-        if(th.isLeader()) canc = true;
-        if(canc)
-        {
-                Giocatore_Net gtm = ((Giocatore_Net)listaGiocatori.getFirst());
-                if(!(gtm == null)){
-                    PlayerThread threadtemp = (PlayerThread)gtm.getThread();
-                    threadtemp.setLeader(true);
-                    try {
-                        Server.BroadcastMessage(MessaggioComandi.creaMsgLeader(threadtemp.getPlayerIndex()), gtm.getClientOut());
-                    } catch (IOException ex) {
-                        System.err.println("Errore nell'invio leader "+ex.getMessage());
+    /**
+     * Processa un messaggio che implica la rimozione di un giocatore.
+     * Questa funzione è valida anche per un messaggio di tipo "Kickplayer" e "Disconnect"
+     * @param index Il giocatore da eliminare.
+     */
+    private void serverPlayerRemove(int index){
+            Giocatore_Net tempgioc = (Giocatore_Net)listaGiocatori.get(index);
+            PlayerThread th = (PlayerThread)tempgioc.getThread();
+            boolean canc = false;
+            if(th.isLeader()) canc = true;
+            if(canc)
+            {
+                    Giocatore_Net gtm = ((Giocatore_Net)listaGiocatori.getFirst());
+                    if(!(gtm == null)){
+                        PlayerThread threadtemp = (PlayerThread)gtm.getThread();
+                        threadtemp.setLeader(true);
+                        try {
+                            Server.BroadcastMessage(MessaggioComandi.creaMsgLeader(threadtemp.getPlayerIndex()), gtm.getClientOut());
+                        } catch (IOException ex) {
+                            System.err.println("Errore nell'invio leader "+ex.getMessage());
+                        }
                     }
-                }
-        }
-        attendiConnessioni.setNumeroGiocatori(listaGiocatori.getSize());
-        try {
-            tempgioc.closeSocket();
-        } catch (Exception ex) {
-            System.err.println("Errore socket Disconnessione: "+ex.getMessage());
-        }
-}
-
-/**
- * Controlla se tutti i giocatori hanno premuto ready
- * @return True se tutti sono pronti, false altrimenti
- */
-private boolean allReady(){
-    if(listaGiocatori.getSize() < 3) return false;
-    for(int i=0;i<listaGiocatori.getSize();i++){
-        Giocatore_Net temp = (Giocatore_Net)listaGiocatori.get(i);
-        if(temp == null) continue;
-        PlayerThread th = (PlayerThread)temp.getThread();
-        if(th.isReady()) continue;
-        return false;
+            }
+            attendiConnessioni.setNumeroGiocatori(listaGiocatori.getSize());
+            try {
+                tempgioc.closeSocket();
+            } catch (Exception ex) {
+                System.err.println("Errore socket Disconnessione: "+ex.getMessage());
+            }
     }
-    return true;
-}
+
+    /**
+     * Controlla se tutti i giocatori hanno premuto ready
+     * @return True se tutti sono pronti, false altrimenti
+     */
+    private boolean allReady(){
+        if(listaGiocatori.getSize() < 3) return false;
+        for(int i=0;i<listaGiocatori.getSize();i++){
+            Giocatore_Net temp = (Giocatore_Net)listaGiocatori.get(i);
+            if(temp == null) continue;
+            PlayerThread th = (PlayerThread)temp.getThread();
+            if(th.isReady()) continue;
+            return false;
+        }
+        return true;
+    }
 
 }

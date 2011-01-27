@@ -1,6 +1,14 @@
 package risicammaraServer.turnManage;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import risicammaraClient.Bonus_t;
+import risicammaraClient.territori_t;
 import risicammaraJava.deckManage.Carta;
 import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
@@ -14,31 +22,30 @@ import risicammaraServer.messaggiManage.MessaggioListaPlayers;
 import risicammaraServer.messaggiManage.MessaggioPlancia;
 import risicammaraServer.messaggiManage.messaggio_t;
 import risicammaraServer.Server;
+import risicammaraServer.messaggiManage.MessaggioDichiaraAttacco;
+import risicammaraServer.messaggiManage.MessaggioGiocaTris;
+import risicammaraServer.messaggiManage.MessaggioRisultatoDado;
 import risicammaraServer.messaggiManage.MessaggioSpostaArmate;
+import risicammaraServer.messaggiManage.comandi_t;
 
 /**
  * Questa classe serve per rappresentare la successione dei turni di gioco.
- * Nella pratica rappresenta la partita e lo svolgersi degli eventi.
+ * Nella pratica rappresenta il controllo dei messaggi per la partita in base
+ * allo svolgersi degli eventi.
  * @author Sten_Gun
  */
 public class SuccessioneTurni {
+    /** Coda che raccoglie tutti i messaggi che vanno processati dal server.*/
     private CodaMsg coda;
+    /** La lista che rappresenta i giocatori presenti.*/
     private ListaPlayers listaGiocatori;
-    /**
-     * L'oggetto che conterrà la situazione attuale della partita.
-     */
+    /** L'oggetto che conterrà la situazione attuale della partita. */
     protected Partita partita;
-    /**
-     * Serve per stabilire se è presente un vincitore
-     */
+    /** Serve per stabilire se è presente un vincitore */
     protected boolean vincitore;
-    /**
-     * Serve per stabilre se sta iniziando un nuovo giro dei giocatori.
-     */
+    /** Serve per stabilre se sta iniziando un nuovo giro dei giocatori. */
     protected boolean nuovogiro; // Per vedere se devo controllare le condizioni di vittoria.
-    /**
-     * Stabilisce se il giocatore ha conquistato uno o più territori nel suo turno.
-     */
+    /** Stabilisce se il giocatore ha conquistato uno o più territori nel suo turno. */
     protected boolean conquistato; //Se il giocatore ha conquistato almeno un territorio
 
     /**
@@ -94,8 +101,9 @@ public class SuccessioneTurni {
 
     /**
      * Controlla la validità del messaggio in base al tipo (se è un messaggio di chat
-     * viene mandato a tutti) e in base al giocatore di turno (se è un messaggio di un
-     * giocatore diverso da quello che sta giocando devo ignorarlo completamente).
+     * viene mandato a tutti ma ritorna falso, in quanto non è un messaggio di partita)
+     * e in base al giocatore di turno (se è un messaggio di un giocatore diverso
+     * da quello che sta giocando devo ignorarlo completamente).
      * @param msgReceived il messaggio ricevuto;
      * @return true se il messaggio è valido,false altrimenti.
      */
@@ -110,9 +118,7 @@ public class SuccessioneTurni {
             }
             return false;
         }
-        //se è un messaggio che non proviene dal giocatore di turno return false; (non è un messaggio di partita del giocatore)
         if(msgReceived.getSender() != partita.getGiocatoreTurnoIndice()) return false;
-        //se è un messaggio che proviene dal giocatore di turno return true;
         return true;
     }
 
@@ -154,12 +160,47 @@ public class SuccessioneTurni {
                 }
                 return;
             case ATTACCO:
-                // Se il messaggio non è permesso RETURN.
                 if(!parseMsgAttacco(msgReceived)) return;
-                // Quando il messaggio è comando può essere solo il passa fase, quindi break.
-                if(msgReceived.getType() != messaggio_t.DICHIARAATTACCO) break;
-
-
+                // I messaggi  comando sono della fase "attaccando" e vengono accettati
+                //in automatico dalla funzione precedente se si sta attaccando.
+                //Sono praticamente sicuro che se entro qui e non sto attaccando allora
+                //Passerò la fase e non farò altro.
+                if(msgReceived.getType() != messaggio_t.DICHIARAATTACCO){
+                    MessaggioComandi cmd = (MessaggioComandi)msgReceived;
+                        switch(cmd.getComando()){
+                            case PASSAFASE:
+                                break;
+                            case LANCIADADO:
+                                risolviAttacco();
+                                if(partita.getArmateTerrAttaccante()>1) return;
+                            case RITIRATI:
+                                partita.setAttacking(false);
+                                partita.setTerritorioAttaccante(null);
+                                partita.setTerritorioAttaccato(null);
+                                partita.setGiocattaccato(-1);
+                                try {
+                                    Server.SpedisciMsgTutti(MessaggioComandi.creaMsgAttaccoterminato(partita.getGiocatoreTurnoIndice()),
+                                            listaGiocatori,
+                                            -1);
+                                } catch (IOException ex) {
+                                    System.err.println("Errore nell'invio messaggio attacco Terminato: "+ex.getMessage());
+                                }
+                            default:
+                                return;
+                        }
+                }
+                MessaggioDichiaraAttacco msgatt = (MessaggioDichiaraAttacco)msgReceived;
+                partita.setTerritorioAttaccante(msgatt.getTerritorio_attaccante());
+                partita.setTerritorioAttaccato(msgatt.getTerritorio_difensore());
+                partita.setAttacking(true);
+                try {
+                    Server.SpedisciMsgTutti(MessaggioComandi.creaMsgIniziaAttacco(partita.getGiocatoreTurnoIndice(),
+                            partita.getGiocattaccato()),
+                            listaGiocatori,
+                            -1);
+                } catch (IOException ex) {
+                    System.err.println("Errore nell'invio del messaggio di inizio attacco: "+ex.getMessage());
+                }
                 //Dichiara di attaccare un territorio e gestisce tutte la
                 //parte di attacco. Finché il giocatore non dichiara di aver finito l'attacco
                 //si continua in questa fase, altrimenti si passa alla prossima.
@@ -206,6 +247,76 @@ public class SuccessioneTurni {
         }
     }
 
+    //TODO creare nuovo oggetto di tipo Attacco che fa tutto quello di cui si ha bisogno
+    //verificando che sia utile
+    /** Risolve l'attacco effettuando il lancio dei dadi e la rimozione delle armate. */
+    private void risolviAttacco(){
+        Queue<Integer> lancidifensore = new PriorityQueue<Integer>();
+        Queue<Integer> lanciattaccante = new PriorityQueue<Integer>();
+        //--------------------------------------- difesa
+        int armdif = partita.getArmateTerrDifensore();
+        if(armdif > 2) armdif = 3;
+        for(int i=0;i<armdif;i++){
+            int lancio = partita.lanciaDado();
+            try {
+                Server.SpedisciMsgTutti(new MessaggioRisultatoDado(lancio,partita.getGiocattaccato()),
+                        listaGiocatori,
+                        -1);
+            } catch (IOException ex) {
+                System.err.println("Errore nell'invio del risultato dei dadi Difensore: "+ex.getMessage());
+            }
+            lancidifensore.offer(new Integer(lancio));
+        }
+        //-------------------------------------- attacco
+        int att = partita.getArmateTerrAttaccante() -1;
+        if(att >3) att = 3;
+        for(int i=0;i<att;i++){
+            int lancio = partita.lanciaDado();
+            try {
+                Server.SpedisciMsgTutti(new MessaggioRisultatoDado(lancio,partita.getGiocatoreTurnoIndice()),
+                        listaGiocatori,
+                        i);
+            } catch (IOException ex) {
+                System.err.println("Errore nell'invio del risultato dei dadi Attaccante: "+ex.getMessage());
+            }
+            lanciattaccante.offer(new Integer(lancio));
+        }
+        int rimuovi_att = 0;
+        int rimuovi_dif = 0;
+        while(true){
+            Integer lancioAtt = lanciattaccante.poll();
+            Integer lancioDif = lancidifensore.poll();
+            if(lancioAtt > lancioDif) rimuovi_dif++;
+            else rimuovi_att++;
+            if(lanciattaccante.isEmpty() || lancidifensore.isEmpty()) break;
+        }
+        //Rimozione delle armate
+        if(rimuovi_att != 0){
+            partita.removeArmateTerrAttaccante(rimuovi_att);
+            try {
+                Server.SpedisciMsgTutti(new MessaggioCambiaArmateTerritorio(partita.getGiocatoreTurnoIndice(),
+                        partita.getArmateTerrAttaccante(),
+                        partita.getTerritorioAttaccante()),
+                        listaGiocatori,
+                        -1);
+            } catch (IOException ex) {
+                System.err.println("Errore nella notifica di cambio armate territorio attaccante: "+ex.getMessage());
+            }
+        }
+        if(rimuovi_dif != 0){
+            partita.removeArmateTerrDifensore(rimuovi_dif);
+            try{
+            Server.SpedisciMsgTutti(new MessaggioCambiaArmateTerritorio(partita.getGiocattaccato(),
+                    partita.getArmateTerrDifensore(),
+                    partita.getTerritorioAttaccato()),
+                    listaGiocatori,
+                    -1);
+            }
+            catch (IOException ex){
+                System.err.println("Errore nella notifica di cambio armate territorio difensore: "+ex.getMessage());
+            }
+        }
+    }
     /**
      * Stabilisce se il messaggio è valido per la fase SPOSTAMENTO.
      * @param msg il messaggio da processare
@@ -235,9 +346,25 @@ public class SuccessioneTurni {
     private boolean parseMsgAttacco(Messaggio msg){
         switch(msg.getType()){
             case COMMAND:
+                if(partita.isAttacking()) return parseCmdAttaccando((MessaggioComandi)msg);
                 return parseCommandAttacco((MessaggioComandi)msg);
             case DICHIARAATTACCO:
+                if(partita.isAttacking()) return false;
                 return true;
+            default:
+                return false;
+        }
+    }
+    /**
+     * Stabilisce se un Comando è accettabile per l'attacco vero e proprio oppure
+     * no. Vengono accettati:
+     * -Comando RITIRATI
+     * -Comando LANCIADADI
+     * @param msg il comando da analizzare
+     * @return vero se è accettabile, falso altrimenti.
+     */
+    private boolean parseCmdAttaccando(MessaggioComandi msg){
+        switch(msg.getComando()){
             default:
                 return false;
         }
@@ -260,8 +387,39 @@ public class SuccessioneTurni {
      * @param msg messaggio contenente i dati del tris.
      * @return numero delle armate ottenute dal tris.
      */
-    //TODO completare la funzione che calcola il numero di armate bonus ottenute dai tris
     private int getBonusFromTris(Messaggio msg){
-        return 1;
+        MessaggioGiocaTris msgTris = (MessaggioGiocaTris)msg;
+        List<territori_t> tergio = listaGiocatori.get(msg.getSender()).getListaterr();
+        int bonus = 0;
+        territori_t tuno = (territori_t)msgTris.getCarta1();
+        if(tergio.contains(tuno)) bonus += 2;
+        territori_t tdue = (territori_t)msgTris.getCarta2();
+        if(tergio.contains(tdue)) bonus +=2;
+        territori_t ttre = (territori_t)msgTris.getCarta3();
+        if(tergio.contains(ttre)) bonus +=2;
+        //Bonus per jolly e 2 carte uguali
+        if(        tuno.getBonus() == Bonus_t.JOLLY
+                || tdue.getBonus() == Bonus_t.JOLLY
+                || ttre.getBonus() == Bonus_t.JOLLY)
+        {
+            return 12 + bonus;
+        }
+        //Bonus per le carte uguali
+        if(     tuno.getBonus() == tdue.getBonus()
+                && tdue.getBonus() == ttre.getBonus())
+        {
+            switch(tuno.getBonus()){
+                case CANNONE:
+                    return 4 + bonus;
+                case FANTE:
+                    return 6 + bonus;
+                case CAVALLO:
+                    return 8 + bonus;
+                default:
+                    return 0;
+            }
+        }
+        //bonus per carte diverse
+        return 10 + bonus;
     }
 }
