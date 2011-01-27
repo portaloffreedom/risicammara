@@ -11,6 +11,19 @@ public class MessaggioComandi implements Messaggio{
     private int receiver;
 // Qua ci vanno tutti i costruttori static per ogni tipo di messaggio, in modo da
     //facilitare la vita a chi crea i messaggi.
+    public static MessaggioComandi creaMsgIniziaAttacco(int giocatorecheattacca,int giocatorecheDifende){
+        return new MessaggioComandi(comandi_t.INIZIAATTACCO, giocatorecheattacca, giocatorecheDifende);
+    }
+    public static MessaggioComandi creaMsgAttaccoterminato(int giocatorecheAttaccava){
+        return new MessaggioComandi(comandi_t.ATTACCOTERMINATO, giocatorecheAttaccava);
+    }
+    public static MessaggioComandi creaMsgLanciadado(int giocatorecheLanciaDado){
+        return new MessaggioComandi(comandi_t.LANCIADADO, giocatorecheLanciaDado);
+    }
+
+    public static MessaggioComandi creaMsgRitirati(int giocatoreCheSiRitira){
+        return new MessaggioComandi(comandi_t.RITIRATI, giocatoreCheSiRitira);
+    }
     public static MessaggioComandi creaMsgProssimaFase(int giocatoreChePassa){
         return new MessaggioComandi(comandi_t.PASSAFASE, giocatoreChePassa);
     }

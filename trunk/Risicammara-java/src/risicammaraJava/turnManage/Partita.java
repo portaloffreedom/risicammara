@@ -15,6 +15,7 @@ import risicammaraClient.territori_t;
 import risicammaraClient.tipovittoria_t;
 import risicammaraJava.boardManage.Territorio_plancia;
 import risicammaraJava.deckManage.Carta;
+import risicammaraJava.fightManage.Dado;
 
 /**
  * Questa classe ha il compito di inizializzare tutti gli oggetti che servono per
@@ -22,6 +23,8 @@ import risicammaraJava.deckManage.Carta;
  * Inizializza una Plancia di gioco
  * Assegna ad ogni giocatore dei territori "a caso"
  * prepara il mazzo per giocare.
+ * fornsice tutte le azioni necessarie a modificare l'ambiente di gioco.
+ * tiene traccia della fase corrente.
  * @author Sten_Gun
  */
 public class Partita {
@@ -32,9 +35,12 @@ public class Partita {
     private Fasi_t fasi[];
     private int fase_attuale;
     private boolean giocato_tris;
-
+    private boolean attacking;
+    private Dado dado;
+    private int giocattaccato;
+    private territori_t territorioAttaccato,territorioAttaccante;
     /**
-     * Costruttore ::Partita che inizializza tutti gli oggetti
+     * Costruttore Partita che inizializza tutti gli oggetti
      * @param listagiocatori L'oggetto che rappresenta la lista dei giocatori
      */
     public Partita(ListaPlayers listagiocatori){
@@ -42,6 +48,11 @@ public class Partita {
         this.planciadigioco = new Plancia();
         this.mazzo = new MazzoTerritori();
         this.giocato_tris = false;
+        this.attacking = false;
+        this.dado = new Dado(6);
+        this.territorioAttaccato = null;
+        this.territorioAttaccante = null;
+        this.giocattaccato = -1;
         //Distribuzione territori per i giocatori
         territori_t car;
         int numgioc = listagiocatori.getSize();
@@ -49,6 +60,10 @@ public class Partita {
         int inc = 1;
                 while(mazzo.getCard(inc)!= null){
                     Giocatore giocorrente = listagiocatori.get(gio);
+                    while(giocorrente == null){
+                        gio--;
+                        giocorrente = listagiocatori.get(gio);
+                    }
                     car = mazzo.getCard(inc);
                     inc++;
                     while((car == territori_t.Jolly1)||(car == territori_t.Jolly2)){
@@ -56,7 +71,7 @@ public class Partita {
                         inc++;
                     }
                     if(car == null) break;
-                    planciadigioco.getTerritorio(car).setProprietario(giocorrente);
+                    planciadigioco.getTerritorio(car).setProprietario(gio);
                     giocorrente.addTerr(car);
                     giocorrente.setArmatedisponibili(NumeroArmate(numgioc)-giocorrente.getNumTerritori());
                     if(gio==0) gio = numgioc-1;
@@ -71,7 +86,38 @@ public class Partita {
         this.fase_attuale = 0;
     }
 
-    //Metodi di partita
+    //Metodi di partita (informazioni)
+
+    public int getGiocattaccato() {
+        return giocattaccato;
+    }
+    public void setGiocattaccato(int giocattaccato) {
+        this.giocattaccato = giocattaccato;
+    }
+    public boolean isAttacking() {
+        return attacking;
+    }
+    public void setAttacking(boolean attacking) {
+        this.attacking = attacking;
+    }
+    public void setTerritorioAttaccato(territori_t terr){
+        this.territorioAttaccato = terr;
+        this.giocattaccato = getProprietarioTerritorio(terr);
+    }
+    public territori_t getTerritorioAttaccato(){
+        return this.territorioAttaccato;
+    }
+    public territori_t getTerritorioAttaccante() {
+        return territorioAttaccante;
+    }
+    public void setTerritorioAttaccante(territori_t territorioAttaccante) {
+        this.territorioAttaccante = territorioAttaccante;
+    }
+
+    public int getProprietarioTerritorio(territori_t ter){
+        Territorio_plancia tpla = planciadigioco.getTerritorio(ter);
+        return tpla.getProprietario();
+    }
     public int getNumeroGiocatori(){
         return listagiocatori.getSize();
     }
@@ -87,10 +133,29 @@ public class Partita {
     public void setPlayedTris(boolean value){
         giocato_tris = value;
     }
+    public void removeArmateTerrAttaccante(int armate_da_rimuovere){
+        Territorio_plancia temp = planciadigioco.getTerritorio(territorioAttaccante);
+        int tmp = temp.getArmate();
+        temp.setArmate(tmp-armate_da_rimuovere);
+    }
+    public void removeArmateTerrDifensore(int armate_da_rimuovere){
+        Territorio_plancia temp = planciadigioco.getTerritorio(territorioAttaccato);
+        int tmp = temp.getArmate();
+        temp.setArmate(tmp-armate_da_rimuovere);
+    }
     public void addArmateTerritorio(territori_t territorio,int armate){
         Territorio_plancia terpla = planciadigioco.getTerritorio(territorio);
         int armate_attuali = terpla.getArmate();
         terpla.setArmate(armate+armate_attuali);
+    }
+    public int getArmateTerrAttaccante(){
+        return getArmateTerritorio(territorioAttaccante);
+    }
+    public int getArmateTerrDifensore(){
+        return getArmateTerritorio(territorioAttaccato);
+    }
+    public int getArmateTerritorio(territori_t territorio){
+        return planciadigioco.getTerritorio(territorio).getArmate();
     }
 
     //metodi per azioni di gioco
@@ -111,7 +176,9 @@ public class Partita {
         terrarrivo.setArmate(terrarrivo.getArmate() + armate);
         terrinizio.setArmate(terrinizio.getArmate()-armate);
     }
-
+    public int lanciaDado(){
+        return dado.RollDice();
+    }
     //Metodi per le fasi
     public Fasi_t getFase(){
         return fasi[fase_attuale];
@@ -206,7 +273,11 @@ public class Partita {
         return false;
     };
 
-    @Deprecated
+    /**
+     * Restituisce la lista giocatori della partita.
+     * @deprecated La lista dei giocatori viene già gestita dal server.
+     * @return Lista giocatori attuale
+     */
     public ListaPlayers getListaGiocatori() {
         return this.listagiocatori;
     }

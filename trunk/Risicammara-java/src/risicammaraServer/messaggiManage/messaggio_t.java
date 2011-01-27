@@ -59,28 +59,34 @@ public enum messaggio_t {
     ERROR,      //Il pacchetto ricevuto è una notifica di errore
 
     //------------ Messaggi di partita e svolgimento partita
+    RISULTATODADO,      //Il server invia il risultato del lancio di UN dado
     /**
      * Pacchetto che indica uno spostamento di armate da parte dei giocatori.
+     * @see risicammaraServer.messaggiManage.MessaggioSpostaArmate
      */
     SPOSTAARMATE,       //Sposta le armate
     /**
      * Messaggio che indica una dichiarazione di attacco da parte del giocatore
      * di turno ad un altro giocatore.
+     * @see risicammaraServer.messaggiManage.MessaggioDichiaraAttacco
      */
     DICHIARAATTACCO, // Dichiara un attacco
     /**
      * Messaggio che indica l'utilizzo di un tris per ottenere un bonus armate.
+     * @see risicammaraServer.messaggiManage.MessaggioGiocaTris
      */
     GIOCATRIS,  //Messaggio che indica la giocata di un tris
     /**
      * Messaggio inviato dal server per dare la plancia di gioco a tutti i giocatori
      * che iniziano la partita.
+     * @see risicammaraServer.messaggiManage.MessaggioPlancia
      */
     PLANCIA,    //Messaggio plancia per inizio partita
     /**
      * Messaggio inviato dal server che fornisce la lista dei giocatori a tutti
      * i giocanti.
      * <b> WARNING </b> probabilmente è inutile.
+     * @deprecated
      */
     PLAYERLIST, //Messaggio lista iniziale per tutti i giocatori
     /**
@@ -104,6 +110,7 @@ public enum messaggio_t {
     AGGIORNADATIGIOCATORE,  //Il pacchetto ricevuto notifica un cambiamento nei dati giocatore
     /**
      * Pacchetto che avvisa i giocatori di un avvenuto cambio nella lista giocatori.
+     * @deprecated Inutilizabile (non serve);
      */
     AGGIORNALISTAGIOCATORI; //Il pacchetto ricevuto notifica un aggiornamento della lista dei giocatori
 
