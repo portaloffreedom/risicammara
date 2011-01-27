@@ -68,11 +68,11 @@ public class MessaggioComandi implements Messaggio{
     }
     /**
      * Costruisce un messaggioComandi per una NuovaPartita
-     * @param giocatoreCheCrea Chi fa partire il server prima che siano tutti pronti (se non sei il lobby master il server rifiuterà il messaggio)
-     * @return l'oggetto MessaggioComandi con comando NUOVAPARTITA
+     * @param chi_invia Chi fa partire il server prima che siano tutti pronti (se non sei il lobby master il server rifiuterà il messaggio)
+     * @return l'oggetto MessaggioComandi con comando AVVIAPARTITA
      */
-    public static MessaggioComandi creaMsgNuovaPartita(int giocatoreCheCrea){
-        return new MessaggioComandi(comandi_t.NUOVAPARTITA, giocatoreCheCrea);
+    public static MessaggioComandi creaMsgAvviaPartita(int chi_invia){
+        return new MessaggioComandi(comandi_t.AVVIAPARTITA, chi_invia);
     }
     /**
      * Ritorna un nuovo messaggio comando EXIT

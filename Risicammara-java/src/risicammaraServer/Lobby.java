@@ -7,6 +7,8 @@ package risicammaraServer;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import risicammaraClient.Colore_t;
 import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraServer.messaggiManage.Messaggio;
@@ -149,6 +151,11 @@ public class Lobby {
                         }
             }
         }
+        try {
+            Server.SpedisciMsgTutti(MessaggioComandi.creaMsgAvviaPartita(-1), listaGiocatori, -1);
+        } catch (IOException ex) {
+            Logger.getLogger(Lobby.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return listaGiocatori;
     }
     
@@ -172,7 +179,7 @@ public class Lobby {
     */
 private Messaggio CommandHandling(MessaggioComandi cmdMsg){
     //TODO Completare il codice di Exit.
-    //TODO Completare il codice di NUOVAPARTITA
+    //TODO Completare il codice di AVVIAPARTITA
     switch(cmdMsg.getComando()){
         case SETPRONTO:
             serverSetPronto(cmdMsg.getSender());
@@ -242,6 +249,7 @@ private void serverPlayerRemove(int index){
  * @return True se tutti sono pronti, false altrimenti
  */
 private boolean allReady(){
+    if(listaGiocatori.getSize() < 3) return false;
     for(int i=0;i<listaGiocatori.getSize();i++){
         Giocatore_Net temp = (Giocatore_Net)listaGiocatori.get(i);
         if(temp == null) continue;
