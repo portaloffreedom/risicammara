@@ -8,9 +8,11 @@ package PacchettoGrafico;
 import javax.swing.LookAndFeel;
 
 /**
- *
+ * Prova per creare un look and feel personalizzato (fallita miseramente). Non
+ * Utilizzare.
  * @author matteo
  */
+@Deprecated
 public class RisicammaraLookAndFeel extends LookAndFeel{
 
     @Override
@@ -20,7 +22,7 @@ public class RisicammaraLookAndFeel extends LookAndFeel{
 
     @Override
     public String getID() {
-        return "checazzovuoi";
+        return "checosavuoi?";
     }
 
     @Override
