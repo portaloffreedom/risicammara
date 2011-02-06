@@ -1,12 +1,9 @@
 package risicammaraServer.turnManage;
 
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import risicammaraClient.Bonus_t;
 import risicammaraClient.territori_t;
 import risicammaraJava.deckManage.Carta;
@@ -26,7 +23,6 @@ import risicammaraServer.messaggiManage.MessaggioDichiaraAttacco;
 import risicammaraServer.messaggiManage.MessaggioGiocaTris;
 import risicammaraServer.messaggiManage.MessaggioRisultatoDado;
 import risicammaraServer.messaggiManage.MessaggioSpostaArmate;
-import risicammaraServer.messaggiManage.comandi_t;
 
 /**
  * Questa classe serve per rappresentare la successione dei turni di gioco.

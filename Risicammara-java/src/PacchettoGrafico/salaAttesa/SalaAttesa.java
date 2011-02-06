@@ -163,6 +163,10 @@ public class SalaAttesa extends JFrame implements Runnable {
                             pannello.invertiPronto(msgComando.getSender());
                             break;
 
+                        case AVVIAPARTITA:
+                            pannello.stampaMessaggioComando("Partita Avviata!");
+                            //TODO avvia la partita
+                            break;
 
                         default:
                             System.err.println("Comando non riconosciuto: "+msgComando.getComando());
