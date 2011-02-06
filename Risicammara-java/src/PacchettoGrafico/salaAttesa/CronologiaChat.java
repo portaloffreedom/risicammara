@@ -6,7 +6,6 @@
 package PacchettoGrafico.salaAttesa;
 
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +20,7 @@ public class CronologiaChat extends JLabel {
 
     private int maxRighe;
     private List<String> testoInRighe;
+    private boolean testoCambiato;
 
     @Deprecated
     public CronologiaChat(Rectangle cronologiaR) {
@@ -42,6 +42,7 @@ public class CronologiaChat extends JLabel {
     }
 
     public CronologiaChat(int maxRighe){
+        this.testoCambiato = false;
         this.maxRighe = maxRighe;
         testoInRighe = new ArrayList<String>(maxRighe+1);
         setVerticalAlignment(TOP);
@@ -70,14 +71,25 @@ public class CronologiaChat extends JLabel {
         testoCompleto = testoCompleto+"</body></html>";
 
         this.setText(testoCompleto);
+        this.testoCambiato = true;
     }
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
         Rectangle bordi = this.getBounds();
-        Rectangle bordiNuovi = new Rectangle(0, bordi.height,0,0);
-        this.scrollRectToVisible(bordiNuovi);
+        
+        if (testoCambiato == true){
+            System.out.println("y:"+bordi.y+"\theight:"+bordi.height);
+            Rectangle bordiNuovi = new Rectangle(0, bordi.height,0,0);
+            this.scrollRectToVisible(bordiNuovi);
+            testoCambiato = false;
+        }
+
+
+        //konsoleScorrimento.getViewport().toViewCoordinates(new Point(0, bordi.height));
+        //konsoleScorrimento.getViewport().setViewPosition(new Point(0, -bordi.y));
+        //this.setBounds(0, -9999999, bordi.height, bordi.height);
     }
 
 
