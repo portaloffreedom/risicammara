@@ -7,7 +7,6 @@ package risicammaraClient;
 
 import PacchettoGrafico.CollegatiPartita;
 import PacchettoGrafico.PannelloSpeciale;
-import PacchettoGrafico.RisicammaraLookAndFeel;
 import PacchettoGrafico.salaAttesa.SalaAttesa;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -136,11 +135,11 @@ public class Client implements WindowListener, Runnable {
 
         try {
             if (!laf.equals("")) {
-                if (laf.equals("personal")) {
-                    UIManager.setLookAndFeel(new RisicammaraLookAndFeel());
-                } else {
+                if (laf.equalsIgnoreCase("kde"))
+                    System.err.println(laf+" non ancora implementato");
+                else
                     UIManager.setLookAndFeel(laf);
-                }
+                
             } else {
                 if (System.getProperties().getProperty("os.name").equalsIgnoreCase("linux")) {
                     UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
@@ -210,7 +209,7 @@ public class Client implements WindowListener, Runnable {
         finestra.addWindowListener(this);
         finestra.setVisible(true);
 
-        if (this.debug == true) {
+        if (Client.debug == true) {
             System.out.println("Poteri della SuperMucca attivati ;)");
             PoteriDellaSuperMucca dio = new PoteriDellaSuperMucca(this.partita);
         }
