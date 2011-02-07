@@ -221,6 +221,14 @@ public class SuccessioneTurni {
                     if(ctmp != null) listaGiocatori.get(partita.getGiocatoreTurnoIndice()).addCard(ctmp);
                 }
                 partita.ProssimoGiocatore();
+                if(partita.isNuovogiro()){
+                    int vitt = partita.Vincitore();
+                    if(vitt >=0){
+                        //TODO inviare il messaggio di vittoria a tutti
+                        System.out.println("Il vincitore è il giocatore "+vitt);
+                        return;
+                    }
+                }
                 int gioturno = partita.getGiocatoreTurnoIndice();
                 try {
                     Server.SpedisciMsgTutti(MessaggioComandi.creaMsgTurnOfPlayer(gioturno), listaGiocatori, gioturno);
@@ -242,9 +250,6 @@ public class SuccessioneTurni {
             System.err.println("Errore nell'invio del messaggio di CambioFase");
         }
     }
-
-    //TODO creare nuovo oggetto di tipo Attacco che fa tutto quello di cui si ha bisogno
-    //verificando che sia utile
     /** Risolve l'attacco effettuando il lancio dei dadi e la rimozione delle armate. */
     private void risolviAttacco(){
         Queue<Integer> lancidifensore = new PriorityQueue<Integer>();
