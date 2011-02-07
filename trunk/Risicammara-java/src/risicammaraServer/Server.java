@@ -46,6 +46,7 @@ public static void main(String[] args) {
         listaGiocatori = server.start();
         boolean vincitore = false;
         SuccessioneTurni svolgimento = new SuccessioneTurni(listaGiocatori,coda);
+        svolgimento.start();
     }
 
 

@@ -4,8 +4,8 @@
  */
 
 package risicammaraJava.boardManage;
+import java.io.Serializable;
 import risicammaraClient.Continente_t;
-import risicammaraJava.playerManage.Giocatore;
 import risicammaraClient.territori_t;
 
 /**
@@ -13,7 +13,7 @@ import risicammaraClient.territori_t;
  * le operazioni che è possibile fare su di esso.
  * @author stengun
  */
-public class Territorio_plancia {
+public class Territorio_plancia implements Serializable{
 
     private territori_t territorio;
     private int armate_presenti;

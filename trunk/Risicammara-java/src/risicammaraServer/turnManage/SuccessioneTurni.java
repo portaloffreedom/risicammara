@@ -69,12 +69,6 @@ public class SuccessioneTurni {
         } catch (IOException ex) {
             System.err.println("Errore nell'invio della Plancia a tutti i giocatori "+ex.getMessage());
         }
-
-        try {
-            Server.SpedisciMsgTutti(new MessaggioListaPlayers(listaGiocatori), listaGiocatori, -1);
-        } catch (IOException ex) {
-            System.err.println("Errore nell'invio della ListaGiocatori a tutti i client: "+ex.getMessage());
-        }
         
         //Fase pre partita in cui tutti i giocatori mettono le loro armate preliminari nei territori.
         //Ogni giocatore a turno mette 3 armate dove vuole, il turno poi passa al prossimo giocatore.
