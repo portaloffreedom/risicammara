@@ -5,7 +5,6 @@
 
 package risicammaraJava.playerManage;
 import java.io.Serializable;
-import java.lang.IndexOutOfBoundsException;
 import java.util.ArrayList;
 import risicammaraClient.Colore_t;
 /**
@@ -29,6 +28,18 @@ public class ListaPlayers implements Serializable {
         listaPlayers.trimToSize();
         this.nullnumber = MAXPLAYERS;
     }
+
+    /**
+     * Crea una lista copia della lista passata come parametro
+     * @param listaGiocatori lista sorgente
+     */
+    protected ListaPlayers (ListaPlayers listaGiocatori) {
+        this();
+        for (Giocatore giocatore : listaPlayers) {
+            this.addPlayer(giocatore);
+        }
+    }
+
 
     /**
      * Richiede il primo giocatore non nullo partendo dall'inizio.
@@ -56,7 +67,7 @@ public class ListaPlayers implements Serializable {
      * @param player L'oggetto giocatore da inserire in lista
      * @return
      */
-    public int addPlayer(Giocatore player){
+    public final int addPlayer(Giocatore player){
         int index = listaPlayers.indexOf(null);
         if(index < 0) {
             throw new IndexOutOfBoundsException();

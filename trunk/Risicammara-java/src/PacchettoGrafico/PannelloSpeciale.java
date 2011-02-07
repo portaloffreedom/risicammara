@@ -12,7 +12,9 @@ import java.awt.Point;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import javax.swing.JPanel;
-import risicammaraJava.turnManage.Partita;
+import risicammaraClient.Obbiettivi_t;
+import risicammaraJava.boardManage.Plancia;
+import risicammaraJava.playerManage.ListaPlayers;
 
 
 /**
@@ -21,7 +23,9 @@ import risicammaraJava.turnManage.Partita;
  */
 public class PannelloSpeciale extends JPanel{
 
-    private Partita partita;
+    private ListaGiocatoriClient listaGiocatori;
+    private int indexGiocatore;
+    private Plancia plancia;
 
     private Dimension dimensioni;
     private BarraSuperiore barra;
@@ -31,9 +35,10 @@ public class PannelloSpeciale extends JPanel{
     private int durataFrame;
     boolean ridimensionata;
 
-    public PannelloSpeciale(int frameRateMassimo, Partita partita) {
+    public PannelloSpeciale(int frameRateMassimo, Plancia plancia, ListaPlayers listaGiocatori, int indexGiocatore, Obbiettivi_t mioObbietivo) {
         super();
-        this.partita= partita;
+        this.listaGiocatori = new ListaGiocatoriClient(listaGiocatori, indexGiocatore, mioObbietivo);
+        this.plancia = plancia;
 
         this.addComponentListener(new AscoltatorePannello(this));
         dimensioni = new Dimension();
@@ -43,7 +48,7 @@ public class PannelloSpeciale extends JPanel{
         this.durataFrame = (int) ((1.0/frameRateMassimo)*1000);
 
         this.barra = new BarraSuperiore(dimensioni, this, 60);
-        this.menuGiocatore = new MenuGiocatore(dimensioni, partita);
+        this.menuGiocatore = new MenuGiocatore(dimensioni, this.listaGiocatori);
         this.barra.addCarteActionListener(null);
         this.barra.addGiocatoreActionListener(menuGiocatore);
 

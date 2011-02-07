@@ -15,6 +15,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import javax.swing.JFrame;
+import risicammaraClient.Client;
+import risicammaraClient.Obbiettivi_t;
 import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraServer.messaggiManage.*;
@@ -32,9 +34,9 @@ public class SalaAttesa extends JFrame implements Runnable {
     private Socket server;
     private ObjectOutputStream scriviServer;
     private ObjectInputStream  leggiServer;
-    /** Variabile che serve per decidere quando deve smettere la sala d'attesa e
-     * cominciare la partita */
-    private boolean lobby;
+    /** Riferimento al Client: unico scopo fare partire la fase successiva di gioco */
+    private Client meStesso;
+
     PannelloSalaAttesa pannello;
 
     //roba ricevuta dal sever
@@ -43,11 +45,10 @@ public class SalaAttesa extends JFrame implements Runnable {
     /** Intera lista dei giocatori */
     ListaPlayers listaGiocatori;
 
-    public SalaAttesa(Socket server) {
+    public SalaAttesa(Socket server, Client meStesso) {
         super("Sala d'Attesa");
         this.server=server;
-        //this.leader=leader;
-        this.lobby = true; //imposta lo "stato" come lobby
+        this.meStesso = meStesso;
 
         this.indexGiocatore = -2;
         this.listaGiocatori = null;
@@ -80,7 +81,7 @@ public class SalaAttesa extends JFrame implements Runnable {
         
         Messaggio arrivo = null;
 
-        while (lobby) {
+        while (true) {
             try {
                 arrivo = (Messaggio) leggiServer.readObject();
             } catch (IOException ex) {
@@ -165,7 +166,7 @@ public class SalaAttesa extends JFrame implements Runnable {
 
                         case AVVIAPARTITA:
                             pannello.stampaMessaggioComando("Partita Avviata!");
-                            //TODO avvia la partita
+                            this.avviaPartita();
                             break;
 
                         default:
@@ -197,6 +198,23 @@ public class SalaAttesa extends JFrame implements Runnable {
         MessaggioConfermaNuovoGiocatore msg = (MessaggioConfermaNuovoGiocatore) leggiServer.readObject();
         this.indexGiocatore = msg.getPlyIndex();
         this.listaGiocatori = msg.getPlyList();
+    }
+    
+    private void avviaPartita(){
+        this.setVisible(false);
+        MessaggioPlancia veicoloPlancia = null;
+        Obbiettivi_t mioObbiettivo = null;
+        try {
+            veicoloPlancia = (MessaggioPlancia) leggiServer.readObject();
+            mioObbiettivo = ((MessaggioObbiettivo) leggiServer.readObject()).getObj();
+        } catch (IOException ex) {
+            System.err.println("Errore nel leggere la plancia (lettura da stream): "+ex);
+            System.exit(10);
+        } catch (ClassNotFoundException ex) {
+            System.err.println("Errore nel leggere la plancia (interpretazione oggetto): "+ex);
+            System.exit(11);
+        }
+        meStesso.inizializzaPartita(indexGiocatore, listaGiocatori, veicoloPlancia.getPlancia());
     }
 
     /** Funzione da chiamare per fare diventare leader il giocatore */

@@ -16,6 +16,8 @@ import java.net.Socket;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import risicammaraJava.boardManage.Plancia;
+import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraJava.turnManage.Partita;
 
 //TODO Stampare un messaggio: "ho cambiato nick"
@@ -162,20 +164,19 @@ public class Client implements WindowListener, Runnable {
      * Fa partire il client costruito.
      */
     public void run() {
-        //TODO dialogo di "crea partita"
+        //TODO dialogo di "crea inizializzaPartita"
         this.collegatiPartita();
     }
 
     public void collegatiPartita() {
         CollegatiPartita dialogo = new CollegatiPartita(this, this.porta);
-        //System.out.println("8===D");
     }
 
     public void salaAttesa(Socket server) {
         this.server = server;
 
 
-        SalaAttesa finestraSalaAttesa = new SalaAttesa(server);
+        SalaAttesa finestraSalaAttesa = new SalaAttesa(server, this);
         Thread salaAttesa = new Thread(finestraSalaAttesa);
         salaAttesa.start();
 
@@ -187,20 +188,18 @@ public class Client implements WindowListener, Runnable {
         listaGiocatori.addPlayer("Matteo", Colore_t.GIALLO);
         listaGiocatori.addPlayer("Mandingo", Colore_t.NERO);
 
-        this.inizializzaPartita(new Partita(listaGiocatori));
+        this.inizializzaPartitaPluffete(new Partita(listaGiocatori));
         /*
          */
 
     }
 
-    public void inizializzaPartita(Partita partita) {
-
-        this.partita = partita;
-
+    public void inizializzaPartita (int indexgiocatore, ListaPlayers listaGiocatori, Plancia plancia){
+        
         JFrame finestra = new JFrame("Risicammara");
         finestra.setMinimumSize(new Dimension(800, 400));
         Container contestoFinestra = finestra.getContentPane();
-        this.pannello = new PannelloSpeciale(60, this.partita);
+        this.pannello = new PannelloSpeciale(60, plancia, listaGiocatori, indexgiocatore, Obbiettivi_t.ROSSO);
 
         finestra.setBounds(200, 180, 200, 180);
         contestoFinestra.add(pannello);
@@ -209,11 +208,13 @@ public class Client implements WindowListener, Runnable {
         finestra.addWindowListener(this);
         finestra.setVisible(true);
 
+        /*
         if (Client.debug == true) {
             System.out.println("Poteri della SuperMucca attivati ;)");
             PoteriDellaSuperMucca dio = new PoteriDellaSuperMucca(this.partita);
         }
-
+         */
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="ascoltatore finestre">
