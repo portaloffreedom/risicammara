@@ -23,13 +23,13 @@ public class MenuGiocatore implements ActionListener, Elemento_2DGraphics {
     private Dimension dimensioni;
     private boolean visibile;
 
-    private Partita partita;
+    private ListaGiocatoriClient listaGiocatori;
 
 
-    public MenuGiocatore(Dimension dimensioni, Partita partita) {
+    public MenuGiocatore(Dimension dimensioni, ListaGiocatoriClient listaGiocatori) {
         this.dimensioni=dimensioni;
         this.visibile=false;
-        this.partita=partita;
+        this.listaGiocatori = listaGiocatori;
 
         this.rettangolo = new Rectangle(5, 55, 120, 70);
     }
@@ -42,7 +42,7 @@ public class MenuGiocatore implements ActionListener, Elemento_2DGraphics {
             graphics2D.setColor(Color.red);
             graphics2D.fill(rettangolo);
             graphics2D.setColor(Color.black);
-            new TestoACapo(graphics2D, dimensioni, rettangolo, partita.getGiocatoreDiTurno().getObbiettivo()
+            new TestoACapo(graphics2D, dimensioni, rettangolo, listaGiocatori.meStesso().getObbiettivo()
                     .toString()).disegna(graphics2D);
             //graphics2D.drawString("Tutti gli uomini del\n presidente", this.bordo+5, this.distanzaSuperiore+15);
             
