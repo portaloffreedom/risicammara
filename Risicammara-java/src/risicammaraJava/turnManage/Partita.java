@@ -36,6 +36,7 @@ public class Partita {
     private int fase_attuale;
     private boolean giocato_tris;
     private boolean attacking;
+    private boolean nuovogiro;
     private Dado dado;
     private int giocattaccato;
     private territori_t territorioAttaccato,territorioAttaccante;
@@ -53,6 +54,7 @@ public class Partita {
         this.territorioAttaccato = null;
         this.territorioAttaccante = null;
         this.giocattaccato = -1;
+        this.nuovogiro = false;
         //Distribuzione territori per i giocatori
         territori_t car;
         int numgioc = listagiocatori.getSize();
@@ -197,6 +199,7 @@ public class Partita {
             return;
         }
         giocturno = 0;
+        this.nuovogiro = true;
         return;
     };
     public void ProssimaFase(){
@@ -204,21 +207,27 @@ public class Partita {
         else fase_attuale = 0;
         return;
     };
+    public boolean isNuovogiro() {
+        return nuovogiro;
+    }
+    public void setNuovogiro(boolean nuovogiro) {
+        this.nuovogiro = nuovogiro;
+    }
 
 
-    public Giocatore Vincitore(){
-        int numpl = listagiocatori.getSize();
-        for(int i = 0;i<numpl;i++){
+    public int Vincitore(){
+        for(int i = 0;i<ListaPlayers.MAXPLAYERS;i++){
             Giocatore giocat = listagiocatori.get(i);
+            if(giocat == null) continue;
             Obbiettivi_t obj = giocat.getObbiettivo();
             if(getVictoryType(obj) == tipovittoria_t.TERRITORIALE){
-                if(Verifica_territoriale(giocat)) return giocat;
+                if(Verifica_territoriale(giocat)) return i;
             }
             if(getVictoryType(obj) == tipovittoria_t.CONTINENTALE){
-                if(Verifica_continentale(giocat)) return giocat;
+                if(Verifica_continentale(giocat)) return i;
             }
         }
-        return null;
+        return -1;
     };
 
     //METODI PRIVATI
