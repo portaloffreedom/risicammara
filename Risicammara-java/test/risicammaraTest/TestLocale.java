@@ -18,7 +18,7 @@ public class TestLocale {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Client client = new Client(Client.PORT);
+        Client client = new Client(Client.PORT,"");
         Thread clientThread = new Thread(client);
 
         Server server = new Server(Client.PORT);
