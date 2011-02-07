@@ -12,7 +12,7 @@ import risicammaraClient.Colore_t;
  * @author stengun
  */
 public class ListaPlayers implements Serializable {
-    private ArrayList <Giocatore> listaPlayers;
+    protected ArrayList <Giocatore> listaPlayers;
     private int nullnumber;
     /**
      * Indicai l massimo numero possibile di giocatori.
@@ -35,8 +35,8 @@ public class ListaPlayers implements Serializable {
      */
     protected ListaPlayers (ListaPlayers listaGiocatori) {
         this();
-        for (Giocatore giocatore : listaPlayers) {
-            this.addPlayer(giocatore);
+        for (int i=0;i<ListaPlayers.MAXPLAYERS;i++) {
+            this.addPlayer(listaGiocatori.get(i));
         }
     }
 
