@@ -1,5 +1,6 @@
 package risicammaraJava.boardManage;
 
+import java.io.Serializable;
 import risicammaraClient.territori_t;
 
 /**
@@ -7,7 +8,7 @@ import risicammaraClient.territori_t;
  * (proprietario, numero di armate presenti, i confini)
  * @author stengun
  */
-public class Plancia {
+public class Plancia implements Serializable{
     /** Un array di territorio_plancia che rappresenta tutti i territori.*/
     private Territorio_plancia[] tabellone;
     /**
