@@ -27,6 +27,11 @@ public class ListaGiocatoriClient extends ListaPlayers {
     }
 
     private void aggiungiObbiettivoMio(Obbiettivi_t obbiettivo){
-        this.get(indexGiocatore).setObj(obbiettivo);
+        Giocatore catz = listaPlayers.get(indexGiocatore);
+        if(catz == null){
+            System.out.println("Giocatore nullo: "+indexGiocatore);
+            System.exit(133);
+        }
+        catz.setObj(obbiettivo);
     }
 }
