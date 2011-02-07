@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import risicammaraClient.Bonus_t;
+import risicammaraClient.Obbiettivi_t;
 import risicammaraClient.territori_t;
 import risicammaraJava.deckManage.Carta;
 import risicammaraJava.playerManage.Giocatore;
@@ -21,6 +22,7 @@ import risicammaraServer.messaggiManage.messaggio_t;
 import risicammaraServer.Server;
 import risicammaraServer.messaggiManage.MessaggioDichiaraAttacco;
 import risicammaraServer.messaggiManage.MessaggioGiocaTris;
+import risicammaraServer.messaggiManage.MessaggioObbiettivo;
 import risicammaraServer.messaggiManage.MessaggioRisultatoDado;
 import risicammaraServer.messaggiManage.MessaggioSpostaArmate;
 
@@ -68,6 +70,17 @@ public class SuccessioneTurni {
             Server.SpedisciMsgTutti(new MessaggioPlancia(partita.getPlancia()), listaGiocatori, -1);
         } catch (IOException ex) {
             System.err.println("Errore nell'invio della Plancia a tutti i giocatori "+ex.getMessage());
+        }
+        //Assegna gli obbiettivi ai giocatori
+        try {
+            for(int i=0;i<ListaPlayers.MAXPLAYERS;i++){
+                Giocatore_Net gi = (Giocatore_Net)listaGiocatori.get(i);
+                if(gi == null) continue;
+                Server.BroadcastMessage(new MessaggioObbiettivo(gi.getObbiettivo())
+                                        , gi.getClientOut());
+            }
+        } catch (IOException ex) {
+            System.err.println("Errore nell'invio della ListaGiocatori a tutti i client: "+ex.getMessage());
         }
         
         //Fase pre partita in cui tutti i giocatori mettono le loro armate preliminari nei territori.

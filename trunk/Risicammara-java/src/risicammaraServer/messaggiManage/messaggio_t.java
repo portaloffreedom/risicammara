@@ -109,6 +109,12 @@ public enum messaggio_t {
      */
     AGGIORNADATIGIOCATORE,  //Il pacchetto ricevuto notifica un cambiamento nei dati giocatore
     /**
+     * Il giocatore che riceve questo messaggio ha coem obbiettivo quello
+     * assegnato dal server. Solo il server può inviare questo messaggio.
+     * @see risicammaraServer.messaggiManage.MessaggioObbiettivo
+     */
+    AGGIORNAOBJGIOCATORE, //Aggiorna l'obbiettivo.
+    /**
      * Pacchetto che avvisa i giocatori di un avvenuto cambio nella lista giocatori.
      * @deprecated Inutilizabile (non serve);
      */
