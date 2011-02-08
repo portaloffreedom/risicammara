@@ -13,6 +13,7 @@ import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraJava.turnManage.Partita;
 import risicammaraServer.CodaMsg;
 import risicammaraServer.Giocatore_Net;
+import risicammaraServer.PlayerThread;
 import risicammaraServer.messaggiManage.Messaggio;
 import risicammaraServer.messaggiManage.MessaggioCambiaArmateTerritorio;
 import risicammaraServer.messaggiManage.MessaggioComandi;
@@ -87,7 +88,6 @@ public class SuccessioneTurni {
         //Ogni giocatore a turno mette 3 armate dove vuole, il turno poi passa al prossimo giocatore.
         //Questo ciclo finisce quando tutti i giocatori non hanno più armate da mettere. (Se il prossimo giocatore non ha armate si termina)
 
-
         //Ciclo dei turni
         while(!vincitore){
             Messaggio msgReceived = coda.get();
@@ -132,15 +132,35 @@ public class SuccessioneTurni {
      * @param msgReceived il messaggio ricevuto
      */
     private void cicloFasi(Messaggio msgReceived){
-        Giocatore gio = partita.getGiocatoreDiTurno();
+        int prossimo = -1;
+        int gioint = partita.getGiocatoreTurnoIndice();
+        Giocatore_Net gio = (Giocatore_Net)partita.getGiocatoreDiTurno();
+        PlayerThread pthread = (PlayerThread)gio.getThread();
+
+
         switch(partita.getFase()){
+            case PREPARTITA:
+                if(msgReceived.getType()!=messaggio_t.CAMBIAARMATETERRITORIO) return;
+                MessaggioCambiaArmateTerritorio mss = (MessaggioCambiaArmateTerritorio)msgReceived;
+                partita.addArmateTerritorio(mss.getTerritorio(), 1);
+                int armatt = gio.getArmateperturno();
+                gio.setArmatedisponibili(armatt-1);
+                pthread.incnumar();
+                if(pthread.isMustpass()){
+                    partita.ProssimoGiocatore();
+                    prossimo = partita.getGiocatoreTurnoIndice();
+                    Giocatore tmp = partita.getGiocatoreDiTurno();
+                    spedisciMsgCambioTurno(prossimo);
+                    if(tmp.getArmateperturno() == 0) break;
+                }
+                return;
             case RINFORZO:
                 if((msgReceived.getType() != messaggio_t.CAMBIAARMATETERRITORIO) &&
                         (msgReceived.getType() != messaggio_t.GIOCATRIS)) return;
                 //Assegno le armate in base ai territori posseduti dal giocatore.
                 int armattu = gio.getArmateperturno();
                 if(armattu == 0){
-                    gio.setArmatedisponibili(partita.getNumTerritoriGiocatoreTurno()/3);
+                    gio.setArmatedisponibili(gio.getNumTerritori()/3);
                 }
                 if((msgReceived.getType() == messaggio_t.GIOCATRIS) 
                         && !partita.playedTris())
@@ -182,11 +202,15 @@ public class SuccessioneTurni {
                                 partita.setTerritorioAttaccato(null);
                                 partita.setGiocattaccato(-1);
                                 try {
-                                    Server.SpedisciMsgTutti(MessaggioComandi.creaMsgAttaccoterminato(partita.getGiocatoreTurnoIndice()),
-                                            listaGiocatori,
-                                            -1);
+                                  Server.SpedisciMsgTutti(
+                                       MessaggioComandi.creaMsgAttaccoterminato(
+                                                                        gioint),
+                                       listaGiocatori,
+                                       -1);
                                 } catch (IOException ex) {
-                                    System.err.println("Errore nell'invio messaggio attacco Terminato: "+ex.getMessage());
+                                    System.err.println(
+                               "Errore nell'invio messaggio attacco Terminato: "
+                                            +ex.getMessage());
                                 }
                             default:
                                 return;
@@ -197,12 +221,15 @@ public class SuccessioneTurni {
                 partita.setTerritorioAttaccato(msgatt.getTerritorio_difensore());
                 partita.setAttacking(true);
                 try {
-                    Server.SpedisciMsgTutti(MessaggioComandi.creaMsgIniziaAttacco(partita.getGiocatoreTurnoIndice(),
-                            partita.getGiocattaccato()),
-                            listaGiocatori,
-                            -1);
+                  Server.SpedisciMsgTutti(MessaggioComandi.creaMsgIniziaAttacco(
+                                                    gioint,
+                                                    partita.getGiocattaccato()),
+                  listaGiocatori,
+                  -1);
                 } catch (IOException ex) {
-                    System.err.println("Errore nell'invio del messaggio di inizio attacco: "+ex.getMessage());
+                    System.err.println(
+                           "Errore nell'invio del messaggio di inizio attacco: "
+                           +ex.getMessage());
                 }
                 //Dichiara di attaccare un territorio e gestisce tutte la
                 //parte di attacco. Finché il giocatore non dichiara di aver finito l'attacco
@@ -225,7 +252,7 @@ public class SuccessioneTurni {
                 //Viene settato il prossimo giocatore.
                 if(conquistato){
                     Carta ctmp = partita.getCarta();
-                    if(ctmp != null) listaGiocatori.get(partita.getGiocatoreTurnoIndice()).addCard(ctmp);
+                    if(ctmp != null) gio.addCard(ctmp);
                 }
                 partita.ProssimoGiocatore();
                 if(partita.isNuovogiro()){
@@ -236,28 +263,50 @@ public class SuccessioneTurni {
                         return;
                     }
                 }
-                int gioturno = partita.getGiocatoreTurnoIndice();
-                try {
-                    Server.SpedisciMsgTutti(MessaggioComandi.creaMsgTurnOfPlayer(gioturno), listaGiocatori, gioturno);
-                    Server.SpedisciMsgUno(MessaggioComandi.creaMsgStartYourTurn(gioturno), listaGiocatori, gioturno);
-                } catch (IOException ex) {
-                    System.err.println("Errore nell'invio messaggi fine turno e cambio turno: "+ex.getMessage());
-                }
+                prossimo = partita.getGiocatoreTurnoIndice();
+                spedisciMsgCambioTurno(prossimo);
             default:
                 break;
         }
         partita.ProssimaFase();
         try {
             Server.SpedisciMsgTutti(MessaggioComandi.creaMsgProssimaFase(
-                    partita.getGiocatoreTurnoIndice()),
+                    prossimo),
                     listaGiocatori,
                     -1);
             //messaggi per il cambio di fase
         } catch (IOException ex) {
-            System.err.println("Errore nell'invio del messaggio di CambioFase");
+            System.err.println("Errore nell'invio del messaggio di CambioFase: "
+                    +ex.getMessage());
         }
     }
-    /** Risolve l'attacco effettuando il lancio dei dadi e la rimozione delle armate. */
+    /**
+     * Spedisce a tutti i giocatori il messaggio di avvenuto cambio turno di
+     * un gicoatore e spedisce al giocatore di turno il messaggio che indica
+     * che può iniziare a giocare.
+     * @param giocatore_che_deve_giocare L'indice del giocatore che deve giocare
+     */
+    private void spedisciMsgCambioTurno(int giocatore_che_deve_giocare){
+        try {
+            Server.SpedisciMsgTutti(
+              MessaggioComandi.creaMsgTurnOfPlayer(giocatore_che_deve_giocare),
+              listaGiocatori,
+              giocatore_che_deve_giocare);
+            Server.SpedisciMsgUno(
+              MessaggioComandi.creaMsgStartYourTurn(giocatore_che_deve_giocare),
+              listaGiocatori,
+              giocatore_che_deve_giocare);
+        } catch (IOException ex) {
+            System.err.println(
+                    "Errore nell'invio messaggi fine turno/ cambio turno: "
+                    +ex.getMessage());
+        }
+    }
+    //TODO creare nuovo oggetto di tipo Attacco che fa tutto quello di cui si ha
+    // bisogno
+    //verificando che sia utile
+    /** Risolve l'attacco effettuando il lancio dei dadi e la rimozione delle
+     * armate. */
     private void risolviAttacco(){
         Queue<Integer> lancidifensore = new PriorityQueue<Integer>();
         Queue<Integer> lanciattaccante = new PriorityQueue<Integer>();

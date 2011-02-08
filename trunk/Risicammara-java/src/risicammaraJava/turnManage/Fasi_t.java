@@ -10,6 +10,7 @@ package risicammaraJava.turnManage;
  * @author Sten_Gun
  */
 public enum Fasi_t {
+    PREPARTITA  (false,false),
     RINFORZO    (false,false),
     ATTACCO     (true, false),
     SPOSTAMENTO (true, true),

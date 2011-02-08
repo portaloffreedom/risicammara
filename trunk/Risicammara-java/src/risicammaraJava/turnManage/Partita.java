@@ -204,7 +204,7 @@ public class Partita {
     };
     public void ProssimaFase(){
         if(fase_attuale < fasi.length) fase_attuale++;
-        else fase_attuale = 0;
+        else fase_attuale = 1;
         return;
     };
     public boolean isNuovogiro() {
