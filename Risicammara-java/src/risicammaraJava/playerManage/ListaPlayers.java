@@ -46,12 +46,22 @@ public class ListaPlayers implements Serializable {
      * @return il Giocatore corrispondente
      */
     public Giocatore getFirst(){
-        for(int i=0;i<MAXPLAYERS;i++){
-            Giocatore gio = listaPlayers.get(i);
+        return this.getFirst(-1);
+    }
+    /**
+     * Richiede il primo giocatore non nullo partendo da un indice
+     * @param _from_index L'indice da cui partire per cercare il primo non nullo
+     * @return il giocatore trovato
+     */
+    public Giocatore getFirst(int _from_index){
+        if(this.isEmpty()) return null;
+        Giocatore gio = null;
+        for(int i=_from_index+1;i<MAXPLAYERS;i++){
+            gio = listaPlayers.get(i);
             if(gio==null)continue;
-            return gio;
+            break;
         }
-        return null;
+        return gio;
     }
     /**
      * Aggiunge un giocatore direttamente in lista.
@@ -93,7 +103,14 @@ public class ListaPlayers implements Serializable {
     public int getSize(){
         return listaPlayers.size()-nullnumber;
     }
-
+    /**
+     * Controlla se la lista dei giocatori è vuota
+     * @return True se è vuota, false altrimenti.
+     */
+    public boolean isEmpty(){
+        if(this.getSize() == 0) return true;
+        return false;
+    }
     /**
      * Preleva l'oggetto giocadore all'indice specificato
      * @param index L'indice dal quale prelevare il giocatore

@@ -225,8 +225,9 @@ public class Lobby {
             if(th.isLeader()) canc = true;
             if(canc)
             {
-                    Giocatore_Net gtm = ((Giocatore_Net)listaGiocatori.getFirst());
-                    if(!(gtm == null)){
+                if(listaGiocatori.getSize()-1 > 0){
+                    Giocatore_Net gtm = ((Giocatore_Net)listaGiocatori.getFirst(index));
+                    if(gtm != null){
                         PlayerThread threadtemp = (PlayerThread)gtm.getThread();
                         threadtemp.setLeader(true);
                         try {
@@ -235,6 +236,7 @@ public class Lobby {
                             System.err.println("Errore nell'invio leader "+ex.getMessage());
                         }
                     }
+                }
             }
             attendiConnessioni.setNumeroGiocatori(listaGiocatori.getSize());
             try {
