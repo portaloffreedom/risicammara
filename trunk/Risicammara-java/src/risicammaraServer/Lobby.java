@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package risicammaraServer;
 
 import java.io.IOException;
@@ -140,11 +135,10 @@ public class Lobby {
                     // Quando c'è un solo giocatore quello è il leader della lobby
             if(listaGiocatori.getSize() == 1){
                         Giocatore_Net gtmp = (Giocatore_Net)listaGiocatori.getFirst();
-                        PlayerThread th = (PlayerThread)gtmp.getThread();
-                        if(!th.isLeader()){
-                            th.setLeader(true);
+                        if(!gtmp.isLeader()){
+                            gtmp.setLeader(true);
                             try {
-                                Server.BroadcastMessage(MessaggioComandi.creaMsgLeader(th.getPlayerIndex()), gtmp.getClientOut());
+                                Server.BroadcastMessage(MessaggioComandi.creaMsgLeader(gtmp.getPlayerIndex()), gtmp.getClientOut());
                             } catch (IOException ex) {
                                 System.err.println("Errore nell'invio di \"LEADER\" al primo giocatore "+ex.getMessage());
                             }
@@ -204,11 +198,10 @@ public class Lobby {
      */
     private void serverSetPronto(int sender){
             Giocatore_Net giotmp = (Giocatore_Net)listaGiocatori.get(sender);
-            PlayerThread th = (PlayerThread)giotmp.getThread();
-            if(th.isReady()) th.setReady(false);
+            if(giotmp.isReady()) giotmp.setReady(false);
             else
             {
-                th.setReady(true);
+                giotmp.setReady(true);
                 if(allReady()) this.inizia = true;
             }
     }
@@ -220,22 +213,17 @@ public class Lobby {
      */
     private void serverPlayerRemove(int index){
             Giocatore_Net tempgioc = (Giocatore_Net)listaGiocatori.get(index);
-            PlayerThread th = (PlayerThread)tempgioc.getThread();
-            boolean canc = false;
-            if(th.isLeader()) canc = true;
-            if(canc)
+            //se il giocatore che va via è leader bisogna sceglierne un altro
+            if(tempgioc.isLeader())
             {
                 if(listaGiocatori.getSize()-1 > 0){
                     Giocatore_Net gtm = ((Giocatore_Net)listaGiocatori.getFirst(index));
-                    if(gtm != null){
-                        PlayerThread threadtemp = (PlayerThread)gtm.getThread();
-                        threadtemp.setLeader(true);
+                        gtm.setLeader(true);
                         try {
-                            Server.BroadcastMessage(MessaggioComandi.creaMsgLeader(threadtemp.getPlayerIndex()), gtm.getClientOut());
+                            Server.BroadcastMessage(MessaggioComandi.creaMsgLeader(gtm.getPlayerIndex()), gtm.getClientOut());
                         } catch (IOException ex) {
                             System.err.println("Errore nell'invio leader "+ex.getMessage());
                         }
-                    }
                 }
             }
             attendiConnessioni.setNumeroGiocatori(listaGiocatori.getSize());
@@ -252,11 +240,11 @@ public class Lobby {
      */
     private boolean allReady(){
         if(listaGiocatori.getSize() < 3) return false;
-        for(int i=0;i<listaGiocatori.getSize();i++){
-            Giocatore_Net temp = (Giocatore_Net)listaGiocatori.get(i);
-            if(temp == null) continue;
-            PlayerThread th = (PlayerThread)temp.getThread();
-            if(th.isReady()) continue;
+        int i = -1;
+        while(true){
+            Giocatore_Net temp = (Giocatore_Net)listaGiocatori.getFirst(i++);
+            if(temp == null) break;
+            if(temp.isReady()) continue;
             return false;
         }
         return true;
