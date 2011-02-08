@@ -20,7 +20,7 @@ public class CronologiaChat extends JLabel {
 
     private int maxRighe;
     private List<String> testoInRighe;
-    private boolean testoCambiato;
+    private int contatore;
 
     @Deprecated
     public CronologiaChat(Rectangle cronologiaR) {
@@ -42,7 +42,7 @@ public class CronologiaChat extends JLabel {
     }
 
     public CronologiaChat(int maxRighe){
-        this.testoCambiato = false;
+        this.contatore = 0;
         this.maxRighe = maxRighe;
         testoInRighe = new ArrayList<String>(maxRighe+1);
         setVerticalAlignment(TOP);
@@ -52,7 +52,7 @@ public class CronologiaChat extends JLabel {
     }
 
 
-    public void stampaMessaggio(String messaggio) {
+    public synchronized void stampaMessaggio(String messaggio) {
 
         testoInRighe.add(messaggio);
 
@@ -71,19 +71,19 @@ public class CronologiaChat extends JLabel {
         testoCompleto = testoCompleto+"</body></html>";
 
         this.setText(testoCompleto);
-        this.testoCambiato = true;
+        this.contatore = 0;
     }
 
     @Override
-    public void paint(Graphics g) {
+    public synchronized void paint(Graphics g) {
         super.paint(g);
         Rectangle bordi = this.getBounds();
+        contatore++;
         
-        if (testoCambiato == true){
-            System.out.println("y:"+bordi.y+"\theight:"+bordi.height);
+        if (contatore <= 3){
+            //System.out.println("y:"+bordi.y+"\theight:"+bordi.height);
             Rectangle bordiNuovi = new Rectangle(0, bordi.height,0,0);
             this.scrollRectToVisible(bordiNuovi);
-            testoCambiato = false;
         }
 
 

@@ -139,7 +139,7 @@ public class PannelloSalaAttesa extends JPanel {
         return pronti[indexGiocatore].isSelected();
     }
 
-    //#############PARTE PRIVATA#############################################################################################################
+    ///////////////PARTE PRIVATA/////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private void disegnaGiocatori() {
          
         this.pronti = new JToggleButton[6];
