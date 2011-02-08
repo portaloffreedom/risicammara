@@ -11,6 +11,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.net.Socket;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import risicammaraClient.Client;
 import risicammaraClient.Connessione;
@@ -45,6 +46,7 @@ public class SalaAttesa extends JFrame implements Runnable {
         super("Sala d'Attesa");
         this.server = null;
         this.meStesso = meStesso;
+        this.setIconImage(new ImageIcon("./risorse/risicamlogo.png").getImage());
 
         this.indexGiocatore = -2;
         this.listaGiocatori = null;
