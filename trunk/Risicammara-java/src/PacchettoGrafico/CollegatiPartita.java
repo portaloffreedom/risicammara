@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -47,6 +48,7 @@ public class CollegatiPartita extends JFrame {
         this.setResizable(false);
         this.main = main;
         this.porta = porta;
+        this.setIconImage(new ImageIcon("./risorse/risicamlogo.png").getImage());
 
         JPanel pannello = new JPanel(new BorderLayout(5, 5));
         this.getContentPane().add(pannello);

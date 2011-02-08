@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import risicammaraClient.Connessione;
 import risicammaraJava.boardManage.Plancia;
@@ -30,6 +31,8 @@ public class FinestraGioco extends JFrame {
         this.server = server;
         this.listaGiocatori = listaGiocatori;
         this.plancia = plancia;
+
+        this.setIconImage(new ImageIcon("./risorse/risicamlogo.png").getImage());
         //TODO mettere l'icona della finestra (e capire come minchia si fa -.-)
 
         this.setMinimumSize(new Dimension(800, 400));
