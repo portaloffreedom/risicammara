@@ -10,8 +10,6 @@ import java.awt.Cursor;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -27,7 +25,7 @@ import risicammaraClient.Client;
  *
  * @author matteo
  */
-public class CollegatiPartita extends JFrame implements WindowListener {
+public class CollegatiPartita extends JFrame {
 
     private TextField stringaIndirizzo;
     private JButton collegati;
@@ -43,7 +41,8 @@ public class CollegatiPartita extends JFrame implements WindowListener {
 
     public CollegatiPartita(Client main, int porta) {
         super("Collegati al server");
-        this.addWindowListener(this);
+        //this.addWindowListener(this);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setBounds(100, 100, 300, 100);
         this.setResizable(false);
         this.main = main;
@@ -66,37 +65,6 @@ public class CollegatiPartita extends JFrame implements WindowListener {
 
         this.setVisible(true);
     }
-
-
-    // <editor-fold defaultstate="collapsed" desc="WindowListener">
-    public void windowOpened(WindowEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void windowClosing(WindowEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-        System.exit(0);
-    }
-
-    public void windowClosed(WindowEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void windowIconified(WindowEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void windowDeiconified(WindowEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void windowActivated(WindowEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void windowDeactivated(WindowEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }// </editor-fold>
 
     private static class ActionLocalHost implements ActionListener {
 

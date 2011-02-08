@@ -47,14 +47,17 @@ public class FinestraGioco extends JFrame {
 
     }
 
+    // <editor-fold defaultstate="collapsed" desc="ascoltatore della finestra">
     private static class WindowListenerImpl implements WindowListener {
+
         Connessione server;
 
         public WindowListenerImpl(Connessione server) {
             this.server = server;
         }
 
-        public void windowOpened(WindowEvent e) {}
+        public void windowOpened(WindowEvent e) {
+        }
 
         public void windowClosing(WindowEvent e) {
             //TODO casella di conferma uscita
@@ -67,16 +70,21 @@ public class FinestraGioco extends JFrame {
             System.exit(0);
         }
 
-        public void windowClosed(WindowEvent e) {}
+        public void windowClosed(WindowEvent e) {
+        }
 
-        public void windowIconified(WindowEvent e) {}
+        public void windowIconified(WindowEvent e) {
+        }
 
-        public void windowDeiconified(WindowEvent e) {}
+        public void windowDeiconified(WindowEvent e) {
+        }
 
-        public void windowActivated(WindowEvent e) {}
+        public void windowActivated(WindowEvent e) {
+        }
 
-        public void windowDeactivated(WindowEvent e) {}
-    }
+        public void windowDeactivated(WindowEvent e) {
+        }
+    }// </editor-fold>
 
 
 
