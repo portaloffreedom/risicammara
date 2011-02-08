@@ -45,11 +45,11 @@ public class AscoltatoreCambiaNomeColore implements ActionListener {
         Colore_t nuovoColore = pannello.colore_getSelectedItem();
         try {
             if (salaAttesa.pronto(salaAttesa.indexGiocatore)){
-                salaAttesa.mandaMessaggio((Messaggio) MessaggioComandi.creaMsgSetPronto(salaAttesa.indexGiocatore));
+                salaAttesa.server.spedisci((Messaggio) MessaggioComandi.creaMsgSetPronto(salaAttesa.indexGiocatore));
                 salaAttesa.invertiPronto(salaAttesa.indexGiocatore);
                 pannello.stampaMessaggioComando("Adesso non sei più pronto");
             }
-            salaAttesa.mandaMessaggio((Messaggio) new MessaggioCambiaNickColore(nuovoNome, nuovoColore, salaAttesa.indexGiocatore));
+            salaAttesa.server.spedisci((Messaggio) new MessaggioCambiaNickColore(nuovoNome, nuovoColore, salaAttesa.indexGiocatore));
         } catch (IOException ex) {
             pannello.stampaMessaggioErrore("Cambio colore e/o nuck non riuscito", ex);
             return;

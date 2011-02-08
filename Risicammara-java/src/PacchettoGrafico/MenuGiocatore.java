@@ -11,7 +11,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import risicammaraJava.turnManage.Partita;
 
 /**
  *
@@ -42,8 +41,8 @@ public class MenuGiocatore implements ActionListener, Elemento_2DGraphics {
             graphics2D.setColor(Color.red);
             graphics2D.fill(rettangolo);
             graphics2D.setColor(Color.black);
-            new TestoACapo(graphics2D, dimensioni, rettangolo, listaGiocatori.meStesso().getObbiettivo()
-                    .toString()).disegna(graphics2D);
+            new TestoACapo(graphics2D, dimensioni, rettangolo, listaGiocatori.meStesso().getObbiettivo().toString())
+                          .disegna(graphics2D);
             //graphics2D.drawString("Tutti gli uomini del\n presidente", this.bordo+5, this.distanzaSuperiore+15);
             
         }

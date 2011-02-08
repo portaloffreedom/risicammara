@@ -5,17 +5,15 @@
 
 package PacchettoGrafico.salaAttesa;
 
+import PacchettoGrafico.ListaGiocatoriClient;
 import java.awt.Rectangle;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
 import javax.swing.JFrame;
 import risicammaraClient.Client;
+import risicammaraClient.Connessione;
 import risicammaraClient.Obbiettivi_t;
 import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
@@ -31,9 +29,7 @@ public class SalaAttesa extends JFrame implements Runnable {
     final static Rectangle finestraR = new Rectangle(100, 100, 600, 305);
     
     // variabili locali per il funzionamento interno
-    private Socket server;
-    private ObjectOutputStream scriviServer;
-    private ObjectInputStream  leggiServer;
+    public Connessione server;
     /** Riferimento al Client: unico scopo fare partire la fase successiva di gioco */
     private Client meStesso;
 
@@ -47,7 +43,7 @@ public class SalaAttesa extends JFrame implements Runnable {
 
     public SalaAttesa(Socket server, Client meStesso) {
         super("Sala d'Attesa");
-        this.server=server;
+        this.server = null;
         this.meStesso = meStesso;
 
         this.indexGiocatore = -2;
@@ -55,7 +51,7 @@ public class SalaAttesa extends JFrame implements Runnable {
 
 
         try {
-            creaConnessione();
+            this.server = creaConnessione(server);
         } catch (IOException ex) {
             System.err.println("Il sistema non è riuscito ad aprire gli stream"
                     + "di output o di input dal server oppure non è riuscito a"
@@ -83,7 +79,7 @@ public class SalaAttesa extends JFrame implements Runnable {
 
         while (true) {
             try {
-                arrivo = (Messaggio) leggiServer.readObject();
+                arrivo = server.ricevi();
             } catch (IOException ex) {
                 System.err.println("Errore! Client disconnesso :"+ex);
                 System.err.println(ex.getStackTrace());
@@ -184,7 +180,8 @@ public class SalaAttesa extends JFrame implements Runnable {
         }
     }
 
-    private void creaConnessione() throws IOException, ClassNotFoundException {
+    private Connessione creaConnessione(Socket server) throws IOException, ClassNotFoundException {
+        /*
         if (server.isInputShutdown()) {
             System.err.println("Il server non permette di leggere da lui");
         }
@@ -195,9 +192,12 @@ public class SalaAttesa extends JFrame implements Runnable {
         this.scriviServer = new ObjectOutputStream(new BufferedOutputStream(this.server.getOutputStream()));
         this.scriviServer.flush();
         this.leggiServer  = new ObjectInputStream(new BufferedInputStream(this.server.getInputStream()));
-        MessaggioConfermaNuovoGiocatore msg = (MessaggioConfermaNuovoGiocatore) leggiServer.readObject();
+         */
+        Connessione connessioneServer = new Connessione(server);
+        MessaggioConfermaNuovoGiocatore msg = (MessaggioConfermaNuovoGiocatore) connessioneServer.ricevi();
         this.indexGiocatore = msg.getPlyIndex();
         this.listaGiocatori = msg.getPlyList();
+        return connessioneServer;
     }
     
     private void avviaPartita(){
@@ -205,8 +205,8 @@ public class SalaAttesa extends JFrame implements Runnable {
         MessaggioPlancia veicoloPlancia = null;
         Obbiettivi_t mioObbiettivo = null;
         try {
-            veicoloPlancia = (MessaggioPlancia) leggiServer.readObject();
-            mioObbiettivo = ((MessaggioObbiettivo) leggiServer.readObject()).getObj();
+            veicoloPlancia = (MessaggioPlancia) server.ricevi();
+            mioObbiettivo = ((MessaggioObbiettivo) server.ricevi()).getObj();
         } catch (IOException ex) {
             System.err.println("Errore nel leggere la plancia (lettura da stream): "+ex);
             System.exit(10);
@@ -214,24 +214,14 @@ public class SalaAttesa extends JFrame implements Runnable {
             System.err.println("Errore nel leggere la plancia (interpretazione oggetto): "+ex);
             System.exit(11);
         }
-        meStesso.inizializzaPartita(indexGiocatore, listaGiocatori, veicoloPlancia.getPlancia());
+        ListaGiocatoriClient listaGiocatoriClient = new ListaGiocatoriClient(listaGiocatori, indexGiocatore, mioObbiettivo);
+        meStesso.inizializzaPartita(server, veicoloPlancia.getPlancia(), listaGiocatoriClient);
     }
 
     /** Funzione da chiamare per fare diventare leader il giocatore */
     private void diventaLeader() {
         //this.leader = true;
         pannello.diventaLeader();
-    }
-
-    public void mandaMessaggio (Messaggio messaggio) throws IOException {
-        scriviServer.writeObject(messaggio);
-        scriviServer.flush();
-    }
-
-    public void chiudiServer () throws IOException {
-        scriviServer.flush();
-        scriviServer.close();
-        server.close();
     }
 
     public void eliminaGiocatore(int index) {
@@ -267,7 +257,7 @@ public class SalaAttesa extends JFrame implements Runnable {
             //    System.err.println("Errore nel mandare il messaggio di \"hang-up\": "+ex);
             //}
             try {
-                salaAttesa.chiudiServer();
+                salaAttesa.server.chiudiConnessione();
             } catch (IOException ex) {
                 System.err.println("Errore nel chiudere il collegamento col server: " + ex);
             }

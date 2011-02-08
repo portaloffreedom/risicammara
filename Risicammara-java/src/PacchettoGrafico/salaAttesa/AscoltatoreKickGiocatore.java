@@ -34,7 +34,7 @@ public class AscoltatoreKickGiocatore implements ActionListener {
             }
             else {
                 try {
-                    salaAttesa.mandaMessaggio((Messaggio) MessaggioComandi.creaMsgKickplayer(salaAttesa.indexGiocatore, index));
+                    salaAttesa.server.spedisci((Messaggio) MessaggioComandi.creaMsgKickplayer(salaAttesa.indexGiocatore, index));
                     pannello.stampaMessaggioComando("Kickato giocatore "+index+" \""+salaAttesa.listaGiocatori.getNomeByIndex(index)+"\"");
                     //salaAttesa.eliminaGiocatore(index);
                 } catch (IOException ex) {

@@ -6,18 +6,14 @@
 package risicammaraClient;
 
 import PacchettoGrafico.CollegatiPartita;
+import PacchettoGrafico.FinestraGioco;
+import PacchettoGrafico.ListaGiocatoriClient;
 import PacchettoGrafico.PannelloSpeciale;
 import PacchettoGrafico.salaAttesa.SalaAttesa;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.net.Socket;
-import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import risicammaraJava.boardManage.Plancia;
-import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraJava.turnManage.Partita;
 
 //TODO Stampare un messaggio: "ho cambiato nick"
@@ -29,7 +25,7 @@ import risicammaraJava.turnManage.Partita;
  * 
  * @author matteo
  */
-public class Client implements WindowListener, Runnable {
+public class Client implements Runnable {
 
     /** Rappresenta la Porta di default che deve utilizzare il programma. Viene
      * utlizzata anche dal lato server come porta di DEFAULT */
@@ -194,20 +190,9 @@ public class Client implements WindowListener, Runnable {
 
     }
 
-    public void inizializzaPartita (int indexgiocatore, ListaPlayers listaGiocatori, Plancia plancia){
+    public void inizializzaPartita (Connessione server, Plancia plancia, ListaGiocatoriClient listaGiocatori){
         
-        JFrame finestra = new JFrame("Risicammara");
-        finestra.setMinimumSize(new Dimension(800, 400));
-        Container contestoFinestra = finestra.getContentPane();
-        this.pannello = new PannelloSpeciale(60, plancia, listaGiocatori, indexgiocatore, Obbiettivi_t.ROSSO);
-
-        finestra.setBounds(200, 180, 200, 180);
-        contestoFinestra.add(pannello);
-
-
-        finestra.addWindowListener(this);
-        finestra.setVisible(true);
-
+        FinestraGioco finestra =  new FinestraGioco(server, listaGiocatori, plancia);
         /*
         if (Client.debug == true) {
             System.out.println("Poteri della SuperMucca attivati ;)");
@@ -216,42 +201,4 @@ public class Client implements WindowListener, Runnable {
          */
         
     }
-
-    // <editor-fold defaultstate="collapsed" desc="ascoltatore finestre">
-    public void windowOpened(WindowEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-        System.out.println("Ciao Mondo di merda!!");
-    }
-
-    public void windowClosing(WindowEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-        System.out.println("Uscita in corso...");
-        System.exit(0);
-    }
-
-    public void windowClosed(WindowEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-        System.out.println("windowClosed");
-    }
-
-    public void windowIconified(WindowEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-        System.out.println("windowIconified");
-    }
-
-    public void windowDeiconified(WindowEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-        System.out.println("windowDeiconified");
-    }
-
-    public void windowActivated(WindowEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-        System.out.println("windowActivated");
-    }
-
-    public void windowDeactivated(WindowEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-        System.out.println("windowDeactivated");
-    }// </editor-fold>
-
 }
