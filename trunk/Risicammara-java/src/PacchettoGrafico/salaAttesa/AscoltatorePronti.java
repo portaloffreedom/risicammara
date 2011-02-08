@@ -32,7 +32,7 @@ public class AscoltatorePronti implements ActionListener {
         }
 
         try {
-            salaAttesa.mandaMessaggio(MessaggioComandi.creaMsgSetPronto(salaAttesa.indexGiocatore));
+            salaAttesa.server.spedisci(MessaggioComandi.creaMsgSetPronto(salaAttesa.indexGiocatore));
         } catch (IOException ex) {
             pannello.stampaMessaggioErrore("Il tuo stato non è stato impostato come pronto", ex);
         }

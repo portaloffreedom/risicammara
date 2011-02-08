@@ -43,7 +43,7 @@ public class AscoltatoreMandaChat implements ActionListener {
         if (messaggio.equals("")) return;
 
         try {
-            salaAttesa.mandaMessaggio((Messaggio) new MessaggioChat(salaAttesa.indexGiocatore, messaggio));
+            salaAttesa.server.spedisci((Messaggio) new MessaggioChat(salaAttesa.indexGiocatore, messaggio));
             pannello.immissioneChat_resetText();
         } catch (IOException ex) {
             pannello.stampaMessaggioErrore("Attenzione messaggio \""+messaggio+"\" non inviato", ex);

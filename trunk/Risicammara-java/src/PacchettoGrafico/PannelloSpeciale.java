@@ -9,12 +9,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import javax.swing.JPanel;
-import risicammaraClient.Obbiettivi_t;
 import risicammaraJava.boardManage.Plancia;
-import risicammaraJava.playerManage.ListaPlayers;
 
 
 /**
@@ -24,7 +20,6 @@ import risicammaraJava.playerManage.ListaPlayers;
 public class PannelloSpeciale extends JPanel{
 
     private ListaGiocatoriClient listaGiocatori;
-    private int indexGiocatore;
     private Plancia plancia;
 
     private Dimension dimensioni;
@@ -35,12 +30,11 @@ public class PannelloSpeciale extends JPanel{
     private int durataFrame;
     boolean ridimensionata;
 
-    public PannelloSpeciale(int frameRateMassimo, Plancia plancia, ListaPlayers listaGiocatori, int indexGiocatore, Obbiettivi_t mioObbietivo) {
+    public PannelloSpeciale(int frameRateMassimo, Plancia plancia, ListaGiocatoriClient listaGiocatori) {
         super();
-        this.listaGiocatori = new ListaGiocatoriClient(listaGiocatori, indexGiocatore, mioObbietivo);
+        this.listaGiocatori = listaGiocatori;
         this.plancia = plancia;
 
-        this.addComponentListener(new AscoltatorePannello(this));
         dimensioni = new Dimension();
 
         this.cronometro = new OrologioTimer();
@@ -101,39 +95,4 @@ public class PannelloSpeciale extends JPanel{
             }
         }
     }
-}
-
-
-
-
-/**
- * Classe che serve come sempice ascoltatore del Pannello speciale.
- * @author matteo
- */
-class AscoltatorePannello implements ComponentListener {
-    
-    private PannelloSpeciale pannello;
-
-    public AscoltatorePannello(PannelloSpeciale pannello) {
-        this.pannello=pannello;
-    }
-
-    public void componentResized(ComponentEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-        //System.out.println("componentResized");
-        this.pannello.ridimensionata=true;
-    }
-
-    public void componentMoved(ComponentEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void componentShown(ComponentEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void componentHidden(ComponentEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
-
 }
