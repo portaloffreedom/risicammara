@@ -251,11 +251,6 @@ public class SalaAttesa extends JFrame implements Runnable {
         }
 
         public void windowClosing(WindowEvent e) {
-            //try {
-            //    new ObjectOutputStream(server.getOutputStream()).writeObject(new MessaggioComandi(comandi_t.DISCONNECT, indexGiocatore));
-            //} catch (IOException ex) {
-            //    System.err.println("Errore nel mandare il messaggio di \"hang-up\": "+ex);
-            //}
             try {
                 salaAttesa.server.chiudiConnessione();
             } catch (IOException ex) {
