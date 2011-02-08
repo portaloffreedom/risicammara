@@ -21,6 +21,8 @@ public class PlayerThread extends Thread{
     private CodaMsg coda;
     private boolean ready;
     private boolean leader;
+    private boolean mustpass;
+    private int numar;
 
     public PlayerThread(CodaMsg coda,ObjectInputStream playerInput,int playerIndex){
         this.coda = coda;
@@ -28,6 +30,7 @@ public class PlayerThread extends Thread{
         this.playerInput = playerInput;
         this.ready = false;
         this.leader = false;
+        this.mustpass = false;
     }
 
     @Override
@@ -71,6 +74,22 @@ public class PlayerThread extends Thread{
         return playerIndex;
     }
 
+    public boolean isMustpass() {
+        return mustpass;
+    }
+
+    public void setMustpass(boolean mustpass) {
+        this.mustpass = mustpass;
+    }
+
+    public void incnumar(){
+        if(numar<3){
+            numar++;
+            return;
+        }
+        mustpass = true;
+        numar = 0;
+    }
     
 
 }
