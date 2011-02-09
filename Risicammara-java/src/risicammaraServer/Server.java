@@ -41,12 +41,13 @@ public static void main(String[] args) {
     }
 
     public void run() {
-
-        Lobby server = new Lobby(porta,coda);
-        listaGiocatori = server.start();
-        boolean vincitore = false;
-        SuccessioneTurni svolgimento = new SuccessioneTurni(listaGiocatori,coda);
-        svolgimento.start();
+        while(true){
+            Lobby server = new Lobby(porta,coda);
+            listaGiocatori = server.start();
+            boolean vincitore = false;
+            SuccessioneTurni svolgimento = new SuccessioneTurni(listaGiocatori,coda);
+            svolgimento.start();
+        }
     }
 
 

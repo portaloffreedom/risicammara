@@ -150,6 +150,8 @@ public class Lobby {
         } catch (IOException ex) {
             Logger.getLogger(Lobby.class.getName()).log(Level.SEVERE, null, ex);
         }
+        attendiConnessioni.setStop(true);
+        attendiConnessioni.interrupt();
         return listaGiocatori;
     }
 
