@@ -9,7 +9,6 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-import javax.swing.JPanel;
 
 /**
  *
@@ -19,8 +18,8 @@ public class BarraSuperiore implements Elemento_2DGraphics {
     private Dimension dimensioniPannello;
     private Rectangle dimensioni;
     private PannelloGioco pannello;
-    private BottoneRisicammaraBis giocatoreButton;
-    private BottoneRisicammaraBis carteButton;
+    private BottoneRisicammara giocatoreButton;
+    private BottoneRisicammara carteButton;
     private Point posizioneGiocatore;
     private Point posizioneCarte;
 
@@ -34,9 +33,9 @@ public class BarraSuperiore implements Elemento_2DGraphics {
         this.posizioneGiocatore = new Point(5, 5);
         this.posizioneCarte     = new Point(dimensioni.width-5-100, 5);
 
-        this.giocatoreButton = new BottoneRisicammaraBis(posizioneGiocatore, "Giocatore");
+        this.giocatoreButton = new BottoneRisicammara(posizioneGiocatore, "Giocatore");
         pannello.addPulsante(giocatoreButton);
-        this.carteButton     = new BottoneRisicammaraBis(posizioneCarte, "Carte");
+        this.carteButton     = new BottoneRisicammara(posizioneCarte, "Carte");
         pannello.addPulsante(carteButton);
     }
 
