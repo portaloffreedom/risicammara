@@ -5,7 +5,6 @@
 
 package PacchettoGrafico.salaAttesa;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -19,12 +18,10 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
-import javax.swing.text.html.StyleSheet.BoxPainter;
 import risicammaraClient.Colore_t;
 import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
@@ -153,66 +150,6 @@ public class PannelloSalaAttesa extends JPanel {
     }
 
     ///////////////PARTE PRIVATA/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /*private void disegnaGiocatori() {
-         
-        this.pronti = new JToggleButton[6];
-        this.giocatoriBottoni = new BottoneGiocatori[ListaPlayers.MAXPLAYERS];
-        this.giocatoriLabel = new LabelGiocatori[ListaPlayers.MAXPLAYERS];
-        this.giocatori = giocatoriLabel;
-
-        for (int i=0; i<ListaPlayers.MAXPLAYERS; i++) {
-
-            this.pronti[i] = new JToggleButton("Ω");
-            this.pronti[i].setBounds(prontiR.x, margine+(margine+altezza)*i, prontiR.width, prontiR.height);
-            this.pronti[i].setEnabled(false);
-            this.add(this.pronti[i]);
-
-            Rectangle posizioneQuadratoGiocatore = new Rectangle(giocatoriR.x, margine+(margine+altezza)*i, giocatoriR.width, giocatoriR.height);
-
-            this.giocatoriBottoni[i] = new BottoneGiocatori(i);
-            this.giocatoriBottoni[i].setBounds(posizioneQuadratoGiocatore);
-            this.giocatoriBottoni[i].setVisible(false);
-            this.add(this.giocatoriBottoni[i]);
-            
-            this.giocatoriLabel[i] = new LabelGiocatori();
-            this.giocatoriLabel[i].setBounds(posizioneQuadratoGiocatore);
-            this.giocatoriLabel[i].setVisible(true);
-            this.add(this.giocatoriLabel[i]);
-
-        }
-
-        this.nomeGiocatore = new JTextField();
-        this.nomeGiocatore.setBounds(nomeGiocatoreR);
-
-        this.colore = new JComboBox(Colore_t.values());
-        this.colore.setBounds(coloreR);
-
-        this.conferma = new JButton("conferma");
-        this.conferma.setBounds(confermaR);
-        this.conferma.addActionListener(new AscoltatoreCambiaNomeColore(salaAttesa, this));//new CambiaNomeColore();
-
-        this.immissioneChat = new JTextField();
-        this.immissioneChat.setBounds(immissioneR);
-        ActionListener mandaChat = new AscoltatoreMandaChat(salaAttesa, this);
-        this.immissioneChat.addActionListener(mandaChat);
-
-        this.invioChat = new JButton("Invia");
-        this.invioChat.setBounds(invioR);
-        this.invioChat.addActionListener(mandaChat);
-
-        this.konsole = new CronologiaChat(20);
-        JScrollPane konsoleScorrimento = konsole.inscatolaInScrollPane(cronologiaR);
-
-        this.add(this.nomeGiocatore);
-        this.add(this.colore);
-        this.add(this.conferma);
-        this.add(this.immissioneChat);
-        this.add(this.invioChat);
-        this.add(konsoleScorrimento);
-
-    }
-     */
-
     private void disegnaGiocatori (){
 
         JPanel giocatoriPanel = new JPanel(new GridBagLayout());
