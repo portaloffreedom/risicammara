@@ -18,14 +18,14 @@ import javax.swing.JPanel;
 public class BarraSuperiore implements Elemento_2DGraphics {
     private Dimension dimensioniPannello;
     private Rectangle dimensioni;
-    private JPanel pannello;
-    private BottoneRisicammara giocatoreButton;
-    private BottoneRisicammara carteButton;
+    private PannelloGioco pannello;
+    private BottoneRisicammaraBis giocatoreButton;
+    private BottoneRisicammaraBis carteButton;
     private Point posizioneGiocatore;
     private Point posizioneCarte;
 
 
-    public BarraSuperiore(Dimension dimensioniPannello, int altezza,JPanel pannello){
+    public BarraSuperiore(Dimension dimensioniPannello, int altezza,PannelloGioco pannello){
         this.dimensioniPannello = dimensioniPannello;
         this.dimensioni= new Rectangle(dimensioniPannello);
         this.dimensioni.height = altezza;
@@ -34,8 +34,10 @@ public class BarraSuperiore implements Elemento_2DGraphics {
         this.posizioneGiocatore = new Point(5, 5);
         this.posizioneCarte     = new Point(dimensioni.width-5-100, 5);
 
-        this.giocatoreButton = new BottoneRisicammara(posizioneGiocatore, "Giocatore");
-        this.carteButton     = new BottoneRisicammara(posizioneCarte, "Carte");
+        this.giocatoreButton = new BottoneRisicammaraBis(posizioneGiocatore, "Giocatore");
+        pannello.addPulsante(giocatoreButton);
+        this.carteButton     = new BottoneRisicammaraBis(posizioneCarte, "Carte");
+        pannello.addPulsante(carteButton);
     }
 
     @Override
