@@ -43,7 +43,12 @@ public class TestoACapo implements  Elemento_2DGraphics {
             int spazio_precedente = restante.length();
             while(fontMetrics.stringWidth(sottoStringa)>rettangolo.width) {
                 spazio_precedente = sottoStringa.lastIndexOf(' ', spazio_precedente);
-                sottoStringa = sottoStringa.substring(0, spazio_precedente);
+                if (spazio_precedente != -1){
+                    sottoStringa = sottoStringa.substring(0, spazio_precedente);
+                }
+                else {
+                    sottoStringa = "";
+                }
             }
             graphics2D.drawString(sottoStringa, (float)rettangolo.getX(), (float)rettangolo.getY()+((fontMetrics.getMaxAscent()+2)*i));
             restante = restante.substring(spazio_precedente);
