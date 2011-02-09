@@ -8,7 +8,7 @@ package risicammaraClient;
 import PacchettoGrafico.CollegatiPartita;
 import PacchettoGrafico.FinestraGioco;
 import PacchettoGrafico.ListaGiocatoriClient;
-import PacchettoGrafico.PannelloSpeciale;
+import PacchettoGrafico.PannelloGioco;
 import PacchettoGrafico.salaAttesa.SalaAttesa;
 import java.net.Socket;
 import javax.swing.UIManager;
@@ -117,7 +117,7 @@ public class Client implements Runnable {
         Client.PORT = port;
     }
 
-    private PannelloSpeciale pannello;
+    private PannelloGioco pannello;
     private Partita partita;
     private Socket server;
     private int porta;
@@ -170,24 +170,10 @@ public class Client implements Runnable {
 
     public void salaAttesa(Socket server) {
         this.server = server;
-
-
+        
         SalaAttesa finestraSalaAttesa = new SalaAttesa(server, this);
         Thread salaAttesa = new Thread(finestraSalaAttesa);
         salaAttesa.start();
-
-
-        /*
-        //prova per vedere se funziona la parte vera del programma "risiko"
-        ListaPlayers listaGiocatori = new ListaPlayers();
-        listaGiocatori.addPlayer("Roberto", Colore_t.BLU);
-        listaGiocatori.addPlayer("Matteo", Colore_t.GIALLO);
-        listaGiocatori.addPlayer("Mandingo", Colore_t.NERO);
-
-        this.inizializzaPartitaPluffete(new Partita(listaGiocatori));
-        /*
-         */
-
     }
 
     public void inizializzaPartita (Connessione server, Plancia plancia, ListaGiocatoriClient listaGiocatori){

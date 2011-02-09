@@ -37,8 +37,8 @@ public class PannelloSalaAttesa extends JPanel {
     private final static int altezza = 40;
     private final static Rectangle giocatoriR = new Rectangle(margine, -1, 120, altezza);
     private final static Rectangle prontiR = new Rectangle(giocatoriR.x+giocatoriR.width, -1, altezza, altezza);
-    private final static Rectangle nomeGiocatoreR = new Rectangle(prontiR.x+prontiR.width+margine, margine, 220, altezza);
-    private final static Rectangle coloreR = new Rectangle(nomeGiocatoreR.x+nomeGiocatoreR.width+margine, margine+10, 80, altezza-20);
+    private final static Rectangle nomeGiocatoreR = new Rectangle(prontiR.x+prontiR.width+margine, margine, 120, altezza);
+    private final static Rectangle coloreR = new Rectangle(nomeGiocatoreR.x+nomeGiocatoreR.width+margine, margine+10, 120, altezza-20);
     private final static Rectangle confermaR = new Rectangle(coloreR.x+coloreR.width+margine, margine, SalaAttesa.finestraR.width -(coloreR.x+coloreR.width+margine*2) , altezza);
     private final static Rectangle invioR = new Rectangle(SalaAttesa.finestraR.width-(altezza+margine), SalaAttesa.finestraR.height-(30+altezza+margine), altezza, altezza);
     private final static Rectangle immissioneR = new Rectangle(nomeGiocatoreR.x, invioR.y, SalaAttesa.finestraR.width-(giocatoriR.width+prontiR.width+invioR.width+margine*4), altezza);
