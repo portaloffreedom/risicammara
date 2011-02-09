@@ -5,7 +5,7 @@
 
 package PacchettoGrafico;
 
-import java.awt.Point;
+import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 
 /**
@@ -14,19 +14,19 @@ import java.util.LinkedList;
  */
 public class MatricePannello {
 
-    private LinkedList<Elemento_2DGraphics> lista;
+    private LinkedList<Elemento_2DGraphicsCliccable> lista;
 
     public MatricePannello (){
-        lista = new LinkedList<Elemento_2DGraphics>();
+        lista = new LinkedList<Elemento_2DGraphicsCliccable>();
     }
 
-    public void add(Elemento_2DGraphics elemento) {
+    public void add(Elemento_2DGraphicsCliccable elemento) {
         lista.add(elemento);
     }
 
-    public void aziona(Point punto){
-        for (Elemento_2DGraphics elemento : lista) {
-            
+    public void aziona(MouseEvent e){
+        for (Elemento_2DGraphicsCliccable elemento : lista) {
+            elemento.doClicked(e);
         }
     }
 }

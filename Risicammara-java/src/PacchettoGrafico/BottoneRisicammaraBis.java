@@ -17,13 +17,13 @@ import javax.swing.ImageIcon;
  *
  * @author matteo
  */
-public class BottoneRisicammara extends Elemento_2DGraphicsCliccable {
+public class BottoneRisicammaraBis extends Elemento_2DGraphicsCliccable {
     private ImageIcon sfondo;
     private ImageIcon rollover;
     private ImageIcon pressione;
     private String testo;
 
-    public BottoneRisicammara(Point posizione, String testo) {
+    public BottoneRisicammaraBis(Point posizione, String testo) {
         super();
         this.testo = testo;
 

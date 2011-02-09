@@ -32,12 +32,14 @@ public class PannelloGioco extends JPanel{
     private int durataFrame;
 
     private AttivatoreGrafica attivatoreGrafica;
+    private MatricePannello gestionePulsanti;
 
     public PannelloGioco(int frameRateMassimo, Plancia plancia, ListaGiocatoriClient listaGiocatori) {
         super();
         this.listaGiocatori = listaGiocatori;
         this.plancia = plancia;
         this.attivatoreGrafica = new AttivatoreGrafica(this);
+        this.gestionePulsanti = new MatricePannello();
 
         dimensioniPannello = new Dimension();
 
@@ -114,7 +116,7 @@ public class PannelloGioco extends JPanel{
         }
 
         public void mouseClicked(MouseEvent e) {
-            pannello.mouseCliccato(e.getPoint());
+            pannello.mouseCliccato(e);
         }
 
         public void mousePressed(MouseEvent e) {
@@ -135,7 +137,11 @@ public class PannelloGioco extends JPanel{
     }// </editor-fold>
 
 
-    public void mouseCliccato(Point posizione) {
-        //posizione
+    public void mouseCliccato(MouseEvent e) {
+        this.gestionePulsanti.aziona(e);
+    }
+
+    public void addPulsante(Elemento_2DGraphicsCliccable elemento) {
+        gestionePulsanti.add(elemento);
     }
 }
