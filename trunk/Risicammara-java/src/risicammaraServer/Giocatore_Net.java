@@ -13,12 +13,12 @@ import risicammaraJava.playerManage.Giocatore;
 import risicammaraServer.messaggiManage.Messaggio;
 
 /**
- * Classe che rappresenta il giocatore nel server.
- * Tutti gli elementi utili al server che fanno parte del giocatore
- * vengono richiamati da questa classe. Contiene il thread corrispondente
- * che comunica con il giocatore, il socket e gli incapsulamenti per input/output.
- * @author stengun
- */
+* Classe che rappresenta il giocatore nel server.
+* Tutti gli elementi utili al server che fanno parte del giocatore
+* vengono richiamati da questa classe. Contiene il thread corrispondente
+* che comunica con il giocatore, il socket e gli incapsulamenti per input/output.
+* @author stengun
+*/
 public class Giocatore_Net extends Giocatore {
 
     /** Socket del giocatore*/

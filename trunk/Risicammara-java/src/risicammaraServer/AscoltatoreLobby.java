@@ -16,19 +16,22 @@ import risicammaraServer.messaggiManage.MessaggioNuovoGiocatore;
  * @author matteo
  */
 public class AscoltatoreLobby extends Thread {
-    /** Variabile che memorizza la coda che server per mandare messaggi al "Server" */
+/** Variabile che memorizza la coda che server per mandare messaggi al "Server"
+ */
     private CodaMsg coda;
 
-    /** Variabile intera che identifica la porta in cui l'Ascoltatore deve rimanere in ascolto */
+/** Variabile intera che identifica la porta in cui l'Ascoltatore deve rimanere 
+ * in ascolto
+ */
     private int porta;
-    /** Variabile che memorizza il ServerSocket che deve rimanere in ascolto */
+/** Variabile che memorizza il ServerSocket che deve rimanere in ascolto */
     private ServerSocket ascoltatore;
 
-    /** Variabile che serve per stoppare il thread a comando */
+/** Variabile che serve per stoppare il thread a comando */
     private boolean stop;
     /**
-     * Inizializza semplicemente i parametri necessari a fare partire un Socket
-     * in ascolto a nuove connessioni.
+     * Inizializza i parametri necessari a fare partire un Socket
+     * in ascolto di nuove connessioni.
      * @param porta porta su cui il server deve rimanere in ascolto
      * @param coda coda con cui l'ascoltatore comunica con il server (Thread)
      * principale
@@ -50,7 +53,9 @@ public class AscoltatoreLobby extends Thread {
         try {
             this.ascoltatore = new ServerSocket(this.porta);
         } catch (IOException ex) {
-            System.err.println("Impossibile aprire una connessione sulla porta: "+this.porta);
+            System.err.println(
+                    "Impossibile aprire una connessione sulla porta: "
+                    +this.porta);
             System.err.println("Errore: "+ex.getStackTrace());
             System.exit(1);
         }
