@@ -1,9 +1,6 @@
 package risicammaraServer;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import risicammaraClient.Colore_t;
 import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraServer.messaggiManage.Messaggio;
@@ -20,8 +17,9 @@ import risicammaraServer.messaggiManage.errori_t;
 /**
  * La classe che rappresenta un oggetto "lobby" (sala d'attesa)
  * La lobby accetta le connessioni di massimo 6 giocatori contemporanei,
- * superato questo limite il thread che ascolta le connessioni entra in wait e sarà svegliato soltanto
- * quando i giocatori saranno meno di 6.
+ * superato questo limite il thread che ascolta le connessioni non accetterà
+ * più connessioni finché non ci saranno meno di 6 giocatori. Quando parte la
+ * partita non sarà più possibile connettersi al server.
  * @author Sten_Gun
  */
 public class Lobby {
@@ -32,11 +30,11 @@ public class Lobby {
     private boolean inizia;
     AscoltatoreLobby attendiConnessioni;
 
-    /**
-     * Inizializza tutte le variabili necessarie.
-     * @param porta la porta su cui aprire in ascolto il server
-     * @param coda la coda dove verranno immessi i messaggi da processare
-     */
+/**
+ * Inizializza tutte le variabili necessarie.
+ * @param porta la porta su cui aprire in ascolto il server
+ * @param coda la coda dove verranno immessi i messaggi da processare
+ */
     public Lobby (int porta, CodaMsg coda) {
         this.porta = porta;
         this.coda = coda;
@@ -44,25 +42,26 @@ public class Lobby {
         this.inizia = false;
     }
 
-    /**
-     * Avvia la gestione dei messaggi da parte del server.
-     * Il server attende che vi sia un messaggio sulla coda dei messaggi (che in questo caso
-     * è come se fosse un buffer di messaggi).
-     * Questa funzione esce soltanto quando un giocatore preme "nuova partita". A quel punto
-     * i giocatori che fanno parte della lobby diventeranno i giocatori della partita vera e propria
-     * e questa lista deve essere restituita dalla funzione.
-     * @return la lista dei giocatori finale.
-     */
+/**
+ * Avvia la gestione dei messaggi da parte del server.
+ * Il server attende che vi sia un messaggio sulla coda dei messaggi
+ * (che in questo caso è come se fosse un buffer di messaggi).
+ * Questa funzione esce soltanto quando un giocatore preme "nuova partita".
+ * A quel punto i giocatori che fanno parte della lobby diventeranno i
+ * giocatori della partita vera e propria e la relativa lista viene
+ * restituita da questo metodo.
+ * @return la lista dei giocatori finale.
+ */
     public ListaPlayers start(){
         attendiConnessioni = new AscoltatoreLobby(this.porta, this.coda);
         attendiConnessioni.start();
         Messaggio msg = null;
         while (!inizia) {
-         msg = coda.get();
-         System.out.println("Tipo messaggio: "+msg.getType().toString());
-          //System.out.println("Sono fuori");
-         int escludi = -1;
-         Messaggio ctt = null;
+            msg = coda.get();
+            System.out.println("Tipo messaggio: "+msg.getType().toString());
+            //System.out.println("Sono fuori");
+            int escludi = -1;
+            Messaggio ctt = null;
             switch (msg.getType()) {
                 // Processa i vari tipi di pacchetto possibili
                 case MODIFICANICKCOLORE:
@@ -120,16 +119,18 @@ public class Lobby {
                 default:
                     ctt = new MessaggioChat(-1, "Messaggio non ancora gestito");
                     break;
-                }
+            }
                 //Stampa il messaggio di chat corrispondente e lo invia a tutti.
                     System.out.println(ctt.toString());
-          if(ctt!= null){
-                try {
-                    Server.SpedisciMsgTutti(ctt, listaGiocatori, escludi);
-                } catch (IOException ex) {
-                    System.err.println("Errore nell'invio messaggio a tutti i giocatori (Lobby) "+ex.getMessage());
-                }
-          }
+            if(ctt!= null){
+                  try {
+                      Server.SpedisciMsgTutti(ctt, listaGiocatori, escludi);
+                  } catch (IOException ex) {
+                      System.err.println(
+                          "Errore nell'invio messaggio a tutti i giocatori (Lobby) "
+                          +ex.getMessage());
+                  }
+            }
 
                     // Quando c'è un solo giocatore quello è il leader della lobby
             if(listaGiocatori.getSize() == 1){
@@ -141,13 +142,16 @@ public class Lobby {
                                                         gtmp.getPlayerIndex())
                                                         );
                             } catch (IOException ex) {
-                                System.err.println("Errore nell'invio di \"LEADER\" al primo giocatore "+ex.getMessage());
+                                System.err.println(
+                           "Errore nell'invio di \"LEADER\" al primo giocatore "
+                                        +ex.getMessage());
                             }
                         }
             }
         }
         try {
-            Server.SpedisciMsgTutti(MessaggioComandi.creaMsgAvviaPartita(-1), listaGiocatori, -1);
+            Server.SpedisciMsgTutti(MessaggioComandi.creaMsgAvviaPartita(-1),
+                    listaGiocatori, -1);
         } catch (IOException ex) {
             System.err.println("Errore nella spedizione di Avvio partita: "
                     +ex.getMessage());
@@ -155,12 +159,14 @@ public class Lobby {
         try {
             attendiConnessioni.setStop(true);
         } catch (IOException ex) {
-            System.err.println("Ascolto nuove connessioni interrotto non correttamente: "+ex);
+            System.err.println(
+                    "Ascolto nuove connessioni interrotto non correttamente: "
+                    +ex);
         }
         return listaGiocatori;
     }
 
-    /**
+/**
     * Funzione che gestisce i messaggi di tipo MessaggioErrore per
     * la funzione receiveMessage
     * @param errorMsg Il pacchetto MessaggioErrore
@@ -173,8 +179,9 @@ public class Lobby {
        }
     }
 
-    /**
-    * Funzione che gestisce i messaggi di tipo MessaggioComando per la costruzione della risposta.
+/**
+    * Funzione che gestisce i messaggi di tipo MessaggioComando per la
+    * costruzione della risposta.
     * @see risicammaraServer.Lobby
     * @param cmdMsg il pacchetto Messaggio_Comando
     */
@@ -197,7 +204,7 @@ public class Lobby {
         }
         return cmdMsg;
     }
-    /**
+/**
      * Processa un messaggio di tipo "SETPRONTO" e "SETNOPRONTO"
      * impostando il thread al corretto valore
      * @param sender Chi ha inviato il messaggio
@@ -213,9 +220,10 @@ public class Lobby {
             }
     }
 
-    /**
+/**
      * Processa un messaggio che implica la rimozione di un giocatore.
-     * Questa funzione è valida anche per un messaggio di tipo "Kickplayer" e "Disconnect"
+     * Questa funzione è valida anche per un messaggio di tipo "Kickplayer"
+     * oppure "Disconnect"
      * @param index Il giocatore da eliminare.
      */
     private void serverPlayerRemove(int index){
@@ -242,7 +250,7 @@ public class Lobby {
             }
     }
 
-    /**
+/**
      * Controlla se tutti i giocatori hanno premuto ready
      * @return True se tutti sono pronti, false altrimenti
      */

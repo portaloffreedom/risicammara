@@ -20,7 +20,6 @@ public class Server implements Runnable {
     private ListaPlayers listaGiocatori;
     private CodaMsg coda;
     private int porta;
-    //TODO riferimento al numero giocatori (probabilmente inutile avendo il riferimento del thread.)
 
     /**
      * @param args the command line arguments
@@ -39,7 +38,10 @@ public static void main(String[] args) {
 
 
     }
-
+/**
+ * Metodo che serve per far partire (all'occorrenza) il server come thread
+ * (per esempio quando si fa partire un server in locale direttamente dalla gui).
+ */
     public void run() {
         while(true){
             Lobby server = new Lobby(porta,coda);
@@ -50,7 +52,7 @@ public static void main(String[] args) {
         }
     }
 
-
+//---------------------------------------------------- Metodi statici
     /**
      * Spedisce un pacchetto ad un client.
      * @param recMsg Il messaggio di chat
@@ -71,30 +73,37 @@ public static void main(String[] args) {
  * @param listaGiocatori la lista da dove prelevare il giocatore
  * @param indicegiocatore l'indice della lista dove prelevare il giocatore
  * @throws IOException eccezione dovuta a broadcastMessage (socket)
+ * @deprecated usa il metodo di Giocatore_Net per inviare un messaggio ad uno
+ * specifico giocatore.
  */
-   public static void SpedisciMsgUno(Messaggio messaggioDaInviare,
-           ListaPlayers listaGiocatori,int indicegiocatore)
-           throws IOException
-   {
-           Giocatore_Net gtmp = (Giocatore_Net)listaGiocatori.get(indicegiocatore);
-           BroadcastMessage(messaggioDaInviare,gtmp.getClientOut());
-   }
+    public static void SpedisciMsgUno(Messaggio messaggioDaInviare,
+            ListaPlayers listaGiocatori,int indicegiocatore)
+            throws IOException
+    {
+       Giocatore_Net gtmp = (Giocatore_Net)listaGiocatori.get(indicegiocatore);
+       BroadcastMessage(messaggioDaInviare,gtmp.getClientOut());
+    }
+
+    public static void SpedisciMsgTutti(Messaggio recMsg){
+        SpedisciMsgTutti(recMsg, , -1);
+    }
    /**
-    * Spedisce un messaggio a tutti i client con possibilità di escluderne uno in particolare.
+    * Spedisce un messaggio a tutti i client con possibilità di escluderne
+    * uno in particolare.
     * @param recMsg Il messaggio da spedire
     * @param listaGiocatori La lista dei client a cui inviare
     * @param escludi L'indice del client da escludere
     */
-   public static void SpedisciMsgTutti(Messaggio recMsg,
+    public static void SpedisciMsgTutti(Messaggio recMsg,
            ListaPlayers listaGiocatori,int escludi)
            throws IOException
-   {
-       for(int i=0;i<ListaPlayers.MAXPLAYERS;i++){
-           if(i==escludi) continue;
-           Giocatore_Net gtmp = (Giocatore_Net)listaGiocatori.get(i);
-           if(gtmp == null)continue;
-           BroadcastMessage(recMsg,gtmp.getClientOut());
-       }
-   }
+     {
+        for(int i=0;i<ListaPlayers.MAXPLAYERS;i++){
+            if(i==escludi) continue;
+            Giocatore_Net gtmp = (Giocatore_Net)listaGiocatori.get(i);
+            if(gtmp == null)continue;
+            BroadcastMessage(recMsg,gtmp.getClientOut());
+        }
+    }
 }
 
