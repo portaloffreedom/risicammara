@@ -91,8 +91,9 @@ public class AscoltatoreLobby extends Thread {
         this.numerogiocatori = num;
     }
 
-    public void setStop(boolean stop) {
+    public void setStop(boolean stop) throws IOException {
         this.stop = stop;
+        this.ascoltatore.close();
     }
 
 }

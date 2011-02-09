@@ -17,7 +17,7 @@ import risicammaraJava.boardManage.Plancia;
  *
  * @author matteo
  */
-public class PannelloSpeciale extends JPanel{
+public class PannelloGioco extends JPanel{
 
     private ListaGiocatoriClient listaGiocatori;
     private Plancia plancia;
@@ -28,9 +28,8 @@ public class PannelloSpeciale extends JPanel{
     private OrologioTimer cronometro;
     private MillisecondiDiEsecuzione performance;
     private int durataFrame;
-    boolean ridimensionata;
 
-    public PannelloSpeciale(int frameRateMassimo, Plancia plancia, ListaGiocatoriClient listaGiocatori) {
+    public PannelloGioco(int frameRateMassimo, Plancia plancia, ListaGiocatoriClient listaGiocatori) {
         super();
         this.listaGiocatori = listaGiocatori;
         this.plancia = plancia;
