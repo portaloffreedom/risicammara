@@ -6,6 +6,7 @@
 package PacchettoGrafico.salaAttesa;
 
 import PacchettoGrafico.ListaGiocatoriClient;
+import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -67,8 +68,9 @@ public class SalaAttesa extends JFrame implements Runnable {
 
 
         this.addWindowListener(new WindowListenerSalaAttesa(this));
+        this.setMinimumSize(finestraR.getSize());
         this.setBounds(finestraR);
-        this.setResizable(false);  //TODO implementare coi pannelli invece che hard coding in modo che sia resizable
+        //this.setResizable(false);
 
         this.pannello = new PannelloSalaAttesa(indexGiocatore, listaGiocatori, this);
         this.getContentPane().add(pannello);

@@ -5,6 +5,7 @@
 
 package PacchettoGrafico.salaAttesa;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class CronologiaChat extends JLabel {
 
     public JScrollPane inscatolaInScrollPane(Rectangle dimensioniScrollPane){
         JScrollPane konsoleScorrimento = new JScrollPane(this);
-        konsoleScorrimento.setBounds(dimensioniScrollPane);
+        konsoleScorrimento.setPreferredSize(new Dimension(dimensioniScrollPane.width, dimensioniScrollPane.height));
         konsoleScorrimento.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         return konsoleScorrimento;
