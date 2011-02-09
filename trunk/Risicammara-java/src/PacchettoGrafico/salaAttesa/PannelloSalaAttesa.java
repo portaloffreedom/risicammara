@@ -5,18 +5,26 @@
 
 package PacchettoGrafico.salaAttesa;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import java.awt.event.ActionListener;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.text.html.StyleSheet.BoxPainter;
 import risicammaraClient.Colore_t;
 import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
@@ -61,12 +69,17 @@ public class PannelloSalaAttesa extends JPanel {
     private SalaAttesa salaAttesa;
 
     public PannelloSalaAttesa(int indexGiocatore, ListaPlayers listaGiocatori, SalaAttesa salaAttesa) {
-        super(new LayoutManagerMatteo());
+        //super(new LayoutManagerMatteo());
+        super();
         this.indexGiocatore = indexGiocatore;
         this.listaGiocatori = listaGiocatori;
         this.salaAttesa = salaAttesa;
-        
 
+        this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        this.pronti = new JToggleButton[6];
+        this.giocatoriBottoni = new BottoneGiocatori[ListaPlayers.MAXPLAYERS];
+        this.giocatoriLabel = new LabelGiocatori[ListaPlayers.MAXPLAYERS];
+        this.giocatori = giocatoriLabel;
 
         disegnaGiocatori();
         personalizza();
@@ -140,7 +153,7 @@ public class PannelloSalaAttesa extends JPanel {
     }
 
     ///////////////PARTE PRIVATA/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    private void disegnaGiocatori() {
+    /*private void disegnaGiocatori() {
          
         this.pronti = new JToggleButton[6];
         this.giocatoriBottoni = new BottoneGiocatori[ListaPlayers.MAXPLAYERS];
@@ -196,6 +209,99 @@ public class PannelloSalaAttesa extends JPanel {
         this.add(this.immissioneChat);
         this.add(this.invioChat);
         this.add(konsoleScorrimento);
+
+    }
+     */
+
+    private void disegnaGiocatori (){
+
+        JPanel giocatoriPanel = new JPanel(new GridBagLayout());
+        this.add(giocatoriPanel);
+        {
+            GridBagConstraints comportamentoGiocatori = new GridBagConstraints();
+            comportamentoGiocatori.fill = GridBagConstraints.HORIZONTAL;
+            comportamentoGiocatori.weighty = 0;
+            comportamentoGiocatori.weightx = 1;
+            comportamentoGiocatori.insets = new Insets(3, 5, 3, 0);
+            comportamentoGiocatori.gridy = 1;
+            GridBagConstraints comportamentoPronti = (GridBagConstraints) comportamentoGiocatori.clone();
+            comportamentoPronti.weightx = 0;
+            comportamentoPronti.insets = new Insets(3, 0, 3, 5);
+            comportamentoPronti.gridy = 2;
+
+            GridBagConstraints comportamento = new GridBagConstraints();
+            comportamento.gridy = ListaPlayers.MAXPLAYERS+1;
+            comportamento.weighty = 1;
+            giocatoriPanel.add(Box.createRigidArea(new Dimension(0, 0)), comportamento);
+
+            for (int i=0; i<ListaPlayers.MAXPLAYERS; i++) {
+                comportamentoGiocatori.gridy = i;
+                comportamentoPronti.gridy = i;
+
+                this.giocatoriBottoni[i] = new BottoneGiocatori(i);
+                this.giocatoriBottoni[i].setVisible(false);
+                this.giocatoriBottoni[i].setPreferredSize(giocatoriR.getSize());
+                giocatoriPanel.add(this.giocatoriBottoni[i], comportamentoGiocatori);
+                this.giocatoriBottoni[i].setAlignmentY(Component.TOP_ALIGNMENT);
+
+                this.giocatoriLabel[i] = new LabelGiocatori();
+                this.giocatoriLabel[i].setVisible(true);
+                this.giocatoriLabel[i].setPreferredSize(giocatoriR.getSize());
+                giocatoriPanel.add(this.giocatoriLabel[i], comportamentoGiocatori);
+                this.giocatoriLabel[i].setAlignmentY(Component.TOP_ALIGNMENT);
+
+                this.pronti[i] = new JToggleButton("Ω");
+                this.pronti[i].setEnabled(false);
+                this.pronti[i].setPreferredSize(prontiR.getSize());
+                giocatoriPanel.add(this.pronti[i], comportamentoPronti);
+                this.pronti[i].setAlignmentY(Component.TOP_ALIGNMENT);
+            }
+        }
+
+        JPanel destra = new JPanel();
+        destra.setLayout(new BoxLayout(destra, BoxLayout.Y_AXIS));
+        this.add(destra);
+        {
+            //pannello della barra in alto che contiene le impostazioni per cambiare colore e nome
+            JPanel impostazioni = new JPanel();
+            impostazioni.setLayout(new BoxLayout(impostazioni, BoxLayout.X_AXIS));
+            destra.add(impostazioni);
+            {
+                this.nomeGiocatore = new JTextField();
+                this.setPreferredSize(nomeGiocatoreR.getSize());
+                impostazioni.add(this.nomeGiocatore);
+
+                this.colore = new JComboBox(Colore_t.values());
+                this.colore.setPreferredSize(coloreR.getSize());
+                impostazioni.add(this.colore);
+
+                this.conferma = new JButton("conferma");
+                this.conferma.setPreferredSize(coloreR.getSize());
+                impostazioni.add(this.conferma);
+                this.conferma.addActionListener(new AscoltatoreCambiaNomeColore(salaAttesa, this));//new CambiaNomeColore();
+            }
+
+            this.konsole = new CronologiaChat(20);
+            JScrollPane konsoleScorrimento = konsole.inscatolaInScrollPane(cronologiaR);
+            destra.add(konsoleScorrimento);
+
+            
+            JPanel imissioneChatPanel = new JPanel();
+            imissioneChatPanel.setLayout(new BoxLayout(imissioneChatPanel, BoxLayout.X_AXIS));
+            destra.add(imissioneChatPanel);
+            {
+                this.immissioneChat = new JTextField();
+                this.immissioneChat.setPreferredSize(immissioneR.getSize());
+                ActionListener mandaChat = new AscoltatoreMandaChat(salaAttesa, this);
+                this.immissioneChat.addActionListener(mandaChat);
+                imissioneChatPanel.add(immissioneChat);
+
+                this.invioChat = new JButton("Invia");
+                this.invioChat.setPreferredSize(invioR.getSize());
+                this.invioChat.addActionListener(mandaChat);
+                imissioneChatPanel.add(invioChat);
+            }
+        }
 
     }
 
