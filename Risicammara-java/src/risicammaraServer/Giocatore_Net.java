@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import risicammaraClient.Colore_t;
 import risicammaraJava.playerManage.Giocatore;
+import risicammaraServer.messaggiManage.Messaggio;
 
 /**
  * Classe che rappresenta il giocatore nel server.
@@ -175,6 +176,14 @@ public class Giocatore_Net extends Giocatore {
      */
     public ObjectOutputStream getClientOut() {
         return clientOut;
+    }
+    /**
+     * Invia un messaggio a questo giocatore.
+     * @param mess Il messaggiod a inviare
+     * @throws IOException Errore di IO con il socket del giocatore.
+     */
+    public void sendMessage(Messaggio mess) throws IOException{
+        Server.BroadcastMessage(mess, this.clientOut);
     }
 
 }
