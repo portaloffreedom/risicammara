@@ -31,10 +31,29 @@ public class Plancia implements Serializable{
      * @return il Territorio_plancia corrispondente
      */
     public Territorio_plancia getTerritorio(territori_t territorio){
+        if(territorio == territori_t.Jolly1 || territorio == territori_t.Jolly2)
+            return null;
         territori_t[] terr = territori_t.values();
-        for(int i=0;i<terr.length;i++){
-            if(terr[i] == territorio) return tabellone[i];
-        }
+        return getTerritorio(territorio, 0,terr.length,terr);
+    }
+/**
+ * Implementa la discesa ricorsiva per la ricerca del territorio
+ * controllando ogni volta se il territorio è più grande o piccolo di quello
+ * che si trova nella metà + 1 dell'array contenente i territori.
+ * @param territorio il territorio da cercare
+ * @param inizar dove iniziare a contare
+ * @param finear dove finire di contare
+ * @param terr array di territori
+ * @return il territorio plancia corrispondente
+ */
+    private Territorio_plancia getTerritorio(territori_t territorio,
+                                       int inizar,int finear,territori_t[] terr)
+    {
+        int meta = ((finear-inizar)/2)+inizar;
+        if ( territorio.compareTo(terr[meta]) == 0 )return tabellone[meta];
+        else if(territorio.compareTo(terr[meta]) > 0) return getTerritorio(territorio,
+                                                     meta+1, finear, terr);
+        else if ( territorio.compareTo(terr[meta]) < 0) return getTerritorio(territorio, inizar, meta-1, terr);
         return null;
     }
 
