@@ -93,7 +93,7 @@ public class AscoltatoreLobby extends Thread {
 
     public void setStop(boolean stop) throws IOException {
         this.stop = stop;
-        this.ascoltatore.close();
+        this.interrupt();
     }
 
 }

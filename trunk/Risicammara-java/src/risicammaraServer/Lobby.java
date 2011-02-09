@@ -79,8 +79,8 @@ public class Lobby {
                     if(listaGiocatori.getSize() > 5){
                         try {
                             //TODO fare il costruttore di MessaggioErrore connection refused
-                            Server.BroadcastMessage(new MessaggioErrore(errori_t.CONNECTIONREFUSED, -1),gioctemp.getClientOut() );
-                            mgio.getConnessioneGiocatore().close();
+                            gioctemp.sendMessage(new MessaggioErrore(errori_t.CONNECTIONREFUSED, -1));
+                            gioctemp.closeSocket();
                         } catch (IOException ex) {
                             System.err.println("Errore di invio errore connessione: "+ex.getMessage());
                         }
@@ -97,9 +97,8 @@ public class Lobby {
                     gioctemp.AssignThread(gioth);
                     if(!gioth.isAlive()) gioth.start();
                     try {
-                        ObjectOutputStream os = (gioctemp.getClientOut());
-                        os.writeObject(new MessaggioConfermaNuovoGiocatore(listaGiocatori,plynumb));
-                        os.flush();
+                       gioctemp.sendMessage(new MessaggioConfermaNuovoGiocatore(
+                                                       listaGiocatori,plynumb));
                     } catch (IOException ex) {
                         System.out.println("Errore nel creare lo Stream di output verso il nuovo utente o di invio del messaggio: "+ex);
                         System.exit(-1);
@@ -138,7 +137,9 @@ public class Lobby {
                         if(!gtmp.isLeader()){
                             gtmp.setLeader(true);
                             try {
-                                Server.BroadcastMessage(MessaggioComandi.creaMsgLeader(gtmp.getPlayerIndex()), gtmp.getClientOut());
+                                gtmp.sendMessage(MessaggioComandi.creaMsgLeader(
+                                                        gtmp.getPlayerIndex())
+                                                        );
                             } catch (IOException ex) {
                                 System.err.println("Errore nell'invio di \"LEADER\" al primo giocatore "+ex.getMessage());
                             }
@@ -148,7 +149,8 @@ public class Lobby {
         try {
             Server.SpedisciMsgTutti(MessaggioComandi.creaMsgAvviaPartita(-1), listaGiocatori, -1);
         } catch (IOException ex) {
-            Logger.getLogger(Lobby.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("Errore nella spedizione di Avvio partita: "
+                    +ex.getMessage());
         }
         try {
             attendiConnessioni.setStop(true);
@@ -225,7 +227,8 @@ public class Lobby {
                     Giocatore_Net gtm = ((Giocatore_Net)listaGiocatori.getFirst(index));
                         gtm.setLeader(true);
                         try {
-                            Server.BroadcastMessage(MessaggioComandi.creaMsgLeader(gtm.getPlayerIndex()), gtm.getClientOut());
+                            gtm.sendMessage(MessaggioComandi.creaMsgLeader(
+                                                         gtm.getPlayerIndex()));
                         } catch (IOException ex) {
                             System.err.println("Errore nell'invio leader "+ex.getMessage());
                         }
