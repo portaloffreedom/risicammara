@@ -9,6 +9,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 import risicammaraJava.boardManage.Plancia;
 
@@ -22,7 +24,7 @@ public class PannelloGioco extends JPanel{
     private ListaGiocatoriClient listaGiocatori;
     private Plancia plancia;
 
-    private Dimension dimensioni;
+    private Dimension dimensioniPannello;
     private BarraSuperiore barra;
     private MenuGiocatore menuGiocatore;
     private OrologioTimer cronometro;
@@ -37,16 +39,17 @@ public class PannelloGioco extends JPanel{
         this.plancia = plancia;
         this.attivatoreGrafica = new AttivatoreGrafica(this);
 
-        dimensioni = new Dimension();
+        dimensioniPannello = new Dimension();
 
         this.cronometro = new OrologioTimer();
-        this.performance = new MillisecondiDiEsecuzione(this.dimensioni, cronometro);
+        this.performance = new MillisecondiDiEsecuzione(this.dimensioniPannello, cronometro);
         this.durataFrame = (int) ((1.0/frameRateMassimo)*1000);
 
-        this.barra = new BarraSuperiore(dimensioni, this, 60);
-        this.menuGiocatore = new MenuGiocatore(dimensioni, this.listaGiocatori, attivatoreGrafica);
-        this.barra.addCarteActionListener(null);
-        this.barra.addGiocatoreActionListener(menuGiocatore);
+        this.barra = new BarraSuperiore(dimensioniPannello, 60, this);
+        this.menuGiocatore = new MenuGiocatore(dimensioniPannello, this.listaGiocatori, attivatoreGrafica);
+        //this.barra.addCarteActionListener(null);
+        //this.barra.addGiocatoreActionListener(menuGiocatore);
+        this.addMouseListener(new MouseListenerImpl(this));
 
         //System.out.println("Dimensioni: "+dimensioni);
 
@@ -79,7 +82,7 @@ public class PannelloGioco extends JPanel{
         long millisecondi = cronometro.tempoPassato();
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
-        this.getSize(dimensioni);
+        this.getSize(dimensioniPannello);
         //System.out.println("Dimensioni: "+dimensioni);
 
         //g2.draw(new Line2D.Double(mouseX, mouseY, millisecondi%500, 70));
@@ -99,5 +102,40 @@ public class PannelloGioco extends JPanel{
                 System.err.println("Errore: "+ex);
             }
         }
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="mouseListener">
+    private static class MouseListenerImpl implements MouseListener {
+
+        private PannelloGioco pannello;
+
+        public MouseListenerImpl(PannelloGioco pannello) {
+            this.pannello = pannello;
+        }
+
+        public void mouseClicked(MouseEvent e) {
+            pannello.mouseCliccato(e.getPoint());
+        }
+
+        public void mousePressed(MouseEvent e) {
+
+        }
+
+        public void mouseReleased(MouseEvent e) {
+
+        }
+
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        public void mouseExited(MouseEvent e) {
+
+        }
+    }// </editor-fold>
+
+
+    public void mouseCliccato(Point posizione) {
+        //posizione
     }
 }

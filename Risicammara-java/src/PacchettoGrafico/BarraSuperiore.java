@@ -7,51 +7,51 @@ package PacchettoGrafico;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.ActionListener;
 import javax.swing.JPanel;
-import javax.swing.JButton;
 
 /**
  *
  * @author matteo
  */
 public class BarraSuperiore implements Elemento_2DGraphics {
+    private Dimension dimensioniPannello;
+    private Rectangle dimensioni;
+    private JPanel pannello;
+    private BottoneRisicammara giocatoreButton;
+    private BottoneRisicammara carteButton;
+    private Point posizioneGiocatore;
+    private Point posizioneCarte;
 
-    private Dimension dimensioni;
-    protected int altezza;
-    protected JPanel pannello;
-    protected JButton giocatoreButton;
-    protected JButton carteButton;
 
-
-    public BarraSuperiore(Dimension dimensioni,JPanel pannello, int altezza){
-        this.dimensioni=dimensioni;
+    public BarraSuperiore(Dimension dimensioniPannello, int altezza,JPanel pannello){
+        this.dimensioniPannello = dimensioniPannello;
+        this.dimensioni= new Rectangle(dimensioniPannello);
+        this.dimensioni.height = altezza;
         this.pannello=pannello;
-        this.altezza=altezza;
 
-        //this.giocatoreButton = new JButton("Giocatore");
-        this.giocatoreButton = new BottoneRisicammara("Giocatore", dimensioni);
-        pannello.add(this.giocatoreButton);
+        this.posizioneGiocatore = new Point(5, 5);
+        this.posizioneCarte     = new Point(dimensioni.width-5-100, 5);
 
-        //this.carteButton.setText("Carte");
-        this.carteButton = new BottoneRisicammara("Carte", dimensioni);
-        pannello.add(this.carteButton);
+        this.giocatoreButton = new BottoneRisicammara(posizioneGiocatore, "Giocatore");
+        this.carteButton     = new BottoneRisicammara(posizioneCarte, "Carte");
     }
 
     @Override
     public void disegna(Graphics2D graphics2D) {
-        graphics2D.fillRect(0, 0, dimensioni.width, altezza);
-        this.giocatoreButton.setBounds(5, 5, 100, 50);
-        this.carteButton.setBounds((dimensioni.width-5-100), 5, 100, 50);
-    }
+        //Corregge le posizioni per il ridimensionamento
+        if (true) { //TODO implementare questa fase solo se il pannello è stato ridimensionato
+            this.dimensioni.width = this.dimensioniPannello.width;
+            this.posizioneCarte.x = dimensioni.width-5-100;
+            this.carteButton.setPosizione(posizioneCarte);
+        }
 
-    public void addGiocatoreActionListener (ActionListener ascoltatore){
-        this.giocatoreButton.addActionListener(ascoltatore);
-    }
-    
-    public void addCarteActionListener (ActionListener ascoltatore){
-        this.carteButton.addActionListener(ascoltatore);
-    }
+        //Disegna lo sfondo nero della barra
+        graphics2D.fillRect(dimensioni.x, dimensioni.y, dimensioni.width, dimensioni.height);
 
+        //Disegna i due pulsanti
+        this.giocatoreButton.disegna(graphics2D);
+        this.carteButton.disegna(graphics2D);
+    }
 }
