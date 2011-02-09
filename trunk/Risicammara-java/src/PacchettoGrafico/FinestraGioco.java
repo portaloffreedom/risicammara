@@ -33,7 +33,6 @@ public class FinestraGioco extends JFrame {
         this.plancia = plancia;
 
         this.setIconImage(new ImageIcon("./risorse/risicamlogo.png").getImage());
-        //TODO mettere l'icona della finestra (e capire come minchia si fa -.-)
 
         this.setMinimumSize(new Dimension(800, 400));
 
