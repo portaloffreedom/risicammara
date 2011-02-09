@@ -48,17 +48,18 @@ public class MenuGiocatore implements ActionListener, Elemento_2DGraphics {
                           .disegna(graphics2D);
             //graphics2D.drawString("Tutti gli uomini del\n presidente", this.bordo+5, this.distanzaSuperiore+15);
         }
-        if (cambiato){
-            attivatoreGrafica.completato();
-            cambiato = false;
-        }
+        //if (cambiato){
+        //    attivatoreGrafica.completato();
+        //    cambiato = false;
+        //}
     }
 
     public void actionPerformed(ActionEvent e) {
         this.visibile = !this.visibile;
-        attivatoreGrafica.attiva();
-        cambiato = true;
+        this.attivatoreGrafica.panelRepaint();
+        //attivatoreGrafica.attiva();
+        //cambiato = true;
     }
-    
+
 }
 

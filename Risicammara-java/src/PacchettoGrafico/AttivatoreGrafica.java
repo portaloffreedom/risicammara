@@ -20,7 +20,7 @@ public class AttivatoreGrafica {
         this.contatore = 0;
     }
 
-    public boolean ridisegna(){
+    public boolean continuaRidisegna(){
         return (contatore > 0);
     }
 
@@ -36,6 +36,10 @@ public class AttivatoreGrafica {
             return;
         }
         contatore--;
+    }
+
+    public void panelRepaint (){
+        this.pannello.repaint();
     }
 
 }

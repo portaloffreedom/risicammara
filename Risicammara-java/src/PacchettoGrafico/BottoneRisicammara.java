@@ -10,7 +10,6 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 
 /**
@@ -32,6 +31,7 @@ public class BottoneRisicammara extends Elemento_2DGraphicsCliccable {
         this.pressione = new ImageIcon("./risorse/premuto_pulsante.png",  "Descrizione");
 
         super.setShape(new Rectangle(posizione, new Dimension(sfondo.getIconWidth(), sfondo.getIconHeight())));
+
     }
 
     public void disegna(Graphics2D graphics2D){
@@ -50,15 +50,5 @@ public class BottoneRisicammara extends Elemento_2DGraphicsCliccable {
 
     public void setPosizione(Point posizione){
         ((Rectangle)this.posizione).setLocation(posizione);
-    }
-
-    @Override
-    public void actionPressed(MouseEvent e) {
-        System.out.println("Premuto BottoneRisicammara "+testo);
-    }
-
-    @Override
-    public void actionRollOver(MouseEvent e) {
-        System.out.println("Rollover BottoneRisicammara "+testo);
     }
 }

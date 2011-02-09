@@ -17,25 +17,26 @@ import java.awt.Rectangle;
 public class BarraSuperiore implements Elemento_2DGraphics {
     private Dimension dimensioniPannello;
     private Rectangle dimensioni;
-    private PannelloGioco pannello;
     private BottoneRisicammara giocatoreButton;
     private BottoneRisicammara carteButton;
     private Point posizioneGiocatore;
     private Point posizioneCarte;
+    private MenuGiocatore menuGiocatore;
 
 
-    public BarraSuperiore(Dimension dimensioniPannello, int altezza,PannelloGioco pannello){
+    public BarraSuperiore(Dimension dimensioniPannello, int altezza,PannelloGioco pannello, ListaGiocatoriClient listaGiocatori, AttivatoreGrafica attivatoreGrafica){
         this.dimensioniPannello = dimensioniPannello;
         this.dimensioni= new Rectangle(dimensioniPannello);
         this.dimensioni.height = altezza;
-        this.pannello=pannello;
-
+        this.menuGiocatore = new MenuGiocatore(dimensioniPannello, listaGiocatori, attivatoreGrafica);
         this.posizioneGiocatore = new Point(5, 5);
         this.posizioneCarte     = new Point(dimensioni.width-5-100, 5);
-
         this.giocatoreButton = new BottoneRisicammara(posizioneGiocatore, "Giocatore");
-        pannello.addPulsante(giocatoreButton);
         this.carteButton     = new BottoneRisicammara(posizioneCarte, "Carte");
+
+        
+        this.giocatoreButton.setActionListener(menuGiocatore);
+        pannello.addPulsante(giocatoreButton);
         pannello.addPulsante(carteButton);
     }
 
@@ -54,5 +55,6 @@ public class BarraSuperiore implements Elemento_2DGraphics {
         //Disegna i due pulsanti
         this.giocatoreButton.disegna(graphics2D);
         this.carteButton.disegna(graphics2D);
+        this.menuGiocatore.disegna(graphics2D);
     }
 }
