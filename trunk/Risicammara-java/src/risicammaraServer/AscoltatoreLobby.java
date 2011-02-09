@@ -90,4 +90,9 @@ public class AscoltatoreLobby extends Thread {
     public void setNumeroGiocatori(int num){
         this.numerogiocatori = num;
     }
+
+    public void setStop(boolean stop) {
+        this.stop = stop;
+    }
+
 }
