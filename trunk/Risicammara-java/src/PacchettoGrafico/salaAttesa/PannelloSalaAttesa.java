@@ -154,7 +154,7 @@ public class PannelloSalaAttesa extends JPanel {
 
         JPanel giocatoriPanel = new JPanel(new GridBagLayout());
         this.add(giocatoriPanel);
-        {
+        {/* giocatoriPanel */
             GridBagConstraints comportamentoGiocatori = new GridBagConstraints();
             comportamentoGiocatori.fill = GridBagConstraints.HORIZONTAL;
             comportamentoGiocatori.weighty = 0;
@@ -193,52 +193,52 @@ public class PannelloSalaAttesa extends JPanel {
                 giocatoriPanel.add(this.pronti[i], comportamentoPronti);
                 this.pronti[i].setAlignmentY(Component.TOP_ALIGNMENT);
             }
-        }
+        }/* giocatoriPanel */
 
-        JPanel destra = new JPanel();
-        destra.setLayout(new BoxLayout(destra, BoxLayout.Y_AXIS));
-        this.add(destra);
-        {
+        JPanel destraPanel = new JPanel();
+        destraPanel.setLayout(new BoxLayout(destraPanel, BoxLayout.Y_AXIS));
+        this.add(destraPanel);
+        {/* destraPanel */
             //pannello della barra in alto che contiene le impostazioni per cambiare colore e nome
-            JPanel impostazioni = new JPanel();
-            impostazioni.setLayout(new BoxLayout(impostazioni, BoxLayout.X_AXIS));
-            destra.add(impostazioni);
-            {
+            JPanel impostazioniPanel = new JPanel();
+            impostazioniPanel.setLayout(new BoxLayout(impostazioniPanel, BoxLayout.X_AXIS));
+            destraPanel.add(impostazioniPanel);
+            {/* impostazioniPanel */
                 this.nomeGiocatore = new JTextField();
                 this.setPreferredSize(nomeGiocatoreR.getSize());
-                impostazioni.add(this.nomeGiocatore);
+                impostazioniPanel.add(this.nomeGiocatore);
 
                 this.colore = new JComboBox(Colore_t.values());
                 this.colore.setPreferredSize(coloreR.getSize());
-                impostazioni.add(this.colore);
+                impostazioniPanel.add(this.colore);
 
                 this.conferma = new JButton("conferma");
                 this.conferma.setPreferredSize(coloreR.getSize());
-                impostazioni.add(this.conferma);
+                impostazioniPanel.add(this.conferma);
                 this.conferma.addActionListener(new AscoltatoreCambiaNomeColore(salaAttesa, this));//new CambiaNomeColore();
-            }
+            }/* impostazioniPanel */
 
             this.konsole = new CronologiaChat(20);
             JScrollPane konsoleScorrimento = konsole.inscatolaInScrollPane(cronologiaR);
-            destra.add(konsoleScorrimento);
+            destraPanel.add(konsoleScorrimento);
 
             
-            JPanel imissioneChatPanel = new JPanel();
-            imissioneChatPanel.setLayout(new BoxLayout(imissioneChatPanel, BoxLayout.X_AXIS));
-            destra.add(imissioneChatPanel);
-            {
+            JPanel immissioneChatPanel = new JPanel();
+            immissioneChatPanel.setLayout(new BoxLayout(immissioneChatPanel, BoxLayout.X_AXIS));
+            destraPanel.add(immissioneChatPanel);
+            {/* immissioneChatPanel */
                 this.immissioneChat = new JTextField();
                 this.immissioneChat.setPreferredSize(immissioneR.getSize());
                 ActionListener mandaChat = new AscoltatoreMandaChat(salaAttesa, this);
                 this.immissioneChat.addActionListener(mandaChat);
-                imissioneChatPanel.add(immissioneChat);
+                immissioneChatPanel.add(immissioneChat);
 
                 this.invioChat = new JButton("Invia");
                 this.invioChat.setPreferredSize(invioR.getSize());
                 this.invioChat.addActionListener(mandaChat);
-                imissioneChatPanel.add(invioChat);
-            }
-        }
+                immissioneChatPanel.add(invioChat);
+            }/* immissioneChatPanel */
+        }/* destraPanel */
 
     }
 
