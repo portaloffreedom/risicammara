@@ -21,13 +21,16 @@ public class MenuGiocatore implements ActionListener, Elemento_2DGraphics {
     private Rectangle rettangolo;
     private Dimension dimensioni;
     private boolean visibile;
+    private boolean cambiato;
+    private AttivatoreGrafica attivatoreGrafica;
 
     private ListaGiocatoriClient listaGiocatori;
 
 
-    public MenuGiocatore(Dimension dimensioni, ListaGiocatoriClient listaGiocatori) {
+    public MenuGiocatore(Dimension dimensioni, ListaGiocatoriClient listaGiocatori, AttivatoreGrafica attivatoreGrafica) {
         this.dimensioni=dimensioni;
         this.visibile=false;
+        this.attivatoreGrafica = attivatoreGrafica;
         this.listaGiocatori = listaGiocatori;
 
         this.rettangolo = new Rectangle(5, 55, 120, 70);
@@ -44,12 +47,17 @@ public class MenuGiocatore implements ActionListener, Elemento_2DGraphics {
             new TestoACapo(graphics2D, dimensioni, rettangolo, listaGiocatori.meStesso().getObbiettivo().toString())
                           .disegna(graphics2D);
             //graphics2D.drawString("Tutti gli uomini del\n presidente", this.bordo+5, this.distanzaSuperiore+15);
-            
+        }
+        if (cambiato){
+            attivatoreGrafica.completato();
+            cambiato = false;
         }
     }
 
     public void actionPerformed(ActionEvent e) {
         this.visibile = !this.visibile;
+        attivatoreGrafica.attiva();
+        cambiato = true;
     }
     
 }

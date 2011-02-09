@@ -29,10 +29,13 @@ public class PannelloGioco extends JPanel{
     private MillisecondiDiEsecuzione performance;
     private int durataFrame;
 
+    private AttivatoreGrafica attivatoreGrafica;
+
     public PannelloGioco(int frameRateMassimo, Plancia plancia, ListaGiocatoriClient listaGiocatori) {
         super();
         this.listaGiocatori = listaGiocatori;
         this.plancia = plancia;
+        this.attivatoreGrafica = new AttivatoreGrafica(this);
 
         dimensioni = new Dimension();
 
@@ -41,7 +44,7 @@ public class PannelloGioco extends JPanel{
         this.durataFrame = (int) ((1.0/frameRateMassimo)*1000);
 
         this.barra = new BarraSuperiore(dimensioni, this, 60);
-        this.menuGiocatore = new MenuGiocatore(dimensioni, this.listaGiocatori);
+        this.menuGiocatore = new MenuGiocatore(dimensioni, this.listaGiocatori, attivatoreGrafica);
         this.barra.addCarteActionListener(null);
         this.barra.addGiocatoreActionListener(menuGiocatore);
 
@@ -63,7 +66,10 @@ public class PannelloGioco extends JPanel{
         }
 
         this.renderizzaScena(g, mouseX, mouseY);
-        this.repaint();
+
+        if (this.attivatoreGrafica.ridisegna())
+            this.repaint();
+
         return;
 
 
