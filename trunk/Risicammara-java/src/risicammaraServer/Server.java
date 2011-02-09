@@ -83,10 +83,6 @@ public static void main(String[] args) {
        Giocatore_Net gtmp = (Giocatore_Net)listaGiocatori.get(indicegiocatore);
        BroadcastMessage(messaggioDaInviare,gtmp.getClientOut());
     }
-
-    public static void SpedisciMsgTutti(Messaggio recMsg){
-        SpedisciMsgTutti(recMsg, , -1);
-    }
    /**
     * Spedisce un messaggio a tutti i client con possibilità di escluderne
     * uno in particolare.
