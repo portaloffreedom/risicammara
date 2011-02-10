@@ -12,12 +12,18 @@ import java.util.Random;
 
 public abstract class Mazzo {
 
+    /**
+     * L'oggetto che raccoglie tutte le carte
+     */
     protected Carta[] deck;
+    /**
+     * Indica da dove iniziare a considerare il mazzo
+     */
     protected int inizio_mazzo;
 /**
  * Costruttore Predefinito del mazzo. Inizializza tutte le variabili
  * e l'array che rappresenta il contenitore delle carte.
- * @param numcarte Numero delle carte che dovrà avere il mazzo
+ * @param tipo
  */
     protected Mazzo(Carta[] tipo){
         deck = tipo;
@@ -51,6 +57,8 @@ public abstract class Mazzo {
           }
       }
     }
-/** Preleva una carta dal mazzo*/
+    /** Preleva una carta dal mazzo
+     * @return la carta pescata
+     */
     public abstract Carta Pesca();
 }

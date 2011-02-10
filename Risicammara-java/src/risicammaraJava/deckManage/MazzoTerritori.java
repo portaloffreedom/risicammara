@@ -12,6 +12,9 @@ public final class MazzoTerritori extends Mazzo {
     private Carta scarti[];
     private int inizio_scarti;
 
+    /**
+     * Inizializza tutto il necessario per il mazzo di carte.
+     */
     public MazzoTerritori(){
         super(territori_t.values());
         inizio_scarti = 0;
@@ -49,6 +52,11 @@ public final class MazzoTerritori extends Mazzo {
         this.Mischia();
     }
 
+    /**
+     * Restituisce una carta a partire da un preciso indice.
+     * @param index l'indice dove prelevare la carta
+     * @return la carta prelevata
+     */
     public territori_t getCard(int index){
         if((index > deck.length) | (index < 1)) return null;
         index -=1;
