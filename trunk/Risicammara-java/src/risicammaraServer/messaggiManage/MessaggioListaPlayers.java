@@ -8,7 +8,11 @@ package risicammaraServer.messaggiManage;
 import risicammaraJava.playerManage.ListaPlayers;
 
 /**
- *
+ * Messaggio che invia l'intera lista dei giocatori.
+ * @deprecated Questo messaggio non viene usato in quanto la lista dei
+ * giocatori viene mandata soltanto all'atto della connessione con il server
+ * e non viene più inviata dopo l'inizio della partita in quanto non si può
+ * connettere nessuno mentre si sta giocando.
  * @author stengun
  */
 public class MessaggioListaPlayers implements Messaggio{

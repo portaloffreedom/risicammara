@@ -23,6 +23,8 @@ public class Giocatore implements Serializable {
     private ArrayList<Carta> carte;
     /** L'obbiettivo del giocatore */
     private Obbiettivi_t obbiettivo;
+    /** Se il giocatore è pronto per giocare */
+    private boolean ready;
 
 /**
  * Inizializza con i valori di default tutti i campi del giocatore eccetto il
@@ -32,6 +34,7 @@ public class Giocatore implements Serializable {
  * @param colore_armate Il colore delle armate (Color_t)
  */
     public Giocatore(String nome,Colore_t colore_armate){
+        this.ready = false;
         this.nome = nome;
         this.colore_armate = colore_armate;
         this.armate_bonus = 0;
@@ -151,4 +154,20 @@ public class Giocatore implements Serializable {
     public void setArmyColour(Colore_t col){
         this.colore_armate = col;
     }
+/**
+ * Chiede se il giocatore è pronto per giocare.
+ * @return True se è pronto, False altrimenti
+ */
+    public boolean isReady() {
+        return ready;
+    }
+/**
+ * Serve per impostare lo stato di Ready di un giocatore.
+ * @param ready true per impostare a Ready, false per impostare non ready
+ */
+    public void setReady(boolean ready) {
+        this.ready = ready;
+    }
+
+
 }

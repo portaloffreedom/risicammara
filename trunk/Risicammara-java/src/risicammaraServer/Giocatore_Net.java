@@ -115,22 +115,6 @@ public class Giocatore_Net extends Giocatore {
     public int getPlayerIndex(){
         return ((PlayerThread)thread_player).getPlayerIndex();
     }
-    /**
-     * Indica se il giocatore è pronto per avviare la partita.
-     * Questa funzione preleva il suo valore dal thread corrispondente.
-     * @return
-     */
-    public boolean isReady(){
-        return ((PlayerThread)thread_player).isReady();
-    }
-    /**
-     * Imposta il valore di Ready del giocatore.
-     * Questa funzione agisce sul thread per impostare lo stato di Ready.
-     * @param ready
-     */
-    public void setReady(boolean ready){
-        ((PlayerThread)thread_player).setReady(ready);
-    }
 
     //------------------ Funzioni che utilizzano il socket
     /**
@@ -183,7 +167,9 @@ public class Giocatore_Net extends Giocatore {
      * @throws IOException Errore di IO con il socket del giocatore.
      */
     public void sendMessage(Messaggio mess) throws IOException{
-        Server.BroadcastMessage(mess, this.clientOut);
+        clientOut.writeObject(mess);
+        clientOut.flush();
+        System.out.println("messaggio "+mess.toString()+" inviato!");
     }
 
 }

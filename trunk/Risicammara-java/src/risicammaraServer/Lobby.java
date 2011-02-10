@@ -77,8 +77,7 @@ public class Lobby {
                     Giocatore_Net gioctemp = new Giocatore_Net(mgio.getConnessioneGiocatore());
                     if(listaGiocatori.getSize() > 5){
                         try {
-                            //TODO fare il costruttore di MessaggioErrore connection refused
-                            gioctemp.sendMessage(new MessaggioErrore(errori_t.CONNECTIONREFUSED, -1));
+                            gioctemp.sendMessage(MessaggioErrore.creaMsgConnectionRefused(-1));
                             gioctemp.closeSocket();
                         } catch (IOException ex) {
                             System.err.println("Errore di invio errore connessione: "+ex.getMessage());
@@ -88,7 +87,6 @@ public class Lobby {
                         }
                         break;
                     }
-                    gioctemp.setArmyColour(Colore_t.NULLO); //TODO probabilmente si può togliere perché non fa niente (è già nullo il colore)
                     // Indice nel quale viene inserito il giocatore
                     int plynumb = listaGiocatori.addPlayer(gioctemp);
                     PlayerThread gioth = new PlayerThread(coda,gioctemp.getClientIn(),plynumb);
@@ -186,19 +184,25 @@ public class Lobby {
     * @param cmdMsg il pacchetto Messaggio_Comando
     */
     private Messaggio CommandHandling(MessaggioComandi cmdMsg){
-        //TODO Completare il codice di Exit.
-        //TODO Completare il codice di AVVIAPARTITA
         switch(cmdMsg.getComando()){
             case SETPRONTO:
                 serverSetPronto(cmdMsg.getSender());
                 break;
             case KICKPLAYER:
-                serverPlayerRemove(cmdMsg.getReceiver());
+                serverPlayerRemove(cmdMsg.getOptParameter());
                 break;
             case DISCONNECT:
                 serverPlayerRemove(cmdMsg.getSender());
                 listaGiocatori.remPlayer(cmdMsg.getSender());
                 break;
+            case EXIT:
+                for(int i=0;i<ListaPlayers.MAXPLAYERS;i++){
+                    Giocatore_Net g = (Giocatore_Net)listaGiocatori.get(i);
+                    if(g==null) continue;
+                    serverPlayerRemove(i);
+                }
+                //Server disconnesso
+                System.exit(0);
             default:
                 return new MessaggioChat(-1,"comando non riconosciuto.");
         }

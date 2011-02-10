@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package risicammaraServer;
 
 import java.io.IOException;
@@ -31,7 +26,10 @@ public static void main(String[] args) {
                     //il metodo run
 
 }
-
+/**
+ * Inizializza un server su una porta richiesta.
+ * @param porta la porta da cui ascoltare le connessioni.
+ */
     public Server(int porta) {
         this.porta = porta;
         this.coda = new CodaMsg();
@@ -58,6 +56,7 @@ public static void main(String[] args) {
      * @param recMsg Il messaggio di chat
      * @param cl il client da notificare
      * @throws IOException Eccezione di I/O dovuta ai socket
+     * @deprecated Usare il metodo di Giocatore_Net per inviare un messaggio.
      */
    public static void BroadcastMessage(Messaggio recMsg,
            ObjectOutputStream cl)
@@ -98,7 +97,7 @@ public static void main(String[] args) {
             if(i==escludi) continue;
             Giocatore_Net gtmp = (Giocatore_Net)listaGiocatori.get(i);
             if(gtmp == null)continue;
-            BroadcastMessage(recMsg,gtmp.getClientOut());
+            gtmp.sendMessage(recMsg);
         }
     }
 }
