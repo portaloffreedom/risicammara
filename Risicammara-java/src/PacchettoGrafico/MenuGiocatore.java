@@ -17,11 +17,10 @@ import java.awt.event.ActionListener;
  * @author matteo
  */
 public class MenuGiocatore implements ActionListener, Elemento_2DGraphics {
-
-    private Rectangle rettangolo;
     private Dimension dimensioni;
     private boolean visibile;
     private boolean cambiato;
+    private RiquadroTesto Obbiettivo;
     private AttivatoreGrafica attivatoreGrafica;
 
     private ListaGiocatoriClient listaGiocatori;
@@ -32,26 +31,15 @@ public class MenuGiocatore implements ActionListener, Elemento_2DGraphics {
         this.visibile=false;
         this.attivatoreGrafica = attivatoreGrafica;
         this.listaGiocatori = listaGiocatori;
-
-        this.rettangolo = new Rectangle(5, 55, 120, 70);
+        Rectangle rettangoloTesto = new Rectangle(5, 55, 200, 0);
+        this.Obbiettivo = new RiquadroTesto(rettangoloTesto, listaGiocatori.meStesso().getObbiettivo().toString());
     }
 
     @Override
     public void disegna(Graphics2D graphics2D) {
         if (visibile) {
-
-            //parte provvisoria
-            graphics2D.setColor(Color.red);
-            graphics2D.fill(rettangolo);
-            graphics2D.setColor(Color.black);
-            new TestoACapo(graphics2D, dimensioni, rettangolo, listaGiocatori.meStesso().getObbiettivo().toString())
-                          .disegna(graphics2D);
-            //graphics2D.drawString("Tutti gli uomini del\n presidente", this.bordo+5, this.distanzaSuperiore+15);
+            this.Obbiettivo.disegna(graphics2D);
         }
-        //if (cambiato){
-        //    attivatoreGrafica.completato();
-        //    cambiato = false;
-        //}
     }
 
     public void actionPerformed(ActionEvent e) {
