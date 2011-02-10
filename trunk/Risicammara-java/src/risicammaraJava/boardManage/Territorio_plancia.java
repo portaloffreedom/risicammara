@@ -79,6 +79,18 @@ public class Territorio_plancia implements Serializable{
         return this.proprietario;
     }
 /**
+ * Controlla se un dato territorio è adiacente a questo.
+ * @param terri il territorio da controllare
+ * @return True se è adiacente, false altrimenti.
+ */
+    public boolean isAdiacent(territori_t terri){
+        for(territori_t t : adiacenze){
+            if(terri == t) return true;
+        }
+        return false;
+    }
+
+    /**
  * Completa la lista di adiacenza di tutti i territori.
  */
     //TODO caricamento adiacenze da file.

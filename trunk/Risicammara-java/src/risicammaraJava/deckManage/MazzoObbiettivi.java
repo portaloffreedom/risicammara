@@ -8,6 +8,9 @@ import risicammaraClient.Obbiettivi_t;
  */
 public final class MazzoObbiettivi extends Mazzo{
 
+    /**
+     * Costruisce il mazzo degli obbiettivi
+     */
     public MazzoObbiettivi(){
         super(Obbiettivi_t.values());
         Mischia();
