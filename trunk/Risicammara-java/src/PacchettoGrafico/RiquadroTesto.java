@@ -17,10 +17,12 @@ import java.awt.Rectangle;
 public class RiquadroTesto extends TestoACapo {
 
     private Rectangle rettangoloRiquadro;
+    private Color coloreGiocatore;
 
-    public RiquadroTesto(Rectangle rettangolo, String testo) {
+    public RiquadroTesto(Rectangle rettangolo, String testo, Color coloreGiocatore) {
         super(RimpicciolisciPerTesto(rettangolo), testo);
         this.rettangoloRiquadro = rettangolo;
+        this.coloreGiocatore = coloreGiocatore;
     }
 
     @Override
@@ -31,7 +33,7 @@ public class RiquadroTesto extends TestoACapo {
         this.rettangoloRiquadro.height = altezza+4;
 
         //disengna effettivamente
-        graphics2D.setColor(Color.RED);
+        graphics2D.setColor(coloreGiocatore);
         graphics2D.fill(rettangoloRiquadro);
         graphics2D.setColor(Color.BLACK);
         graphics2D.draw(rettangoloRiquadro);
