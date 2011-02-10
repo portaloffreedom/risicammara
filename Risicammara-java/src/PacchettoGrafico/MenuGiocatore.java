@@ -5,7 +5,6 @@
 
 package PacchettoGrafico;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -32,7 +31,9 @@ public class MenuGiocatore implements ActionListener, Elemento_2DGraphics {
         this.attivatoreGrafica = attivatoreGrafica;
         this.listaGiocatori = listaGiocatori;
         Rectangle rettangoloTesto = new Rectangle(5, 55, 200, 0);
-        this.Obbiettivo = new RiquadroTesto(rettangoloTesto, listaGiocatori.meStesso().getObbiettivo().toString());
+        this.Obbiettivo = new RiquadroTesto(rettangoloTesto,
+                                            listaGiocatori.meStesso().getObbiettivo().toString(),
+                                            listaGiocatori.meStesso().getArmyColour().getColor());
     }
 
     @Override

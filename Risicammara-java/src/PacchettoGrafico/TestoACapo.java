@@ -7,10 +7,8 @@ package PacchettoGrafico;
 
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.List;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
