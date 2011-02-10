@@ -5,10 +5,13 @@
 
 package PacchettoGrafico;
 
-import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.List;
+import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 /**
  *
@@ -17,54 +20,67 @@ import java.awt.Rectangle;
 public class TestoACapo implements  Elemento_2DGraphics {
     
     private String testo;
-    private FontMetrics fontMetrics;
-    private Rectangle rettangolo;
-    protected Dimension dimensioni;
+    private Rectangle rettangoloTesto;
+    private LinkedList<String> listaRighe;
     
-    public TestoACapo (Graphics2D graphics2D, Dimension dimensioni, Rectangle rectangolo, String testo){
-        this.dimensioni=dimensioni;
+    public TestoACapo (Rectangle rettangolo, String testo){
         this.testo=testo;
+        this.rettangoloTesto = rettangolo;
+        this.listaRighe = new LinkedList<String>();
+    }
 
-        this.rettangolo = new Rectangle(rectangolo.x+4, rectangolo.y, rectangolo.width-6, 0);
-        
-        this.fontMetrics = graphics2D.getFontMetrics();
+    public TestoACapo (Point posizione, int larghezza, String testo){
+        this(new Rectangle(posizione.x, posizione.y, larghezza, 0), testo);
     }
 
     @Override
     public void disegna(Graphics2D graphics2D) {
-        this.disegna(graphics2D, this.testo);
+        this.preparaTesto(graphics2D);
+        this.disegnaTesto(graphics2D);
     }
 
-    public void disegna(Graphics2D graphics2D, String testo) {
+    public void preparaTesto(Graphics2D graphics2D) {
+        this.listaRighe = new LinkedList<String>();
         boolean finito = false;
         String restante = testo;
+        FontMetrics fontMetrics = graphics2D.getFontMetrics();
+
         for (int i=1; !finito; i++){
             String sottoStringa = new String(restante);
             int spazio_precedente = restante.length();
-            while(fontMetrics.stringWidth(sottoStringa)>rettangolo.width) {
+            while(fontMetrics.stringWidth(sottoStringa)>rettangoloTesto.width) {
                 spazio_precedente = sottoStringa.lastIndexOf(' ', spazio_precedente);
                 if (spazio_precedente == -1)
                     spazio_precedente = 0;
                 sottoStringa = sottoStringa.substring(0, spazio_precedente);
             }
-            graphics2D.drawString(sottoStringa, (float)rettangolo.getX(), (float)rettangolo.getY()+((fontMetrics.getMaxAscent()+2)*i));
+            //graphics2D.drawString(sottoStringa, (float)rettangoloTesto.getX(), (float)rettangoloTesto.getY()+((fontMetrics.getMaxAscent()+2)*i));
+            listaRighe.add(sottoStringa);
             restante = restante.substring(spazio_precedente);
             if (restante.isEmpty()) finito=true;
             else restante = restante.substring(1);
-
-
-            /*
-            spazio_precedente = testo.lastIndexOf(' ', spazio_precedente);
-            String sottoStringa = testo.substring(0, spazio_precedente);
-            testo = testo.substring(spazio_precedente+1);
-            System.out.println(sottoStringa+":"+testo);
-             */
-
-
-            //System.out.println("Stringa: "+sottoStringa);
-            //System.out.println("Dimensioni: "+fontMetrics.stringWidth(sottoStringa));
         }
-        //graphics2D.drawString(testo, (float)rettangolo.getX(), (float)rettangolo.getY()+fontMetrics.getMaxAscent());
     }
 
+    public void disegnaTesto(Graphics2D graphics2D){
+        FontMetrics fontMetrics = graphics2D.getFontMetrics();
+        int i=1;
+        for (String riga : listaRighe){
+            graphics2D.drawString(riga, (float)rettangoloTesto.getX(), (float)rettangoloTesto.getY()+((fontMetrics.getMaxAscent()+2)*i));
+            i++;
+        }
+    }
+
+    public int getAltezzaTesto(Graphics2D graphics2D){
+        FontMetrics fontMetrics = graphics2D.getFontMetrics();
+        return fontMetrics.getHeight()*listaRighe.size();
+    }
+
+    public void setTesto(String testo) {
+        this.testo = testo;
+    }
+
+    public void setRettangolo(Rectangle rettangolo) {
+        this.rettangoloTesto = rettangolo;
+    }
 }
