@@ -33,7 +33,7 @@ public class MenuGiocatore implements ActionListener, Elemento_2DGraphics {
         Rectangle rettangoloTesto = new Rectangle(5, 55, 200, 0);
         this.Obbiettivo = new RiquadroTesto(rettangoloTesto,
                                             listaGiocatori.meStesso().getObbiettivo().toString(),
-                                            listaGiocatori.meStesso().getArmyColour().getColor());
+                                            listaGiocatori.meStesso().getArmyColour());
     }
 
     @Override
