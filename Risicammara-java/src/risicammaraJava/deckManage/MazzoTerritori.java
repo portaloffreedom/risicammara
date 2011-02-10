@@ -1,15 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package risicammaraJava.deckManage;
 
-import java.util.Random;
 import risicammaraClient.territori_t;
 
 /**
- *
+ * Rappresenta il mazzo delle carte territorio e il corrispettivo mazzo
+ * degli scarti. Si occupa di gestire lo scarto delle carte e la preparazione
+ * del mazzo quando le carte finiscono e vanno usate quelle degli scarti.
  * @author Sten_Gun
  */
 public final class MazzoTerritori extends Mazzo {
@@ -20,8 +16,6 @@ public final class MazzoTerritori extends Mazzo {
         super(territori_t.values());
         inizio_scarti = 0;
         scarti = null;
-        Mischia();
-        Mischia();
         Mischia();
     }
 
@@ -39,18 +33,6 @@ public final class MazzoTerritori extends Mazzo {
         }
         Carta temp = deck[--inizio_mazzo];
         return temp;
-    }
-
-    
-    protected void Mischia(){
-        Random random = new Random();
-        for(int i=0;i<inizio_mazzo;i++){
-            Carta temp;
-            int r = random.nextInt(inizio_mazzo);
-            temp = deck[i];
-            deck[i] = deck[r];
-            deck[r] = temp;
-        }
     }
 
 

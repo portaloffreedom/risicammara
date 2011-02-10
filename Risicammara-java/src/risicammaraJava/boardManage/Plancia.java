@@ -37,9 +37,9 @@ public class Plancia implements Serializable{
         return getTerritorio(territorio, 0,terr.length,terr);
     }
 /**
- * Implementa la discesa ricorsiva per la ricerca del territorio
+ * Metodo per la discesa ricorsiva per la ricerca del territorio
  * controllando ogni volta se il territorio è più grande o piccolo di quello
- * che si trova nella metà + 1 dell'array contenente i territori.
+ * che si trova nella metà dell'array contenente i territori.
  * @param territorio il territorio da cercare
  * @param inizar dove iniziare a contare
  * @param finear dove finire di contare

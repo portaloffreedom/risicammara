@@ -1,12 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package PacchettoGrafico.salaAttesa;
 
 import PacchettoGrafico.ListaGiocatoriClient;
-import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -78,7 +72,6 @@ public class SalaAttesa extends JFrame implements Runnable {
 
     public void run() {
         this.setVisible(true);
-        
         Messaggio arrivo = null;
 
         while (true) {
@@ -156,7 +149,7 @@ public class SalaAttesa extends JFrame implements Runnable {
                             break;
 
                         case KICKPLAYER:
-                            pannello.stampaMessaggio("Giocatore \""+listaGiocatori.getNomeByIndex(msgComando.getReceiver())+
+                            pannello.stampaMessaggio("Giocatore \""+listaGiocatori.getNomeByIndex(msgComando.getOptParameter())+
                                     "\" è stato kickato da \""+listaGiocatori.getNomeByIndex(msgComando.getSender())+"\"");
                             break;
 

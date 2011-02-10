@@ -8,7 +8,7 @@ public class MessaggioComandi implements Messaggio{
 
     private comandi_t comando;
     private int sender;
-    private int receiver;
+    private int opt_parameter;
 // Qua ci vanno tutti i costruttori static per ogni tipo di messaggio, in modo da
     //facilitare la vita a chi crea i messaggi.
     public static MessaggioComandi creaMsgIniziaAttacco(int giocatorecheattacca,int giocatorecheDifende){
@@ -17,8 +17,8 @@ public class MessaggioComandi implements Messaggio{
     public static MessaggioComandi creaMsgAttaccoterminato(int giocatorecheAttaccava){
         return new MessaggioComandi(comandi_t.ATTACCOTERMINATO, giocatorecheAttaccava);
     }
-    public static MessaggioComandi creaMsgLanciadado(int giocatorecheLanciaDado){
-        return new MessaggioComandi(comandi_t.LANCIADADO, giocatorecheLanciaDado);
+    public static MessaggioComandi creaMsgLanciadado(int giocatorecheLanciaDado,int numerodadi){
+        return new MessaggioComandi(comandi_t.LANCIADADO, giocatorecheLanciaDado,numerodadi);
     }
 
     public static MessaggioComandi creaMsgRitirati(int giocatoreCheSiRitira){
@@ -117,13 +117,13 @@ public class MessaggioComandi implements Messaggio{
      * Costruttore alternativo del pacchetto
      * @param cmd il comando desiderato.
      * @param inviante l'indice del giocatore che invia il comando (-1 se è il sistema,-2 se null)
-     * @param who l'indice di chi riceve questa azione(non può essere -1)
+     * @param opt_parameter l'indice di chi riceve questa azione(non può essere -1)
      */
-    private MessaggioComandi(comandi_t cmd, int inviante, int who){
+    private MessaggioComandi(comandi_t cmd, int inviante, int opt_parameter){
         this.comando = cmd;
         this.sender = inviante;
-        if((who < -1) && (who < 0)) who=-2;
-        this.receiver = who;
+        if((opt_parameter < -1) && (opt_parameter < 0)) opt_parameter=-2;
+        this.opt_parameter = opt_parameter;
     }
 /**
  * Indica che il pacchetto è di tipo COMMAND (da ::messaggi_t )
@@ -151,8 +151,8 @@ public class MessaggioComandi implements Messaggio{
  * Fornisce chi riceve l'azione di questo comando.
  * @return l'indice del giocatore che riceve l'azione.
  */
-    public int getReceiver(){
-        return receiver;
+    public int getOptParameter(){
+        return opt_parameter;
     }
 
     @Override

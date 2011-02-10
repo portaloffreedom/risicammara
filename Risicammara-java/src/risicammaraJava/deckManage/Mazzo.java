@@ -1,4 +1,7 @@
 package risicammaraJava.deckManage;
+
+import java.util.Random;
+
 /**
  * Classe che rappresenta un oggetto di tipo Mazzo (contenitore di carte) e le
  * azioni che è possibile effettuare su di esso (Pescare una carta o mischiare
@@ -34,7 +37,20 @@ public abstract class Mazzo {
 /**
  * Miscela il mazzo di carte.
  */
-    protected abstract void Mischia();
-
+    protected void Mischia(){
+      int asd = 0;
+      while(asd < 500){
+          asd++;
+          Random random = new Random();
+          for(int i=0;i<inizio_mazzo;i++){
+              Carta temp;
+              int r = random.nextInt(inizio_mazzo);
+              temp = deck[i];
+              deck[i] = deck[r];
+              deck[r] = temp;
+          }
+      }
+    }
+/** Preleva una carta dal mazzo*/
     public abstract Carta Pesca();
 }
