@@ -480,19 +480,10 @@ public class SuccessioneTurni {
         if(     tuno.getBonus() == tdue.getBonus()
                 && tdue.getBonus() == ttre.getBonus())
         {
-            switch(tuno.getBonus()){
-                case CANNONE:
-                    return 4 + bonus;
-                case FANTE:
-                    return 6 + bonus;
-                case CAVALLO:
-                    return 8 + bonus;
-                default:
-                    return 0;
-            }
+            return tuno.getBonus().TrisValue(false) + bonus;
         }
         //bonus per carte diverse
-        return 10 + bonus;
+        return tuno.getBonus().TrisValue(true) + bonus;
     }
 /**
  * Calcola a quanto ammonta il numero di armate bonus per i continenti posseduti
