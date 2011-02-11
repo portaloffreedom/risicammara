@@ -5,14 +5,18 @@
 
 package PacchettoGrafico;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.JPanel;
+import risicammaraClient.Colore_t;
 import risicammaraJava.boardManage.Plancia;
+import risicammaraJava.playerManage.Giocatore;
 
 
 /**
@@ -32,6 +36,7 @@ public class PannelloGioco extends JPanel{
 
     private AttivatoreGrafica attivatoreGrafica;
     private MatricePannello gestionePulsanti;
+    private GraphicsAdvanced colori;
 
     public PannelloGioco(int frameRateMassimo, Plancia plancia, ListaGiocatoriClient listaGiocatori) {
         super();
@@ -47,12 +52,9 @@ public class PannelloGioco extends JPanel{
         this.durataFrame = (int) ((1.0/frameRateMassimo)*1000);
 
         this.barra = new BarraSuperiore(dimensioniPannello, 60, this, listaGiocatori, attivatoreGrafica);
-        //this.menuGiocatore = new MenuGiocatore(dimensioniPannello, this.listaGiocatori, attivatoreGrafica);
-        //this.barra.addCarteActionListener(null);
-        //this.barra.addGiocatoreActionListener(menuGiocatore);
         this.addMouseListener(new MouseListenerImpl(this));
 
-        //System.out.println("Dimensioni: "+dimensioni);
+        this.impostaColori(listaGiocatori.meStesso());
 
     }
 
@@ -68,6 +70,10 @@ public class PannelloGioco extends JPanel{
             mouseX=posizioneMouse.x;
             mouseY=posizioneMouse.y;
         }
+
+        System.out.println("colore base: "+g.getColor());
+
+        this.impostaContestoDisegno(g);
 
         this.renderizzaScena(g, mouseX, mouseY);
 
@@ -88,8 +94,8 @@ public class PannelloGioco extends JPanel{
 
         //g2.draw(new Line2D.Double(mouseX, mouseY, millisecondi%500, 70));
 
-        this.barra.disegna(g2);
-        this.performance.disegna(g2);
+        this.barra.disegna(g2, colori);
+        this.performance.disegna(g2, colori);
 
 
 
@@ -102,6 +108,14 @@ public class PannelloGioco extends JPanel{
                 System.err.println("Errore: "+ex);
             }
         }
+    }
+
+    private void impostaContestoDisegno(Graphics g){
+        Graphics2D g2 = (Graphics2D)g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        //TODO impostazione per permettere le altre versioni dell'antialiasing
+        //g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HBGR);
     }
 
     // <editor-fold defaultstate="collapsed" desc="mouseListener">
@@ -141,5 +155,18 @@ public class PannelloGioco extends JPanel{
 
     public void addPulsante(Elemento_2DGraphicsCliccable elemento) {
         gestionePulsanti.add(elemento);
+    }
+
+    private void impostaColori(Giocatore meStesso){
+        Color sfondoScuro = new Color(51, 51, 51);
+        Color sfondoChiaro = Color.white;
+        Color testo = Color.black;
+        Colore_t armateGiocatore = meStesso.getArmyColour();
+        Color coloreGiocatore = meStesso.getArmyColour().getColor();
+
+        if (armateGiocatore == Colore_t.BLU || armateGiocatore == Colore_t.NERO)
+            testo = Color.white;
+
+        this.colori = new GraphicsAdvanced(sfondoScuro, sfondoChiaro, testo, coloreGiocatore);
     }
 }

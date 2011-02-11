@@ -37,7 +37,8 @@ interface Elemento_2DGraphics {
      * l'elemento sul Graphics2D
      *
      * @param graphics2D contesto grafico su cui disegnare
+     * @param graphicsAdvanced colori su cui lavorare
      */
-    public void disegna (Graphics2D graphics2D);
+    public void disegna (Graphics2D graphics2D, GraphicsAdvanced graphicsAdvanced);
 
 }
