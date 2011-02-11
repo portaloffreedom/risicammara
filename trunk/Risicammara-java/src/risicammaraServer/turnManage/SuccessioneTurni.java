@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import risicammaraClient.Bonus_t;
+import risicammaraClient.Continente_t;
 import risicammaraClient.territori_t;
 import risicammaraJava.deckManage.Carta;
 import risicammaraJava.playerManage.Giocatore;
@@ -161,7 +162,7 @@ public class SuccessioneTurni {
                 //Assegno le armate in base ai territori posseduti dal giocatore.
                 int armattu = gio.getArmateperturno();
                 if(armattu == 0){
-                    gio.setArmatedisponibili(gio.getNumTerritori()/3);
+                    gio.setArmatedisponibili((gio.getNumTerritori()/3)+getTotalContinentalBonus(gio));
                 }
                 if((msgReceived.getType() == messaggio_t.GIOCATRIS) 
                         && !partita.playedTris())
@@ -492,5 +493,20 @@ public class SuccessioneTurni {
         }
         //bonus per carte diverse
         return 10 + bonus;
+    }
+/**
+ * Calcola a quanto ammonta il numero di armate bonus per i continenti posseduti
+ * dal giocatore.
+ * @param gioc Il giocatore di cui calcolare le armate.
+ * @return il totale delle armate bonus per continenti.
+ */
+    private int getTotalContinentalBonus(Giocatore gioc){
+        int total = 0;
+        for(Continente_t c:Continente_t.values()){
+            if(gioc.hasContinente(c)){
+                total += c.getArmate();
+            }
+        }
+        return total;
     }
 }
