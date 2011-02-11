@@ -1,5 +1,6 @@
 package risicammaraJava.turnManage;
 
+import risicammaraClient.Continente_t;
 import risicammaraClient.Obbiettivi_t;
 import risicammaraJava.boardManage.Plancia;
 import risicammaraJava.deckManage.MazzoObbiettivi;
@@ -13,15 +14,15 @@ import risicammaraJava.deckManage.Carta;
 import risicammaraJava.fightManage.Dado;
 
 /**
- * Questa classe ha il compito di inizializzare tutti gli oggetti che servono per
- * un nuovo gioco.
- * Inizializza una Plancia di gioco
- * Assegna ad ogni giocatore dei territori "a caso"
- * prepara il mazzo per giocare.
- * fornsice tutte le azioni necessarie a modificare l'ambiente di gioco.
- * tiene traccia della fase corrente.
- * @author Sten_Gun
- */
+* Questa classe ha il compito di inizializzare tutti gli oggetti che servono per
+* un nuovo gioco.
+* Inizializza una Plancia di gioco
+* Assegna ad ogni giocatore dei territori "a caso"
+* prepara il mazzo per giocare.
+* fornsice tutte le azioni necessarie a modificare l'ambiente di gioco.
+* tiene traccia della fase corrente.
+* @author Sten_Gun
+*/
 public class Partita {
     private Plancia planciadigioco;
     private ListaPlayers listagiocatori;
@@ -412,10 +413,47 @@ public class Partita {
         if(gioc.getNumTerritori() >= numterritori) return true;
         return false;
     };
-
+/**
+ * Verifica se un giocatore può vincere in base ai continenti che possiede.
+ * @param gioc il giocatore del quale verificare i continenti
+ * @return true se ha vinto, false altrimenti.
+ */
     private boolean Verifica_continentale(Giocatore gioc){
-        //TODO Completare la verifica vittoria per i continenti
-        return false;
+        switch(gioc.getObbiettivo()){
+            case ASIAAFRICA:
+                if(gioc.hasContinente(Continente_t.AFRICA)
+                        && gioc.hasContinente(Continente_t.ASIA))
+                    return true;
+                return false;
+            case ASIASUDAMERICA:
+                if(gioc.hasContinente(Continente_t.SUDAMERICA)
+                        && gioc.hasContinente(Continente_t.ASIA))
+                    return true;
+                return false;
+            case NORDAMERICAAFRICA:
+                if(gioc.hasContinente(Continente_t.NORDAMERICA)
+                        && gioc.hasContinente(Continente_t.AFRICA))
+                    return true;
+                return false;
+            case NORDAMERICAOCEANIA:
+                if(gioc.hasContinente(Continente_t.AFRICA)
+                        && gioc.hasContinente(Continente_t.NORDAMERICA))
+                    return true;
+                return false;
+            case EUROPAOCEANIATERZO:
+                if(gioc.numContinenti()>2
+                        && gioc.hasContinente(Continente_t.EUROPA)
+                        && gioc.hasContinente(Continente_t.OCEANIA))
+                    return true;
+                return false;
+            case EUROPASUDAMERICATERZO:
+                if(gioc.numContinenti()>2
+                        && gioc.hasContinente(Continente_t.EUROPA)
+                        && gioc.hasContinente(Continente_t.SUDAMERICA))
+                    return true;
+            default:
+                return false;
+        }
     };
 
     /**

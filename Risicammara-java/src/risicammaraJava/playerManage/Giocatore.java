@@ -41,6 +41,12 @@ public class Giocatore implements Serializable {
         this.carte = new ArrayList<Carta>();
         this.listaterr = new ArrayList<territori_t>();
         this.obbiettivo = null;
+        this.oceania = -Continente_t.OCEANIA.getNumterritori();
+        this.europa = -Continente_t.EUROPA.getNumterritori();
+        this.nordamerica = -Continente_t.NORDAMERICA.getNumterritori();
+        this.africa = -Continente_t.AFRICA.getNumterritori();
+        this.asia = -Continente_t.ASIA.getNumterritori();
+        this.sudamerica = -Continente_t.SUDAMERICA.getNumterritori();
     }
 
     /**
@@ -99,6 +105,14 @@ public class Giocatore implements Serializable {
         return obbiettivo;
     }
 
+    //----- Metodi e variabili per il trattamento dei territori.
+    private int oceania;
+    private int europa;
+    private int nordamerica;
+    private int africa;
+    private int asia;
+    private int sudamerica;
+
     /** Lista dei territori posseduti dal giocatore */
     private List<territori_t> listaterr;
 
@@ -115,9 +129,97 @@ public class Giocatore implements Serializable {
      * @param territorio Il territorio da aggiungere
      */
     public void addTerr(territori_t territorio){
+        switch(territorio.getContinente()){
+            case AFRICA:
+                this.africa++;
+                break;
+            case ASIA:
+                this.asia++;
+                break;
+            case EUROPA:
+                this.europa++;
+                break;
+            case NORDAMERICA:
+                this.nordamerica++;
+                break;
+            case OCEANIA:
+                this.oceania++;
+                break;
+            case SUDAMERICA:
+                this.sudamerica++;
+            default:
+                break;
+        }
+
         listaterr.add(territorio);
     }
-
+    /**
+     * Rimuove un dato territorio dalla lista dei territori del giocatore.
+     * @param territorio il territorio da rimuovere.
+     */
+    public void remTerr(territori_t territorio){
+        switch(territorio.getContinente()){
+            case AFRICA:
+                this.africa--;
+                break;
+            case ASIA:
+                this.asia--;
+                break;
+            case EUROPA:
+                this.europa--;
+                break;
+            case NORDAMERICA:
+                this.nordamerica--;
+                break;
+            case OCEANIA:
+                this.oceania--;
+                break;
+            case SUDAMERICA:
+                this.sudamerica--;
+            default:
+                break;
+        }
+        listaterr.remove(territorio);
+    }
+    /**
+     * Chiede il numero di continenti posseduto dal giocatore.
+     * @return il numero di continenti posseduti dal giocatore.
+     */
+    public int numContinenti(){
+        int numcon =0;
+        for(Continente_t c : Continente_t.values()){
+            if(hasContinente(c)) numcon++;
+        }
+        return numcon;
+    }
+/**
+ * Indica se il giocatore possiede un preciso continente.
+ * @param continente il continente da verificare
+ * @return True se il giocatore lo possiede, false altrimenti.
+ */
+    public boolean hasContinente(Continente_t continente){
+        switch(continente){
+            case AFRICA:
+                if(africa == 0) return true;
+                return false;
+            case ASIA:
+                if(asia == 0) return true;
+                return false;
+            case EUROPA:
+                if(europa == 0) return true;
+                return false;
+            case NORDAMERICA:
+                if(nordamerica == 0) return true;
+                return false;
+            case OCEANIA:
+                if(oceania == 0 ) return true;
+                return false;
+            case SUDAMERICA:
+                if(sudamerica == 0) return true;
+            default:
+                return false;
+        }
+    }
     /**
      * Imposta l'obbiettivo al giocatore
      * @param obj L'obbiettivo da assegnare al giocatore
