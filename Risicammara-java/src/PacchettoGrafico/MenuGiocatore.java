@@ -23,13 +23,15 @@ public class MenuGiocatore implements ActionListener, Elemento_2DGraphics {
     private AttivatoreGrafica attivatoreGrafica;
 
     private ListaGiocatoriClient listaGiocatori;
+    private BottoneRisicammara bottone;
 
 
-    public MenuGiocatore(Dimension dimensioni, ListaGiocatoriClient listaGiocatori, AttivatoreGrafica attivatoreGrafica) {
+    public MenuGiocatore(Dimension dimensioni, ListaGiocatoriClient listaGiocatori, AttivatoreGrafica attivatoreGrafica, BottoneRisicammara giocatoreButton) {
         this.dimensioni=dimensioni;
         this.visibile=false;
         this.attivatoreGrafica = attivatoreGrafica;
         this.listaGiocatori = listaGiocatori;
+        this.bottone = giocatoreButton;
         Rectangle rettangoloTesto = new Rectangle(5, 55, 200, 0);
         this.Obbiettivo = new RiquadroTesto(rettangoloTesto,
                                             listaGiocatori.meStesso().getObbiettivo().toString(),
@@ -37,15 +39,17 @@ public class MenuGiocatore implements ActionListener, Elemento_2DGraphics {
     }
 
     @Override
-    public void disegna(Graphics2D graphics2D) {
+    public void disegna(Graphics2D graphics2D, GraphicsAdvanced colori) {
         if (visibile) {
-            this.Obbiettivo.disegna(graphics2D);
+            graphics2D.setColor(colori.getSfondoScuro());
+            this.Obbiettivo.disegna(graphics2D,colori);
         }
     }
 
     public void actionPerformed(ActionEvent e) {
         this.visibile = !this.visibile;
         this.attivatoreGrafica.panelRepaint();
+        this.bottone.setPressed(this.visibile);
         //attivatoreGrafica.attiva();
         //cambiato = true;
     }

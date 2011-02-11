@@ -28,11 +28,11 @@ public class BarraSuperiore implements Elemento_2DGraphics {
         this.dimensioniPannello = dimensioniPannello;
         this.dimensioni= new Rectangle(dimensioniPannello);
         this.dimensioni.height = altezza;
-        this.menuGiocatore = new MenuGiocatore(dimensioniPannello, listaGiocatori, attivatoreGrafica);
         this.posizioneGiocatore = new Point(5, 5);
         this.posizioneCarte     = new Point(dimensioni.width-5-100, 5);
-        this.giocatoreButton = new BottoneRisicammara(posizioneGiocatore, "Giocatore");
-        this.carteButton     = new BottoneRisicammara(posizioneCarte, "Carte");
+        this.giocatoreButton = new BottoneRisicammara(posizioneGiocatore, listaGiocatori.meStesso().getNome(), listaGiocatori.meStesso());
+        this.carteButton     = new BottoneRisicammara(posizioneCarte, "Carte", listaGiocatori.meStesso());
+        this.menuGiocatore = new MenuGiocatore(dimensioniPannello, listaGiocatori, attivatoreGrafica, giocatoreButton);
 
         
         this.giocatoreButton.setActionListener(menuGiocatore);
@@ -41,7 +41,7 @@ public class BarraSuperiore implements Elemento_2DGraphics {
     }
 
     @Override
-    public void disegna(Graphics2D graphics2D) {
+    public void disegna(Graphics2D graphics2D, GraphicsAdvanced colori) {
         //Corregge le posizioni per il ridimensionamento
         if (true) { //TODO implementare questa fase solo se il pannello è stato ridimensionato
             this.dimensioni.width = this.dimensioniPannello.width;
@@ -50,11 +50,12 @@ public class BarraSuperiore implements Elemento_2DGraphics {
         }
 
         //Disegna lo sfondo nero della barra
+        graphics2D.setColor(colori.getSfondoScuro());
         graphics2D.fillRect(dimensioni.x, dimensioni.y, dimensioni.width, dimensioni.height);
 
         //Disegna i due pulsanti
-        this.giocatoreButton.disegna(graphics2D);
-        this.carteButton.disegna(graphics2D);
-        this.menuGiocatore.disegna(graphics2D);
+        this.giocatoreButton.disegna(graphics2D, colori);
+        this.carteButton.disegna(graphics2D, colori);
+        this.menuGiocatore.disegna(graphics2D, colori);
     }
 }

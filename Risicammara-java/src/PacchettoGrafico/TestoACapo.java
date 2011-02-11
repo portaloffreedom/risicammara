@@ -5,6 +5,7 @@
 
 package PacchettoGrafico;
 
+import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -32,9 +33,9 @@ public class TestoACapo implements  Elemento_2DGraphics {
     }
 
     @Override
-    public void disegna(Graphics2D graphics2D) {
+    public void disegna(Graphics2D graphics2D, GraphicsAdvanced colori) {
         this.preparaTesto(graphics2D);
-        this.disegnaTesto(graphics2D);
+        this.disegnaTesto(graphics2D, colori.getTesto());
     }
 
     public void preparaTesto(Graphics2D graphics2D) {
@@ -60,9 +61,10 @@ public class TestoACapo implements  Elemento_2DGraphics {
         }
     }
 
-    public void disegnaTesto(Graphics2D graphics2D){
+    public void disegnaTesto(Graphics2D graphics2D, Color colore){
         FontMetrics fontMetrics = graphics2D.getFontMetrics();
         int i=1;
+        graphics2D.setColor(colore);
         for (String riga : listaRighe){
             graphics2D.drawString(riga, (float)rettangoloTesto.getX(), (float)rettangoloTesto.getY()+((fontMetrics.getMaxAscent()+2)*i));
             i++;
