@@ -18,7 +18,7 @@ import java.awt.event.ActionListener;
  */
 public class BottoneFase extends Elemento_2DGraphicsCliccable implements ActionListener {
     static final private double TempoAnimazioneMillSec = 2000;
-    static final int OFFSET = 7;
+    static final int OFFSET = 8;
     private Dimension dimPannello;
     private AttivatoreGrafica attivatoreGrafica;
     private boolean smosciato;
@@ -69,33 +69,28 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements ActionL
 
     private void ridimensiona(){
         if (animazione){
+            long tempo = System.currentTimeMillis();
+            double animComletamento = (tempo-inizioAnim)/TempoAnimazioneMillSec; //variabile che va da 0 a 1
+            int larghezzaPOP = BarraFasi.LarghezzaBottoni(dimPannello.width-250);
             if (smosciato){
-                long tempo = System.currentTimeMillis();
-                double animComletamento = (tempo-inizioAnim)/TempoAnimazioneMillSec; //variabile che va da 0 a 1
                 if (animComletamento >= 1){
-                    //attivatoreGrafica.panelRepaint();
                     this.animazione = false;
                     this.cambiaLarghezza(50);
+                    this.attivatoreGrafica.panelRepaint(posizione.getBounds());
                     return;
                 }
-                int larghezzaPOP = BarraFasi.LarghezzaBottoni(dimPannello.width-250);
-                larghezzaPOP = (int) (((larghezzaPOP - 50) * (1-animComletamento)) + 50);
-                this.cambiaLarghezza(larghezzaPOP);
+                animComletamento = 1-animComletamento;
             }
             else {
-                long tempo = System.currentTimeMillis();
-                double animComletamento = (tempo-inizioAnim)/TempoAnimazioneMillSec; //variabile che va da 0 a 1
                 if (animComletamento >= 1){
-                    //attivatoreGrafica.panelRepaint();
                     this.animazione = false;
                     this.cambiaLarghezza(BarraFasi.LarghezzaBottoni(dimPannello.width-250));
                     this.attivatoreGrafica.panelRepaint(posizione.getBounds());
                     return;
                 }
-                int larghezzaPOP = BarraFasi.LarghezzaBottoni(dimPannello.width-250);
-                larghezzaPOP = (int) (((larghezzaPOP - 50) * (animComletamento)) + 50);
-                this.cambiaLarghezza(larghezzaPOP);
             }
+            larghezzaPOP = (int) (((larghezzaPOP - 50) * (animComletamento)) + 50);
+            this.cambiaLarghezza(larghezzaPOP);
             return;
         }
         if (smosciato){
