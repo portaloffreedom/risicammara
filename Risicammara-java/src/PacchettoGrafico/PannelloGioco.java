@@ -71,8 +71,6 @@ public class PannelloGioco extends JPanel{
             mouseY=posizioneMouse.y;
         }
 
-        System.out.println("colore base: "+g.getColor());
-
         this.impostaContestoDisegno(g);
 
         this.renderizzaScena(g, mouseX, mouseY);

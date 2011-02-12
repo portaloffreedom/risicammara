@@ -22,6 +22,7 @@ public class BarraSuperiore implements Elemento_2DGraphics {
     private Point posizioneGiocatore;
     private Point posizioneCarte;
     private MenuGiocatore menuGiocatore;
+    private BarraFasi barraFasi;
 
 
     public BarraSuperiore(Dimension dimensioniPannello, int altezza,PannelloGioco pannello, ListaGiocatoriClient listaGiocatori, AttivatoreGrafica attivatoreGrafica){
@@ -33,11 +34,13 @@ public class BarraSuperiore implements Elemento_2DGraphics {
         this.giocatoreButton = new BottoneRisicammara(posizioneGiocatore, listaGiocatori.meStesso().getNome(), listaGiocatori.meStesso());
         this.carteButton     = new BottoneRisicammara(posizioneCarte, "Carte", listaGiocatori.meStesso());
         this.menuGiocatore = new MenuGiocatore(dimensioniPannello, listaGiocatori, attivatoreGrafica, giocatoreButton);
+        this.barraFasi = new BarraFasi(pannello, dimensioniPannello, 125, 125, altezza-20, 10);
 
         
         this.giocatoreButton.setActionListener(menuGiocatore);
         pannello.addPulsante(giocatoreButton);
         pannello.addPulsante(carteButton);
+        pannello.addPulsante(barraFasi);
     }
 
     @Override
@@ -53,9 +56,12 @@ public class BarraSuperiore implements Elemento_2DGraphics {
         graphics2D.setColor(colori.getSfondoScuro());
         graphics2D.fillRect(dimensioni.x, dimensioni.y, dimensioni.width, dimensioni.height);
 
-        //Disegna i due pulsanti
+        //Disegna i pulsanti
+        this.barraFasi.disegna(graphics2D, colori);
         this.giocatoreButton.disegna(graphics2D, colori);
         this.carteButton.disegna(graphics2D, colori);
+
+        //disegna i menù (da tenere per ultimi)
         this.menuGiocatore.disegna(graphics2D, colori);
     }
 }
