@@ -37,7 +37,7 @@ public class FinestraGioco extends JFrame {
         this.setMinimumSize(new Dimension(800, 400));
 
         Container contestoFinestra = this.getContentPane();
-        this.pannello = new PannelloGioco(60, plancia, listaGiocatori);
+        this.pannello = new PannelloGioco(240, plancia, listaGiocatori);
 
         this.setBounds(200, 180, 200, 180);
         contestoFinestra.add(pannello);

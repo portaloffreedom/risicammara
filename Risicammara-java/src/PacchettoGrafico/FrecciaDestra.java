@@ -48,4 +48,10 @@ public class FrecciaDestra extends Polygon {
         return new Rectangle(pos, dim);
     }
 
+    public Rectangle getPuntaBounds() {
+        Point pos = new Point(xpoints[1]-(BottoneFase.OFFSET/2), ypoints[1]);
+        Dimension dim = new Dimension(xpoints[2]-pos.x+BottoneFase.OFFSET, ypoints[4]-pos.y);
+        return new Rectangle(pos, dim);
+    }
+
 }
