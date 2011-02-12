@@ -30,6 +30,8 @@ public class OrologioTimer {
     }
 
     public long getEsecTime() {
+        long tempoDopo= System.currentTimeMillis();
+        this.millisecondiDiEsecuzione= (int) (tempoDopo - this.tempoPrima);
         return this.millisecondiDiEsecuzione;
     }
 

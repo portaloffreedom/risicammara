@@ -5,6 +5,7 @@
 
 package PacchettoGrafico;
 
+import java.awt.Rectangle;
 import javax.swing.JPanel;
 
 /**
@@ -40,6 +41,14 @@ public class AttivatoreGrafica {
 
     public void panelRepaint (){
         this.pannello.repaint();
+    }
+
+    public void panelRepaint(Rectangle r) {
+        pannello.repaint(r);
+    }
+
+    public void panelRepaint(long tm, int x, int y, int width, int height) {
+        pannello.repaint(tm, x, y, width, height);
     }
 
 }
