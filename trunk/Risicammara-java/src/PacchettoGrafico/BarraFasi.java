@@ -25,7 +25,7 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
     private BottoneFase attacco;
     private BottoneFase spostamento;
 
-    final static private int LARGHEZZABORDO = 50;
+    final static int LARGHEZZABORDO = 50;
 
     /**
      * Costruttore
@@ -36,7 +36,7 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
      * @param altezza altezza della barra
      * @param bordoSup distanza da bordo superiore
      */
-    public BarraFasi(PannelloGioco pannello, Dimension dimPannello, int inizio, int fine, int altezza, int bordoSup) {
+    public BarraFasi(Dimension dimPannello, AttivatoreGrafica ag, int inizio, int fine, int altezza, int bordoSup) {
         this.dimPannello = dimPannello;
         this.inizio = inizio;
         this.fine = fine;
@@ -44,9 +44,9 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
 
         //TODO posizionare per bene i bottone fasi(uno sopra all'altro, poi vengono rimpiccioliti
         int larghezzaB = LarghezzaBottoni(ret.width);
-        this.rinforzi = new BottoneFase(new Point(inizio, bordoSup),larghezzaB, altezza);
-        this.attacco  = new BottoneFase(new Point(inizio+50, bordoSup),larghezzaB, altezza);
-        this.spostamento = new BottoneFase(new Point(inizio+100, bordoSup),larghezzaB, altezza);
+        this.rinforzi    = new BottoneFase(dimPannello, ag, new Point(inizio,     bordoSup),larghezzaB, altezza);
+        this.attacco     = new BottoneFase(dimPannello, ag, new Point(inizio+50,  bordoSup),larghezzaB, altezza);
+        this.spostamento = new BottoneFase(dimPannello, ag, new Point(inizio+100, bordoSup),larghezzaB, altezza);
 
         this.rinforzi.setActionListener(rinforzi);
         this.attacco.setActionListener(attacco);
@@ -62,7 +62,13 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
 
         //disegna i tre bottonifase nella giusta sequenza
         this.spostamento.disegna(graphics2D, colori);
+        graphics2D.setColor(colori.getColoreGiocatore());
+        graphics2D.fill(attacco.getMinBounds());
+
         this.attacco.disegna(graphics2D, colori);
+        graphics2D.setColor(colori.getColoreGiocatore());
+        graphics2D.fill(rinforzi.getMinBounds());
+        
         this.rinforzi.disegna(graphics2D, colori);
 
         //disegna il contorno
@@ -122,23 +128,20 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
     private void ridimensiona(){
         this.ridimensiona(inizio, fine);
         int larghezzaB = LarghezzaBottoni(larghezza(inizio, fine));
-        this.rinforzi.cambiaLarghezza(larghezzaB);
-        this.attacco.cambiaLarghezza(larghezzaB);
-        this.spostamento.cambiaLarghezza(larghezzaB);
+        //this.rinforzi.cambiaLarghezza(larghezzaB); //tolti perché gestiti internamente dalle frecce
+        //this.attacco.cambiaLarghezza(larghezzaB);
+        //this.spostamento.cambiaLarghezza(larghezzaB);
     }
 
     private int larghezza(int inizio, int fine){
         return dimPannello.width-(inizio+fine);
     }
 
-    static private int LarghezzaBottoni(int larghezza){
+    static int LarghezzaBottoni(int larghezza){
         return larghezza-LARGHEZZABORDO*3;
         //TODO è questa la funzione che non fa ridimensionare i pulsanti "dinamicamente": toglierla e sostituirla con un'altra idea:
         //idea 1 lasciare il ridimensionamento a carico di ciascun pulsanto, la barra indica solo quando e di quanto
         //idea 2 memorizzare le 3 dimensioni dei tre bottoni all'interno della Barra
     }
-
-
-
 
 }

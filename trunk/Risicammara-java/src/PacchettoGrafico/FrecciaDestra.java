@@ -5,8 +5,10 @@
 
 package PacchettoGrafico;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Polygon;
+import java.awt.Rectangle;
 
 /**
  *
@@ -31,6 +33,19 @@ public class FrecciaDestra extends Polygon {
         xpoints[2] = p.x+larghezza;
         xpoints[3] = p.x+larghezza-freccia;
         //this.bounds.width = larghezza;
+    }
+
+    @Override
+    public Rectangle getBounds() {
+        Point pos = new Point(xpoints[0], ypoints[0]);
+        Dimension dim = new Dimension(xpoints[2]-pos.x+1, ypoints[4]-pos.y);
+        return new Rectangle(pos, dim);
+    }
+
+    public Rectangle getBounds(int larghezza){
+        Point pos = new Point(xpoints[0], ypoints[0]);
+        Dimension dim = new Dimension(larghezza+1, ypoints[4]-pos.y);
+        return new Rectangle(pos, dim);
     }
 
 }

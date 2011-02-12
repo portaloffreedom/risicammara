@@ -113,7 +113,28 @@ public class PannelloGioco extends JPanel{
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         //TODO impostazione per permettere le altre versioni dell'antialiasing
-        //g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HBGR);
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HBGR);
+    }
+    
+    public void mouseCliccato(MouseEvent e) {
+        this.gestionePulsanti.aziona(e);
+    }
+
+    public void addPulsante(Elemento_2DGraphicsCliccable elemento) {
+        gestionePulsanti.add(elemento);
+    }
+
+    private void impostaColori(Giocatore meStesso){
+        Color sfondoScuro = new Color(51, 51, 51);
+        Color sfondoChiaro = Color.white;
+        Color testo = Color.black;
+        Colore_t armateGiocatore = meStesso.getArmyColour();
+        Color coloreGiocatore = meStesso.getArmyColour().getColor();
+
+        if (armateGiocatore == Colore_t.BLU || armateGiocatore == Colore_t.NERO)
+            testo = Color.white;
+
+        this.colori = new GraphicsAdvanced(sfondoScuro, sfondoChiaro, testo, coloreGiocatore);
     }
 
     // <editor-fold defaultstate="collapsed" desc="mouseListener">
@@ -146,25 +167,4 @@ public class PannelloGioco extends JPanel{
         }
     }// </editor-fold>
 
-
-    public void mouseCliccato(MouseEvent e) {
-        this.gestionePulsanti.aziona(e);
-    }
-
-    public void addPulsante(Elemento_2DGraphicsCliccable elemento) {
-        gestionePulsanti.add(elemento);
-    }
-
-    private void impostaColori(Giocatore meStesso){
-        Color sfondoScuro = new Color(51, 51, 51);
-        Color sfondoChiaro = Color.white;
-        Color testo = Color.black;
-        Colore_t armateGiocatore = meStesso.getArmyColour();
-        Color coloreGiocatore = meStesso.getArmyColour().getColor();
-
-        if (armateGiocatore == Colore_t.BLU || armateGiocatore == Colore_t.NERO)
-            testo = Color.white;
-
-        this.colori = new GraphicsAdvanced(sfondoScuro, sfondoChiaro, testo, coloreGiocatore);
-    }
 }
