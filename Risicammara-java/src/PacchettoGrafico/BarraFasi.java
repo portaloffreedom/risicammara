@@ -133,6 +133,9 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
 
     static private int LarghezzaBottoni(int larghezza){
         return larghezza-LARGHEZZABORDO*3;
+        //TODO è questa la funzione che non fa ridimensionare i pulsanti "dinamicamente": toglierla e sostituirla con un'altra idea:
+        //idea 1 lasciare il ridimensionamento a carico di ciascun pulsanto, la barra indica solo quando e di quanto
+        //idea 2 memorizzare le 3 dimensioni dei tre bottoni all'interno della Barra
     }
 
 
