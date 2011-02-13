@@ -25,6 +25,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements ActionL
     private boolean cambiato;
     private boolean animazione;
     private long inizioAnim;
+    private double faseAnimPrec;
 
     public BottoneFase(Dimension dimPannello, AttivatoreGrafica ag, Point p, int larghezza, int altezza) {
         super();
@@ -34,6 +35,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements ActionL
         this.attivatoreGrafica = ag;
         this.smosciato = false;
         this.animazione = false;
+        this.faseAnimPrec = 1;
     }
 
     public void disegna(Graphics2D g2, GraphicsAdvanced colori) {
@@ -45,7 +47,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements ActionL
         g2.setColor(colori.getColoreGiocatore());
         g2.fill(posizione);
         
-        g2.setColor(colori.getSfondoScuro());
+        g2.setColor(colori.getColoreScuro());
         g2.draw(posizione);
 
         if (animazione)
@@ -71,19 +73,22 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements ActionL
         if (animazione){
             long tempo = System.currentTimeMillis();
             double animComletamento = (tempo-inizioAnim)/TempoAnimazioneMillSec; //variabile che va da 0 a 1
+            animComletamento = (Math.sin((animComletamento+Math.PI/2)*Math.PI)+1)/2;
             int larghezzaPOP = BarraFasi.LarghezzaBottoni(dimPannello.width-250);
             if (smosciato){
-                if (animComletamento >= 1){
+                animComletamento = 1-animComletamento;
+                if (animComletamento > this.faseAnimPrec){
                     this.animazione = false;
+                    this.faseAnimPrec = 0;
                     this.cambiaLarghezza(50);
                     this.attivatoreGrafica.panelRepaint(posizione.getBounds());
                     return;
                 }
-                animComletamento = 1-animComletamento;
             }
             else {
-                if (animComletamento >= 1){
+                if (animComletamento < this.faseAnimPrec){
                     this.animazione = false;
+                    this.faseAnimPrec = 1;
                     this.cambiaLarghezza(BarraFasi.LarghezzaBottoni(dimPannello.width-250));
                     this.attivatoreGrafica.panelRepaint(posizione.getBounds());
                     return;
@@ -91,6 +96,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements ActionL
             }
             larghezzaPOP = (int) (((larghezzaPOP - 50) * (animComletamento)) + 50);
             this.cambiaLarghezza(larghezzaPOP);
+            this.faseAnimPrec = animComletamento;
             return;
         }
         if (smosciato){

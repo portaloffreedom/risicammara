@@ -29,12 +29,12 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
 
     /**
      * Costruttore
-     * @param pannello riferimento al JPanel principale
-     * @param dimPannello dimensioni del pannello variabili al ridimensionamento
-     * @param inizio distanza dal bordo sinistro
-     * @param fine distanza dal bordo destro
-     * @param altezza altezza della barra
-     * @param bordoSup distanza da bordo superiore
+     * @param dimPannello Dimensioni del pannello variabili al ridimensionamento.
+     * @param ag AttivatoreGrafica che serve ai pulsanti per fare le animazioni.
+     * @param inizio Distanza dal bordo sinistro.
+     * @param fine Distanza dal bordo destro.
+     * @param altezza Altezza della barra.
+     * @param bordoSup Distanza da bordo superiore.
      */
     public BarraFasi(Dimension dimPannello, AttivatoreGrafica ag, int inizio, int fine, int altezza, int bordoSup) {
         this.dimPannello = dimPannello;
@@ -72,12 +72,12 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
         this.rinforzi.disegna(graphics2D, colori);
 
         //disegna il contorno
-        graphics2D.setColor(colori.getSfondoScuro());
+        graphics2D.setColor(colori.getColoreScuro());
         graphics2D.draw(posizione);
     }
 
     @Override
-    public void actionPressed(MouseEvent e) {
+    protected void actionPressed(MouseEvent e) {
         if (rinforzi.doClicked(e))
             return;
         if (attacco.doClicked(e))
