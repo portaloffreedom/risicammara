@@ -1,0 +1,55 @@
+R → territorio G → continente
+
+#1 Asia
+1:1 Afganistan
+1:2 Cina
+1:3 India
+1:4 Cita
+1:5 Giappone
+1:6 Kamchatka
+1:7 Medio oriente
+1:8 Mongolia
+1:9 Siam
+1:10 Siberia
+1:11 Urali
+1:12 Jacuzia
+
+#2 Africa
+2:1 Congo
+2:2 Africa Orientale
+2:3 Egitto
+2:4 Madagascar
+2:5 Africa del nord
+2:6 Africa del sud
+
+#3 Europa
+3:1 Gran Bretagna
+3:2 Islanda
+3:3 Europa settentrionale
+3:4 Scandinavia
+3:5 Europa meridionale
+3:6 Ucraina
+3:7 Europa Occidentale
+
+#4 America del Nord
+4:1 Alaska
+4:2 Alberta
+4:3 America centrale
+4:4 Stati uniti Orientali
+4:5 Groenlandia
+4:6 Territori del NordOvest
+4:7 Ontario
+4:8 Quebec
+4:9 Stati uniti Occidentali
+
+#5 America del Sud
+5:1 Argentina
+5:2 Brasile
+5:3 Perù
+5:4 Venezuela
+
+#6 Oceania
+6:1 Australia Occidentale
+6:2 Indonesia
+6:3 Nuova Guinea
+6:4 Australia Orientale
