@@ -25,7 +25,7 @@ public class MillisecondiDiEsecuzione implements Elemento_2DGraphics{
 
     @Override
     public void disegna(Graphics2D graphics2D, GraphicsAdvanced colori) {
-        graphics2D.setColor(colori.getSfondoScuro());
+        graphics2D.setColor(colori.getColoreScuro());
         graphics2D.drawString(""+Cronometro.getEsecTime(), 5, dimensioni.height-15);
     }
 

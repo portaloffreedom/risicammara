@@ -41,7 +41,7 @@ public class MenuGiocatore implements ActionListener, Elemento_2DGraphics {
     @Override
     public void disegna(Graphics2D graphics2D, GraphicsAdvanced colori) {
         if (visibile) {
-            graphics2D.setColor(colori.getSfondoScuro());
+            graphics2D.setColor(colori.getColoreScuro());
             this.Obbiettivo.disegna(graphics2D,colori);
         }
     }
