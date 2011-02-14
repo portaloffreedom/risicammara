@@ -9,6 +9,7 @@ import java.net.Socket;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import risicammaraClient.Client;
+import risicammaraClient.Colore_t;
 import risicammaraClient.Connessione;
 import risicammaraClient.Obbiettivi_t;
 import risicammaraJava.playerManage.Giocatore;
@@ -139,8 +140,8 @@ public class SalaAttesa extends JFrame implements Runnable {
                         case DISCONNECT:
                             int indexRimozione = msgComando.getSender();
                             String nomeGiocatore = listaGiocatori.getNomeByIndex(indexRimozione);
-                            listaGiocatori.remPlayer(indexRimozione);
                             pannello.giocatoreVisible(indexRimozione, false);
+                            listaGiocatori.remPlayer(indexRimozione);
                             pannello.stampaMessaggioComando("Giocatore \""+nomeGiocatore+"\" uscito.");
                             break;
 

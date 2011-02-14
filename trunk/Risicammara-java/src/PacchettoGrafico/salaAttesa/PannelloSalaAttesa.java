@@ -116,12 +116,21 @@ public class PannelloSalaAttesa extends JPanel {
     public void giocatoreVisible (int index, boolean visibile){
         this.giocatori[index].setVisible(visibile);
         this.pronti[index].setVisible(visibile);
+        if (!visibile)
+            setInfoGiocatore(index, "sconnesso", Colore_t.NULLO, false);
     }
 
     public void setInfoGiocatore (int index, String nome, Colore_t colore){
         //ATTENZIONE index prende anche valori che puntano a giocatori 'null'
         setNomeGiocatore(index, nome);
         setColoreGiocatore(index, colore);
+    }
+
+    public void setInfoGiocatore (int index, String nome, Colore_t colore, boolean pronto){
+        //ATTENZIONE index prende anche valori che puntano a giocatori 'null'
+        setNomeGiocatore(index, nome);
+        setColoreGiocatore(index, colore);
+        setPronto(index, pronto);
     }
 
     public String immissioneChat_getText(){
@@ -137,7 +146,12 @@ public class PannelloSalaAttesa extends JPanel {
     }
 
     public void invertiPronto(int indexGiocatore){
-        pronti[indexGiocatore].setSelected(!pronti[indexGiocatore].isSelected());
+        //pronti[indexGiocatore].setSelected(!pronti[indexGiocatore].isSelected());
+        setPronto(indexGiocatore, !pronto(indexGiocatore));
+    }
+
+    public void setPronto(int indexGiocatore, boolean pronto){
+        pronti[indexGiocatore].setSelected(pronto);
     }
 
     public boolean pronto(int indexGiocatore) {
@@ -248,6 +262,7 @@ public class PannelloSalaAttesa extends JPanel {
             }
             else {
                 setInfoGiocatore(i, giocatore.getNome(), giocatore.getArmyColour());
+                setPronto(i, giocatore.isReady());
             }
         }
 
