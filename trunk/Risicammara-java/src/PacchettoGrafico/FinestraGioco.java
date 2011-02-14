@@ -6,7 +6,7 @@
 package PacchettoGrafico;
 
 import java.awt.Container;
-import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
@@ -34,19 +34,20 @@ public class FinestraGioco extends JFrame {
 
         this.setIconImage(new ImageIcon("./risorse/risicamlogo.png").getImage());
 
-        this.setMinimumSize(new Dimension(800, 400));
-
         Container contestoFinestra = this.getContentPane();
         this.pannello = new PannelloGioco(240, plancia, listaGiocatori);
-
-        this.setBounds(200, 180, 200, 180);
         contestoFinestra.add(pannello);
 
+        Rectangle rect = new Rectangle(this.pannello.getDimensioniMinime());
+        //rect.width+=20;
+        //rect.height+=60;
+        contestoFinestra.setMinimumSize(rect.getSize());
+        contestoFinestra.setSize(rect.getSize());
+        rect.setLocation(50, 50);
+        this.setBounds(rect);
 
         this.addWindowListener(new WindowListenerImpl(server));
         this.setVisible(true);
-
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="ascoltatore della finestra">

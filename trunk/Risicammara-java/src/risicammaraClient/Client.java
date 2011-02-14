@@ -30,7 +30,7 @@ public class Client implements Runnable {
     private static String laf = "";
     /** boolenano che identifica se si sta utilizzando il programma in modalità
      * di DEBUG */
-    private static boolean debug = false;
+    public static boolean DEBUG = false;
 
     /**
      * Main per fare partire il programma lato client
@@ -45,7 +45,7 @@ public class Client implements Runnable {
     }
 
     /**
-     * Parser degli argomenti di debug
+     * Parser degli argomenti di DEBUG
      * @param args argomenti dal main
      */
     private static void Parser(String args[]) {
@@ -85,13 +85,13 @@ public class Client implements Runnable {
     }
 
     /**
-     * Cambia la modalità di debug (attiva o no). Si può utilizzare solo all'inizio
+     * Cambia la modalità di DEBUG (attiva o no). Si può utilizzare solo all'inizio
      * prima che parta la parte grafica, altrimenti non si garantisce il corretto
      * funzionamento.
-     * @param debug da mettere true o false
+     * @param DEBUG da mettere true o false
      */
     private static void Debug(boolean debug) {
-        Client.debug = debug;
+        Client.DEBUG = debug;
     }
 
     /**
@@ -175,7 +175,7 @@ public class Client implements Runnable {
         
         FinestraGioco finestra =  new FinestraGioco(server, listaGiocatori, plancia);
         /*
-        if (Client.debug == true) {
+        if (Client.DEBUG == true) {
             System.out.println("Poteri della SuperMucca attivati ;)");
             PoteriDellaSuperMucca dio = new PoteriDellaSuperMucca(this.partita);
         }
