@@ -23,14 +23,17 @@ import risicammaraClient.Client;
  * @author matteo
  */
 public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
+    private AttivatoreGrafica attivatoreGrafica;
     private BufferedImage planciaBMP;
     private BufferedImage planciaPNG;
     private BufferedImage planciaPNGfinal;
-    private int RGBselezionato;
+    private int idTerritorioSelezionato;
+    private boolean selezionato;
 
-    public PlanciaImmagine(Point posizione) {
+    public PlanciaImmagine(Point posizione, AttivatoreGrafica ag) {
         super();
-        RGBselezionato = 0;
+        idTerritorioSelezionato = 0;
+        attivatoreGrafica = ag;
         planciaBMP = loadImage("./risorse/risicammara_plancia.bmp");
         planciaPNG = loadImage("./risorse/risicammara_plancia.png");
         planciaPNGfinal = loadImage("./risorse/risicammara_plancia.png");
@@ -67,25 +70,93 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         Point p = e.getPoint();
         Point offset = ((Rectangle)posizione).getLocation();
         p.translate(-offset.x, -offset.y);
-        int RGB = this.planciaBMP.getRGB(p.x, p.y);
+        int idTerritorio = this.planciaBMP.getRGB(p.x, p.y);
 
-        int continenteMask = 0x00000f00;
-        int territorioMask = 0x000f0000;
-        int continente = ((RGB & continenteMask)>>2*4);
-        int territorio = ((RGB & territorioMask)>>4*4);
+        int continente = GetContinente(idTerritorio);
+        int territorio = GetTerritorio(idTerritorio);
         if (Client.DEBUG == true) {
             System.out.println("Continente: "+continente);
             System.out.println("Territorio: "+territorio);
         }
+        
+        if (selezionato){
+            ripristinaTerritorio(idTerritorioSelezionato);
+            idTerritorioSelezionato = 0;
+            selezionato = false;
+        }
+        else {
+            if (!eTerritorio(idTerritorio))
+                return;
+            colora(idTerritorio, Color.GREEN);
+            idTerritorioSelezionato = idTerritorio;
+            selezionato = true;
+        }
 
-        //this.planciaPNG.setRGB(p.x, p.y, Color.WHITE.getRGB());
+        attivatoreGrafica.panelRepaint();
+    }
+
+    private void colora(int idTerritorio, Color colore){
         for (int r=1; r<planciaBMP.getHeight(); r++){
             for (int c=1; c<planciaBMP.getWidth(); c++){
                 int tempRGB = this.planciaBMP.getRGB(c, r);
-                if (tempRGB == RGB)
-                    this.planciaPNG.setRGB(c, r, Color.WHITE.getRGB());
+                if (tempRGB == idTerritorio)
+                    this.planciaPNG.setRGB(c, r, colore.getRGB());
             }
         }
+    }
+
+    private void coloraSfumato(int idTerritorio, Color colore, double trasparenza){
+        for (int r=1; r<planciaBMP.getHeight(); r++){
+            for (int c=1; c<planciaBMP.getWidth(); c++){
+                int tempRGB = this.planciaBMP.getRGB(c, r);
+                if (tempRGB == idTerritorio)
+                    this.planciaPNG.setRGB(c, r, Sfuma(colore.getRGB(), this.planciaPNGfinal.getRGB(c, r), trasparenza));
+            }
+        }
+    }
+
+    private static int Sfuma(int RGB1, int RGB2, double trasparenza){
+        //TODO implementare il codice per fare "trasparenze"
+        return RGB1;
+    }
+
+    private void ripristinaTerritorio(int idTerritorio){
+        for (int r=1; r<planciaBMP.getHeight(); r++){
+            for (int c=1; c<planciaBMP.getWidth(); c++){
+                int tempRGB = this.planciaBMP.getRGB(c, r);
+                if (tempRGB == idTerritorio)
+                    this.planciaPNG.setRGB(c, r, this.planciaPNGfinal.getRGB(c, r));
+            }
+        }
+    }
+
+    public static int GetIdTerritorio(int continente, int territorio){
+        int idTerritorio = 0;
+        
+        idTerritorio = (idTerritorio | (continente >>2*4));
+        idTerritorio = (idTerritorio | (territorio >>4*4));
+
+        return idTerritorio;
+    }
+
+    public static int GetContinente (int idTerritorio){
+        int continenteMask = 0x00000f00;
+        return ((idTerritorio & continenteMask)>>2*4);
+    }
+
+    public static int GetTerritorio (int idTerritorio){
+        int territorioMask = 0x000f0000;
+        return ((idTerritorio & territorioMask)>>4*4);
+    }
+
+    public static boolean eTerritorio(int idTerritorio){
+        boolean territorio = false;
+        int mask = 0x00f0f0ff;
+        idTerritorio = (idTerritorio & mask);
+        if( (idTerritorio & mask) == 0)
+            territorio = true;
+
+        return territorio;
     }
 
 }
