@@ -11,7 +11,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import javax.swing.ImageIcon;
-import risicammaraJava.playerManage.Giocatore;
 
 /**
  * Bottoni rettangolari normali. Si colorano del colore del giocatore.
