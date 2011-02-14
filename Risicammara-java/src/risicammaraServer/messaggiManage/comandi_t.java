@@ -36,7 +36,6 @@ public enum comandi_t {
     SETPRONTO,      //Informa che il giocatore è pronto per partire
     /**
      * Esce dalla lobby e avvia la partita.
-     * @deprecated  non più utile in quanto il server parte appena sono tutti pronti.
      */
     AVVIAPARTITA,   // Ordina al server di iniziare una nuova partita
     /**
