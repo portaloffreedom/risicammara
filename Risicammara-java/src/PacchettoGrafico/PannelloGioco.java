@@ -20,16 +20,18 @@ import risicammaraJava.playerManage.Giocatore;
 
 
 /**
- *
+ * Pannello principale del Client.
  * @author matteo
  */
-public class PannelloGioco extends JPanel{
+final public class PannelloGioco extends JPanel{
+    static public int ALTEZZAPANNELLO = 60;
 
     private ListaGiocatoriClient listaGiocatori;
     private Plancia plancia;
 
     private Dimension dimensioniPannello;
     private BarraSuperiore barra;
+    private PlanciaImmagine planciaImmagine;
     private OrologioTimer cronometro;
     private MillisecondiDiEsecuzione performance;
     private int durataFrame;
@@ -51,16 +53,22 @@ public class PannelloGioco extends JPanel{
         this.performance = new MillisecondiDiEsecuzione(this.dimensioniPannello, cronometro);
         this.durataFrame = (int) ((1.0/frameRateMassimo)*1000);
 
-        this.barra = new BarraSuperiore(dimensioniPannello, 60, this, listaGiocatori, attivatoreGrafica);
+        this.barra = new BarraSuperiore(dimensioniPannello, ALTEZZAPANNELLO, this, listaGiocatori, attivatoreGrafica);
         this.addMouseListener(new MouseListenerImpl(this));
+        this.planciaImmagine = new PlanciaImmagine(new Point(0, ALTEZZAPANNELLO));
+        this.addPulsante(planciaImmagine);
 
         this.impostaColori(listaGiocatori.meStesso());
 
+        Dimension dimensioniMinime = this.getDimensioniMinime();
+        this.setMinimumSize(dimensioniMinime);
+        this.setSize(dimensioniMinime);
     }
 
     
     @Override
     public void paintComponent (Graphics g) {
+        super.paintComponent(g);
         Point posizioneMouse = super.getMousePosition();
         int mouseX = 0;
         int mouseY = 0;
@@ -92,6 +100,7 @@ public class PannelloGioco extends JPanel{
 
         //g2.draw(new Line2D.Double(mouseX, mouseY, millisecondi%500, 70));
 
+        this.planciaImmagine.disegna(g2, colori);
         this.barra.disegna(g2, colori);
         this.performance.disegna(g2, colori);
 
@@ -135,6 +144,12 @@ public class PannelloGioco extends JPanel{
             testo = Color.white;
 
         this.colori = new GraphicsAdvanced(sfondoScuro, sfondoChiaro, testo, coloreGiocatore);
+    }
+
+    public Dimension getDimensioniMinime (){
+        Dimension dim = this.planciaImmagine.getDimension();
+        dim.height += ALTEZZAPANNELLO;
+        return dim;
     }
 
     // <editor-fold defaultstate="collapsed" desc="mouseListener">
