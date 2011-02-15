@@ -19,7 +19,7 @@ import risicammaraJava.boardManage.Plancia;
  *
  * @author matteo
  */
-public class FinestraGioco extends JFrame {
+public class FinestraGioco extends JFrame implements Runnable {
     private Connessione server;
     private ListaGiocatoriClient listaGiocatori;
     private Plancia plancia;
@@ -50,6 +50,10 @@ public class FinestraGioco extends JFrame {
 
         this.addWindowListener(new WindowListenerImpl(server));
         this.setVisible(true);
+    }
+
+    public void run() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     // <editor-fold defaultstate="collapsed" desc="ascoltatore della finestra">

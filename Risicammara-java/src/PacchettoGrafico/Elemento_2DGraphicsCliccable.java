@@ -3,7 +3,6 @@ package PacchettoGrafico;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
@@ -18,7 +17,7 @@ import java.awt.event.MouseEvent;
 public abstract class Elemento_2DGraphicsCliccable implements Elemento_2DGraphics {
     /** Posizione e dimensioni del pulsante */
     protected Shape posizione;
-    private ActionListener ascoltatore;
+    private RisicammaraEventListener ascoltatore;
 
     /**
      * Costruttore che inizializza le dimensioni iniziali con un Rectangle(0,0,0,0)
@@ -72,14 +71,14 @@ public abstract class Elemento_2DGraphicsCliccable implements Elemento_2DGraphic
      * un ascoltatore alla volta. Per cancellare l'ascoltatore impostarne uno null
      * @param ascoltatore riferimento alla classe utilizzata come ascoltatore
      */
-    public void setActionListener(ActionListener ascoltatore){
+    public void setActionListener(RisicammaraEventListener ascoltatore){
         this.ascoltatore = ascoltatore;
     }
 
     protected void actionPressed(MouseEvent e){
         if (this.ascoltatore != null) {
-            ActionEvent actionEvent = new ActionEvent(this, e.getID(), "cliccato");
-            this.ascoltatore.actionPerformed(actionEvent);
+            EventoAzioneRisicammara risicEv = new EventoAzioneRisicammara(this, e.getID(), "cliccato",e.getPoint());
+            this.ascoltatore.actionPerformed(risicEv);
         }
     }
 

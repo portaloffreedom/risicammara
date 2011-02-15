@@ -10,13 +10,12 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  *
  * @author matteo
  */
-public class BottoneFase extends Elemento_2DGraphicsCliccable implements ActionListener {
+public class BottoneFase extends Elemento_2DGraphicsCliccable implements RisicammaraEventListener {
     static final private double TempoAnimazioneMillSec = 2000;
     static final int OFFSET = 8;
     private Dimension dimPannello;
@@ -54,7 +53,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements ActionL
             attivatoreGrafica.panelRepaint(((FrecciaDestra)posizione).getPuntaBounds());
     }
 
-    public void actionPerformed(ActionEvent ae) {
+    public void actionPerformed(EventoAzioneRisicammara ae) {
         this.setSmoscia(!this.smosciato);
     }
 

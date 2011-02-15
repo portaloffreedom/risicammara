@@ -9,13 +9,12 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  *
  * @author matteo
  */
-public class MenuGiocatore implements ActionListener, Elemento_2DGraphics {
+public class MenuGiocatore implements RisicammaraEventListener, Elemento_2DGraphics {
     private Dimension dimensioni;
     private boolean visibile;
     private boolean cambiato;
@@ -46,7 +45,7 @@ public class MenuGiocatore implements ActionListener, Elemento_2DGraphics {
         }
     }
 
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(EventoAzioneRisicammara e) {
         this.visibile = !this.visibile;
         this.attivatoreGrafica.panelRepaint();
         this.bottone.setPressed(this.visibile);
