@@ -87,7 +87,8 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         else {
             if (!eTerritorio(idTerritorio))
                 return;
-            colora(idTerritorio, Color.GREEN);
+            //colora(idTerritorio, Color.GREEN);
+            coloraSfumato(idTerritorio, Color.blue, 0.5);
             idTerritorioSelezionato = idTerritorio;
             selezionato = true;
         }
@@ -116,8 +117,21 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
     }
 
     private static int Sfuma(int RGB1, int RGB2, double trasparenza){
-        //TODO implementare il codice per fare "trasparenze"
-        return RGB1;
+        int RGBsfumato = 0;
+        int mask = 0x000000ff;
+        //int Rmask = 0x0000ff00;
+        //int Gmask = 0x00ff0000;
+        //int Bmask = 0xff000000;
+
+        for (int i=0; i<4; i++){
+            int tempColor1 = (RGB1 & mask)>>i*8;
+            int tempColor2 = (RGB2 & mask)>>i*8;
+            tempColor1 = (int) (tempColor1*trasparenza + tempColor2*(1-trasparenza));
+            RGBsfumato = RGBsfumato | (tempColor1<<i*8);
+            mask = mask<<8;
+        }
+
+        return RGBsfumato;
     }
 
     private void ripristinaTerritorio(int idTerritorio){
@@ -157,6 +171,13 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
             territorio = true;
 
         return territorio;
+    }
+
+    private static void StampaA4Bit(int RGB){
+        for (int i=0; i<(4*4); i++){
+            System.out.print(((RGB>>(i*4)) & 0x0000000f)+" ");
+        }
+        System.out.println();
     }
 
 }
