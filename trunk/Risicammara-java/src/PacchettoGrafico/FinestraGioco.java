@@ -39,12 +39,14 @@ public class FinestraGioco extends JFrame {
         contestoFinestra.add(pannello);
 
         Rectangle rect = new Rectangle(this.pannello.getDimensioniMinime());
-        //rect.width+=20;
-        //rect.height+=60;
+        rect.width+=20;
+        rect.height+=60;
         contestoFinestra.setMinimumSize(rect.getSize());
         contestoFinestra.setSize(rect.getSize());
         rect.setLocation(50, 50);
         this.setBounds(rect);
+        this.getContentPane().setMinimumSize(rect.getSize());
+        this.setMinimumSize(rect.getSize());
 
         this.addWindowListener(new WindowListenerImpl(server));
         this.setVisible(true);
