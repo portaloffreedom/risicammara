@@ -11,19 +11,45 @@ public class MessaggioComandi implements Messaggio{
     private int opt_parameter;
 // Qua ci vanno tutti i costruttori static per ogni tipo di messaggio, in modo da
     //facilitare la vita a chi crea i messaggi.
+    /**
+     * Crea un messaggio di inizio attacco
+     * @param giocatorecheattacca l'indice di chi sta attaccando
+     * @param giocatorecheDifende l'indice di chi viene attaccato
+     * @return l'oggetto Messaggio IniziaAttacco.
+     */
     public static MessaggioComandi creaMsgIniziaAttacco(int giocatorecheattacca,int giocatorecheDifende){
         return new MessaggioComandi(comandi_t.INIZIAATTACCO, giocatorecheattacca, giocatorecheDifende);
     }
+    /**
+     * Messaggio che informa la fine di un attacco.
+     * @param giocatorecheAttaccava il giocatore che effettuava l'attacco.
+     * @return l'oggetto MessaggioAttaccoTerminato.
+     */
     public static MessaggioComandi creaMsgAttaccoterminato(int giocatorecheAttaccava){
         return new MessaggioComandi(comandi_t.ATTACCOTERMINATO, giocatorecheAttaccava);
     }
+    /**
+     * Lancia un certo numero di dadi
+     * @param giocatorecheLanciaDado Il giocatore che lancia il dado
+     * @param numerodadi il numero di dadi.
+     * @return l'oggetto MessaggioLanciaDado
+     */
     public static MessaggioComandi creaMsgLanciadado(int giocatorecheLanciaDado,int numerodadi){
         return new MessaggioComandi(comandi_t.LANCIADADO, giocatorecheLanciaDado,numerodadi);
     }
-
+/**
+ * Crea un messaggio dii ritiro attacco
+ * @param giocatoreCheSiRitira il giocatore che si ritira (chi attaccava)
+ * @return l'oggetto MessaggioRitirati
+ */
     public static MessaggioComandi creaMsgRitirati(int giocatoreCheSiRitira){
         return new MessaggioComandi(comandi_t.RITIRATI, giocatoreCheSiRitira);
     }
+    /**
+     * Crea un messaggio di passaggio alla prossima fase
+     * @param giocatoreChePassa il giocatore che passa alla fase successiva
+     * @return l'oggetto MessaggioProssimaFase
+     */
     public static MessaggioComandi creaMsgProssimaFase(int giocatoreChePassa){
         return new MessaggioComandi(comandi_t.PASSAFASE, giocatoreChePassa);
     }
@@ -31,6 +57,7 @@ public class MessaggioComandi implements Messaggio{
      * Comando che informa il giocatore che può iniziare il suo turno.
      * @param giocatoreChePuoGiocare l'indice del giocatore che sta giocando e che può iniziare il turno.
      * @return l'oggetto MessaggioComandi con comando STARTYOURTURN
+     * @deprecated
      */
     public static MessaggioComandi creaMsgStartYourTurn(int giocatoreChePuoGiocare){
         return new MessaggioComandi(comandi_t.STARTYOURTURN, -1, giocatoreChePuoGiocare);
