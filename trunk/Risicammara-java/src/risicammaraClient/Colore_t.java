@@ -16,7 +16,7 @@ public enum Colore_t {
     /** Armate Gialle */
     GIALLO  (Color.YELLOW),
     /** Armate Viola */
-    VIOLA   (Color.PINK),
+    VIOLA   (new Color(200, 6, 198)),
     /** Armate Nere */
     NERO    (Color.BLACK),
     /** Armate Verdi */
