@@ -93,11 +93,15 @@ public enum territori_t implements Carta {
     public int getNumadiacenze(){
         return this.territori_adiacenti;
     }
-/** Implementa il metodo per TipoCarta */
+    /** Implementa il metodo per TipoCarta */
     public String tipoCarta() {
         return this.toString();
     }
-
+    /**
+     * Interfaccia per prendere l'idTerritorio in codifica RGB.
+     * @return l'idTerritorio generato dalla PlanciaImmagine
+     * @see PlanciaImmagine.GetIdTerritorio(int, int);
+     */
     public int getIdTerritorio(){
         return PlanciaImmagine.GetIdTerritorio(continente.getId(), id);
     }

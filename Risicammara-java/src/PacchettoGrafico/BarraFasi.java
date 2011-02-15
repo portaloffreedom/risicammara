@@ -25,7 +25,8 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
     private BottoneFase attacco;
     private BottoneFase spostamento;
 
-    final static int LARGHEZZABORDO = 50;
+    public final static int LARGHEZZABORDO = 50;
+    public static Color SFONDO = new Color(255, 192, 0);
 
     /**
      * Costruttore
@@ -56,8 +57,8 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
     public void disegna(Graphics2D graphics2D, GraphicsAdvanced colori) {
         this.ridimensiona(); //questa riga rende dinamiche le dimensioni
 
-        //disegna lo sfondo magenta (e quindi il pulsante finale)
-        graphics2D.setColor(Color.red);
+        //disegna lo SFONDO magenta (e quindi il pulsante finale)
+        graphics2D.setColor(SFONDO);
         graphics2D.fill(posizione);
 
         //disegna i tre bottonifase nella giusta sequenza
