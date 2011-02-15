@@ -28,8 +28,7 @@ public class Partita {
     private ListaPlayers listagiocatori;
     private MazzoTerritori mazzo;
     private int giocturno;
-    private Fasi_t fasi[];
-    private int fase_attuale;
+    private Fasi_t fase_attuale;
     private boolean giocato_tris;
     private boolean attacking;
     private boolean nuovogiro;
@@ -79,9 +78,7 @@ public class Partita {
         MazzoObbiettivi mazzoobj = new MazzoObbiettivi();
         for(int i = 0; i<numgioc;i++) listagiocatori.get(i).setObj((Obbiettivi_t)mazzoobj.Pesca());
         giocturno = 0;
-
-        this.fasi = Fasi_t.values();
-        this.fase_attuale = 0;
+        this.fase_attuale = Fasi_t.PREPARTITA;
     }
 
     //Metodi di partita (informazioni)
@@ -287,12 +284,15 @@ public class Partita {
         return dado.RollDice();
     }
     //Metodi per le fasi
+    public void setFase(Fasi_t fase){
+        this.fase_attuale = fase;
+    }
     /**
      * Informa sulla fase attuale del gioco
      * @return la fase attuale del gioco.
      */
     public Fasi_t getFase(){
-        return fasi[fase_attuale];
+        return fase_attuale;
     }
     /**
      * Restituisce l'oggetto Giocatore del giocatore di turno.
@@ -320,14 +320,6 @@ public class Partita {
         }
         giocturno = 0;
         this.nuovogiro = true;
-        return;
-    };
-    /**
-     * Passa alla prossima fase di gioco
-     */
-    public void ProssimaFase(){
-        if(fase_attuale < fasi.length) fase_attuale++;
-        else fase_attuale = 1;
         return;
     };
     /**

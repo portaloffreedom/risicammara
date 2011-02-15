@@ -20,6 +20,8 @@ public enum comandi_t {
     //--------generale
     /**
      * Chi invia questo comando vuole passare alla fase successiva.
+     * @see messaggio_t
+     * @see MessaggioFase
      */
     PASSAFASE,      //Passa la fase corrente.
 

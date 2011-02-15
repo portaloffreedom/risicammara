@@ -10,6 +10,7 @@ import risicammaraClient.territori_t;
 import risicammaraJava.deckManage.Carta;
 import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
+import risicammaraJava.turnManage.Fasi_t;
 import risicammaraJava.turnManage.Partita;
 import risicammaraServer.CodaMsg;
 import risicammaraServer.Giocatore_Net;
@@ -21,6 +22,7 @@ import risicammaraServer.messaggiManage.MessaggioPlancia;
 import risicammaraServer.messaggiManage.messaggio_t;
 import risicammaraServer.Server;
 import risicammaraServer.messaggiManage.MessaggioDichiaraAttacco;
+import risicammaraServer.messaggiManage.MessaggioFase;
 import risicammaraServer.messaggiManage.MessaggioGiocaTris;
 import risicammaraServer.messaggiManage.MessaggioObbiettivo;
 import risicammaraServer.messaggiManage.MessaggioRisultatoDado;
@@ -89,6 +91,20 @@ public class SuccessioneTurni {
                     +ex.getMessage());
         }
         //Ciclo dei turni
+        try{
+            int giotin = partita.getGiocatoreTurnoIndice();
+            Server.SpedisciMsgTutti(new MessaggioFase(Fasi_t.PREPARTITA, -1),
+                    listaGiocatori, -1);            
+            Server.SpedisciMsgTutti(MessaggioComandi.creaMsgTurnOfPlayer(giotin),
+                                    listaGiocatori, giotin);
+            ((Giocatore_Net)partita.getGiocatoreDiTurno()).sendMessage(
+                    MessaggioComandi.creaMsgStartYourTurn(
+                    giotin));
+        }
+        catch (IOException ex){
+            System.err.println("Errore nell'invio messaggio di inizio: "
+                    +ex.getMessage());
+        }
         while(!vincitore){
             Messaggio msgReceived = coda.get();
             if(!validitaMessaggio(msgReceived)) continue;
@@ -132,6 +148,7 @@ public class SuccessioneTurni {
      * @param msgReceived il messaggio ricevuto
      */
     private void cicloFasi(Messaggio msgReceived){
+        Fasi_t proxfase = null;
         int prossimo = -1;
         int gioint = partita.getGiocatoreTurnoIndice();
         Giocatore_Net gio = (Giocatore_Net)partita.getGiocatoreDiTurno();
@@ -139,6 +156,7 @@ public class SuccessioneTurni {
 
 
         switch(partita.getFase()){
+            //tre armate ognuno finché non finiscono a tutti
             case PREPARTITA:
                 if(msgReceived.getType()!=messaggio_t.CAMBIAARMATETERRITORIO) return;
                 MessaggioCambiaArmateTerritorio mss
@@ -152,9 +170,14 @@ public class SuccessioneTurni {
                     prossimo = partita.getGiocatoreTurnoIndice();
                     Giocatore tmp = partita.getGiocatoreDiTurno();
                     spedisciMsgCambioTurno(prossimo);
-                    if(tmp.getArmateperturno() == 0) break;
+                    if(tmp.getArmateperturno() == 0){
+                        proxfase = Fasi_t.RINFORZO;
+                        break;
+                    }
                 }
                 return;
+                // Ogni 3 territori una armata, per difetto. Possibilità di
+                //giocare tris e prendere bonus se si ha continenti.
             case RINFORZO:
                 if((msgReceived.getType() != messaggio_t.CAMBIAARMATETERRITORIO) 
                         && (msgReceived.getType() != messaggio_t.GIOCATRIS))
@@ -181,9 +204,12 @@ public class SuccessioneTurni {
                 //Alla prossima fase.
                 if(gio.getArmateperturno()==0){
                     partita.setPlayedTris(false);
+                    proxfase = Fasi_t.ATTACCO;
                     break;
                 }
                 return;
+                // Evetuale attacco. Uno o più attacchi vinti danno diritto a una
+                //sola carta.
             case ATTACCO:
                 if(!parseMsgAttacco(msgReceived)) return;
                 // I messaggi  comando sono della fase "attaccando" e vengono accettati
@@ -194,6 +220,7 @@ public class SuccessioneTurni {
                     MessaggioComandi cmd = (MessaggioComandi)msgReceived;
                         switch(cmd.getComando()){
                             case PASSAFASE:
+                                proxfase = Fasi_t.SPOSTAMENTO;
                                 break;
                             case LANCIADADO:
                                 risolviAttacco(cmd.getOptParameter());
@@ -235,14 +262,16 @@ public class SuccessioneTurni {
                            "Errore nell'invio del messaggio di inizio attacco: "
                            +ex.getMessage());
                 }
-                //Dichiara di attaccare un territorio e gestisce tutte la
-                //parte di attacco. Finché il giocatore non dichiara di aver finito l'attacco
-                //si continua in questa fase, altrimenti si passa alla prossima.
                 return;
+
+                //Spostare armate da un territorio all'altro.
             case SPOSTAMENTO:
                 //Da qui passano solo spostaarmate e passafase
                 if(!validoSpostamento(msgReceived)) return;
-                if(msgReceived.getType() != messaggio_t.SPOSTAARMATE) break;
+                if(msgReceived.getType() != messaggio_t.SPOSTAARMATE){
+                    proxfase = Fasi_t.FINETURNO;
+                    break;
+                }
                 MessaggioSpostaArmate msgSpostamento = (MessaggioSpostaArmate)msgReceived;
 
                 partita.spostamento(msgSpostamento.getSorgente(), 
@@ -252,6 +281,7 @@ public class SuccessioneTurni {
                 //Questa fase finisce se il giocatore passa all'altro turno o se effettua
                 //Il suo spostamento.
                 break;
+                //Fine del turno
             case FINETURNO:
                 //Se il giocatore ha conquistato un territorio allora pesca una carta.
                 //Viene settato il prossimo giocatore.
@@ -270,12 +300,13 @@ public class SuccessioneTurni {
                 }
                 prossimo = partita.getGiocatoreTurnoIndice();
                 spedisciMsgCambioTurno(prossimo);
-            default:
+                proxfase = Fasi_t.RINFORZO;
+            default:                
                 break;
         }
-        partita.ProssimaFase();
+        partita.setFase(proxfase);
         try {
-            Server.SpedisciMsgTutti(MessaggioComandi.creaMsgProssimaFase(
+            Server.SpedisciMsgTutti(new MessaggioFase( proxfase,
                     prossimo),
                     listaGiocatori,
                     -1);
