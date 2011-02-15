@@ -55,8 +55,9 @@ final public class PannelloGioco extends JPanel{
 
         this.barra = new BarraSuperiore(dimensioniPannello, ALTEZZAPANNELLO, this, listaGiocatori, attivatoreGrafica);
         this.addMouseListener(new MouseListenerImpl(this));
-        this.planciaImmagine = new PlanciaImmagine(new Point(0, ALTEZZAPANNELLO),attivatoreGrafica);
+        this.planciaImmagine = new PlanciaImmagine(new Point(0, ALTEZZAPANNELLO));
         this.addPulsante(planciaImmagine);
+        AscoltatorePlancia ascoltatorePlancia = new AscoltatorePlancia(planciaImmagine, attivatoreGrafica);
 
         this.impostaColori(listaGiocatori.meStesso());
 
@@ -103,9 +104,6 @@ final public class PannelloGioco extends JPanel{
         this.planciaImmagine.disegna(g2, colori);
         this.barra.disegna(g2, colori);
         this.performance.disegna(g2, colori);
-
-
-
 
         long tempoSleep = this.durataFrame-cronometro.getEsecTime();
         if (tempoSleep > 0) {

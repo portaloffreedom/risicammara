@@ -11,29 +11,23 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import risicammaraClient.Client;
  
 /**
  *
  * @author matteo
  */
 public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
-    private AttivatoreGrafica attivatoreGrafica;
+    //private AttivatoreGrafica attivatoreGrafica;
     private BufferedImage planciaBMP;
     private BufferedImage planciaPNG;
     private BufferedImage planciaPNGfinal;
-    private int idTerritorioSelezionato;
-    private boolean selezionato;
 
-    public PlanciaImmagine(Point posizione, AttivatoreGrafica ag) {
+    public PlanciaImmagine(Point posizione) {
         super();
-        idTerritorioSelezionato = 0;
-        attivatoreGrafica = ag;
         planciaBMP = loadImage("./risorse/risicammara_plancia.bmp");
         planciaPNG = loadImage("./risorse/risicammara_plancia.png");
         planciaPNGfinal = loadImage("./risorse/risicammara_plancia.png");
@@ -49,8 +43,20 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         graphics2D.drawImage(planciaPNG,p.x,p.y,null);
     }
 
+    public Rectangle getRettangolo(){
+        return (Rectangle) posizione;
+    }
+
     public Dimension getDimension (){
-        return ((Rectangle)posizione).getSize();
+        return getRettangolo().getSize();
+    }
+
+    public Point getPosizione(){
+        return getRettangolo().getLocation();
+    }
+
+    public int getidTerritorio(Point p){
+        return planciaBMP.getRGB(p.x, p.y);
     }
 
     private BufferedImage loadImage (String pad){
@@ -64,39 +70,7 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         return img;
     }
 
-    @Override
-    protected void actionPressed(MouseEvent e) {
-        super.actionPressed(e);
-        Point p = e.getPoint();
-        Point offset = ((Rectangle)posizione).getLocation();
-        p.translate(-offset.x, -offset.y);
-        int idTerritorio = this.planciaBMP.getRGB(p.x, p.y);
-
-        int continente = GetContinente(idTerritorio);
-        int territorio = GetTerritorio(idTerritorio);
-        if (Client.DEBUG == true) {
-            System.out.println("Continente: "+continente);
-            System.out.println("Territorio: "+territorio);
-        }
-        
-        if (selezionato){
-            ripristinaTerritorio(idTerritorioSelezionato);
-            idTerritorioSelezionato = 0;
-            selezionato = false;
-        }
-        else {
-            if (!eTerritorio(idTerritorio))
-                return;
-            //colora(idTerritorio, Color.GREEN);
-            coloraSfumato(idTerritorio, Color.blue, 0.5);
-            idTerritorioSelezionato = idTerritorio;
-            selezionato = true;
-        }
-
-        attivatoreGrafica.panelRepaint();
-    }
-
-    private void colora(int idTerritorio, Color colore){
+    public void colora(int idTerritorio, Color colore){
         for (int r=1; r<planciaBMP.getHeight(); r++){
             for (int c=1; c<planciaBMP.getWidth(); c++){
                 int tempRGB = this.planciaBMP.getRGB(c, r);
@@ -106,7 +80,7 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         }
     }
 
-    private void coloraSfumato(int idTerritorio, Color colore, double trasparenza){
+    public void coloraSfumato(int idTerritorio, Color colore, double trasparenza){
         for (int r=1; r<planciaBMP.getHeight(); r++){
             for (int c=1; c<planciaBMP.getWidth(); c++){
                 int tempRGB = this.planciaBMP.getRGB(c, r);
@@ -134,7 +108,7 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         return RGBsfumato;
     }
 
-    private void ripristinaTerritorio(int idTerritorio){
+    public void ripristinaTerritorio(int idTerritorio){
         for (int r=1; r<planciaBMP.getHeight(); r++){
             for (int c=1; c<planciaBMP.getWidth(); c++){
                 int tempRGB = this.planciaBMP.getRGB(c, r);
