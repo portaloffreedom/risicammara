@@ -9,7 +9,7 @@ import java.net.Socket;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import risicammaraJava.boardManage.Plancia;
-import risicammaraJava.turnManage.Partita;
+import risicammaraJava.turnManage.PartitaServer;
 
 //TODO Stampare un messaggio: "ho cambiato nick"
 //TODO provare ad usare OpenGL
@@ -113,7 +113,7 @@ public class Client implements Runnable {
     }
 
     private PannelloGioco pannello;
-    private Partita partita;
+    private PartitaServer partita;
     private Socket server;
     private int porta;
 

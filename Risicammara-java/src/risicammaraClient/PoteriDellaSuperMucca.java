@@ -5,6 +5,7 @@
 
 package risicammaraClient;
 
+import PacchettoGrafico.ListaGiocatoriClient;
 import java.awt.Container;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -15,7 +16,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import risicammaraJava.playerManage.Giocatore;
-import risicammaraJava.turnManage.Partita;
+import risicammaraJava.turnManage.PartitaServer;
 
 /**
  *
@@ -23,7 +24,7 @@ import risicammaraJava.turnManage.Partita;
  */
 public class PoteriDellaSuperMucca extends JFrame {
 
-    private Partita partita;
+    private ListaGiocatoriClient listaGiocatori;
     private Giocatore giocatoreSelezionato;
 
     private JPanel pannello;
@@ -34,9 +35,9 @@ public class PoteriDellaSuperMucca extends JFrame {
     //private JSpinner numeroArmateTerritorio;
     private JTextField coloreArmate;
 
-    public PoteriDellaSuperMucca(Partita partita) {
+    public PoteriDellaSuperMucca(ListaGiocatoriClient listagiocatori) {
         super("Poteri della SuperMucca");
-        this.partita=partita;
+        this.listaGiocatori=listagiocatori;
 
         //**********************************************************************
         //impostazioni della finestra
@@ -56,10 +57,10 @@ public class PoteriDellaSuperMucca extends JFrame {
         
         // ComboBox per la selezione del Giocatore------------------------------
         this.selezioneGiocatore = new JComboBox();
-        for (int i=0; i<partita.getListaGiocatori().getSize(); i++){
-            selezioneGiocatore.addItem(partita.getListaGiocatori().get(i));
+        for (int i=0; i<listagiocatori.getSize(); i++){
+            selezioneGiocatore.addItem(listagiocatori.get(i));
         }
-        Giocatore giocatoreSelezionato=partita.getListaGiocatori().get(0);
+        Giocatore giocatoreSelezionato=listagiocatori.get(0);
         this.giocatoreSelezionato = null; // importante impostarlo in null, o la
                                           // funzione this.giocatoreSelezionato
                                           // non funziona al primo giro.
