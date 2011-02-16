@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import risicammaraClient.Bonus_t;
 import risicammaraClient.Continente_t;
 import risicammaraClient.territori_t;
@@ -11,7 +13,7 @@ import risicammaraJava.deckManage.Carta;
 import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraJava.turnManage.Fasi_t;
-import risicammaraJava.turnManage.Partita;
+import risicammaraJava.turnManage.PartitaServer;
 import risicammaraServer.CodaMsg;
 import risicammaraServer.Giocatore_Net;
 import risicammaraServer.PlayerThread;
@@ -40,7 +42,7 @@ public class SuccessioneTurni {
     /** La lista che rappresenta i giocatori presenti.*/
     private ListaPlayers listaGiocatori;
     /** L'oggetto che conterrà la situazione attuale della partita. */
-    protected Partita partita;
+    protected PartitaServer partita;
     /** Serve per stabilire se è presente un vincitore */
     protected boolean vincitore;
     /** Serve per stabilre se sta iniziando un nuovo giro dei giocatori. */
@@ -67,7 +69,7 @@ public class SuccessioneTurni {
      */
     public Giocatore_Net start(){
         //PRE partita
-        partita = new Partita(listaGiocatori);
+        partita = new PartitaServer(listaGiocatori);
         try {
             Server.SpedisciMsgTutti(
                     new MessaggioPlancia(partita.getPlancia()),
@@ -96,10 +98,7 @@ public class SuccessioneTurni {
             Server.SpedisciMsgTutti(new MessaggioFase(Fasi_t.PREPARTITA, -1),
                     listaGiocatori, -1);            
             Server.SpedisciMsgTutti(MessaggioComandi.creaMsgTurnOfPlayer(giotin),
-                                    listaGiocatori, giotin);
-            ((Giocatore_Net)partita.getGiocatoreDiTurno()).sendMessage(
-                    MessaggioComandi.creaMsgStartYourTurn(
-                    giotin));
+                                    listaGiocatori, -1);
         }
         catch (IOException ex){
             System.err.println("Errore nell'invio messaggio di inizio: "
@@ -162,6 +161,12 @@ public class SuccessioneTurni {
                 MessaggioCambiaArmateTerritorio mss
                         = (MessaggioCambiaArmateTerritorio)msgReceived;
                 partita.addArmateTerritorio(mss.getTerritorio(), 1);
+                try {
+                    Server.SpedisciMsgTutti(msgReceived, listaGiocatori, -1);
+                } catch (IOException ex) {
+                    System.err.println("Errore invio aggiornaArmate: "
+                            +ex.getMessage());
+                }
                 int armatt = gio.getArmateperturno();
                 gio.setArmatedisponibili(armatt-1);
                 pthread.incnumar();
@@ -198,6 +203,12 @@ public class SuccessioneTurni {
                 MessaggioCambiaArmateTerritorio msgArmate = (MessaggioCambiaArmateTerritorio)msgReceived;
                 partita.addArmateTerritorio(msgArmate.getTerritorio(), msgArmate.getArmate());
                 gio.setArmatedisponibili(armattu-msgArmate.getArmate());
+                try {
+                    Server.SpedisciMsgTutti(msgReceived, listaGiocatori, -1);
+                } catch (IOException ex) {
+                    System.err.println("Errore invio aggiornaArmate (rinforzo): "
+                            +ex.getMessage());
+                }
                 //Assegno eventuali armate bonus per tris giocati (Permetto di giocare tris)
                 //Permetti al giocatore di posizionare le sue armate
                 //Il giocatore mette tutte le armate e quando ha finito si passa
@@ -277,6 +288,12 @@ public class SuccessioneTurni {
                 partita.spostamento(msgSpostamento.getSorgente(), 
                                     msgSpostamento.getArrivo(),
                                     msgSpostamento.getNumarmate());
+                try {
+                    Server.SpedisciMsgTutti(msgReceived, listaGiocatori, -1);
+                } catch (IOException ex) {
+                    System.err.print("Errore invio spostamento armate: "
+                            +ex.getMessage());
+                }
                 //Il giocatore sceglie di spostare n armate da un territorio all'altro.
                 //Questa fase finisce se il giocatore passa all'altro turno o se effettua
                 //Il suo spostamento.
