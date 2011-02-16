@@ -344,9 +344,7 @@ public class SuccessioneTurni {
             Server.SpedisciMsgTutti(
               MessaggioComandi.creaMsgTurnOfPlayer(giocatore_che_deve_giocare),
               listaGiocatori,
-              giocatore_che_deve_giocare);
-            Giocatore_Net g = (Giocatore_Net)listaGiocatori.get(giocatore_che_deve_giocare);
-            g.sendMessage(MessaggioComandi.creaMsgStartYourTurn(giocatore_che_deve_giocare));
+              -1);
         } catch (IOException ex) {
             System.err.println(
                     "Errore nell'invio messaggi fine turno/ cambio turno: "
