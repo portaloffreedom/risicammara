@@ -13,6 +13,7 @@ import java.awt.Rectangle;
 public class BottoneFase extends Elemento_2DGraphicsCliccable implements RisicammaraEventListener {
     static final private double TempoAnimazioneMillSec = 2000;
     static final int OFFSET = 8;
+    static final int OFFSET_TESTO = 20;
     private Dimension dimPannello;
     private AttivatoreGrafica attivatoreGrafica;
     private boolean smosciato;
@@ -90,7 +91,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements Risicam
 
         dimensioniTesto.width = metrics.stringWidth(testo);
         dimensioniTesto.height = metrics.getHeight();
-        posizioneTesto.x = rect.width+rect.x-dimensioniTesto.width-(20);
+        posizioneTesto.x = rect.width+rect.x-dimensioniTesto.width-(OFFSET_TESTO);
         //posizioneTesto.y = rect.y + (rect.height-dimensioniTesto.height)/2;
         posizioneTesto.y = rect.y + (rect.height-dimensioniTesto.height)/2 + dimensioniTesto.height;
 
@@ -106,7 +107,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements Risicam
 
         dimensioniTesto.width = metrics.stringWidth(testoSinistra);
         dimensioniTesto.height = metrics.getHeight();
-        posizioneTesto.x = rect.x + (20);
+        posizioneTesto.x = rect.x + (OFFSET_TESTO);
         posizioneTesto.y = rect.y + (rect.height-dimensioniTesto.height)/2 + dimensioniTesto.height;
 
         g2.setColor(colori.getTesto());
