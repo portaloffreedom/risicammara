@@ -58,6 +58,7 @@ final public class PannelloGioco extends JPanel{
         this.planciaImmagine = new PlanciaImmagine(new Point(0, ALTEZZAPANNELLO));
         this.addPulsante(planciaImmagine);
         AscoltatorePlancia ascoltatorePlancia = new AscoltatorePlancia(planciaImmagine, attivatoreGrafica);
+        planciaImmagine.setActionListener(ascoltatorePlancia);
 
         this.impostaColori(listaGiocatori.meStesso());
 
@@ -120,7 +121,7 @@ final public class PannelloGioco extends JPanel{
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         //TODO impostazione per permettere le altre versioni dell'antialiasing
-        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HBGR);
+        //g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HBGR);
     }
     
     public void mouseCliccato(MouseEvent e) {
@@ -148,6 +149,10 @@ final public class PannelloGioco extends JPanel{
         Dimension dim = this.planciaImmagine.getDimension();
         dim.height += ALTEZZAPANNELLO;
         return dim;
+    }
+
+    public BarraFasi getBarraFasi(){
+        return barra.getBarraFasi();
     }
 
     // <editor-fold defaultstate="collapsed" desc="mouseListener">

@@ -26,6 +26,10 @@ public class ListaGiocatoriClient extends ListaPlayers {
         return this.get(indexGiocatore);
     }
 
+    public int meStessoIndex(){
+        return indexGiocatore;
+    }
+
     private void aggiungiObbiettivoMio(Obbiettivi_t obbiettivo){
         Giocatore catz = listaPlayers.get(indexGiocatore);
         if(catz == null){

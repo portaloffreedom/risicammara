@@ -1,15 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package PacchettoGrafico;
 
 import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
 
 /**
  *
@@ -21,11 +16,22 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements Risicam
     private Dimension dimPannello;
     private AttivatoreGrafica attivatoreGrafica;
     private boolean smosciato;
-    private boolean cambiato;
     private boolean animazione;
     private long inizioAnim;
     private double faseAnimPrec;
+    private String testoDestra;
+    private String testoSinistra;
+    private String testoSmosciato;
 
+    /**
+     * Costruttore.
+     * @param dimPannello Riferimento alle dimensioni del pannello principale.
+     * @param ag Riferimento all'attivatore grafica.
+     * @param p Punto della posizione dell'angolo in alto a sinistra del
+     * pulsante
+     * @param larghezza Larghezza che deve avere il pulsante (ormai inutile).
+     * @param altezza Altezza che deve avere il pulsante.
+     */
     public BottoneFase(Dimension dimPannello, AttivatoreGrafica ag, Point p, int larghezza, int altezza) {
         super();
         FrecciaDestra freccia = new FrecciaDestra(p, altezza, larghezza, 27);
@@ -35,6 +41,9 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements Risicam
         this.smosciato = false;
         this.animazione = false;
         this.faseAnimPrec = 1;
+        this.testoDestra = "";
+        this.testoSinistra = "";
+        this.testoSmosciato = "";
     }
 
     public void disegna(Graphics2D g2, GraphicsAdvanced colori) {
@@ -45,6 +54,8 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements Risicam
         //fase di disegno
         g2.setColor(colori.getColoreGiocatore());
         g2.fill(posizione);
+
+        disegnaTesto(g2, colori);
         
         g2.setColor(colori.getColoreScuro());
         g2.draw(posizione);
@@ -53,30 +64,111 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements Risicam
             attivatoreGrafica.panelRepaint(((FrecciaDestra)posizione).getPuntaBounds());
     }
 
-    public void actionPerformed(EventoAzioneRisicammara ae) {
-        this.setSmoscia(!this.smosciato);
+    private void disegnaTesto(Graphics2D g2, GraphicsAdvanced colori) {
+        if (animazione || smosciato){
+            disegnaTestoSmosciato(g2, colori);
+        }
+        else {
+            disegnaTestoDestra(g2, colori);
+            disegnaTestoSinistra(g2, colori);
+        }
     }
 
-    public void cambiaLarghezza(int larghezza){
+    private void disegnaTestoSmosciato(Graphics2D g2, GraphicsAdvanced colori){
+        this.disegnaTestoDestra(g2, colori, testoSmosciato);
+    }
+
+    private void disegnaTestoDestra(Graphics2D g2, GraphicsAdvanced colori){
+        this.disegnaTestoDestra(g2, colori, testoDestra);
+    }
+
+    private void disegnaTestoDestra(Graphics2D g2, GraphicsAdvanced colori, String testo){
+        Rectangle rect = this.getBounds();
+        FontMetrics metrics = g2.getFontMetrics();
+        Dimension dimensioniTesto = new Dimension();
+        Point posizioneTesto = new Point();
+
+        dimensioniTesto.width = metrics.stringWidth(testo);
+        dimensioniTesto.height = metrics.getHeight();
+        posizioneTesto.x = rect.width+rect.x-dimensioniTesto.width-(20);
+        //posizioneTesto.y = rect.y + (rect.height-dimensioniTesto.height)/2;
+        posizioneTesto.y = rect.y + (rect.height-dimensioniTesto.height)/2 + dimensioniTesto.height;
+
+        g2.setColor(colori.getTesto());
+        g2.drawString(testo, posizioneTesto.x, posizioneTesto.y);
+    }
+
+    private void disegnaTestoSinistra(Graphics2D g2, GraphicsAdvanced colori){
+        Rectangle rect = this.getBounds();
+        FontMetrics metrics = g2.getFontMetrics();
+        Dimension dimensioniTesto = new Dimension();
+        Point posizioneTesto = new Point();
+
+        dimensioniTesto.width = metrics.stringWidth(testoSinistra);
+        dimensioniTesto.height = metrics.getHeight();
+        posizioneTesto.x = rect.x + (20);
+        posizioneTesto.y = rect.y + (rect.height-dimensioniTesto.height)/2 + dimensioniTesto.height;
+
+        g2.setColor(colori.getTesto());
+        g2.drawString(testoSinistra, posizioneTesto.x, posizioneTesto.y);
+    }
+
+    @Deprecated
+    public void actionPerformed(EventoAzioneRisicammara ae) {
+        this.setSmosciato(!this.smosciato);
+    }
+
+    private void cambiaLarghezza(int larghezza){
         ((FrecciaDestra)posizione).cambiaLarghezza(larghezza);
     }
 
-    public void setSmoscia(boolean smosciato){
+    /**
+     * Imposta se il pulsante si deve smosciare o no.
+     * @param smosciato Booleano per lo stato "smosciato".
+     */
+    public void setSmosciato(boolean smosciato){
         this.smosciato = smosciato;
         this.attivatoreGrafica.panelRepaint();
         this.inizioAnim = System.currentTimeMillis();
         this.animazione = true;
     }
 
+    /**
+     * Imposta il testo che deve essere visualizzato quando il pulsante è
+     * smosciato. Impostare un testo corto.
+     * @param testoSmosciato Stringa da visualizzare
+     */
+    public void setTestoSmosciato(String testoSmosciato){
+        this.testoSmosciato = testoSmosciato;
+    }
+
+    /**
+     * Imposta il testo da visualizzare sulla destra quando il pulsante non è
+     * smosciato.
+     * @param testoDestra Stringa da visualizzare
+     */
+    public void setTestoDestra(String testoDestra) {
+        this.testoDestra = testoDestra;
+    }
+
+    /**
+     * Imposta il testo da visualizzare sulla sinistra quando il pulsante non
+     * è smosciato.
+     * @param testoSinistra Stringa da visualizzare
+     */
+    public void setTestoSinistra(String testoSinistra) {
+        this.testoSinistra = testoSinistra;
+    }
+
     private void ridimensiona(){
         if (animazione){
             long tempo = System.currentTimeMillis();
-            double animComletamento = (tempo-inizioAnim)/TempoAnimazioneMillSec; //variabile che va da 0 a 1
-            animComletamento = (Math.sin((animComletamento+Math.PI/2)*Math.PI)+1)/2;
-            int larghezzaPOP = BarraFasi.LarghezzaBottoni(dimPannello.width-250);
+            double animCompletamento = (tempo-inizioAnim)/TempoAnimazioneMillSec; //variabile che va da 0 a 1
+            animCompletamento = (Math.sin((animCompletamento+Math.PI/2)*Math.PI)+1)/2;
+            int larghezzaPOP = BarraFasi.LarghezzaBottoniMassima(dimPannello.width-250);
             if (smosciato){
-                animComletamento = 1-animComletamento;
-                if (animComletamento > this.faseAnimPrec){
+                animCompletamento = 1-animCompletamento;
+                if (animCompletamento > this.faseAnimPrec){
                     this.animazione = false;
                     this.faseAnimPrec = 0;
                     this.cambiaLarghezza(50);
@@ -85,30 +177,39 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements Risicam
                 }
             }
             else {
-                if (animComletamento < this.faseAnimPrec){
+                if (animCompletamento < this.faseAnimPrec){
                     this.animazione = false;
                     this.faseAnimPrec = 1;
-                    this.cambiaLarghezza(BarraFasi.LarghezzaBottoni(dimPannello.width-250));
+                    this.cambiaLarghezza(BarraFasi.LarghezzaBottoniMassima(dimPannello.width-250));
                     this.attivatoreGrafica.panelRepaint(posizione.getBounds());
                     return;
                 }
             }
-            larghezzaPOP = (int) (((larghezzaPOP - 50) * (animComletamento)) + 50);
+            larghezzaPOP = (int) (((larghezzaPOP - 50) * (animCompletamento)) + 50);
             this.cambiaLarghezza(larghezzaPOP);
-            this.faseAnimPrec = animComletamento;
+            this.faseAnimPrec = animCompletamento;
             return;
         }
         if (smosciato){
             this.cambiaLarghezza(50);
         }
         else {
-            int larghezza = BarraFasi.LarghezzaBottoni(dimPannello.width-250);
+            int larghezza = BarraFasi.LarghezzaBottoniMassima(dimPannello.width-250);
             this.cambiaLarghezza(larghezza);
         }
     }
 
+    /**
+     * Serve per ricevere le minime dimensioni che può prendere il pulsante.
+     * @return Rectangle che rappresenta la minima dimensione (con posizione)
+     * del pulsante.
+     */
     public Rectangle getMinBounds() {
         return ((FrecciaDestra)posizione).getBounds(BarraFasi.LARGHEZZABORDO);
+    }
+
+    private Rectangle getBounds(){
+        return ((FrecciaDestra)posizione).getBounds();
     }
 
 }

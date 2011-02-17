@@ -118,7 +118,7 @@ public enum messaggio_t {
      * Aggiorna la fase del gioco.
      * @see risicammaraServer.messaggiManage.MessaggioFase
      */
-    AGGIORNAFASE,
+    FASE,
     /**
      * Pacchetto che avvisa i giocatori di un avvenuto cambio nella lista giocatori.
      * @deprecated Inutilizabile (non serve);

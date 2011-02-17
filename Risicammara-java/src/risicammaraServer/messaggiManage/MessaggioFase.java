@@ -26,7 +26,7 @@ public class MessaggioFase implements Messaggio {
     }
     
     public messaggio_t getType() {
-        return messaggio_t.AGGIORNAFASE;
+        return messaggio_t.FASE;
     }
 
     public int getSender() {
