@@ -9,7 +9,6 @@ import java.net.Socket;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import risicammaraClient.Client;
-import risicammaraClient.Colore_t;
 import risicammaraClient.Connessione;
 import risicammaraClient.Obbiettivi_t;
 import risicammaraJava.playerManage.Giocatore;
@@ -161,7 +160,7 @@ public class SalaAttesa extends JFrame implements Runnable {
                         case AVVIAPARTITA:
                             pannello.stampaMessaggioComando("Partita Avviata!");
                             this.avviaPartita();
-                            break;
+                            return; //termina il thread
 
                         default:
                             System.err.println("Comando non riconosciuto: "+msgComando.getComando());

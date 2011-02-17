@@ -174,12 +174,14 @@ public class Client implements Runnable {
     public void inizializzaPartita (Connessione server, Plancia plancia, ListaGiocatoriClient listaGiocatori){
         
         FinestraGioco finestra =  new FinestraGioco(server, listaGiocatori, plancia);
-        /*
-        if (Client.DEBUG == true) {
-            System.out.println("Poteri della SuperMucca attivati ;)");
-            PoteriDellaSuperMucca dio = new PoteriDellaSuperMucca(this.partita);
-        }
-         */
-        
+        //fa partire direttamente il ciclo di lettura dei messaggi
+        Thread finestraThread = new Thread(finestra);
+        finestraThread.start();
+    }
+
+    static public void RiavviaClient(){
+        //TODO implementare finestra di dialogo
+        //TODO implementare la richiesta di una nuova connessione ad un'altro server
+        System.exit(4242);
     }
 }

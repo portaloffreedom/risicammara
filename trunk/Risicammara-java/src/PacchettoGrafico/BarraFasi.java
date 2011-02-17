@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package PacchettoGrafico;
 
 import java.awt.Color;
@@ -21,9 +16,19 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
     private Dimension dimPannello;
     private int inizio;
     private int fine;
-    private BottoneFase rinforzi;
-    private BottoneFase attacco;
+
     private BottoneFase spostamento;
+    private RisicammaraEventListener ascoltatoreSpostamento;
+
+    private BottoneFase attacco;
+    private RisicammaraEventListener ascoltatoreAttacco;
+
+    private BottoneFase rinforzi;
+    private RisicammaraEventListener ascoltatoreRinforzi;
+
+    private RisicammaraEventListener ascoltatoreFineTurno;
+
+    private ContatoreFasi contatoreFasi;
 
     public final static int LARGHEZZABORDO = 50;
     public static Color SFONDO = new Color(255, 192, 0);
@@ -41,17 +46,18 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
         this.dimPannello = dimPannello;
         this.inizio = inizio;
         this.fine = fine;
+        this.contatoreFasi = new ContatoreFasi();
         Rectangle ret = this.ridimensiona(inizio, fine, altezza, bordoSup);
 
         //TODO posizionare per bene i bottone fasi(uno sopra all'altro, poi vengono rimpiccioliti
-        int larghezzaB = LarghezzaBottoni(ret.width);
-        this.rinforzi    = new BottoneFase(dimPannello, ag, new Point(inizio,     bordoSup),larghezzaB, altezza);
+        int larghezzaB = LarghezzaBottoniMassima(ret.width);
+        this.spostamento = new BottoneFase(dimPannello, ag, new Point(inizio,     bordoSup),larghezzaB, altezza);
         this.attacco     = new BottoneFase(dimPannello, ag, new Point(inizio+50,  bordoSup),larghezzaB, altezza);
-        this.spostamento = new BottoneFase(dimPannello, ag, new Point(inizio+100, bordoSup),larghezzaB, altezza);
+        this.rinforzi    = new BottoneFase(dimPannello, ag, new Point(inizio+100, bordoSup),larghezzaB, altezza);
 
-        this.rinforzi.setActionListener(rinforzi);
-        this.attacco.setActionListener(attacco);
         this.spostamento.setActionListener(spostamento);
+        this.attacco.setActionListener(attacco);
+        this.rinforzi.setActionListener(rinforzi);
     }
 
     public void disegna(Graphics2D graphics2D, GraphicsAdvanced colori) {
@@ -62,15 +68,15 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
         graphics2D.fill(posizione);
 
         //disegna i tre bottonifase nella giusta sequenza
-        this.spostamento.disegna(graphics2D, colori);
+        this.rinforzi.disegna(graphics2D, colori);
         graphics2D.setColor(colori.getColoreGiocatore());
         graphics2D.fill(attacco.getMinBounds());
 
         this.attacco.disegna(graphics2D, colori);
         graphics2D.setColor(colori.getColoreGiocatore());
-        graphics2D.fill(rinforzi.getMinBounds());
+        graphics2D.fill(spostamento.getMinBounds());
         
-        this.rinforzi.disegna(graphics2D, colori);
+        this.spostamento.disegna(graphics2D, colori);
 
         //disegna il contorno
         graphics2D.setColor(colori.getColoreScuro());
@@ -79,14 +85,51 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
 
     @Override
     protected void actionPressed(MouseEvent e) {
-        if (rinforzi.doClicked(e))
-            return;
-        if (attacco.doClicked(e))
-            return;
-        if (spostamento.doClicked(e))
-            return;
-        else
-            this.fineturno();
+        int who = whoIsPressed(e.getPoint());
+        switch (who){
+            default:
+                System.err.println("Errore nel pulsante schiacciato\n"
+                        + "di default viene premuto il pulsante FineTurno");
+            case ContatoreFasi.ATTESA:
+                azionaAscoltatore(ascoltatoreFineTurno, e);
+                break;
+            case ContatoreFasi.RINFORZO:
+                azionaAscoltatore(ascoltatoreRinforzi, e);
+                break;
+            case ContatoreFasi.ATTACCO:
+                azionaAscoltatore(ascoltatoreAttacco, e);
+                break;
+            case ContatoreFasi.SPOSTAMENTI:
+                azionaAscoltatore(ascoltatoreSpostamento, e);
+                break;
+        }
+    }
+
+    private boolean azionaAscoltatore(RisicammaraEventListener eventListener, MouseEvent e){
+        if (eventListener == null)
+            return false;
+        else {
+            eventListener.actionPerformed(new EventoAzioneRisicammara(this, 0, "FaseButton", e.getPoint()));
+            return true;
+        }
+    }
+
+    private int whoIsPressed(Point p){
+        if (spostamento.isClicked(p)){
+            return ContatoreFasi.SPOSTAMENTI;
+        }
+
+        if (attacco.isClicked(p)){
+            return ContatoreFasi.ATTACCO;
+        }
+
+        if (rinforzi.isClicked(p)){
+            return ContatoreFasi.RINFORZO;
+        }
+
+        else {
+            return ContatoreFasi.ATTESA;
+        }
     }
 
     private void fineturno(){
@@ -128,7 +171,7 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
      */
     private void ridimensiona(){
         this.ridimensiona(inizio, fine);
-        int larghezzaB = LarghezzaBottoni(larghezza(inizio, fine));
+        //int larghezzaB = LarghezzaBottoniMassima(larghezza(inizio, fine));
         //this.rinforzi.cambiaLarghezza(larghezzaB); //tolti perché gestiti internamente dalle frecce
         //this.attacco.cambiaLarghezza(larghezzaB);
         //this.spostamento.cambiaLarghezza(larghezzaB);
@@ -138,11 +181,86 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
         return dimPannello.width-(inizio+fine);
     }
 
-    static int LarghezzaBottoni(int larghezza){
+    /**
+     * Funzione che ritorna la dimensione la dimensione massima che possono
+     * avere i bottoni
+     * @param larghezza Larghezza della BarraFasi (spesso espresso in funzione
+     * delle dimensioni del pannello)
+     * @return la larghezza massima che può raggiungere il bottone in pixel
+     */
+    static int LarghezzaBottoniMassima(int larghezza){
         return larghezza-LARGHEZZABORDO*3;
-        //TODO è questa la funzione che non fa ridimensionare i pulsanti "dinamicamente": toglierla e sostituirla con un'altra idea:
-        //idea 1 lasciare il ridimensionamento a carico di ciascun pulsanto, la barra indica solo quando e di quanto
-        //idea 2 memorizzare le 3 dimensioni dei tre bottoni all'interno della Barra
     }
 
+    /**
+     * Passa alla fase successiva. Le fasi si ripetono ciclicamente.<p>
+     * Le fasi si susseguono in:<br>
+     * - ATTESA<br>
+     * - RINFORZO<br>
+     * - ATTACCO<br>
+     * - SPOSTAMENTO
+     */
+    public void avanzaFase(){
+        contatoreFasi.avanzaFase();
+        switch(contatoreFasi.getFase()){
+
+            case ContatoreFasi.RINFORZO: //Passo a RINFORZO
+                rinforzi.setSmosciato(false);
+                break;
+
+            case ContatoreFasi.ATTACCO: //Passo ad ATTACCO
+                attacco.setSmosciato(false);
+                break;
+
+            case ContatoreFasi.SPOSTAMENTI: //Passo a SPOSTAMENTO
+                spostamento.setSmosciato(false);
+                break;
+
+            default: //ERRORE
+                System.err.println("Errore fase. Impostata come fase d'attesa");
+            case ContatoreFasi.ATTESA: //Passo ad ATTESA
+                rinforzi.setSmosciato(true);
+                attacco.setSmosciato(true);
+                spostamento.setSmosciato(true);
+                break;
+        }
+    }
+
+    /**
+     * Imposta alla fase d'attesa.
+     */
+    public void resetFase(){
+        contatoreFasi.resetta();
+        rinforzi.setSmosciato(true);
+        attacco.setSmosciato(true);
+        spostamento.setSmosciato(true);
+    }
+
+    /**
+     * Serve per sapere la fase in cui è attualmente la barra.<p>
+     * ContatoreFase.ATTESA      = 0<br>
+     * ContatoreFase.RINFORZO    = 1<br>
+     * ContatoreFase.ATTACCO     = 2<br>
+     * ContatoreFase.SPOSTAMENTO = 3<br>
+     * @return un intero rappresentante la fase in cui si è.
+     */
+    public int getFase(){
+        return contatoreFasi.getFase();
+    }
+
+    public void setAscoltatoreAttacco(RisicammaraEventListener ascoltatoreAttacco) {
+        this.ascoltatoreAttacco = ascoltatoreAttacco;
+    }
+
+    public void setAscoltatoreFineTurno(RisicammaraEventListener ascoltatoreFineTurno) {
+        this.ascoltatoreFineTurno = ascoltatoreFineTurno;
+    }
+
+    public void setAscoltatoreRinforzi(RisicammaraEventListener ascoltatoreRinforzi) {
+        this.ascoltatoreRinforzi = ascoltatoreRinforzi;
+    }
+
+    public void setAscoltatoreSpostamento(RisicammaraEventListener ascoltatoreSpostamento) {
+        this.ascoltatoreSpostamento = ascoltatoreSpostamento;
+    }
 }

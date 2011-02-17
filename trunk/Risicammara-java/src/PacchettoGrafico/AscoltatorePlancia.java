@@ -22,7 +22,7 @@ public class AscoltatorePlancia implements RisicammaraEventListener {
     public AscoltatorePlancia(PlanciaImmagine planciaImmagine, AttivatoreGrafica ag) {
         this.planciaImmagine = planciaImmagine;
         this.attivatoreGrafica = ag;
-        planciaImmagine.setActionListener(this);
+        //planciaImmagine.setActionListener(this);
     }
 
     public void actionPerformed(EventoAzioneRisicammara e) {
@@ -46,8 +46,7 @@ public class AscoltatorePlancia implements RisicammaraEventListener {
         else {
             if (!PlanciaImmagine.eTerritorio(idTerritorio))
                 return;
-            //colora(idTerritorio, Color.GREEN);
-            planciaImmagine.coloraSfumato(idTerritorio, Color.blue, 0.5);
+            planciaImmagine.coloraSfumato(idTerritorio, Color.white, 0.5);
             idTerritorioSelezionato = idTerritorio;
             selezionato = true;
         }

@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package PacchettoGrafico;
 
 import java.awt.Container;
@@ -12,17 +7,25 @@ import java.awt.event.WindowListener;
 import java.io.IOException;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import risicammaraClient.Client;
 import risicammaraClient.Connessione;
 import risicammaraJava.boardManage.Plancia;
+import risicammaraJava.turnManage.Fasi_t;
+import risicammaraServer.messaggiManage.Messaggio;
+import risicammaraServer.messaggiManage.MessaggioCambiaArmateTerritorio;
+import risicammaraServer.messaggiManage.MessaggioComandi;
+import risicammaraServer.messaggiManage.MessaggioFase;
+import risicammaraServer.messaggiManage.comandi_t;
 
 /**
- *
+ * Finestra della interfaccia di gioco.
  * @author matteo
  */
 public class FinestraGioco extends JFrame implements Runnable {
     private Connessione server;
     private ListaGiocatoriClient listaGiocatori;
     private Plancia plancia;
+    private GestoreFasi gestoreFasi;
 
     private PannelloGioco pannello;
 
@@ -48,12 +51,79 @@ public class FinestraGioco extends JFrame implements Runnable {
         this.getContentPane().setMinimumSize(rect.getSize());
         this.setMinimumSize(rect.getSize());
 
+        this.gestoreFasi = new GestoreFasi(pannello.getBarraFasi());
+
         this.addWindowListener(new WindowListenerImpl(server));
         this.setVisible(true);
     }
 
     public void run() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        /* APPUNTI
+         * A tutti i giocatori un MessaggioFase che dice la fase in cui siamo, a
+         * tutti i giocatori tranne quello ceh gioca arriva un messaggio
+         * TurnOfPlayer(comandO) che dice chi sta giocando, e al giocatore che
+         * deve giocare arriva un StartYourTurn (comando)
+         */
+        try {
+
+            MessaggioFase msgFase = (MessaggioFase) server.ricevi();
+            if (msgFase.getFase() != Fasi_t.PREPARTITA) {
+                System.err.println("Errore, server non sincronizzato");
+                Client.RiavviaClient();
+            }
+
+            this.cicloPreFase();
+
+            this.cicloPartita();
+
+
+        } catch (IOException ex) {
+            System.err.println("Connessione al server persa o corrotta.");
+            Client.RiavviaClient();
+        } catch (ClassNotFoundException ex) {
+            System.err.println("Pacchetto inviato al server irriconoscibile. Disconnessione...");
+            Client.RiavviaClient();
+        }
+    }
+
+    private void cicloPreFase() throws ClassNotFoundException, IOException {
+        Messaggio msg = null;
+        //gestoreFasi.faseToAttesa();
+        while (true) {
+            msg = server.ricevi();
+            if (Client.DEBUG)
+                System.out.println("Arrivato messaggio: "+msg);
+            switch (msg.getType()) {
+                case FASE:
+                    gestoreFasi.faseToAttesa();
+                    return;  //è finita la prefase
+                case COMMAND:
+                    MessaggioComandi msgComandi = (MessaggioComandi) msg;
+                    if (Client.DEBUG && (msgComandi.getComando() != comandi_t.TURNOFPLAYER)){
+                        System.err.println("Errore si sincronizzazione col server");
+                        Client.RiavviaClient();
+                    }
+                    if (msgComandi.getSender() == listaGiocatori.meStessoIndex()){
+                        gestoreFasi.avanzaFase();
+                        //TODO distribuisci le 3 armate
+                    }
+                    break;
+                case CAMBIAARMATETERRITORIO:
+                    MessaggioCambiaArmateTerritorio msgArmate = (MessaggioCambiaArmateTerritorio) msg;
+                    //TODO inserisci armate nel territorio
+                    break;
+            }
+        }
+    }
+
+    private void cicloPartita() throws IOException, ClassNotFoundException {
+        Messaggio msg = null;
+        while (true) {
+            msg = server.ricevi();
+            switch (msg.getType()) {
+                default:
+            }
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="ascoltatore della finestra">
@@ -94,7 +164,5 @@ public class FinestraGioco extends JFrame implements Runnable {
         public void windowDeactivated(WindowEvent e) {
         }
     }// </editor-fold>
-
-
 
 }

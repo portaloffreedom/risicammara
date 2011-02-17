@@ -82,4 +82,8 @@ public class BarraSuperiore implements Elemento_2DGraphics {
         //disegna i menù (da tenere per ultimi)
         this.menuGiocatore.disegna(graphics2D, colori);
     }
+
+    public BarraFasi getBarraFasi(){
+        return barraFasi;
+    }
 }
