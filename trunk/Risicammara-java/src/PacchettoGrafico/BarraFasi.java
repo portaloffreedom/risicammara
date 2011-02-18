@@ -55,9 +55,15 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
         this.attacco     = new BottoneFase(dimPannello, ag, new Point(inizio+50,  bordoSup),larghezzaB, altezza);
         this.rinforzi    = new BottoneFase(dimPannello, ag, new Point(inizio+100, bordoSup),larghezzaB, altezza);
 
-        this.spostamento.setActionListener(spostamento);
-        this.attacco.setActionListener(attacco);
-        this.rinforzi.setActionListener(rinforzi);
+        //this.spostamento.setActionListener(spostamento);
+        //this.attacco.setActionListener(attacco);
+        //this.rinforzi.setActionListener(rinforzi);
+        spostamento.setTestoSinistra("Fase di spostamento");
+        spostamento.setTestoDestra("→");
+
+        attacco.setTestoSinistra("Fase di Attacco");
+        rinforzi.setTestoSinistra("Fase di Rinforzo dei territori");
+        rinforzi.setTestoDestra("Armate disponibili: 3");
     }
 
     public void disegna(Graphics2D graphics2D, GraphicsAdvanced colori) {

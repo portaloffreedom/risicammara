@@ -7,13 +7,14 @@ package risicammaraJava.boardManage;
 import java.io.Serializable;
 import risicammaraClient.Continente_t;
 import risicammaraClient.territori_t;
+import risicammaraJava.playerManage.Giocatore;
 
 /**
  * Classe che rappresenta un territorio della plancia di gioco e tutte
  * le operazioni che è possibile fare su di esso.
  * @author stengun
  */
-public class Territorio_plancia implements Serializable{
+public class TerritorioPlancia implements Serializable{
 
     private territori_t territorio;
     private int armate_presenti;
@@ -24,11 +25,18 @@ public class Territorio_plancia implements Serializable{
      * Inizializza tutti i dati del territorio.
      * @param territorio l'enumerato che rappresenta il territorio.
      */
-    public Territorio_plancia(territori_t territorio){
+    public TerritorioPlancia(territori_t territorio){
         this.territorio = territorio;
         this.armate_presenti = 1;
         this.proprietario = -1;
         this.CompletaAdiacenze();
+    }
+
+    protected TerritorioPlancia(TerritorioPlancia territorioPlancia){
+        this.territorio = territorioPlancia.territorio;
+        this.armate_presenti = territorioPlancia.armate_presenti;
+        this.proprietario = territorioPlancia.proprietario;
+        this.adiacenze = territorioPlancia.adiacenze;
     }
 
     /**
@@ -78,11 +86,11 @@ public class Territorio_plancia implements Serializable{
     public int getProprietario(){
         return this.proprietario;
     }
-/**
- * Controlla se un dato territorio è adiacente a questo.
- * @param terri il territorio da controllare
- * @return True se è adiacente, false altrimenti.
- */
+    /**
+     * Controlla se un dato territorio è adiacente a questo.
+     * @param terri il territorio da controllare
+     * @return True se è adiacente, false altrimenti.
+     */
     public boolean isAdiacent(territori_t terri){
         for(territori_t t : adiacenze){
             if(terri == t) return true;

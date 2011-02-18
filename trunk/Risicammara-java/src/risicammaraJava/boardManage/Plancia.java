@@ -8,29 +8,33 @@ import risicammaraClient.territori_t;
  * (proprietario, numero di armate presenti, i confini)
  * @author stengun
  */
-public class Plancia implements Serializable{
+public class Plancia implements Serializable {
     /** Un array di territorio_plancia che rappresenta tutti i territori.*/
-    private Territorio_plancia[] tabellone;
+    protected TerritorioPlancia[] tabellone;
     /**
      * Inizializza tutti i territori della plancia.
      */
     public Plancia(){
-        tabellone = new Territorio_plancia[42];
+        tabellone = new TerritorioPlancia[42];
         int i = 0;
         for(territori_t t:territori_t.values()){
-            tabellone[i] = new Territorio_plancia(t);
+            tabellone[i] = new TerritorioPlancia(t);
             i++;
             if((t == territori_t.Jolly1)|(t == territori_t.Jolly2)|(i==42)) break;
         }
+    }
+
+    protected Plancia(Plancia plancia){
+        this.tabellone = plancia.tabellone;
     }
 
     /**
      * Richiedi il corrispondente territorio della plancia di gioco a partire
      * dall'enumerato che rappresenta il territorio. (nome).
      * @param territorio Il nome del territorio richiesto.
-     * @return il Territorio_plancia corrispondente
+     * @return il TerritorioPlancia corrispondente
      */
-    public Territorio_plancia getTerritorio(territori_t territorio){
+    public TerritorioPlancia getTerritorio(territori_t territorio){
         if(territorio == territori_t.Jolly1 || territorio == territori_t.Jolly2)
             return null;
         territori_t[] terr = territori_t.values();
@@ -46,7 +50,7 @@ public class Plancia implements Serializable{
  * @param terr array di territori
  * @return il territorio plancia corrispondente
  */
-    private Territorio_plancia getTerritorio(territori_t territorio,
+    private TerritorioPlancia getTerritorio(territori_t territorio,
                                        int inizar,int finear,territori_t[] terr)
     {
         int meta = ((finear-inizar)/2)+inizar;
@@ -55,6 +59,10 @@ public class Plancia implements Serializable{
                                                      meta+1, finear, terr);
         else if ( territorio.compareTo(terr[meta]) < 0) return getTerritorio(territorio, inizar, meta-1, terr);
         return null;
+    }
+
+    public TerritorioPlancia getTerritorio(int idTerritorio){
+        return this.getTerritorio(territori_t.GetTerritorio(idTerritorio));
     }
 
 }

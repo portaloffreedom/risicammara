@@ -15,8 +15,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 import risicammaraClient.Colore_t;
-import risicammaraJava.boardManage.Plancia;
+import risicammaraJava.boardManage.PlanciaClient;
 import risicammaraJava.playerManage.Giocatore;
+import risicammaraJava.turnManage.PartitaClient;
 
 
 /**
@@ -27,7 +28,7 @@ final public class PannelloGioco extends JPanel{
     static public int ALTEZZAPANNELLO = 60;
 
     private ListaGiocatoriClient listaGiocatori;
-    private Plancia plancia;
+    private PlanciaClient plancia;
 
     private Dimension dimensioniPannello;
     private BarraSuperiore barra;
@@ -40,10 +41,10 @@ final public class PannelloGioco extends JPanel{
     private MatricePannello gestionePulsanti;
     private GraphicsAdvanced colori;
 
-    public PannelloGioco(int frameRateMassimo, Plancia plancia, ListaGiocatoriClient listaGiocatori) {
+    public PannelloGioco(int frameRateMassimo, PartitaClient partita) {
         super();
-        this.listaGiocatori = listaGiocatori;
-        this.plancia = plancia;
+        this.listaGiocatori = partita.getListaGiocatori();
+        this.plancia = partita.getPlancia();
         this.attivatoreGrafica = new AttivatoreGrafica(this);
         this.gestionePulsanti = new MatricePannello();
 
@@ -55,7 +56,7 @@ final public class PannelloGioco extends JPanel{
 
         this.barra = new BarraSuperiore(dimensioniPannello, ALTEZZAPANNELLO, this, listaGiocatori, attivatoreGrafica);
         this.addMouseListener(new MouseListenerImpl(this));
-        this.planciaImmagine = new PlanciaImmagine(new Point(0, ALTEZZAPANNELLO));
+        this.planciaImmagine = new PlanciaImmagine(new Point(0, ALTEZZAPANNELLO), partita);
         this.addPulsante(planciaImmagine);
         AscoltatorePlancia ascoltatorePlancia = new AscoltatorePlancia(planciaImmagine, attivatoreGrafica);
         planciaImmagine.setActionListener(ascoltatorePlancia);

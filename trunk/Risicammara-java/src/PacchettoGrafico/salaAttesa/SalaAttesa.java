@@ -11,8 +11,10 @@ import javax.swing.JFrame;
 import risicammaraClient.Client;
 import risicammaraClient.Connessione;
 import risicammaraClient.Obbiettivi_t;
+import risicammaraJava.boardManage.PlanciaClient;
 import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
+import risicammaraJava.turnManage.PartitaClient;
 import risicammaraServer.messaggiManage.*;
 
 /**
@@ -212,7 +214,9 @@ public class SalaAttesa extends JFrame implements Runnable {
             System.exit(11);
         }
         ListaGiocatoriClient listaGiocatoriClient = new ListaGiocatoriClient(listaGiocatori, indexGiocatore, mioObbiettivo);
-        meStesso.inizializzaPartita(server, veicoloPlancia.getPlancia(), listaGiocatoriClient);
+        PlanciaClient planciaClient = new PlanciaClient(veicoloPlancia.getPlancia());
+        PartitaClient partita = new PartitaClient(listaGiocatoriClient,planciaClient);
+        meStesso.inizializzaPartita(server, partita);
     }
 
     /** Funzione da chiamare per fare diventare leader il giocatore */

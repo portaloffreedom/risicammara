@@ -9,6 +9,8 @@ import java.net.Socket;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import risicammaraJava.boardManage.Plancia;
+import risicammaraJava.boardManage.PlanciaClient;
+import risicammaraJava.turnManage.PartitaClient;
 import risicammaraJava.turnManage.PartitaServer;
 
 //TODO Stampare un messaggio: "ho cambiato nick"
@@ -171,9 +173,9 @@ public class Client implements Runnable {
         salaAttesa.start();
     }
 
-    public void inizializzaPartita (Connessione server, Plancia plancia, ListaGiocatoriClient listaGiocatori){
+    public void inizializzaPartita (Connessione server, PartitaClient partita){
         
-        FinestraGioco finestra =  new FinestraGioco(server, listaGiocatori, plancia);
+        FinestraGioco finestra =  new FinestraGioco(server, partita);
         //fa partire direttamente il ciclo di lettura dei messaggi
         Thread finestraThread = new Thread(finestra);
         finestraThread.start();

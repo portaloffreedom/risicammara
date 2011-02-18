@@ -7,6 +7,7 @@ package PacchettoGrafico;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.Rectangle;
 import risicammaraClient.Client;
 
 /**
@@ -26,6 +27,7 @@ public class AscoltatorePlancia implements RisicammaraEventListener {
     }
 
     public void actionPerformed(EventoAzioneRisicammara e) {
+        Rectangle rettangolo = null;
         Point p = e.getPoint();
         Point offset = planciaImmagine.getPosizione();
         p.translate(-offset.x, -offset.y);
@@ -39,19 +41,21 @@ public class AscoltatorePlancia implements RisicammaraEventListener {
         }
 
         if (selezionato){
-            planciaImmagine.ripristinaTerritorio(idTerritorioSelezionato);
+            rettangolo = planciaImmagine.ripristinaTerritorio(idTerritorioSelezionato);
             idTerritorioSelezionato = 0;
             selezionato = false;
         }
         else {
             if (!PlanciaImmagine.eTerritorio(idTerritorio))
                 return;
-            planciaImmagine.coloraSfumato(idTerritorio, Color.white, 0.5);
+            rettangolo = planciaImmagine.coloraSfumato(idTerritorio, Color.white, 0.5);
             idTerritorioSelezionato = idTerritorio;
             selezionato = true;
         }
 
-        attivatoreGrafica.panelRepaint();
+        rettangolo = new Rectangle(rettangolo);
+        rettangolo.y+=PannelloGioco.ALTEZZAPANNELLO;
+        attivatoreGrafica.panelRepaint(rettangolo);
     }
 
 }

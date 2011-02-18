@@ -9,8 +9,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import risicammaraClient.Client;
 import risicammaraClient.Connessione;
-import risicammaraJava.boardManage.Plancia;
+import risicammaraJava.boardManage.PlanciaClient;
 import risicammaraJava.turnManage.Fasi_t;
+import risicammaraJava.turnManage.PartitaClient;
 import risicammaraServer.messaggiManage.Messaggio;
 import risicammaraServer.messaggiManage.MessaggioCambiaArmateTerritorio;
 import risicammaraServer.messaggiManage.MessaggioComandi;
@@ -24,21 +25,21 @@ import risicammaraServer.messaggiManage.comandi_t;
 public class FinestraGioco extends JFrame implements Runnable {
     private Connessione server;
     private ListaGiocatoriClient listaGiocatori;
-    private Plancia plancia;
+    private PlanciaClient plancia;
     private GestoreFasi gestoreFasi;
 
     private PannelloGioco pannello;
 
-    public FinestraGioco(Connessione server, ListaGiocatoriClient listaGiocatori, Plancia plancia) {
+    public FinestraGioco(Connessione server, PartitaClient partita) {
         super("Risicammara");
         this.server = server;
-        this.listaGiocatori = listaGiocatori;
-        this.plancia = plancia;
+        this.listaGiocatori = partita.getListaGiocatori();
+        this.plancia = partita.getPlancia();
 
         this.setIconImage(new ImageIcon("./risorse/risicamlogo.png").getImage());
 
         Container contestoFinestra = this.getContentPane();
-        this.pannello = new PannelloGioco(240, plancia, listaGiocatori);
+        this.pannello = new PannelloGioco(240, partita);
         contestoFinestra.add(pannello);
 
         Rectangle rect = new Rectangle(this.pannello.getDimensioniMinime());

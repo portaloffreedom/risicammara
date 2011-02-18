@@ -70,6 +70,7 @@ public enum territori_t implements Carta {
         this.bonus = bonus;
         this.continente = continente;
         this.territori_adiacenti = territori_adiacenti;
+        this.id = id;
     }
     /**
      * Interfaccia per leggere il bonus legato al territorio
@@ -105,6 +106,154 @@ public enum territori_t implements Carta {
     public int getIdTerritorio(){
         return PlanciaImmagine.GetIdTerritorio(continente.getId(), id);
     }
+
+    public static territori_t GetTerritorio(int idTerritorio){
+        int territorio = PlanciaImmagine.GetTerritorio(idTerritorio);
+        int continente = PlanciaImmagine.GetContinente(idTerritorio);
+        return GetTerritorio(continente, territorio);
+    }
+
+    private static territori_t GetTerritorio(int continente, int territorio){
+        
+        if (continente == Continente_t.ASIA.getId())//Asia
+            return GetTerritorioAsia(territorio);
+        if (continente == Continente_t.AFRICA.getId())//Africa
+            return GetTerritorioAfrica(territorio);
+        if (continente == Continente_t.EUROPA.getId())//Europa
+            return GetTerritorioEuropa(territorio);
+        if (continente == Continente_t.NORDAMERICA.getId())//America del Nord
+            return GetTerritorioAmericaNord(territorio);
+        if (continente == Continente_t.SUDAMERICA.getId())//America del Sud
+            return GetTerritorioAmericaSud(territorio);
+        if (continente == Continente_t.OCEANIA.getId())//Oceania
+            return GetTerritorioOceania(territorio);
+
+        System.err.println("ERRORE, non esiste un settimo continente");
+        return null;
+    }
+
+    private static territori_t GetTerritorioAsia (int territorio){
+        if (territorio == Afghanistan.id)
+            return Afghanistan;
+        if (territorio == Cina.id)
+            return Cina;
+        if (territorio == India.id)
+            return India;
+        if (territorio == Cita.id)
+            return Cita;
+        if (territorio == Giappone.id)
+            return Giappone;
+        if (territorio == Kamchatka.id)
+            return Kamchatka;
+        if (territorio == Medio_Oriente.id)
+            return Medio_Oriente;
+        if (territorio == Mongolia.id)
+            return Mongolia;
+        if (territorio == Siam.id)
+            return Siam;
+        if (territorio == Siberia.id)
+            return Siberia;
+        if (territorio == Urali.id)
+            return Urali;
+        if (territorio == Jacuzia.id)
+            return Jacuzia;
+
+        System.err.println("Non esiste un 13° territorio in Asia");
+        return null;
+    }
+
+    private static territori_t GetTerritorioAfrica (int territorio){
+        if (territorio == Congo.id)
+            return Congo;
+        if (territorio == territori_t.Africa_Orientale.id)
+            return Africa_Orientale;
+        if (territorio == Egitto.id)
+            return Egitto;
+        if (territorio == Madagascar.id)
+            return Madagascar;
+        if (territorio == Africa_del_Nord.id)
+            return Africa_del_Nord;
+        if (territorio == Africa_del_Sud.id)
+            return Africa_del_Sud;
+
+        System.err.println("Non esiste un 7° territorio in Africa");
+        return null;
+    }
+
+    private static territori_t GetTerritorioEuropa (int territorio){
+        if (territorio == Gran_Bretagna.id)
+            return Gran_Bretagna;
+        if (territorio == Islanda.id)
+            return Islanda;
+        if (territorio == Europa_Settentrionale.id)
+            return Europa_Settentrionale;
+        if (territorio == Scandinavia.id)
+            return Scandinavia;
+        if (territorio == Europa_Meridionale.id)
+            return Europa_Meridionale;
+        if (territorio == Ucraina.id)
+            return Ucraina;
+        if (territorio == Europa_Occidentale.id)
+            return Europa_Occidentale;
+
+        System.err.println("Non esiste un 8° territorio in Europa");
+        return null;
+    }
+
+    private static territori_t GetTerritorioAmericaNord (int territorio){
+
+        if (territorio == Alaska.id)
+            return Alaska;
+        if (territorio == Alberta.id)
+            return Alberta;
+        if (territorio == America_Centrale.id)
+            return America_Centrale;
+        if (territorio == Stati_Uniti_Orientali.id)
+            return Stati_Uniti_Orientali;
+        if (territorio == Groenlandia.id)
+            return Groenlandia;
+        if (territorio == Territori_del_Nord_Ovest.id)
+            return Territori_del_Nord_Ovest;
+        if (territorio == Ontario.id)
+            return Ontario;
+        if (territorio == Quebec.id)
+            return Quebec;
+        if (territorio == Stati_Uniti_Occidentali.id)
+            return Stati_Uniti_Occidentali;
+
+        System.err.println("Non esiste un 10° territorio in Nord America");
+        return null;
+    }
+
+    private static territori_t GetTerritorioAmericaSud (int territorio){
+        if (territorio == Argentina.id)
+            return Argentina;
+        if (territorio == Brasile.id)
+            return Brasile;
+        if (territorio == Peru.id)
+            return Peru;
+        if (territorio == Venezuela.id)
+            return Venezuela;
+
+        System.err.println("Non esiste un 5° territorio in Sud America");
+        return null;
+    }
+
+    private static territori_t GetTerritorioOceania (int territorio){
+        if (territorio == Australia_Occidentale.id)
+            return Australia_Occidentale;
+        if (territorio == Indonesia.id)
+            return Indonesia;
+        if (territorio == Nuova_Guinea.id)
+            return Nuova_Guinea;
+        if (territorio == Australia_Orientale.id)
+            return Australia_Orientale;
+
+        System.err.println("Non esiste un 5° territorio in Oceania");
+        return null;
+    }
+
+
 
 };
 
