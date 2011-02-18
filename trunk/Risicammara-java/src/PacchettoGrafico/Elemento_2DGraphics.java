@@ -8,7 +8,7 @@ import java.awt.Graphics2D;
  * 
  * @author matteo
  */
-interface Elemento_2DGraphics {
+public interface Elemento_2DGraphics {
     /**
      * Funzioni che deve essere chiamata per disegnare
      * l'elemento sul contesto grafico del pannello
