@@ -9,7 +9,6 @@ import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraClient.territori_t;
 import risicammaraClient.tipovittoria_t;
-import risicammaraJava.boardManage.Territorio_plancia;
 import risicammaraJava.deckManage.Carta;
 import risicammaraJava.fightManage.Dado;
 
@@ -66,13 +65,6 @@ public class PartitaServer extends GestionePartita {
     }
 
     //Metodi di partita (informazioni)
-    /**
-     * Restituisce l'oggetto che rappresenta la plancia dei territori.
-     * @return L'oggetto Plancia.
-     */
-    public Plancia getPlancia(){
-        return planciadigioco;
-    }
 
     //metodi per azioni di gioco
     /**

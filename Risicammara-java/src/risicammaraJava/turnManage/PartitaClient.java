@@ -1,7 +1,7 @@
 package risicammaraJava.turnManage;
 
-import risicammaraJava.boardManage.Plancia;
-import risicammaraJava.playerManage.ListaPlayers;
+import PacchettoGrafico.ListaGiocatoriClient;
+import risicammaraJava.boardManage.PlanciaClient;
 
 /**
  *
@@ -9,8 +9,17 @@ import risicammaraJava.playerManage.ListaPlayers;
  */
 public class PartitaClient extends GestionePartita {
     
-    public PartitaClient(ListaPlayers listagiocatori, Plancia planciadigioco){
+    public PartitaClient(ListaGiocatoriClient listagiocatori, PlanciaClient planciadigioco){
         super(listagiocatori);
         this.planciadigioco = planciadigioco;
+    }
+
+    @Override
+    public PlanciaClient getPlancia() {
+        return (PlanciaClient) super.getPlancia();
+    }
+
+    public ListaGiocatoriClient getListaGiocatori(){
+        return (ListaGiocatoriClient) this.listagiocatori;
     }
 }

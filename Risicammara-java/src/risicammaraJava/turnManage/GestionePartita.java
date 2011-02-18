@@ -2,7 +2,7 @@ package risicammaraJava.turnManage;
 
 import risicammaraClient.territori_t;
 import risicammaraJava.boardManage.Plancia;
-import risicammaraJava.boardManage.Territorio_plancia;
+import risicammaraJava.boardManage.TerritorioPlancia;
 import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
 
@@ -97,7 +97,7 @@ public abstract class GestionePartita {
      * @return il proprietario del territorio
      */
     public int getProprietarioTerritorio(territori_t ter){
-        Territorio_plancia tpla = planciadigioco.getTerritorio(ter);
+        TerritorioPlancia tpla = planciadigioco.getTerritorio(ter);
         return tpla.getProprietario();
     }
 
@@ -127,7 +127,7 @@ public abstract class GestionePartita {
      * @param armate_da_rimuovere le armate da rimuovere
      */
     public void removeArmateTerrAttaccante(int armate_da_rimuovere){
-        Territorio_plancia temp = planciadigioco.getTerritorio(territorioAttaccante);
+        TerritorioPlancia temp = planciadigioco.getTerritorio(territorioAttaccante);
         int tmp = temp.getArmate();
         temp.setArmate(tmp-armate_da_rimuovere);
     }
@@ -136,7 +136,7 @@ public abstract class GestionePartita {
      * @param armate_da_rimuovere le armate da rimuovere
      */
     public void removeArmateTerrDifensore(int armate_da_rimuovere){
-        Territorio_plancia temp = planciadigioco.getTerritorio(territorioAttaccato);
+        TerritorioPlancia temp = planciadigioco.getTerritorio(territorioAttaccato);
         int tmp = temp.getArmate();
         temp.setArmate(tmp-armate_da_rimuovere);
     }
@@ -146,7 +146,7 @@ public abstract class GestionePartita {
      * @param armate il numero di armate da aggiungere
      */
     public void addArmateTerritorio(territori_t territorio,int armate){
-        Territorio_plancia terpla = planciadigioco.getTerritorio(territorio);
+        TerritorioPlancia terpla = planciadigioco.getTerritorio(territorio);
         int armate_attuali = terpla.getArmate();
         terpla.setArmate(armate+armate_attuali);
     }
@@ -182,7 +182,7 @@ public abstract class GestionePartita {
      * @param armate il numero di armate da spostare.
      */
     public void spostamento(territori_t inizio,territori_t arrivo,int armate){
-        Territorio_plancia tin = planciadigioco.getTerritorio(inizio);
+        TerritorioPlancia tin = planciadigioco.getTerritorio(inizio);
         if(!tin.isAdiacent(arrivo)){
             System.err.println("Errore: Territorio non adiacente");
             return;
@@ -192,8 +192,8 @@ public abstract class GestionePartita {
             System.err.println("Errore: armate spostate maggiori del dovuto");
             return;
         }
-        Territorio_plancia terrinizio = planciadigioco.getTerritorio(inizio);
-        Territorio_plancia terrarrivo = planciadigioco.getTerritorio(arrivo);
+        TerritorioPlancia terrinizio = planciadigioco.getTerritorio(inizio);
+        TerritorioPlancia terrarrivo = planciadigioco.getTerritorio(arrivo);
         terrarrivo.setArmate(terrarrivo.getArmate() + armate);
         terrinizio.setArmate(terrinizio.getArmate()-armate);
     }
@@ -261,5 +261,13 @@ public abstract class GestionePartita {
      */
     public int getNumeroGiocatori(){
         return listagiocatori.getSize();
+    }
+
+    /**
+     * Restituisce l'oggetto che rappresenta la plancia dei territori.
+     * @return L'oggetto Plancia.
+     */
+    public Plancia getPlancia(){
+        return planciadigioco;
     }
 }
