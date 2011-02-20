@@ -64,5 +64,4 @@ public class Plancia implements Serializable {
     public TerritorioPlancia getTerritorio(int idTerritorio){
         return this.getTerritorio(territori_t.GetTerritorio(idTerritorio));
     }
-
 }

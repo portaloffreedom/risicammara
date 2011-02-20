@@ -6,6 +6,7 @@
 package PacchettoGrafico;
 
 import java.awt.Color;
+import risicammaraClient.Colore_t;
 
 /**
  * Classe che aiuta veicolando altri oggetti e funzioni utili in tutto il
@@ -75,5 +76,20 @@ public class GraphicsAdvanced {
      */
     public Color getSfondoTesto() {
         return coloreGiocatore;
+    }
+
+    /**
+     * Serve per trovare il colore giusto con cui disegnare le scritte con sfondo
+     * colorato.
+     * @param colore Colore dello sfondo colorato (fa riferimento ai colori delle
+     * armate)
+     * @return il colore che dovrebbe essere usato per disegnare testo sullo sfondo
+     * colorato di "colore"
+     */
+    public static Color getTextColor(Colore_t colore){
+        if (colore != Colore_t.BLU && colore != Colore_t.NERO)
+            return Color.black;
+        else 
+            return Color.white;
     }
 }

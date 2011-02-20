@@ -42,4 +42,8 @@ public class PlanciaClient extends Plancia {
         return (TerritorioPlanciaClient) super.getTerritorio(idTerritorio);
     }
 
+    public TerritorioPlancia[] getTabellone() {
+        return tabellone;
+    }
+
 }

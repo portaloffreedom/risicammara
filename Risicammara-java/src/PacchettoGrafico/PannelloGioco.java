@@ -136,12 +136,9 @@ final public class PannelloGioco extends JPanel{
     private void impostaColori(Giocatore meStesso){
         Color sfondoScuro = new Color(51, 51, 51);
         Color sfondoChiaro = Color.white;
-        Color testo = Color.black;
         Colore_t armateGiocatore = meStesso.getArmyColour();
-        Color coloreGiocatore = meStesso.getArmyColour().getColor();
-
-        if (armateGiocatore == Colore_t.BLU || armateGiocatore == Colore_t.NERO)
-            testo = Color.white;
+        Color coloreGiocatore =armateGiocatore.getColor();
+        Color testo = GraphicsAdvanced.getTextColor(armateGiocatore);
 
         this.colori = new GraphicsAdvanced(sfondoScuro, sfondoChiaro, testo, coloreGiocatore);
     }
