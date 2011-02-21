@@ -39,7 +39,7 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
     private AttivatoreGrafica ag;
 
     private PartitaClient partita;
-    private PlanciaClient plancia;
+    PlanciaClient plancia;
 
     public PlanciaImmagine(Point posizione, PartitaClient partita, Dimension dimensioniPannello, AttivatoreGrafica ag) {
         super();
@@ -93,11 +93,13 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
     }
 
     public void disegna(Graphics2D g2, GraphicsAdvanced colori) {
-        Point p = ((Rectangle)posizione).getLocation();
+        Rectangle rect = (Rectangle) posizione;
+        rect.width = dimensioniPannello.width-rect.x;
+        rect.height = dimensioniPannello.height-rect.y;
         g2.setColor(Color.cyan.brighter());
         g2.fill(posizione);
         //g2.drawImage(planciaPNG,p.x,p.y,null);
-        g2.drawImage(planciaPNG, p.x, p.y, dimensioniPannello.width-p.x, dimensioniPannello.height-p.y, null);
+        g2.drawImage(planciaPNG, rect.x, rect.y, rect.width, rect.height, null);
 
         FontMetrics font = g2.getFontMetrics();
         for (TerritorioPlancia territorio : plancia.getTabellone()) {
