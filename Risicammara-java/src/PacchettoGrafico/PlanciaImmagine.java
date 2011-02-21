@@ -12,6 +12,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -34,11 +35,14 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
     private BufferedImage planciaBMP;
     private BufferedImage planciaPNG;
     private BufferedImage planciaPNGfinal;
+    private Dimension dimensioniPannello;
+
     private PartitaClient partita;
     private PlanciaClient plancia;
 
-    public PlanciaImmagine(Point posizione, PartitaClient partita) {
+    public PlanciaImmagine(Point posizione, PartitaClient partita, Dimension dimensioniPannello) {
         super();
+        this.dimensioniPannello = dimensioniPannello;
         this.partita = partita;
         this.plancia = partita.getPlancia();
         planciaBMP = loadImage("./risorse/risicammara_plancia.bmp");
@@ -90,7 +94,8 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         Point p = ((Rectangle)posizione).getLocation();
         g2.setColor(Color.cyan.brighter());
         g2.fill(posizione);
-        g2.drawImage(planciaPNG,p.x,p.y,null);
+        //g2.drawImage(planciaPNG,p.x,p.y,null);
+        g2.drawImage(planciaPNG, p.x, p.y, dimensioniPannello.width-p.x, dimensioniPannello.height-p.y, null);
 
         FontMetrics font = g2.getFontMetrics();
         for (TerritorioPlancia territorio : plancia.getTabellone()) {
@@ -99,7 +104,7 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
     }
 
     public void disegnaSegnaposto(Graphics2D g2, GraphicsAdvanced colori, FontMetrics font, TerritorioPlanciaClient territorio){
-        Point p = territorio.getPosizioneCerchietto();
+        Point p = getTransformedPointFromImage(territorio.getPosizioneCerchietto());
         Colore_t coloreProprietario = partita.getListaGiocatori().get(territorio.getProprietario()).getArmyColour();
 
         //determina la posizione del numero (delle armate) da stampare
@@ -108,17 +113,17 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         posizioneTesto.width = font.stringWidth(numeroArmate);
         posizioneTesto.height = font.getHeight();
         posizioneTesto.x = p.x-(posizioneTesto.width/2);
-        posizioneTesto.y = p.y+(posizioneTesto.height/2)+PannelloGioco.ALTEZZAPANNELLO;
+        posizioneTesto.y = p.y+(posizioneTesto.height/2);
         
         //determina le dimensioni dell'ovale da disegnare
-        Rectangle dimensioniOvale = new Rectangle(p.x-(CERCHIO/2), p.y-(CERCHIO/2)+PannelloGioco.ALTEZZAPANNELLO, CERCHIO, CERCHIO);
+        Rectangle dimensioniOvale = new Rectangle(p.x-(CERCHIO/2), p.y-(CERCHIO/2), CERCHIO, CERCHIO);
         if (posizioneTesto.width > dimensioniOvale.width+OFFSET_CORONA*2) {
             dimensioniOvale.width = posizioneTesto.width+OFFSET_CORONA*2;
             dimensioniOvale.x = p.x-(dimensioniOvale.width/2);
         }
         Rectangle dimensioneOvaleRidotto = new Rectangle(dimensioniOvale.width-OFFSET_CORONA*2, dimensioniOvale.height-OFFSET_CORONA*2);
         dimensioneOvaleRidotto.x = p.x-(dimensioneOvaleRidotto.width/2);
-        dimensioneOvaleRidotto.y = p.y-(dimensioneOvaleRidotto.height/2)+PannelloGioco.ALTEZZAPANNELLO;
+        dimensioneOvaleRidotto.y = p.y-(dimensioneOvaleRidotto.height/2);
 
         //disegna l'ovale
         g2.setColor(Color.BLACK);
@@ -255,4 +260,33 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         System.out.println();
     }
 
+    @Override
+    protected void actionPressed(MouseEvent e) {
+        transformPointToImage(e.getPoint());
+        super.actionPressed(e);
+    }
+
+    private void transformPointToImage(Point p){
+        // immagineP : pannelloP = immagine : pannello
+        p.x = (int) (p.x * ((double) planciaPNG.getWidth() / (double) dimensioniPannello.width));
+        p.y = (int) (p.y * ((double) planciaPNG.getHeight() / (double) (dimensioniPannello.height-PannelloGioco.ALTEZZAPANNELLO)));
+    }
+
+    private Point getTransformedPointToImage(Point p){
+        Point b = new Point(p);
+        transformPointToImage(b);
+        return b;
+    }
+
+    private void transformPointFromImage(Point p){
+        // pannelloP : immagineP = pannello : immagine
+        p.x = (int) (p.x * ((double) dimensioniPannello.width / (double) planciaPNG.getWidth()));
+        p.y = (int) (p.y * ((double) (dimensioniPannello.height-PannelloGioco.ALTEZZAPANNELLO) / (double) planciaPNG.getHeight()))+PannelloGioco.ALTEZZAPANNELLO;
+    }
+
+    private Point getTransformedPointFromImage(Point p){
+        Point b = new Point(p.x, p.y);
+        transformPointFromImage(b);
+        return b;
+    }
 }
