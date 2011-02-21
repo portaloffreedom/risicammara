@@ -61,7 +61,7 @@ public class Plancia implements Serializable {
         return null;
     }
 
-    public TerritorioPlancia getTerritorio(int idTerritorio){
+    public TerritorioPlancia getTerritorio(int idTerritorio) throws TerritorioNonTrovatoException {
         return this.getTerritorio(territori_t.GetTerritorio(idTerritorio));
     }
 }

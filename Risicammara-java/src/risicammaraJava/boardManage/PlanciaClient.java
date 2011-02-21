@@ -28,7 +28,7 @@ public class PlanciaClient extends Plancia {
         territorioPlancia.setPosizioneCerchietto(posizioneCerchio);
     }
 
-    public void setBounds(int idTerritorio, Rectangle rettangolo, Point posizioneCerchio){
+    public void setBounds(int idTerritorio, Rectangle rettangolo, Point posizioneCerchio) throws TerritorioNonTrovatoException{
         setBounds(territori_t.GetTerritorio(idTerritorio), rettangolo, posizioneCerchio);
     }
 
@@ -38,7 +38,7 @@ public class PlanciaClient extends Plancia {
     }
 
     @Override
-    public TerritorioPlanciaClient getTerritorio(int idTerritorio) {
+    public TerritorioPlanciaClient getTerritorio(int idTerritorio) throws TerritorioNonTrovatoException {
         return (TerritorioPlanciaClient) super.getTerritorio(idTerritorio);
     }
 

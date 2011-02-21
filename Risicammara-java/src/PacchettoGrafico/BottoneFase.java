@@ -23,6 +23,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements Risicam
     private String testoDestra;
     private String testoSinistra;
     private String testoSmosciato;
+    private boolean disegnaTestoSmosciato;
 
     /**
      * Costruttore.
@@ -45,6 +46,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements Risicam
         this.testoDestra = "";
         this.testoSinistra = "";
         this.testoSmosciato = "";
+        this.disegnaTestoSmosciato = true;
     }
 
     public void disegna(Graphics2D g2, GraphicsAdvanced colori) {
@@ -66,7 +68,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements Risicam
     }
 
     private void disegnaTesto(Graphics2D g2, GraphicsAdvanced colori) {
-        if (animazione || smosciato){
+        if (animazione || smosciato || disegnaTestoSmosciato){
             disegnaTestoSmosciato(g2, colori);
         }
         else {
@@ -132,6 +134,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements Risicam
         this.attivatoreGrafica.panelRepaint();
         this.inizioAnim = System.currentTimeMillis();
         this.animazione = true;
+        this.disegnaTestoSmosciato = smosciato;
     }
 
     /**
@@ -209,8 +212,21 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements Risicam
         return ((FrecciaDestra)posizione).getBounds(BarraFasi.LARGHEZZABORDO);
     }
 
+    /**
+     * Prende le dimensioni e la posizione della freccia.
+     * @return rettangolo che racchiude la freccia.
+     */
     public Rectangle getBounds(){
         return ((FrecciaDestra)posizione).getBounds();
+    }
+
+    /**
+     * Imposta il testo da disegnare come smosciato anche se non è smosciato.
+     * Serve per quando il pulsante non è smosciato ma coperto.
+     * @param disegnaTestoSmosciato vero se disegnare il testo smosciato.
+     */
+    public void setDisegnaTestoSmosciato(boolean disegnaTestoSmosciato) {
+        this.disegnaTestoSmosciato = disegnaTestoSmosciato;
     }
 
 }
