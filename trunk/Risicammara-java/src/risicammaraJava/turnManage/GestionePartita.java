@@ -5,6 +5,7 @@ import risicammaraJava.boardManage.Plancia;
 import risicammaraJava.boardManage.TerritorioPlancia;
 import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
+import risicammaraServer.Giocatore_Net;
 
 /**
  *
@@ -230,15 +231,10 @@ public abstract class GestionePartita {
      * Passa al prossimo giocatore di turno
      */
     public void ProssimoGiocatore(){
-        for(int i=giocturno;i<ListaPlayers.MAXPLAYERS;++i){
-            Giocatore tmp = listagiocatori.get(i);
-            if(tmp == null)continue;
-            giocturno = i;
+            Giocatore_Net tmp = (Giocatore_Net)listagiocatori.getFirst(giocturno);
+            if(tmp == null)giocturno = 0;
+            giocturno = tmp.getPlayerIndex();
             return;
-        }
-        giocturno = 0;
-        this.nuovogiro = true;
-        return;
     };
     /**
      * Chiede se questo è un nuovo giro.

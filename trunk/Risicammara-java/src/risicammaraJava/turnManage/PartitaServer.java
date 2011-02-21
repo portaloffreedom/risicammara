@@ -1,5 +1,8 @@
 package risicammaraJava.turnManage;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import risicammaraClient.Continente_t;
 import risicammaraClient.Obbiettivi_t;
 import risicammaraJava.boardManage.Plancia;
@@ -11,6 +14,8 @@ import risicammaraClient.territori_t;
 import risicammaraClient.tipovittoria_t;
 import risicammaraJava.deckManage.Carta;
 import risicammaraJava.fightManage.Dado;
+import risicammaraServer.Giocatore_Net;
+import risicammaraServer.messaggiManage.MessaggioArmateDisponibili;
 
 /**
 * Questa classe ha il compito di inizializzare tutti gli oggetti che servono per
@@ -55,7 +60,6 @@ public class PartitaServer extends GestionePartita {
                     if(car == null) break;
                     planciadigioco.getTerritorio(car).setProprietario(gio);
                     giocorrente.addTerr(car);
-                    giocorrente.setArmatedisponibili(NumeroArmate(numgioc)-giocorrente.getNumTerritori());
                     if(gio==0) gio = numgioc-1;
                     else gio--;
                 }
@@ -119,7 +123,7 @@ public class PartitaServer extends GestionePartita {
      * @param numerogiocatori Il numero dei giocanti alla partita
      * @return Il numero di armate disponibili
      */
-    private int NumeroArmate(int numerogiocatori){
+    public int NumeroArmate(int numerogiocatori){
         switch(numerogiocatori){
             case 6:
                 return 20;
