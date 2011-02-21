@@ -36,15 +36,17 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
     private BufferedImage planciaPNG;
     private BufferedImage planciaPNGfinal;
     private Dimension dimensioniPannello;
+    private AttivatoreGrafica ag;
 
     private PartitaClient partita;
     private PlanciaClient plancia;
 
-    public PlanciaImmagine(Point posizione, PartitaClient partita, Dimension dimensioniPannello) {
+    public PlanciaImmagine(Point posizione, PartitaClient partita, Dimension dimensioniPannello, AttivatoreGrafica ag) {
         super();
         this.dimensioniPannello = dimensioniPannello;
         this.partita = partita;
         this.plancia = partita.getPlancia();
+        this.ag = ag;
         planciaBMP = loadImage("./risorse/risicammara_plancia.bmp");
         planciaPNG = loadImage("./risorse/risicammara_plancia.png");
         planciaPNGfinal = loadImage("./risorse/risicammara_plancia.png");
@@ -323,10 +325,37 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         return b;
     }
 
-    public void transformRectangleToImage(Rectangle rect) {
+    private void transformRectangleToImage(Rectangle rect) {
         rect.x      = transformXPointFromImage(rect.x,      true);
         rect.width  = transformXPointFromImage(rect.width,  false);
         rect.y      = transformYPointFromImage(rect.y,      true);
         rect.height = transformYPointFromImage(rect.height, false);
+    }
+
+    public void aggiornaTerritorio(territori_t territorio){
+        aggiornaTerritorio(plancia.getTerritorio(territorio));
+    }
+
+    public void aggiornaTerritorio(int idTerritorio){
+        aggiornaTerritorio(plancia.getTerritorio(idTerritorio));
+    }
+
+    public void aggiornaTerritorio(TerritorioPlanciaClient territorio){
+        repaintPlancia(territorio.getPosizione());
+    }
+
+    public void repaintPlancia(Rectangle rettangoloImmagine){
+        rettangoloImmagine = new Rectangle(rettangoloImmagine);
+        transformRectangleToImage(rettangoloImmagine);
+
+        rettangoloImmagine.width++; //approssimazione per eccesso
+        rettangoloImmagine.height++;
+        ag.panelRepaint(rettangoloImmagine);
+    }
+
+    public void aggiornaArmateTerritorio(int armate, territori_t territorioT){
+        TerritorioPlanciaClient territorio = plancia.getTerritorio(territorioT);
+        territorio.setArmate(armate+territorio.getArmate());
+        aggiornaTerritorio(territorio);
     }
 }

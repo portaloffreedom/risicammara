@@ -56,9 +56,9 @@ final public class PannelloGioco extends JPanel{
 
         this.barra = new BarraSuperiore(dimensioniPannello, ALTEZZAPANNELLO, this, listaGiocatori, attivatoreGrafica);
         this.addMouseListener(new MouseListenerImpl(this));
-        this.planciaImmagine = new PlanciaImmagine(new Point(0, ALTEZZAPANNELLO), partita, dimensioniPannello);
+        this.planciaImmagine = new PlanciaImmagine(new Point(0, ALTEZZAPANNELLO), partita, dimensioniPannello, attivatoreGrafica);
         this.addPulsante(planciaImmagine);
-        AscoltatorePlancia ascoltatorePlancia = new AscoltatorePlancia(planciaImmagine, attivatoreGrafica);
+        AscoltatorePlanciaEvidenziatore ascoltatorePlancia = new AscoltatorePlanciaEvidenziatore(planciaImmagine, attivatoreGrafica);
         planciaImmagine.setActionListener(ascoltatorePlancia);
 
         this.impostaColori(listaGiocatori.meStesso());
@@ -151,6 +151,14 @@ final public class PannelloGioco extends JPanel{
 
     public BarraFasi getBarraFasi(){
         return barra.getBarraFasi();
+    }
+
+    public AttivatoreGrafica getAttivatoreGrafica() {
+        return attivatoreGrafica;
+    }
+
+    public PlanciaImmagine getPlanciaImmagine() {
+        return planciaImmagine;
     }
 
     // <editor-fold defaultstate="collapsed" desc="mouseListener">

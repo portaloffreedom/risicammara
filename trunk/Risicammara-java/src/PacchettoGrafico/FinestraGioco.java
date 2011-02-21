@@ -9,10 +9,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import risicammaraClient.Client;
 import risicammaraClient.Connessione;
+import risicammaraClient.territori_t;
 import risicammaraJava.boardManage.PlanciaClient;
 import risicammaraJava.turnManage.Fasi_t;
 import risicammaraJava.turnManage.PartitaClient;
 import risicammaraServer.messaggiManage.Messaggio;
+import risicammaraServer.messaggiManage.MessaggioArmateDisponibili;
 import risicammaraServer.messaggiManage.MessaggioCambiaArmateTerritorio;
 import risicammaraServer.messaggiManage.MessaggioComandi;
 import risicammaraServer.messaggiManage.MessaggioFase;
@@ -25,8 +27,9 @@ import risicammaraServer.messaggiManage.comandi_t;
 public class FinestraGioco extends JFrame implements Runnable {
     private Connessione server;
     private ListaGiocatoriClient listaGiocatori;
-    private PlanciaClient plancia;
+    private PartitaClient partita;
     private GestoreFasi gestoreFasi;
+    private PlanciaImmagine plancia;
 
     private PannelloGioco pannello;
 
@@ -34,7 +37,7 @@ public class FinestraGioco extends JFrame implements Runnable {
         super("Risicammara");
         this.server = server;
         this.listaGiocatori = partita.getListaGiocatori();
-        this.plancia = partita.getPlancia();
+        this.partita = partita;
 
         this.setIconImage(new ImageIcon("./risorse/risicamlogo.png").getImage());
 
@@ -42,17 +45,12 @@ public class FinestraGioco extends JFrame implements Runnable {
         this.pannello = new PannelloGioco(240, partita);
         contestoFinestra.add(pannello);
 
-        Rectangle rect = new Rectangle(this.pannello.getDimensioniMinime());
-        //rect.width+=20;
-        //rect.height+=60;
-        //contestoFinestra.setMinimumSize(rect.getSize());
-        //contestoFinestra.setSize(rect.getSize());
-        rect.setLocation(50, 50);
+        Rectangle rect = new Rectangle(50, 50, 800, 1500);
         this.setBounds(rect);
-        //this.getContentPane().setMinimumSize(rect.getSize());
-        //this.setMinimumSize(rect.getSize());
-
-        this.gestoreFasi = new GestoreFasi(pannello.getBarraFasi());
+        this.setMinimumSize(rect.getSize());
+        
+        this.plancia = pannello.getPlanciaImmagine();
+        this.gestoreFasi = new GestoreFasi(pannello.getBarraFasi(),server,listaGiocatori,plancia ,pannello.getAttivatoreGrafica());
 
         this.addWindowListener(new WindowListenerImpl(server));
         this.setVisible(true);
@@ -106,13 +104,20 @@ public class FinestraGioco extends JFrame implements Runnable {
                     }
                     if (msgComandi.getSender() == listaGiocatori.meStessoIndex()){
                         gestoreFasi.avanzaFase();
-                        //TODO distribuisci le 3 armate
                     }
+                    else
+                        gestoreFasi.faseToAttesa();
                     break;
                 case CAMBIAARMATETERRITORIO:
                     MessaggioCambiaArmateTerritorio msgArmate = (MessaggioCambiaArmateTerritorio) msg;
+                    plancia.aggiornaArmateTerritorio(msgArmate.getArmate(), msgArmate.getTerritorio());
+                    gestoreFasi.diminuisciArmateRinforzoDisponibili();
                     //TODO inserisci armate nel territorio
                     break;
+
+                case ARMATEDISPONIBILI:
+                    MessaggioArmateDisponibili msgMad = (MessaggioArmateDisponibili) msg;
+                    gestoreFasi.setArmateRinforzoDisponibili(msgMad.getNumarm());
             }
         }
     }
