@@ -45,7 +45,7 @@ public class FinestraGioco extends JFrame implements Runnable {
         this.pannello = new PannelloGioco(240, partita);
         contestoFinestra.add(pannello);
 
-        Rectangle rect = new Rectangle(50, 50, 800, 1500);
+        Rectangle rect = new Rectangle(50, 50, 700, 1000);
         this.setBounds(rect);
         this.setMinimumSize(rect.getSize());
         
