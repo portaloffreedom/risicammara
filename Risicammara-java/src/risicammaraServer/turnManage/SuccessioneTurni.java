@@ -168,16 +168,25 @@ public class SuccessioneTurni {
                             +ex.getMessage());
                 }
                 if(gio.isFirst()){
-                    int armatt = gio.getArmateperturno();
-                    gio.setArmatedisponibili(armatt);
+                    int armd = partita.NumeroArmate(partita.getNumeroGiocatori())-gio.getNumTerritori();
                     try {
-                            gio.sendMessage(new MessaggioArmateDisponibili(armatt, -1));
-                        } catch (IOException ex) {
-                            System.err.println(
-                                    "Errore nell'invio Armate disponibili Tris: "
-                                    +ex.getMessage());
+                        gio.sendMessage(
+                                new MessaggioArmateDisponibili(armd, -1));
+                    } catch (IOException ex) {
+                        System.err.println(
+                                "Errore invio armate disponibili PrePartita: "
+                                +ex.getMessage());
                     }
                     gio.setFirst(false);
+                }
+                int armatt = gio.getArmateperturno()-1;
+                gio.setArmatedisponibili(armatt);
+                try {
+                        gio.sendMessage(new MessaggioArmateDisponibili(armatt, -1));
+                    } catch (IOException ex) {
+                        System.err.println(
+                                "Errore nell'invio Armate disponibili Tris: "
+                                +ex.getMessage());
                 }
                 pthread.incnumar();
                 if(pthread.isMustpass()){
@@ -187,7 +196,6 @@ public class SuccessioneTurni {
                     spedisciMsgCambioTurno(prossimo);
                     if(tmp.getArmateperturno() == 0){
                         proxfase = Fasi_t.RINFORZO;
-                        if(!partita.isNuovogiro()) gio.setFirst(true);
                         break;
                     }
                 }
