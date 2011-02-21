@@ -262,14 +262,59 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
 
     @Override
     protected void actionPressed(MouseEvent e) {
-        transformPointToImage(e.getPoint());
+        Point p = getTransformedPointToImage(e.getPoint());
+        e = new MouseEvent(e.getComponent(), e.getID(), e.getWhen(), e.getModifiers(), p.x, p.y, e.getClickCount(), false);
         super.actionPressed(e);
+    }
+
+    private int getXtranslate(boolean translate){
+        if (translate)
+            return ((Rectangle) posizione).x;
+        else
+            return 0;
+    }
+
+    private int getYtranslate(boolean translate){
+        if (translate)
+            return ((Rectangle) posizione).y;
+        else
+            return 0;
+    }
+
+    // pannelloP : immagineP = pannello : immagine
+    private int transformXPointFromImage(int x, boolean translate){
+        int translation = getXtranslate(translate);
+        return (int) (x * ((double) (dimensioniPannello.width-translation) / (double) planciaPNG.getWidth()))+translation;
+    }
+    private int transformYPointFromImage(int y, boolean translate){
+        int traslation = getYtranslate(translate);
+        return (int) (y * ((double) (dimensioniPannello.height-traslation) / (double) planciaPNG.getHeight()))+traslation;
+    }
+
+    private int transformXPointToImage(int x, boolean translate){
+        int translation = getXtranslate(translate);
+        return (int) ((x-translation) * ((double) planciaPNG.getWidth() / (double) (dimensioniPannello.width-translation)));
+    }
+    private int transformYPointToImage(int y, boolean translate){
+        int traslation = getYtranslate(translate);
+        return (int) ((y-traslation) * ((double) planciaPNG.getHeight() / (double) (dimensioniPannello.height-traslation)));
+    }
+
+    private void transformPointFromImage(Point p){
+        p.x = transformXPointFromImage(p.x, true);
+        p.y = transformYPointFromImage(p.y, true);
+    }
+
+    private Point getTransformedPointFromImage(Point p){
+        Point b = new Point(p.x, p.y);
+        transformPointFromImage(b);
+        return b;
     }
 
     private void transformPointToImage(Point p){
         // immagineP : pannelloP = immagine : pannello
-        p.x = (int) (p.x * ((double) planciaPNG.getWidth() / (double) dimensioniPannello.width));
-        p.y = (int) (p.y * ((double) planciaPNG.getHeight() / (double) (dimensioniPannello.height-PannelloGioco.ALTEZZAPANNELLO)));
+        p.x = transformXPointToImage(p.x, true);
+        p.y = transformYPointToImage(p.y, true);
     }
 
     private Point getTransformedPointToImage(Point p){
@@ -278,15 +323,10 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         return b;
     }
 
-    private void transformPointFromImage(Point p){
-        // pannelloP : immagineP = pannello : immagine
-        p.x = (int) (p.x * ((double) dimensioniPannello.width / (double) planciaPNG.getWidth()));
-        p.y = (int) (p.y * ((double) (dimensioniPannello.height-PannelloGioco.ALTEZZAPANNELLO) / (double) planciaPNG.getHeight()))+PannelloGioco.ALTEZZAPANNELLO;
-    }
-
-    private Point getTransformedPointFromImage(Point p){
-        Point b = new Point(p.x, p.y);
-        transformPointFromImage(b);
-        return b;
+    public void transformRectangleToImage(Rectangle rect) {
+        rect.x      = transformXPointFromImage(rect.x,      true);
+        rect.width  = transformXPointFromImage(rect.width,  false);
+        rect.y      = transformYPointFromImage(rect.y,      true);
+        rect.height = transformYPointFromImage(rect.height, false);
     }
 }
