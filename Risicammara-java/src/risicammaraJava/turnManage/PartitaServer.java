@@ -1,6 +1,7 @@
 package risicammaraJava.turnManage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import risicammaraClient.Continente_t;
@@ -30,6 +31,8 @@ import risicammaraServer.messaggiManage.MessaggioArmateDisponibili;
 public class PartitaServer extends GestionePartita {
     private MazzoTerritori mazzo;
     private Dado dado;
+    private ArrayList vittoriaDistruzione;
+
     /**
      * Costruttore PartitaServer che inizializza tutti gli oggetti
      * @param listagiocatori L'oggetto che rappresenta la lista dei giocatori
@@ -39,7 +42,7 @@ public class PartitaServer extends GestionePartita {
         this.planciadigioco = new Plancia();
         this.mazzo = new MazzoTerritori();
         this.dado = new Dado(6);
-
+        this.vittoriaDistruzione = new ArrayList();
         //Distribuzione territori per i giocatori
         territori_t car;
         int numgioc = listagiocatori.getSize();
@@ -63,9 +66,37 @@ public class PartitaServer extends GestionePartita {
                     if(gio==0) gio = numgioc-1;
                     else gio--;
                 }
+        for(int i=0;i<ListaPlayers.MAXPLAYERS;i++){
+            Giocatore g = listagiocatori.get(i);
+            if(g==null)continue;
+            int armd = NumeroArmate(numgioc)-g.getNumTerritori();
+            g.setArmatedisponibili(armd);
+        }
         //Distribuzione obbiettivi
         MazzoObbiettivi mazzoobj = new MazzoObbiettivi();
-        for(int i = 0; i<numgioc;i++) listagiocatori.get(i).setObj((Obbiettivi_t)mazzoobj.Pesca());
+        for(int i = 0; i<numgioc;i++){
+            Obbiettivi_t ob = (Obbiettivi_t)mazzoobj.Pesca();
+            switch(ob.VictoryType()){
+                case DISTRUZIONE:
+//                    for(int f = 0;f<ListaPlayers.MAXPLAYERS;f++){
+//                        if(f == i) continue;
+//                        if(listagiocatori.get(f) == null) continue;
+//                        switch(ob){
+//                            case ROSSO:
+//                            case BLU:
+//                            case GIALLO:
+//                            case VERDE:
+//                            case NERO:
+//                            case VIOLA:
+//                            default:
+//                                break;
+//                        }
+//                    }
+                default:
+                    listagiocatori.get(i).setObj(ob);
+                    break;
+            }
+        }
     }
 
     //Metodi di partita (informazioni)
@@ -123,7 +154,7 @@ public class PartitaServer extends GestionePartita {
      * @param numerogiocatori Il numero dei giocanti alla partita
      * @return Il numero di armate disponibili
      */
-    public int NumeroArmate(int numerogiocatori){
+    private int NumeroArmate(int numerogiocatori){
         switch(numerogiocatori){
             case 6:
                 return 20;
@@ -205,4 +236,6 @@ public class PartitaServer extends GestionePartita {
                 return false;
         }
     };
+
+
 }

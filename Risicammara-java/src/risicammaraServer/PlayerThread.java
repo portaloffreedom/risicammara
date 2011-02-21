@@ -117,6 +117,7 @@ public class PlayerThread extends Thread{
     /**
      * è appena entrato in partita per l'assegnazione armate.
      * @return
+     * @deprecated
      */
     public boolean isFirst() {
         return first;
@@ -124,6 +125,7 @@ public class PlayerThread extends Thread{
 /**
  * Se devono essergli assegnate le armate.
  * @param first
+ * @deprecated 
  */
     public void setFirst(boolean first) {
         this.first = first;

@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import risicammaraClient.Bonus_t;
 import risicammaraClient.Continente_t;
 import risicammaraClient.territori_t;
@@ -104,6 +102,15 @@ public class SuccessioneTurni {
             System.err.println("Errore nell'invio messaggio di inizio: "
                     +ex.getMessage());
         }
+
+        try {
+            inviaArmateDisponibili();
+        } catch (IOException ex) {
+            System.err.println("Errore invio armate disponibili inizio turno: "
+                    +ex.getMessage());
+        }
+
+        // Ciclo principale
         while(!vincitore){
             Messaggio msgReceived = coda.get();
             if(!validitaMessaggio(msgReceived)) continue;
@@ -114,6 +121,7 @@ public class SuccessioneTurni {
             //attuale di gioco (se è un messaggio premesso dalla fase)
             cicloFasi(msgReceived);
         }
+
         return null;
     }
 
@@ -166,18 +174,6 @@ public class SuccessioneTurni {
                 } catch (IOException ex) {
                     System.err.println("Errore invio aggiornaArmate: "
                             +ex.getMessage());
-                }
-                if(gio.isFirst()){
-                    int armd = partita.NumeroArmate(partita.getNumeroGiocatori())-gio.getNumTerritori();
-                    try {
-                        gio.sendMessage(
-                                new MessaggioArmateDisponibili(armd, -1));
-                    } catch (IOException ex) {
-                        System.err.println(
-                                "Errore invio armate disponibili PrePartita: "
-                                +ex.getMessage());
-                    }
-                    gio.setFirst(false);
                 }
                 int armatt = gio.getArmateperturno()-1;
                 gio.setArmatedisponibili(armatt);
@@ -581,5 +577,13 @@ public class SuccessioneTurni {
             }
         }
         return total;
+    }
+
+    private void inviaArmateDisponibili() throws IOException {
+        for(int i=0;i<ListaPlayers.MAXPLAYERS;i++){
+            Giocatore_Net g = (Giocatore_Net)listaGiocatori.get(i);
+            if(g==null)continue;
+            g.sendMessage(new MessaggioArmateDisponibili(g.getArmateperturno(), -1));
+        }
     }
 }
