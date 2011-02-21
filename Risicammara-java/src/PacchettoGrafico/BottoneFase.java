@@ -131,7 +131,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements Risicam
      */
     public void setSmosciato(boolean smosciato){
         this.smosciato = smosciato;
-        this.attivatoreGrafica.panelRepaint();
+        this.attivatoreGrafica.panelRepaint(this.getBounds());
         this.inizioAnim = System.currentTimeMillis();
         this.animazione = true;
         this.disegnaTestoSmosciato = smosciato;

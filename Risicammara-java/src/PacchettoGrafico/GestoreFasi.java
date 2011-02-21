@@ -139,6 +139,10 @@ public class GestoreFasi {
         setArmateRinforzoDisponibili(armateRinforzoDisponibili);
     }
 
+    public int getFaseCorrente(){
+        return barraFasi.getFase();
+    }
+
     // <editor-fold defaultstate="collapsed" desc="AscoltatoriPulsantiFase">
     private class AscoltatoreFineTurno implements RisicammaraEventListener {
         private GestoreFasi fasi;
