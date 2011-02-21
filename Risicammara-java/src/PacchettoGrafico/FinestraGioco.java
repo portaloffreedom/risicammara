@@ -9,8 +9,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import risicammaraClient.Client;
 import risicammaraClient.Connessione;
-import risicammaraClient.territori_t;
-import risicammaraJava.boardManage.PlanciaClient;
 import risicammaraJava.turnManage.Fasi_t;
 import risicammaraJava.turnManage.PartitaClient;
 import risicammaraServer.messaggiManage.Messaggio;
@@ -45,7 +43,7 @@ public class FinestraGioco extends JFrame implements Runnable {
         this.pannello = new PannelloGioco(240, partita);
         contestoFinestra.add(pannello);
 
-        Rectangle rect = new Rectangle(50, 50, 700, 1000);
+        Rectangle rect = new Rectangle(50, 50, 900, 600);
         this.setBounds(rect);
         this.setMinimumSize(rect.getSize());
         
