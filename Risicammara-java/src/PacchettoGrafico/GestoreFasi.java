@@ -5,7 +5,12 @@
 
 package PacchettoGrafico;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import risicammaraClient.Connessione;
+import risicammaraJava.turnManage.Fasi_t;
+import risicammaraServer.messaggiManage.MessaggioFase;
 
 /**
  *
@@ -32,10 +37,10 @@ public class GestoreFasi {
         this.ag = ag;
         this.setArmateRinforzoDisponibili(0);
 
-        this.ascoltatoreFineTurno = new AscoltatoreFineTurno(this);
+        this.ascoltatoreFineTurno = new AscoltatoreFineTurno(this, listaGiocatori.meStessoIndex());
         //this.ascoltatoreRinforzo = new AscoltatoreRinforzo();
         //this.ascoltatoreAttacco = new AscoltatoreAttacco();
-        this.ascoltatoreSpostamento = new AscoltatoreSpostamento(this);
+        this.ascoltatoreSpostamento = new AscoltatoreSpostamento(this, listaGiocatori.meStessoIndex());
         faseToAttesa();
     }
 
@@ -48,7 +53,7 @@ public class GestoreFasi {
         barraFasi.avanzaFase();
         switch(barraFasi.getFase()){
             case ContatoreFasi.FINETURNO:
-                setAscoltatore(true, false);
+                setAscoltatore(false, false);
                 planciaImmagine.setActionListener(null);
                 return;
 
@@ -131,6 +136,7 @@ public class GestoreFasi {
     final public void setArmateRinforzoDisponibili(int armate){
         this.armateRinforzoDisponibili = armate;
         barraFasi.rinforzi.setTestoDestra("Armate disponibili: "+armateRinforzoDisponibili);
+        barraFasi.rinforzi.setTestoSmosciato(""+armateRinforzoDisponibili);
         ag.panelRepaint(barraFasi.rinforzi.getBounds());
     }
 
@@ -146,27 +152,41 @@ public class GestoreFasi {
     // <editor-fold defaultstate="collapsed" desc="AscoltatoriPulsantiFase">
     private class AscoltatoreFineTurno implements RisicammaraEventListener {
         private GestoreFasi fasi;
+        private int meStesso;
 
-        public AscoltatoreFineTurno(GestoreFasi fasi) {
+        public AscoltatoreFineTurno(GestoreFasi fasi, int meStesso) {
             this.fasi = fasi;
+            this.meStesso = meStesso;
         }
 
         public void actionPerformed(EventoAzioneRisicammara e) {
-            //TODO Messaggio vai a fine turno
+            try {
+                server.spedisci(new MessaggioFase(Fasi_t.FINETURNO, meStesso));
+            } catch (IOException ex) {
+                System.err.println("Messaggio fine turno non inviato: "+ex);
+                return;
+            }
             fasi.faseToAttesa();
         }
     }
 
     private class AscoltatoreSpostamento implements RisicammaraEventListener {
         private GestoreFasi gestoreFasi;
+        private int meStesso;
 
-        public AscoltatoreSpostamento(GestoreFasi gestoreFasi) {
+        public AscoltatoreSpostamento(GestoreFasi gestoreFasi, int meStesso) {
             this.gestoreFasi = gestoreFasi;
+            this.meStesso = meStesso;
         }
         
         public void actionPerformed(EventoAzioneRisicammara e) {
             //da attacco passa a spostamenti
-            //TODO messaggio di fine fase attacco e inizio fase spostamento
+            try {
+                server.spedisci(new MessaggioFase(Fasi_t.SPOSTAMENTO, meStesso));
+            } catch (IOException ex) {
+                System.err.println("Messaggio passaggio a turno spostamento non inviato: "+ex);
+                return;
+            }
             gestoreFasi.avanzaFase();
         }
     }

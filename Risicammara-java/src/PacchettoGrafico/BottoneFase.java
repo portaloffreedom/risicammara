@@ -14,6 +14,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements Risicam
     static final private double TempoAnimazioneMillSec = 2000;
     static final int OFFSET = 8;
     static final int OFFSET_TESTO = 20;
+    static final int DIMENSIONI_PUNTA = 27;
     private Dimension dimPannello;
     private AttivatoreGrafica attivatoreGrafica;
     private boolean smosciato;
@@ -36,7 +37,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements Risicam
      */
     public BottoneFase(Dimension dimPannello, AttivatoreGrafica ag, Point p, int larghezza, int altezza) {
         super();
-        FrecciaDestra freccia = new FrecciaDestra(p, altezza, larghezza, 27);
+        FrecciaDestra freccia = new FrecciaDestra(p, altezza, larghezza, DIMENSIONI_PUNTA);
         super.posizione = freccia;
         this.dimPannello = dimPannello;
         this.attivatoreGrafica = ag;
@@ -64,7 +65,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements Risicam
         g2.draw(posizione);
 
         if (animazione)
-            attivatoreGrafica.panelRepaint(((FrecciaDestra)posizione).getPuntaBounds());
+            attivatoreGrafica.panelRepaint(this.getExtraPuntaBounds());
     }
 
     private void disegnaTesto(Graphics2D g2, GraphicsAdvanced colori) {
@@ -227,6 +228,13 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements Risicam
      */
     public void setDisegnaTestoSmosciato(boolean disegnaTestoSmosciato) {
         this.disegnaTestoSmosciato = disegnaTestoSmosciato;
+    }
+
+    private Rectangle getExtraPuntaBounds() {
+        Rectangle rect = (((FrecciaDestra)posizione).getPuntaBounds());
+        rect.x-= BarraFasi.LARGHEZZABORDO;
+        rect.width += BarraFasi.LARGHEZZABORDO+5;
+        return rect;
     }
 
 }

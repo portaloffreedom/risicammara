@@ -93,6 +93,8 @@ public class FinestraGioco extends JFrame implements Runnable {
             switch (msg.getType()) {
                 case FASE:
                     gestoreFasi.faseToAttesa();
+                    if (Client.DEBUG)
+                        System.out.println("Finita la prefase");
                     return;  //è finita la prefase
                 case COMMAND:
                     MessaggioComandi msgComandi = (MessaggioComandi) msg;
@@ -111,7 +113,6 @@ public class FinestraGioco extends JFrame implements Runnable {
                     plancia.aggiornaArmateTerritorio(msgArmate.getArmate(), msgArmate.getTerritorio());
                     if (gestoreFasi.getFaseCorrente() == ContatoreFasi.RINFORZO)
                         gestoreFasi.diminuisciArmateRinforzoDisponibili();
-                    //TODO inserisci armate nel territorio
                     break;
 
                 case ARMATEDISPONIBILI:
@@ -126,8 +127,42 @@ public class FinestraGioco extends JFrame implements Runnable {
         Messaggio msg = null;
         while (true) {
             msg = server.ricevi();
+            if (Client.DEBUG)
+                System.out.println("Arrivato messaggio: "+msg);
             switch (msg.getType()) {
+                case COMMAND: {
+                    MessaggioComandi msgComandi = (MessaggioComandi) msg;
+                    switch (msgComandi.getComando()) {
+                        case TURNOFPLAYER:
+                        if (msgComandi.getSender() == listaGiocatori.meStessoIndex())
+                            gestoreFasi.avanzaFase();
+                        else {
+                            //TODO tocca al giocatore msgComandi.getSender()
+                        }
+                    }
+                    break;
+                }
+                
+                case ARMATEDISPONIBILI:
+                    MessaggioArmateDisponibili msgMad = (MessaggioArmateDisponibili) msg;
+                    gestoreFasi.setArmateRinforzoDisponibili(msgMad.getNumarm());
+                    break;
+                
+                case CAMBIAARMATETERRITORIO:
+                    MessaggioCambiaArmateTerritorio msgArmate = (MessaggioCambiaArmateTerritorio) msg;
+                    plancia.aggiornaArmateTerritorio(msgArmate.getArmate(), msgArmate.getTerritorio());
+                    if (gestoreFasi.getFaseCorrente() == ContatoreFasi.RINFORZO)
+                        gestoreFasi.diminuisciArmateRinforzoDisponibili();
+                    break;
+
+                case FASE:
+                    if (gestoreFasi.getFaseCorrente() == ContatoreFasi.RINFORZO)
+                        gestoreFasi.avanzaFase();
+                    break;
+
                 default:
+                    System.err.println("MESSAGGIO NON RICONOSCIUTO! "+msg);
+                    break;
             }
         }
     }
