@@ -209,7 +209,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements Risicam
         return ((FrecciaDestra)posizione).getBounds(BarraFasi.LARGHEZZABORDO);
     }
 
-    private Rectangle getBounds(){
+    public Rectangle getBounds(){
         return ((FrecciaDestra)posizione).getBounds();
     }
 

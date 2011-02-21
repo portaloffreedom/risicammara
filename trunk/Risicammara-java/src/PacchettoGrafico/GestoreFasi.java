@@ -129,12 +129,12 @@ public class GestoreFasi {
         this.armateRinforzoDisponibili = armate;
         if (barraFasi.getFase() == ContatoreFasi.RINFORZO)
             barraFasi.rinforzi.setTestoDestra("Armate disponibili: "+armateRinforzoDisponibili);
+        ag.panelRepaint(barraFasi.rinforzi.getBounds());
     }
 
     final public void diminuisciArmateRinforzoDisponibili(){
-        this.armateRinforzoDisponibili--;
-        if (barraFasi.getFase() == ContatoreFasi.RINFORZO)
-            barraFasi.rinforzi.setTestoDestra("Armate disponibili: "+armateRinforzoDisponibili);
+        armateRinforzoDisponibili--;
+        setArmateRinforzoDisponibili(armateRinforzoDisponibili);
     }
 
     // <editor-fold defaultstate="collapsed" desc="AscoltatoriPulsantiFase">
