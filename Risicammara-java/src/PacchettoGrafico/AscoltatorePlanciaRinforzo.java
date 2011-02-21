@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import risicammaraClient.Connessione;
 import risicammaraClient.territori_t;
+import risicammaraJava.boardManage.TerritorioPlanciaClient;
 import risicammaraServer.messaggiManage.MessaggioCambiaArmateTerritorio;
 
 /**
@@ -31,13 +32,19 @@ public class AscoltatorePlanciaRinforzo implements RisicammaraEventListener {
     public void actionPerformed(EventoAzioneRisicammara e) {
         //mettiArmata nel territorio
         int idTerritorio = planciaImmagine.getidTerritorio(e.getPoint());
-        MessaggioCambiaArmateTerritorio msg = new MessaggioCambiaArmateTerritorio(meStesso, 1, territori_t.GetTerritorio(idTerritorio));
+        territori_t territorioT = territori_t.GetTerritorio(idTerritorio);
+        TerritorioPlanciaClient territorio = planciaImmagine.plancia.getTerritorio(territorioT);
+        if (territorio.getProprietario() == meStesso) {
+            MessaggioCambiaArmateTerritorio msg = new MessaggioCambiaArmateTerritorio(meStesso, 1, territorioT);
 
-        try {
-            server.spedisci(msg);
-        } catch (IOException ex) {
-            System.err.println("Errore di connessione con il server. Armata non spedita. Motivo: "+ex);
+            try {
+                server.spedisci(msg);
+            } catch (IOException ex) {
+                System.err.println("Errore di connessione con il server. Armata non spedita. Motivo: "+ex);
+            }
         }
+        else
+            return;
     }
 
 }
