@@ -25,6 +25,7 @@ public class PlayerThread extends Thread{
     private boolean leader;
     private boolean mustpass;
     private int numar;
+    private boolean first;
 
 /**
  * Inizializza tutti i dati necessari al thread che riceve i messaggi da un
@@ -40,6 +41,7 @@ public class PlayerThread extends Thread{
         this.setName("Thread giocatore"+playerIndex);
         this.leader = false;
         this.mustpass = false;
+        this.first=true;
     }
 /**
  * Metodo run per l'interfaccia Runnable. È il codice che viene eseguito dal thread
@@ -104,13 +106,29 @@ public class PlayerThread extends Thread{
  * quante armate sono state messe dal giocatore nella fase pre partita).
  */
     public void incnumar(){
-        if(numar<3){
+        if(numar<2){
             numar++;
             return;
         }
         mustpass = true;
         numar = 0;
     }
-    
+
+    /**
+     * è appena entrato in partita per l'assegnazione armate.
+     * @return
+     */
+    public boolean isFirst() {
+        return first;
+    }
+/**
+ * Se devono essergli assegnate le armate.
+ * @param first
+ */
+    public void setFirst(boolean first) {
+        this.first = first;
+    }
+
+
 
 }

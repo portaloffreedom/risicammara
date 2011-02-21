@@ -47,7 +47,7 @@ public class SuccessioneTurni {
     /** Serve per stabilire se è presente un vincitore */
     protected boolean vincitore;
     /** Serve per stabilre se sta iniziando un nuovo giro dei giocatori. */
-    protected boolean nuovogiro; // Per vedere se devo controllare le condizioni di vittoria.
+    //protected boolean nuovogiro; // Per vedere se devo controllare le condizioni di vittoria.
     /** Stabilisce se il giocatore ha conquistato uno o più territori nel suo turno. */
     protected boolean conquistato; //Se il giocatore ha conquistato almeno un territorio
 
@@ -60,7 +60,6 @@ public class SuccessioneTurni {
     public SuccessioneTurni(ListaPlayers listaGiocatori,CodaMsg coda){
         this.coda = coda;
         this.listaGiocatori = listaGiocatori;
-        this.nuovogiro = false;
         this.vincitore = false;
         this.conquistato = false;
     };
@@ -168,8 +167,18 @@ public class SuccessioneTurni {
                     System.err.println("Errore invio aggiornaArmate: "
                             +ex.getMessage());
                 }
-                int armatt = gio.getArmateperturno();
-                gio.setArmatedisponibili(armatt-1);
+                if(gio.isFirst()){
+                    int armatt = gio.getArmateperturno();
+                    gio.setArmatedisponibili(armatt);
+                    try {
+                            gio.sendMessage(new MessaggioArmateDisponibili(armatt, -1));
+                        } catch (IOException ex) {
+                            System.err.println(
+                                    "Errore nell'invio Armate disponibili Tris: "
+                                    +ex.getMessage());
+                    }
+                    gio.setFirst(false);
+                }
                 pthread.incnumar();
                 if(pthread.isMustpass()){
                     partita.ProssimoGiocatore();
@@ -178,6 +187,7 @@ public class SuccessioneTurni {
                     spedisciMsgCambioTurno(prossimo);
                     if(tmp.getArmateperturno() == 0){
                         proxfase = Fasi_t.RINFORZO;
+                        if(!partita.isNuovogiro()) gio.setFirst(true);
                         break;
                     }
                 }
