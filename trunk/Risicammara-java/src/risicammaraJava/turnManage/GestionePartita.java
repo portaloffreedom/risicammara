@@ -232,7 +232,10 @@ public abstract class GestionePartita {
      */
     public void ProssimoGiocatore(){
             Giocatore_Net tmp = (Giocatore_Net)listagiocatori.getFirst(giocturno);
-            if(tmp == null)giocturno = 0;
+            if(tmp == null){
+                giocturno = 0;
+                return;
+            }
             giocturno = tmp.getPlayerIndex();
             return;
     };
