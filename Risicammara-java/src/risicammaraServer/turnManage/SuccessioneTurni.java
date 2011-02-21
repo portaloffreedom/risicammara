@@ -186,6 +186,7 @@ public class SuccessioneTurni {
                 }
                 pthread.incnumar();
                 if(pthread.isMustpass()){
+                    pthread.setMustpass(false);
                     partita.ProssimoGiocatore();
                     prossimo = partita.getGiocatoreTurnoIndice();
                     Giocatore tmp = partita.getGiocatoreDiTurno();
