@@ -109,13 +109,15 @@ public class FinestraGioco extends JFrame implements Runnable {
                 case CAMBIAARMATETERRITORIO:
                     MessaggioCambiaArmateTerritorio msgArmate = (MessaggioCambiaArmateTerritorio) msg;
                     plancia.aggiornaArmateTerritorio(msgArmate.getArmate(), msgArmate.getTerritorio());
-                    gestoreFasi.diminuisciArmateRinforzoDisponibili();
+                    if (gestoreFasi.getFaseCorrente() == ContatoreFasi.RINFORZO)
+                        gestoreFasi.diminuisciArmateRinforzoDisponibili();
                     //TODO inserisci armate nel territorio
                     break;
 
                 case ARMATEDISPONIBILI:
                     MessaggioArmateDisponibili msgMad = (MessaggioArmateDisponibili) msg;
                     gestoreFasi.setArmateRinforzoDisponibili(msgMad.getNumarm());
+                    break;
             }
         }
     }
