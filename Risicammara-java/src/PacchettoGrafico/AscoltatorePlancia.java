@@ -29,8 +29,6 @@ public class AscoltatorePlancia implements RisicammaraEventListener {
     public void actionPerformed(EventoAzioneRisicammara e) {
         Rectangle rettangolo = null;
         Point p = e.getPoint();
-        Point offset = planciaImmagine.getPosizione();
-        p.translate(-offset.x, -offset.y);
         int idTerritorio = planciaImmagine.getidTerritorio(p);
 
         int continente = PlanciaImmagine.GetContinente(idTerritorio);
@@ -54,7 +52,10 @@ public class AscoltatorePlancia implements RisicammaraEventListener {
         }
 
         rettangolo = new Rectangle(rettangolo);
-        rettangolo.y+=PannelloGioco.ALTEZZAPANNELLO;
+        planciaImmagine.transformRectangleToImage(rettangolo);
+        
+        rettangolo.width++; //approssimazione per eccesso
+        rettangolo.height++;
         attivatoreGrafica.panelRepaint(rettangolo);
     }
 
