@@ -5,19 +5,32 @@
 
 package PacchettoGrafico;
 
+import risicammaraClient.Connessione;
+
 /**
  *
  * @author matteo
  */
 public class GestoreFasi {
     private BarraFasi barraFasi;
+    private PlanciaImmagine planciaImmagine;
     private AscoltatoreFineTurno   ascoltatoreFineTurno;
     //private AscoltatoreRinforzo    ascoltatoreRinforzo;
     //private AscoltatoreAttacco     ascoltatoreAttacco;
     private AscoltatoreSpostamento ascoltatoreSpostamento;
+    private int armateRinforzoDisponibili;
 
-    public GestoreFasi(BarraFasi barraFasi) {
+    private Connessione server;
+    private AttivatoreGrafica ag;
+    private ListaGiocatoriClient listaGiocatori;
+
+    public GestoreFasi(BarraFasi barraFasi, Connessione server, ListaGiocatoriClient listaGiocatori, PlanciaImmagine planciaImmagine, AttivatoreGrafica ag) {
         this.barraFasi = barraFasi;
+        this.planciaImmagine = planciaImmagine;
+        this.listaGiocatori = listaGiocatori;
+        this.server = server;
+        this.ag = ag;
+        this.setArmateRinforzoDisponibili(0);
 
         this.ascoltatoreFineTurno = new AscoltatoreFineTurno(this);
         //this.ascoltatoreRinforzo = new AscoltatoreRinforzo();
@@ -36,10 +49,12 @@ public class GestoreFasi {
         switch(barraFasi.getFase()){
             case ContatoreFasi.FINETURNO:
                 setAscoltatore(true, false);
+                planciaImmagine.setActionListener(null);
                 return;
 
             case ContatoreFasi.RINFORZO:
                 setAscoltatore(false, false);
+                planciaImmagine.setActionListener(new AscoltatorePlanciaRinforzo(planciaImmagine, server, listaGiocatori.meStessoIndex()));
                 return;
 
             case ContatoreFasi.ATTACCO:
@@ -108,6 +123,18 @@ public class GestoreFasi {
                     barraFasi.setAscoltatoreSpostamento(null);
                 return;
         }
+    }
+
+    final public void setArmateRinforzoDisponibili(int armate){
+        this.armateRinforzoDisponibili = armate;
+        if (barraFasi.getFase() == ContatoreFasi.RINFORZO)
+            barraFasi.rinforzi.setTestoDestra("Armate disponibili: "+armateRinforzoDisponibili);
+    }
+
+    final public void diminuisciArmateRinforzoDisponibili(){
+        this.armateRinforzoDisponibili--;
+        if (barraFasi.getFase() == ContatoreFasi.RINFORZO)
+            barraFasi.rinforzi.setTestoDestra("Armate disponibili: "+armateRinforzoDisponibili);
     }
 
     // <editor-fold defaultstate="collapsed" desc="AscoltatoriPulsantiFase">

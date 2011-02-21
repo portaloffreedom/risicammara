@@ -14,13 +14,13 @@ import risicammaraClient.Client;
  *
  * @author matteo
  */
-public class AscoltatorePlancia implements RisicammaraEventListener {
+public class AscoltatorePlanciaEvidenziatore implements RisicammaraEventListener {
     private PlanciaImmagine planciaImmagine;
     private AttivatoreGrafica attivatoreGrafica;
     private int idTerritorioSelezionato;
     private boolean selezionato;
 
-    public AscoltatorePlancia(PlanciaImmagine planciaImmagine, AttivatoreGrafica ag) {
+    public AscoltatorePlanciaEvidenziatore(PlanciaImmagine planciaImmagine, AttivatoreGrafica ag) {
         this.planciaImmagine = planciaImmagine;
         this.attivatoreGrafica = ag;
         //planciaImmagine.setActionListener(this);
@@ -51,12 +51,7 @@ public class AscoltatorePlancia implements RisicammaraEventListener {
             selezionato = true;
         }
 
-        rettangolo = new Rectangle(rettangolo);
-        planciaImmagine.transformRectangleToImage(rettangolo);
-        
-        rettangolo.width++; //approssimazione per eccesso
-        rettangolo.height++;
-        attivatoreGrafica.panelRepaint(rettangolo);
+        planciaImmagine.repaintPlancia(rettangolo);
     }
 
 }

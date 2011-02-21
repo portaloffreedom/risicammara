@@ -35,11 +35,11 @@ public class BottoneRisicammara extends Elemento_2DGraphicsCliccable {
         this.pressed = false;
 
         //TODO togliere queste immagini
-        this.sfondo = new ImageIcon("./risorse/sfondo_pulsante.png", "Descrizione");
+        //this.sfondo = new ImageIcon("./risorse/sfondo_pulsante.png", "Descrizione");
         //this.rollover = new ImageIcon("./risorse/mouse_pulsante.png",  "Descrizione");
         //this.pressione = new ImageIcon("./risorse/premuto_pulsante.png",  "Descrizione");
 
-        super.setShape(new Rectangle(posizione, new Dimension(sfondo.getIconWidth(), sfondo.getIconHeight())));
+        super.setShape(new Rectangle(posizione, new Dimension(100,50)));
 
     }
 

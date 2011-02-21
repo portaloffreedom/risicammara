@@ -17,13 +17,13 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
     private int inizio;
     private int fine;
 
-    private BottoneFase spostamento;
+    BottoneFase spostamento;
     private RisicammaraEventListener ascoltatoreSpostamento;
 
-    private BottoneFase attacco;
+    BottoneFase attacco;
     private RisicammaraEventListener ascoltatoreAttacco;
 
-    private BottoneFase rinforzi;
+    BottoneFase rinforzi;
     private RisicammaraEventListener ascoltatoreRinforzi;
 
     private RisicammaraEventListener ascoltatoreFineTurno;
