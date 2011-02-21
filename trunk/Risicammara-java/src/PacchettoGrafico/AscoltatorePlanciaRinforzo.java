@@ -6,9 +6,8 @@
 package PacchettoGrafico;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import risicammaraClient.Connessione;
+import risicammaraJava.boardManage.TerritorioNonTrovatoException;
 import risicammaraClient.territori_t;
 import risicammaraJava.boardManage.TerritorioPlanciaClient;
 import risicammaraServer.messaggiManage.MessaggioCambiaArmateTerritorio;
@@ -32,8 +31,19 @@ public class AscoltatorePlanciaRinforzo implements RisicammaraEventListener {
     public void actionPerformed(EventoAzioneRisicammara e) {
         //mettiArmata nel territorio
         int idTerritorio = planciaImmagine.getidTerritorio(e.getPoint());
-        territori_t territorioT = territori_t.GetTerritorio(idTerritorio);
+
+        if (!PlanciaImmagine.eTerritorio(idTerritorio))
+            return;
+
+        territori_t territorioT;
+        try {
+            territorioT = territori_t.GetTerritorio(idTerritorio);
+        } catch (TerritorioNonTrovatoException ex) {
+                System.err.println("Punto non selezionabile:\n"+ex);
+                return;
+        }
         TerritorioPlanciaClient territorio = planciaImmagine.plancia.getTerritorio(territorioT);
+        
         if (territorio.getProprietario() == meStesso) {
             MessaggioCambiaArmateTerritorio msg = new MessaggioCambiaArmateTerritorio(meStesso, 1, territorioT);
 

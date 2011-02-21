@@ -60,10 +60,14 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
         //this.rinforzi.setActionListener(rinforzi);
         spostamento.setTestoSinistra("Fase di spostamento");
         spostamento.setTestoDestra("→");
+        spostamento.setTestoSmosciato("#");
 
         attacco.setTestoSinistra("Fase di Attacco");
+        attacco.setTestoSmosciato("#");
+
         rinforzi.setTestoSinistra("Fase di Rinforzo dei territori");
-        rinforzi.setTestoDestra("Armate disponibili: 3");
+        rinforzi.setTestoSmosciato("#");
+        //rinforzi.setTestoDestra("Armate disponibili: 3");
     }
 
     public void disegna(Graphics2D graphics2D, GraphicsAdvanced colori) {
@@ -215,10 +219,12 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
                 break;
 
             case ContatoreFasi.ATTACCO: //Passo ad ATTACCO
+                rinforzi.setDisegnaTestoSmosciato(true);
                 attacco.setSmosciato(false);
                 break;
 
             case ContatoreFasi.SPOSTAMENTI: //Passo a SPOSTAMENTO
+                attacco.setDisegnaTestoSmosciato(true);
                 spostamento.setSmosciato(false);
                 break;
 

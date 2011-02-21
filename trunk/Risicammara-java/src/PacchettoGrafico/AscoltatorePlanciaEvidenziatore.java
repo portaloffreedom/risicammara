@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import risicammaraClient.Client;
+import risicammaraJava.boardManage.TerritorioNonTrovatoException;
 
 /**
  *
@@ -39,14 +40,24 @@ public class AscoltatorePlanciaEvidenziatore implements RisicammaraEventListener
         }
 
         if (selezionato){
-            rettangolo = planciaImmagine.ripristinaTerritorio(idTerritorioSelezionato);
+            try {
+                rettangolo = planciaImmagine.ripristinaTerritorio(idTerritorioSelezionato);
+            } catch (TerritorioNonTrovatoException ex) {
+                System.err.println("Punto non selezionabile:\n"+ex);
+                return;
+            }
             idTerritorioSelezionato = 0;
             selezionato = false;
         }
         else {
             if (!PlanciaImmagine.eTerritorio(idTerritorio))
                 return;
-            rettangolo = planciaImmagine.coloraSfumato(idTerritorio, Color.white, 0.5);
+            try {
+                rettangolo = planciaImmagine.coloraSfumato(idTerritorio, Color.white, 0.5);
+            } catch (TerritorioNonTrovatoException ex) {
+                System.err.println("Punto non selezionabile:\n"+ex);
+                return;
+            }
             idTerritorioSelezionato = idTerritorio;
             selezionato = true;
         }

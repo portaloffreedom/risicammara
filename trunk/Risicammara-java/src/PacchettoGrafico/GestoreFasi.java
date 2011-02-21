@@ -59,10 +59,13 @@ public class GestoreFasi {
 
             case ContatoreFasi.ATTACCO:
                 setAscoltatore(true, true);
+                barraFasi.rinforzi.setDisegnaTestoSmosciato(true);
+                planciaImmagine.setActionListener(null);
                 return;
 
             case ContatoreFasi.SPOSTAMENTI:
                 setAscoltatore(true, false);
+                planciaImmagine.setActionListener(null);
                 return;
         }
     }
@@ -127,8 +130,7 @@ public class GestoreFasi {
 
     final public void setArmateRinforzoDisponibili(int armate){
         this.armateRinforzoDisponibili = armate;
-        if (barraFasi.getFase() == ContatoreFasi.RINFORZO)
-            barraFasi.rinforzi.setTestoDestra("Armate disponibili: "+armateRinforzoDisponibili);
+        barraFasi.rinforzi.setTestoDestra("Armate disponibili: "+armateRinforzoDisponibili);
         ag.panelRepaint(barraFasi.rinforzi.getBounds());
     }
 
