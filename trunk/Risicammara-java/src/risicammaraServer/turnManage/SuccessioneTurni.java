@@ -10,24 +10,12 @@ import risicammaraClient.territori_t;
 import risicammaraJava.deckManage.Carta;
 import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
-import risicammaraJava.turnManage.Fasi_t;
-import risicammaraJava.turnManage.PartitaServer;
+import risicammaraJava.turnManage.*;
 import risicammaraServer.CodaMsg;
 import risicammaraServer.Giocatore_Net;
 import risicammaraServer.PlayerThread;
-import risicammaraServer.messaggiManage.Messaggio;
-import risicammaraServer.messaggiManage.MessaggioCambiaArmateTerritorio;
-import risicammaraServer.messaggiManage.MessaggioComandi;
-import risicammaraServer.messaggiManage.MessaggioPlancia;
-import risicammaraServer.messaggiManage.messaggio_t;
+import risicammaraServer.messaggiManage.*;
 import risicammaraServer.Server;
-import risicammaraServer.messaggiManage.MessaggioArmateDisponibili;
-import risicammaraServer.messaggiManage.MessaggioDichiaraAttacco;
-import risicammaraServer.messaggiManage.MessaggioFase;
-import risicammaraServer.messaggiManage.MessaggioGiocaTris;
-import risicammaraServer.messaggiManage.MessaggioObbiettivo;
-import risicammaraServer.messaggiManage.MessaggioRisultatoDado;
-import risicammaraServer.messaggiManage.MessaggioSpostaArmate;
 
 /**
  * Questa classe serve per rappresentare la successione dei turni di gioco.
@@ -190,12 +178,12 @@ public class SuccessioneTurni {
                     pthread.setMustpass(false);
                     partita.ProssimoGiocatore();
                     prossimo = partita.getGiocatoreTurnoIndice();
-                    Giocatore tmp = partita.getGiocatoreDiTurno();
-                    spedisciMsgCambioTurno(prossimo);
-                    if(tmp.getArmateperturno() == 0){
+                    gio = (Giocatore_Net) partita.getGiocatoreDiTurno();
+                    if(gio.getArmateperturno() == 0){
                         proxfase = Fasi_t.RINFORZO;
                         break;
                     }
+                    spedisciMsgCambioTurno(prossimo);
                 }
                 return;
                 // Ogni 3 territori una armata, per difetto. Possibilità di
@@ -205,18 +193,6 @@ public class SuccessioneTurni {
                         && (msgReceived.getType() != messaggio_t.GIOCATRIS))
                     return;
                 //Assegno le armate in base ai territori posseduti dal giocatore.
-                int armattu = gio.getArmateperturno();
-                if(armattu == 0){
-                    int abon = (gio.getNumTerritori()/3)+getTotalContinentalBonus(gio);
-                    gio.setArmatedisponibili(abon);
-                    try {
-                        gio.sendMessage(new MessaggioArmateDisponibili(abon, -1));
-                    } catch (IOException ex) {
-                        System.err.println(
-                                "Errore nell'invio Armate disponibili: "
-                                +ex.getMessage());
-                    }
-                }
                 if((msgReceived.getType() == messaggio_t.GIOCATRIS) 
                         && !partita.playedTris())
                 {
@@ -233,6 +209,7 @@ public class SuccessioneTurni {
                     }
                     partita.setPlayedTris(true);
                 }
+                int armattu = gio.getArmateperturno();
                 MessaggioCambiaArmateTerritorio msgArmate = (MessaggioCambiaArmateTerritorio)msgReceived;
                 partita.addArmateTerritorio(msgArmate.getTerritorio(), msgArmate.getArmate());
                 gio.setArmatedisponibili(armattu-msgArmate.getArmate());
@@ -257,6 +234,11 @@ public class SuccessioneTurni {
                 //sola carta.
             case ATTACCO:
                 if(!parseMsgAttacco(msgReceived)) return;
+                if(msgReceived.getType() ==  messaggio_t.FASE) {
+                    MessaggioFase msgFase = (MessaggioFase) msgReceived;
+                    proxfase = msgFase.getFase();
+                    break;
+                }
                 // I messaggi  comando sono della fase "attaccando" e vengono accettati
                 //in automatico dalla funzione precedente se si sta attaccando.
                 //Sono praticamente sicuro che se entro qui e non sto attaccando allora
@@ -350,8 +332,8 @@ public class SuccessioneTurni {
                     }
                 }
                 prossimo = partita.getGiocatoreTurnoIndice();
-                spedisciMsgCambioTurno(prossimo);
                 proxfase = Fasi_t.RINFORZO;
+                gio = (Giocatore_Net) partita.getGiocatoreDiTurno();
             default:                
                 break;
         }
@@ -365,6 +347,19 @@ public class SuccessioneTurni {
         } catch (IOException ex) {
             System.err.println("Errore nell'invio del messaggio di CambioFase: "
                     +ex.getMessage());
+        }
+
+        if(proxfase == Fasi_t.RINFORZO) {
+            spedisciMsgCambioTurno(prossimo);
+            int abon = (gio.getNumTerritori()/3)+getTotalContinentalBonus(gio);
+            gio.setArmatedisponibili(abon);
+            try {
+                gio.sendMessage(new MessaggioArmateDisponibili(abon, -1));
+            } catch (IOException ex) {
+                System.err.println(
+                        "Errore nell'invio Armate disponibili: "
+                        +ex.getMessage());
+            }
         }
     }
     /**
@@ -500,6 +495,7 @@ public class SuccessioneTurni {
             case COMMAND:
                 if(partita.isAttacking()) return parseCmdAttaccando((MessaggioComandi)msg);
                 return parseCommandAttacco((MessaggioComandi)msg);
+            case FASE:
             case DICHIARAATTACCO:
                 if(partita.isAttacking()) return false;
                 return true;
