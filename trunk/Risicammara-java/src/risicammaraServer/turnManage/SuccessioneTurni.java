@@ -177,14 +177,15 @@ public class SuccessioneTurni {
                 }
                 int armatt = gio.getArmateperturno()-1;
                 gio.setArmatedisponibili(armatt);
-                try {
-                        gio.sendMessage(new MessaggioArmateDisponibili(armatt, -1));
-                    } catch (IOException ex) {
-                        System.err.println(
-                                "Errore nell'invio Armate disponibili Tris: "
-                                +ex.getMessage());
-                }
-                pthread.incnumar();
+//                try {
+//                        gio.sendMessage(new MessaggioArmateDisponibili(armatt, -1));
+//                    } catch (IOException ex) {
+//                        System.err.println(
+//                                "Errore nell'invio Armate disponibili Tris: "
+//                                +ex.getMessage());
+//                }
+                if(armatt == 0) pthread.setMustpass(true);
+                else pthread.incnumar();
                 if(pthread.isMustpass()){
                     pthread.setMustpass(false);
                     partita.ProssimoGiocatore();
