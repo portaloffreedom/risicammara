@@ -56,7 +56,7 @@ final public class PannelloGioco extends JPanel{
 
         this.barra = new BarraSuperiore(dimensioniPannello, ALTEZZAPANNELLO, this, listaGiocatori, attivatoreGrafica);
         this.addMouseListener(new MouseListenerImpl(this));
-        this.planciaImmagine = new PlanciaImmagine(new Point(0, ALTEZZAPANNELLO), partita);
+        this.planciaImmagine = new PlanciaImmagine(new Point(0, ALTEZZAPANNELLO), partita, dimensioniPannello);
         this.addPulsante(planciaImmagine);
         AscoltatorePlancia ascoltatorePlancia = new AscoltatorePlancia(planciaImmagine, attivatoreGrafica);
         planciaImmagine.setActionListener(ascoltatorePlancia);
