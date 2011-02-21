@@ -23,6 +23,7 @@ import risicammaraServer.messaggiManage.MessaggioComandi;
 import risicammaraServer.messaggiManage.MessaggioPlancia;
 import risicammaraServer.messaggiManage.messaggio_t;
 import risicammaraServer.Server;
+import risicammaraServer.messaggiManage.MessaggioArmateDisponibili;
 import risicammaraServer.messaggiManage.MessaggioDichiaraAttacco;
 import risicammaraServer.messaggiManage.MessaggioFase;
 import risicammaraServer.messaggiManage.MessaggioGiocaTris;
@@ -190,19 +191,36 @@ public class SuccessioneTurni {
                 //Assegno le armate in base ai territori posseduti dal giocatore.
                 int armattu = gio.getArmateperturno();
                 if(armattu == 0){
-                    gio.setArmatedisponibili((gio.getNumTerritori()/3)+getTotalContinentalBonus(gio));
+                    int abon = (gio.getNumTerritori()/3)+getTotalContinentalBonus(gio);
+                    gio.setArmatedisponibili(abon);
+                    try {
+                        gio.sendMessage(new MessaggioArmateDisponibili(abon, -1));
+                    } catch (IOException ex) {
+                        System.err.println(
+                                "Errore nell'invio Armate disponibili: "
+                                +ex.getMessage());
+                    }
                 }
                 if((msgReceived.getType() == messaggio_t.GIOCATRIS) 
                         && !partita.playedTris())
                 {
                     int armate_bonus = getBonusFromTris(msgReceived);
                     int armatedispo = gio.getArmateperturno();
-                    gio.setArmatedisponibili(armate_bonus+armatedispo);
+                    int disp = armatedispo+armate_bonus;
+                    gio.setArmatedisponibili(disp);
+                    try {
+                        gio.sendMessage(new MessaggioArmateDisponibili(disp, -1));
+                    } catch (IOException ex) {
+                        System.err.println(
+                                "Errore nell'invio Armate disponibili Tris: "
+                                +ex.getMessage());
+                    }
                     partita.setPlayedTris(true);
                 }
                 MessaggioCambiaArmateTerritorio msgArmate = (MessaggioCambiaArmateTerritorio)msgReceived;
                 partita.addArmateTerritorio(msgArmate.getTerritorio(), msgArmate.getArmate());
                 gio.setArmatedisponibili(armattu-msgArmate.getArmate());
+                // Informo tutti del cambio armate.
                 try {
                     Server.SpedisciMsgTutti(msgReceived, listaGiocatori, -1);
                 } catch (IOException ex) {

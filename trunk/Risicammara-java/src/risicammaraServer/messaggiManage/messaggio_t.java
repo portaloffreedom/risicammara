@@ -59,6 +59,13 @@ public enum messaggio_t {
     ERROR,      //Il pacchetto ricevuto è una notifica di errore
 
     //------------ Messaggi di partita e svolgimento partita
+    /**
+     * Armate a disposizione a inizio turno.
+     */
+    ARMATEDISPONIBILI, // Le armate a disposizione
+    /**
+     * Il risultato di un lancio di dado.
+     */
     RISULTATODADO,      //Il server invia il risultato del lancio di UN dado
     /**
      * Pacchetto che indica uno spostamento di armate da parte dei giocatori.
