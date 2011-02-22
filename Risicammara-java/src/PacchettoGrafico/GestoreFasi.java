@@ -8,6 +8,7 @@ package PacchettoGrafico;
 import java.io.IOException;
 import risicammaraClient.Connessione;
 import risicammaraJava.turnManage.Fasi_t;
+import risicammaraJava.turnManage.PartitaClient;
 import risicammaraServer.messaggiManage.MessaggioFase;
 
 /**
@@ -25,6 +26,7 @@ final public class GestoreFasi {
     private int armateRinforzoDisponibili;
     private AscoltatorePlanciaRinforzo ascoltatorePlanciaRinforzo;
     private AscoltatorePlanciaEvidenziatore ascoltatorePlanciaEvidenziatore;
+    private AscoltatorePlanciaAttacco ascoltatorePlanciaAttacco;
 
     private Connessione server;
     private AttivatoreGrafica ag;
@@ -40,10 +42,10 @@ final public class GestoreFasi {
      * visualizzazione della plancia). Serve per agganciarci gli ascoltatori.
      * @param ag riferimento all'Attivatore Grafica (per ridisegnare il pannello)
      */
-    public GestoreFasi(BarraFasi barraFasi, Connessione server, ListaGiocatoriClient listaGiocatori, PlanciaImmagine planciaImmagine, AttivatoreGrafica ag) {
+    public GestoreFasi(BarraFasi barraFasi, Connessione server, PartitaClient partita, PlanciaImmagine planciaImmagine, AttivatoreGrafica ag) {
         this.barraFasi = barraFasi;
         this.planciaImmagine = planciaImmagine;
-        this.listaGiocatori = listaGiocatori;
+        this.listaGiocatori = partita.getListaGiocatori();
         this.server = server;
         this.ag = ag;
         this.setArmateRinforzoDisponibili(0);
@@ -55,6 +57,7 @@ final public class GestoreFasi {
         
         this.ascoltatorePlanciaEvidenziatore = new AscoltatorePlanciaEvidenziatore(planciaImmagine, ag);
         this.ascoltatorePlanciaRinforzo = new AscoltatorePlanciaRinforzo(planciaImmagine, server, listaGiocatori.meStessoIndex());
+        this.ascoltatorePlanciaAttacco = new AscoltatorePlanciaAttacco(planciaImmagine, server, partita);
         faseToAttesa();
     }
 
@@ -87,7 +90,7 @@ final public class GestoreFasi {
             case ContatoreFasi.ATTACCO:
                 setAscoltatore(true, true);
                 barraFasi.rinforzi.setDisegnaTestoSmosciato(true);
-                planciaImmagine.setActionListener(null);
+                planciaImmagine.setActionListener(ascoltatorePlanciaAttacco);
                 return;
 
             case ContatoreFasi.SPOSTAMENTI:

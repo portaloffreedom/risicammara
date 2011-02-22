@@ -1,20 +1,26 @@
 package PacchettoGrafico;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Rectangle;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import risicammaraClient.Client;
 import risicammaraClient.Connessione;
+import risicammaraClient.territori_t;
+import risicammaraJava.boardManage.TerritorioNonValido;
 import risicammaraJava.turnManage.Fasi_t;
 import risicammaraJava.turnManage.PartitaClient;
 import risicammaraServer.messaggiManage.Messaggio;
 import risicammaraServer.messaggiManage.MessaggioArmateDisponibili;
 import risicammaraServer.messaggiManage.MessaggioCambiaArmateTerritorio;
 import risicammaraServer.messaggiManage.MessaggioComandi;
+import risicammaraServer.messaggiManage.MessaggioDichiaraAttacco;
 import risicammaraServer.messaggiManage.MessaggioFase;
 import risicammaraServer.messaggiManage.comandi_t;
 
@@ -48,7 +54,7 @@ public class FinestraGioco extends JFrame implements Runnable {
         this.setMinimumSize(rect.getSize());
         
         this.plancia = pannello.getPlanciaImmagine();
-        this.gestoreFasi = new GestoreFasi(pannello.getBarraFasi(),server,listaGiocatori,plancia ,pannello.getAttivatoreGrafica());
+        this.gestoreFasi = new GestoreFasi(pannello.getBarraFasi(),server, partita,plancia ,pannello.getAttivatoreGrafica());
 
         this.addWindowListener(new WindowListenerImpl(server));
         this.setVisible(true);
@@ -138,7 +144,22 @@ public class FinestraGioco extends JFrame implements Runnable {
                             gestoreFasi.avanzaFase();
                         else {
                             //TODO tocca al giocatore msgComandi.getSender()
+                            System.out.println("tocca al giocatore "+msgComandi.getSender());
                         }
+                        break;
+
+                        case ATTACCOTERMINATO:
+                            try {
+                                territori_t attaccante = partita.getTerritorioAttaccante();
+                                territori_t difensore  = partita.getTerritorioAttaccato();
+                                plancia.ripristinaTerritorio(attaccante.getIdTerritorio());
+                                plancia.aggiornaTerritorio(attaccante.getIdTerritorio());
+                                plancia.ripristinaTerritorio(difensore.getIdTerritorio());
+                                plancia.aggiornaTerritorio(difensore);
+                            } catch (TerritorioNonValido ex) {
+                                System.err.println("Non è riuscito a decolorare i territori:\n"+ex);
+                            }
+                            break;
                     }
                     break;
                 }
@@ -158,6 +179,25 @@ public class FinestraGioco extends JFrame implements Runnable {
                 case FASE:
                     if (gestoreFasi.getFaseCorrente() == ContatoreFasi.RINFORZO)
                         gestoreFasi.avanzaFase();
+                    break;
+
+                case DICHIARAATTACCO:
+                    MessaggioDichiaraAttacco msgAttacco = (MessaggioDichiaraAttacco) msg;
+                    if (msgAttacco.getSender() == listaGiocatori.meStessoIndex())
+                        break;
+                    //TODO colora di rosso e di blu
+                    territori_t attaccante = msgAttacco.getTerritorio_attaccante();
+                    territori_t difensore  = msgAttacco.getTerritorio_difensore();
+                    partita.setTerritorioAttaccante(attaccante);
+                    partita.setTerritorioAttaccato(difensore);
+                    try {
+                        plancia.coloraSfumato(attaccante.getIdTerritorio(), AscoltatorePlanciaAttacco.Attacco, AscoltatorePlanciaAttacco.pesantezzaSfumatura);
+                        plancia.aggiornaTerritorio(attaccante);
+                        plancia.coloraSfumato(difensore.getIdTerritorio(), AscoltatorePlanciaAttacco.Difesa, AscoltatorePlanciaAttacco.pesantezzaSfumatura);
+                        plancia.aggiornaTerritorio(difensore);
+                    } catch (TerritorioNonValido ex) {
+                        System.err.println("Non è riuscito a colorare i territori:\n"+ex);
+                    }
                     break;
 
                 default:

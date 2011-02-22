@@ -18,7 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import risicammaraClient.Colore_t;
-import risicammaraJava.boardManage.TerritorioNonTrovatoException;
+import risicammaraJava.boardManage.TerritorioNonValido;
 import risicammaraClient.territori_t;
 import risicammaraJava.boardManage.PlanciaClient;
 import risicammaraJava.boardManage.TerritorioPlancia;
@@ -168,7 +168,7 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         return img;
     }
 
-    final public Rectangle colora(int idTerritorio, Color colore) throws TerritorioNonTrovatoException{
+    final public Rectangle colora(int idTerritorio, Color colore) throws TerritorioNonValido{
         Rectangle rettangolo = plancia.getTerritorio(idTerritorio).getPosizione();
         for (int r=rettangolo.y; r<(rettangolo.height+rettangolo.y); r++){
             for (int c=rettangolo.x; c<(rettangolo.width+rettangolo.x); c++){
@@ -180,7 +180,7 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         return rettangolo;
     }
 
-    final public Rectangle coloraSfumato(int idTerritorio, Color colore, double trasparenza) throws TerritorioNonTrovatoException{
+    final public Rectangle coloraSfumato(int idTerritorio, Color colore, double trasparenza) throws TerritorioNonValido{
         Rectangle rettangolo = plancia.getTerritorio(idTerritorio).getPosizione();
         for (int r=rettangolo.y; r<(rettangolo.height+rettangolo.y); r++){
             for (int c=rettangolo.x; c<(rettangolo.width+rettangolo.x); c++){
@@ -210,7 +210,7 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         return RGBsfumato;
     }
 
-    public Rectangle ripristinaTerritorio(int idTerritorio) throws TerritorioNonTrovatoException{
+    public Rectangle ripristinaTerritorio(int idTerritorio) throws TerritorioNonValido{
         Rectangle rettangolo = plancia.getTerritorio(idTerritorio).getPosizione();
         for (int r=rettangolo.y; r<(rettangolo.height+rettangolo.y); r++){
             for (int c=rettangolo.x; c<(rettangolo.width+rettangolo.x); c++){
@@ -339,7 +339,7 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         aggiornaTerritorio(plancia.getTerritorio(territorio));
     }
 
-    public void aggiornaTerritorio(int idTerritorio) throws TerritorioNonTrovatoException{
+    public void aggiornaTerritorio(int idTerritorio) throws TerritorioNonValido{
         aggiornaTerritorio(plancia.getTerritorio(idTerritorio));
     }
 
