@@ -7,8 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import risicammaraClient.Client;
@@ -194,6 +192,17 @@ public class FinestraGioco extends JFrame implements Runnable {
                         gestoreFasi.diminuisciArmateRinforzoDisponibili();
                     break;
                 }
+                case SPOSTAARMATE: {
+                    MessaggioSpostaArmate msgSpostaArmate = (MessaggioSpostaArmate) msg;
+                    int armateSpostate = msgSpostaArmate.getNumarmate();
+                    TerritorioPlanciaClient sorgente = plancia.plancia.getTerritorio(msgSpostaArmate.getSorgente());
+                    TerritorioPlanciaClient destinazione = plancia.plancia.getTerritorio(msgSpostaArmate.getArrivo());
+                    sorgente.aggiornaArmate(-armateSpostate);
+                    destinazione.aggiornaArmate(armateSpostate);
+                    
+                    plancia.aggiornaTerritorio(sorgente);
+                    plancia.aggiornaTerritorio(destinazione);
+                }
 
                 case FASE:
                     if (gestoreFasi.getFaseCorrente() == ContatoreFasi.RINFORZO)
@@ -226,7 +235,7 @@ public class FinestraGioco extends JFrame implements Runnable {
                     TerritorioPlanciaClient attaccante = plancia.plancia.getTerritorio(partita.getTerritorioAttaccante());
                     TerritorioPlanciaClient difensore = plancia.plancia.getTerritorio(partita.getTerritorioAttaccato());
                     difensore.setProprietario(attaccante.getProprietario());
-                    attaccante.setArmate(attaccante.getArmate()-armateSpostate);
+                    attaccante.aggiornaArmate(-armateSpostate);
                     difensore.setArmate(armateSpostate);
                     
                     plancia.aggiornaTerritorio(difensore);
