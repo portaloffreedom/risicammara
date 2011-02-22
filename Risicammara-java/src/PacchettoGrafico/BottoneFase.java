@@ -7,7 +7,11 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 /**
- *
+ * Bottone che viene disegnato a forma di freccia. Le sue dimensioni possono
+ * essere smosciate oppure relative alla dimensione del pannello. Possiede una
+ * animazione quando viene smosciato e il contrario. Smosciato significa che
+ * le sue dimensioni sono ridotte e dipendenti solo dalla posizione a sinistra
+ * (non dalla larghezza del pannello).
  * @author matteo
  */
 public class BottoneFase extends Elemento_2DGraphicsCliccable implements RisicammaraEventListener {
@@ -47,7 +51,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements Risicam
         this.testoDestra = "";
         this.testoSinistra = "";
         this.testoSmosciato = "";
-        this.disegnaTestoSmosciato = true;
+        this.disegnaTestoSmosciato = false;
     }
 
     public void disegna(Graphics2D g2, GraphicsAdvanced colori) {
@@ -230,6 +234,11 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements Risicam
         this.disegnaTestoSmosciato = disegnaTestoSmosciato;
     }
 
+    /**
+     * @return Ritorna un rettangolo che garantisce essere grande quanto la
+     * freccia smosciata, ma la posizione comprende dentro la punta della freccia
+     * sempre.
+     */
     private Rectangle getExtraPuntaBounds() {
         Rectangle rect = (((FrecciaDestra)posizione).getPuntaBounds());
         rect.x-= BarraFasi.LARGHEZZABORDO;
