@@ -54,7 +54,7 @@ final public class GestoreFasi {
         this.ascoltatoreSpostamento = new AscoltatoreSpostamento(this, listaGiocatori.meStessoIndex());
         
         this.ascoltatorePlanciaEvidenziatore = new AscoltatorePlanciaEvidenziatore(planciaImmagine, ag);
-        this.ascoltatorePlanciaRinforzo = new AscoltatorePlanciaRinforzo(planciaImmagine, server, armateRinforzoDisponibili);
+        this.ascoltatorePlanciaRinforzo = new AscoltatorePlanciaRinforzo(planciaImmagine, server, listaGiocatori.meStessoIndex());
         faseToAttesa();
     }
 
@@ -76,12 +76,12 @@ final public class GestoreFasi {
         switch(barraFasi.getFase()){
             case ContatoreFasi.FINETURNO:
                 setAscoltatore(false, false);
-                planciaImmagine.setActionListener(ascoltatorePlanciaRinforzo);
+                planciaImmagine.setActionListener(ascoltatorePlanciaEvidenziatore);
                 return;
 
             case ContatoreFasi.RINFORZO:
                 setAscoltatore(false, false);
-                planciaImmagine.setActionListener(ascoltatorePlanciaEvidenziatore);
+                planciaImmagine.setActionListener(ascoltatorePlanciaRinforzo);
                 return;
 
             case ContatoreFasi.ATTACCO:
