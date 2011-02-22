@@ -1,8 +1,9 @@
 package PacchettoGrafico;
 
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
@@ -14,14 +15,17 @@ import risicammaraClient.Client;
 import risicammaraClient.Connessione;
 import risicammaraClient.territori_t;
 import risicammaraJava.boardManage.TerritorioNonValido;
+import risicammaraJava.boardManage.TerritorioPlanciaClient;
 import risicammaraJava.turnManage.Fasi_t;
 import risicammaraJava.turnManage.PartitaClient;
 import risicammaraServer.messaggiManage.Messaggio;
 import risicammaraServer.messaggiManage.MessaggioArmateDisponibili;
+import risicammaraServer.messaggiManage.MessaggioAttaccoVinto;
 import risicammaraServer.messaggiManage.MessaggioCambiaArmateTerritorio;
 import risicammaraServer.messaggiManage.MessaggioComandi;
 import risicammaraServer.messaggiManage.MessaggioDichiaraAttacco;
 import risicammaraServer.messaggiManage.MessaggioFase;
+import risicammaraServer.messaggiManage.MessaggioSpostaArmate;
 import risicammaraServer.messaggiManage.comandi_t;
 
 /**
@@ -34,6 +38,7 @@ public class FinestraGioco extends JFrame implements Runnable {
     private PartitaClient partita;
     private GestoreFasi gestoreFasi;
     private PlanciaImmagine plancia;
+    private RichiestaNumeroArmate richiestaNumeroArmate;
 
     private PannelloGioco pannello;
 
@@ -42,6 +47,7 @@ public class FinestraGioco extends JFrame implements Runnable {
         this.server = server;
         this.listaGiocatori = partita.getListaGiocatori();
         this.partita = partita;
+        this.richiestaNumeroArmate = null;
 
         this.setIconImage(new ImageIcon("./risorse/risicamlogo.png").getImage());
 
@@ -139,16 +145,22 @@ public class FinestraGioco extends JFrame implements Runnable {
                 case COMMAND: {
                     MessaggioComandi msgComandi = (MessaggioComandi) msg;
                     switch (msgComandi.getComando()) {
-                        case TURNOFPLAYER:
-                        if (msgComandi.getSender() == listaGiocatori.meStessoIndex())
-                            gestoreFasi.avanzaFase();
-                        else {
-                            //TODO tocca al giocatore msgComandi.getSender()
-                            System.out.println("tocca al giocatore "+msgComandi.getSender());
+                        case TURNOFPLAYER: {
+                            int giocatoreDiTurno = msg.getSender();
+                            //partita.setGiocatoreDiTurno(giocatoreDiTurno);
+                            
+                            if (msgComandi.getSender() == listaGiocatori.meStessoIndex()) {
+                                gestoreFasi.avanzaFase();
+                                //TODO rimpicciolisci tutte le frecce degli altri
+                            }
+                            else {
+                                //TODO tocca al giocatore avanza le frecce
+                                System.out.println("tocca al giocatore "+giocatoreDiTurno);
+                            }
+                            break;
                         }
-                        break;
 
-                        case ATTACCOTERMINATO:
+                        case ATTACCOTERMINATO: {
                             try {
                                 territori_t attaccante = partita.getTerritorioAttaccante();
                                 territori_t difensore  = partita.getTerritorioAttaccato();
@@ -160,28 +172,35 @@ public class FinestraGioco extends JFrame implements Runnable {
                                 System.err.println("Non è riuscito a decolorare i territori:\n"+ex);
                             }
                             break;
+                        }
+                            
+                        default:
+                            System.err.println("MESSAGGIO COMANDO NON RICONOSCIUTO! "+msg);
+                            break;
                     }
                     break;
                 }
                 
-                case ARMATEDISPONIBILI:
+                case ARMATEDISPONIBILI: {
                     MessaggioArmateDisponibili msgMad = (MessaggioArmateDisponibili) msg;
                     gestoreFasi.setArmateRinforzoDisponibili(msgMad.getNumarm());
                     break;
+                }
                 
-                case CAMBIAARMATETERRITORIO:
+                case CAMBIAARMATETERRITORIO: {
                     MessaggioCambiaArmateTerritorio msgArmate = (MessaggioCambiaArmateTerritorio) msg;
                     plancia.aggiornaArmateTerritorio(msgArmate.getArmate(), msgArmate.getTerritorio());
                     if (gestoreFasi.getFaseCorrente() == ContatoreFasi.RINFORZO)
                         gestoreFasi.diminuisciArmateRinforzoDisponibili();
                     break;
+                }
 
                 case FASE:
                     if (gestoreFasi.getFaseCorrente() == ContatoreFasi.RINFORZO)
                         gestoreFasi.avanzaFase();
                     break;
 
-                case DICHIARAATTACCO:
+                case DICHIARAATTACCO: {
                     MessaggioDichiaraAttacco msgAttacco = (MessaggioDichiaraAttacco) msg;
                     if (msgAttacco.getSender() == listaGiocatori.meStessoIndex())
                         break;
@@ -199,6 +218,34 @@ public class FinestraGioco extends JFrame implements Runnable {
                         System.err.println("Non è riuscito a colorare i territori:\n"+ex);
                     }
                     break;
+                }
+                    
+                case ATTACCOVINTO: {
+                    MessaggioAttaccoVinto msgVincita = (MessaggioAttaccoVinto) msg;
+                    int armateSpostate = msgVincita.getArmSpost();
+                    TerritorioPlanciaClient attaccante = plancia.plancia.getTerritorio(partita.getTerritorioAttaccante());
+                    TerritorioPlanciaClient difensore = plancia.plancia.getTerritorio(partita.getTerritorioAttaccato());
+                    difensore.setProprietario(attaccante.getProprietario());
+                    attaccante.setArmate(attaccante.getArmate()-armateSpostate);
+                    difensore.setArmate(armateSpostate);
+                    
+                    plancia.aggiornaTerritorio(difensore);
+                    plancia.aggiornaTerritorio(attaccante);
+                    
+                    if (attaccante.getProprietario() == listaGiocatori.meStessoIndex()){
+                        //chiedere se vuoi spostare altre armate
+                        int armateDaSpostare = attaccante.getArmate()-1;
+                        ArmateSpostateListener armateSpostateListener = new ArmateSpostateListener(server, partita, attaccante.getTerritorio(), difensore.getTerritorio());
+                            if (armateDaSpostare <= 0){
+                                armateSpostateListener.spostaArmate(0);
+                                break;
+                            }
+                        richiestaNumeroArmate = new RichiestaNumeroArmate("Quante Armate vuoi spostare nel territorio Conquistato?", armateDaSpostare);
+                        armateSpostateListener.setRichiestaNumeroArmate(richiestaNumeroArmate);
+                        richiestaNumeroArmate.addOKActionListener(armateSpostateListener);
+                    }
+                    break;
+                }
 
                 default:
                     System.err.println("MESSAGGIO NON RICONOSCIUTO! "+msg);
@@ -245,5 +292,43 @@ public class FinestraGioco extends JFrame implements Runnable {
         public void windowDeactivated(WindowEvent e) {
         }
     }// </editor-fold>
+
+    private class ArmateSpostateListener implements ActionListener {
+        private RichiestaNumeroArmate richiestaNumeroArmate;
+        private Connessione server;
+        private PartitaClient partita;
+        private territori_t sorgente;
+        private territori_t destinazione;
+
+        public ArmateSpostateListener(Connessione server, PartitaClient partita, territori_t sorgente, territori_t destinazione) {
+            this.server = server;
+            this.partita = partita;
+            this.sorgente = sorgente;
+            this.destinazione = destinazione;
+        }
+
+        public void setRichiestaNumeroArmate(RichiestaNumeroArmate richiestaNumeroArmate) {
+            this.richiestaNumeroArmate = richiestaNumeroArmate;
+        }
+
+        public void actionPerformed(ActionEvent ae) {
+            int armateDaSpostare = richiestaNumeroArmate.getNumArmate();
+            
+            try {
+                spostaArmate(armateDaSpostare);
+            } catch (IOException ex) {
+                System.err.println("Messaggio sposta armate non inviato con successo: "+ex);
+            }
+            
+            richiestaNumeroArmate.setVisible(false);
+            richiestaNumeroArmate.dispose();
+            richiestaNumeroArmate = null;
+        }
+        
+        
+        public void spostaArmate(int armate) throws IOException {
+            server.spedisci(new MessaggioSpostaArmate(partita.getMeStessoIndex(), sorgente, destinazione, armate));
+        }
+    }
 
 }

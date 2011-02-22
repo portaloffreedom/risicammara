@@ -16,7 +16,7 @@ public class MessaggioAttaccoVinto implements Messaggio{
         this.territorio_conquistato = territorio_conquistato;
     }
 
-    public int getArmspost() {
+    public int getArmSpost() {
         return armspost;
     }
 
