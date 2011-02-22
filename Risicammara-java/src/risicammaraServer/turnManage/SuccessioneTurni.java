@@ -279,6 +279,10 @@ public class SuccessioneTurni {
                                 if(partita.getArmateTerrDifensore() == 0){
                                     int armterrat = partita.getArmateTerrAttaccante() -1;
                                     switch(armterrat){
+                                        case 0:
+                                            System.err.println("Erorre armate");
+                                            armterrat = 0;
+                                            break;
                                         case 1:
                                         case 2:
                                         case 3:
@@ -454,7 +458,7 @@ public class SuccessioneTurni {
             } catch (IOException ex) {
                 System.err.println("Errore nell'invio del risultato dei dadi Difensore: "+ex.getMessage());
             }
-            lancidifensore.offer(new Integer(lancio));
+            lancidifensore.offer(new Integer(-lancio));
         }
         //-------------------------------------- attacco
         int att = partita.getArmateTerrAttaccante() -1;
@@ -479,14 +483,14 @@ public class SuccessioneTurni {
             } catch (IOException ex) {
                 System.err.println("Errore nell'invio del risultato dei dadi Attaccante: "+ex.getMessage());
             }
-            lanciattaccante.offer(new Integer(lancio));
+            lanciattaccante.offer(new Integer(-lancio));
         }
         int rimuovi_att = 0;
         int rimuovi_dif = 0;
         while(true){
             Integer lancioAtt = lanciattaccante.poll();
             Integer lancioDif = lancidifensore.poll();
-            if(lancioAtt > lancioDif) rimuovi_dif++;
+            if(lancioAtt < lancioDif) rimuovi_dif++;
             else rimuovi_att++;
             if(lanciattaccante.isEmpty() || lancidifensore.isEmpty()) break;
         }
