@@ -89,6 +89,8 @@ public abstract class GestionePartita {
         if(territorioAttaccato == null) return;
         TerritorioPlancia tpla = planciadigioco.getTerritorio(territorioAttaccato);
         tpla.setProprietario(giocturno);
+        listagiocatori.get(giocturno).addTerr(territorioAttaccato);
+        listagiocatori.get(giocattaccato).remTerr(territorioAttaccato);
     }
     /**
      * restituisci il territorio del difensore
