@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import risicammaraClient.Bonus_t;
 import risicammaraClient.Continente_t;
 import risicammaraClient.territori_t;
@@ -109,7 +107,10 @@ public class SuccessioneTurni {
             if(saltare){
                 saltare = false;
             }
-            else msgReceived = coda.get();
+            else{
+                msgReceived = coda.get();
+                System.out.println("Tipo messaggio: "+msgReceived.getType().toString());
+            }
             if(partita.getFase() != Fasi_t.FINETURNO && !validitaMessaggio(msgReceived)) continue;
             //Processa i messaggi finché non c'è un vincitore.
             //Il server legge il messaggio e lo smista a seconda del messaggio ricevuto.
@@ -276,6 +277,7 @@ public class SuccessioneTurni {
                                             break;
                                     }
                                     conquistato = true;
+                                    partita.spostamento(partita.getTerritorioAttaccante(), partita.getTerritorioAttaccato(), armterrat);
                                     try {
                                         Server.SpedisciMsgTutti(
                                                 new MessaggioAttaccoVinto(
@@ -289,18 +291,14 @@ public class SuccessioneTurni {
                                     return;
                                 }
                             //non uso return perché se no duplico codice.
-                            //Ritirati è deprecato perché non esiste l'attacco perpetuo
+                            //non esiste l'attacco perpetuo
                             //Si fa un attacco e ci si ritira
                             case RITIRATI:
-                                partita.setAttacking(false);
-                                partita.setTerritorioAttaccante(null);
-                                partita.setTerritorioAttaccato(null);
-                                partita.setGiocattaccato(-1);
                                 try {
                                   Server.SpedisciMsgTutti(
                                        MessaggioComandi.creaMsgAttaccoterminato(
-                                                                        gioint,
-                                                                        partita.getGiocattaccato()),
+                                                    gioint,
+                                                    partita.getGiocattaccato()),
                                        listaGiocatori,
                                        -1);
                                 } catch (IOException ex) {
@@ -308,6 +306,10 @@ public class SuccessioneTurni {
                                "Errore nell'invio messaggio attacco Terminato: "
                                             +ex.getMessage());
                                 }
+                                partita.setAttacking(false);
+                                partita.setTerritorioAttaccante(null);
+                                partita.setTerritorioAttaccato(null);
+                                //partita.setGiocattaccato(-1);
                             default:
                                 return;
                         }
@@ -329,9 +331,9 @@ public class SuccessioneTurni {
 
                 //Spostare armate da un territorio all'altro.
             case SPOSTAMENTO:
-                //Da qui passano solo spostaarmate e passafase
+                //Da qui passano solo spostaarmate e passafase e Fase
                 if(!validoSpostamento(msgReceived)) return;
-                if(msgReceived.getType() == messaggio_t.FASE || msgReceived.getType() != messaggio_t.SPOSTAARMATE){
+                if(msgReceived.getType() != messaggio_t.SPOSTAARMATE){
                     proxfase = Fasi_t.FINETURNO;
                     saltare = true;
                     break;
@@ -356,6 +358,7 @@ public class SuccessioneTurni {
                 //Se il giocatore ha conquistato un territorio allora pesca una carta.
                 //Viene settato il prossimo giocatore.
                 if(conquistato){
+                    conquistato = false;
                     Carta ctmp = partita.getCarta();
                     if(ctmp != null) gio.addCard(ctmp);
                 }
@@ -529,6 +532,7 @@ public class SuccessioneTurni {
     private boolean parseMsgAttacco(Messaggio msg){
         switch(msg.getType()){
             case COMMAND:
+                if(conquistato) return false;
                 if(partita.isAttacking()) return parseCmdAttaccando((MessaggioComandi)msg);
                 return parseCommandAttacco((MessaggioComandi)msg);
             case SPOSTAARMATE:
@@ -552,6 +556,9 @@ public class SuccessioneTurni {
      */
     private boolean parseCmdAttaccando(MessaggioComandi msg){
         switch(msg.getComando()){
+            case RITIRATI:
+            case LANCIADADO:
+                return true;
             default:
                 return false;
         }
