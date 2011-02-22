@@ -7,7 +7,7 @@ package PacchettoGrafico;
 
 import java.io.IOException;
 import risicammaraClient.Connessione;
-import risicammaraJava.boardManage.TerritorioNonTrovatoException;
+import risicammaraJava.boardManage.TerritorioNonValido;
 import risicammaraClient.territori_t;
 import risicammaraJava.boardManage.TerritorioPlanciaClient;
 import risicammaraServer.messaggiManage.MessaggioCambiaArmateTerritorio;
@@ -38,7 +38,7 @@ public class AscoltatorePlanciaRinforzo implements RisicammaraEventListener {
         territori_t territorioT;
         try {
             territorioT = territori_t.GetTerritorio(idTerritorio);
-        } catch (TerritorioNonTrovatoException ex) {
+        } catch (TerritorioNonValido ex) {
                 System.err.println("Punto non selezionabile:\n"+ex);
                 return;
         }

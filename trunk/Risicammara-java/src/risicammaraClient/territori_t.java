@@ -1,6 +1,6 @@
 package risicammaraClient;
 
-import risicammaraJava.boardManage.TerritorioNonTrovatoException;
+import risicammaraJava.boardManage.TerritorioNonValido;
 import PacchettoGrafico.PlanciaImmagine;
 import risicammaraJava.deckManage.Carta;
 
@@ -108,13 +108,13 @@ public enum territori_t implements Carta {
         return PlanciaImmagine.GetIdTerritorio(continente.getId(), id);
     }
 
-    public static territori_t GetTerritorio(int idTerritorio) throws TerritorioNonTrovatoException {
+    public static territori_t GetTerritorio(int idTerritorio) throws TerritorioNonValido {
         int territorio = PlanciaImmagine.GetTerritorio(idTerritorio);
         int continente = PlanciaImmagine.GetContinente(idTerritorio);
         return GetTerritorio(continente, territorio);
     }
 
-    private static territori_t GetTerritorio(int continente, int territorio) throws TerritorioNonTrovatoException {
+    private static territori_t GetTerritorio(int continente, int territorio) throws TerritorioNonValido {
         
         if (continente == Continente_t.ASIA.getId())//Asia
             return GetTerritorioAsia(territorio);
@@ -130,11 +130,11 @@ public enum territori_t implements Carta {
             return GetTerritorioOceania(territorio);
 
         //System.err.println("ERRORE, non esiste un settimo continente");
-        throw new TerritorioNonTrovatoException("ERRORE, non esiste il continente="+continente+" (territorio="+territorio+")");
+        throw new TerritorioNonValido("ERRORE, non esiste il continente="+continente+" (territorio="+territorio+")");
         //return null;
     }
 
-    private static territori_t GetTerritorioAsia (int territorio) throws TerritorioNonTrovatoException{
+    private static territori_t GetTerritorioAsia (int territorio) throws TerritorioNonValido{
         if (territorio == Afghanistan.id)
             return Afghanistan;
         if (territorio == Cina.id)
@@ -160,11 +160,11 @@ public enum territori_t implements Carta {
         if (territorio == Jacuzia.id)
             return Jacuzia;
 
-        throw new TerritorioNonTrovatoException("Non esiste il territorio="+territorio+" in Asia");
+        throw new TerritorioNonValido("Non esiste il territorio="+territorio+" in Asia");
         //return null;
     }
 
-    private static territori_t GetTerritorioAfrica (int territorio) throws TerritorioNonTrovatoException{
+    private static territori_t GetTerritorioAfrica (int territorio) throws TerritorioNonValido{
         if (territorio == Congo.id)
             return Congo;
         if (territorio == territori_t.Africa_Orientale.id)
@@ -178,11 +178,11 @@ public enum territori_t implements Carta {
         if (territorio == Africa_del_Sud.id)
             return Africa_del_Sud;
 
-        throw new TerritorioNonTrovatoException("Non esiste il territorio="+territorio+" in Africa");
+        throw new TerritorioNonValido("Non esiste il territorio="+territorio+" in Africa");
         //return null;
     }
 
-    private static territori_t GetTerritorioEuropa (int territorio) throws TerritorioNonTrovatoException{
+    private static territori_t GetTerritorioEuropa (int territorio) throws TerritorioNonValido{
         if (territorio == Gran_Bretagna.id)
             return Gran_Bretagna;
         if (territorio == Islanda.id)
@@ -198,11 +198,11 @@ public enum territori_t implements Carta {
         if (territorio == Europa_Occidentale.id)
             return Europa_Occidentale;
 
-        throw new TerritorioNonTrovatoException("Non esiste il territorio="+territorio+" in Europa");
+        throw new TerritorioNonValido("Non esiste il territorio="+territorio+" in Europa");
         //return null;
     }
 
-    private static territori_t GetTerritorioAmericaNord (int territorio) throws TerritorioNonTrovatoException{
+    private static territori_t GetTerritorioAmericaNord (int territorio) throws TerritorioNonValido{
 
         if (territorio == Alaska.id)
             return Alaska;
@@ -223,11 +223,11 @@ public enum territori_t implements Carta {
         if (territorio == Stati_Uniti_Occidentali.id)
             return Stati_Uniti_Occidentali;
 
-        throw new TerritorioNonTrovatoException("Non esiste il territorio="+territorio+" in Nord America");
+        throw new TerritorioNonValido("Non esiste il territorio="+territorio+" in Nord America");
         //return null;
     }
 
-    private static territori_t GetTerritorioAmericaSud (int territorio) throws TerritorioNonTrovatoException{
+    private static territori_t GetTerritorioAmericaSud (int territorio) throws TerritorioNonValido{
         if (territorio == Argentina.id)
             return Argentina;
         if (territorio == Brasile.id)
@@ -237,11 +237,11 @@ public enum territori_t implements Carta {
         if (territorio == Venezuela.id)
             return Venezuela;
 
-        throw new TerritorioNonTrovatoException("Non esiste il territorio="+territorio+" in Sud America");
+        throw new TerritorioNonValido("Non esiste il territorio="+territorio+" in Sud America");
         //return null;
     }
 
-    private static territori_t GetTerritorioOceania (int territorio) throws TerritorioNonTrovatoException{
+    private static territori_t GetTerritorioOceania (int territorio) throws TerritorioNonValido{
         if (territorio == Australia_Occidentale.id)
             return Australia_Occidentale;
         if (territorio == Indonesia.id)
@@ -251,7 +251,7 @@ public enum territori_t implements Carta {
         if (territorio == Australia_Orientale.id)
             return Australia_Orientale;
 
-        throw new TerritorioNonTrovatoException("Non esiste il territorio="+territorio+" in Oceania");
+        throw new TerritorioNonValido("Non esiste il territorio="+territorio+" in Oceania");
         //return null;
     }
 

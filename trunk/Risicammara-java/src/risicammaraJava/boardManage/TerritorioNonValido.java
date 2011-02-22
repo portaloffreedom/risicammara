@@ -9,9 +9,9 @@ package risicammaraJava.boardManage;
  *
  * @author matteo
  */
-public class TerritorioNonTrovatoException extends Exception {
+public class TerritorioNonValido extends Exception {
 
-    public TerritorioNonTrovatoException(String message) {
+    public TerritorioNonValido(String message) {
         super(message);
     }
 

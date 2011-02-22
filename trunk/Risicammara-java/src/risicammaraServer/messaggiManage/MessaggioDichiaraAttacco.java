@@ -34,6 +34,9 @@ public class MessaggioDichiaraAttacco implements Messaggio {
         return messaggio_t.DICHIARAATTACCO;
     }
 
+    /**
+     * @return Ritorna chi è l'attaccante
+     */
     public int getSender() {
         return sender;
     }
