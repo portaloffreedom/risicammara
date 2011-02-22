@@ -60,6 +60,10 @@ public enum messaggio_t {
 
     //------------ Messaggi di partita e svolgimento partita
     /**
+     * L'attacco ha portato alla conquista del territorio.
+     */
+    ATTACCOVINTO,
+    /**
      * Armate a disposizione a inizio turno.
      */
     ARMATEDISPONIBILI, // Le armate a disposizione

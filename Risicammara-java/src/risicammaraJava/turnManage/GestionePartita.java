@@ -143,6 +143,7 @@ public abstract class GestionePartita {
     }
     /**
      * Aggiungi delle armate in un territorio.
+     * Usare numeri negativi per rimuovere le armate dal territorio.
      * @param territorio Il territorio dove aggiungere le armate
      * @param armate il numero di armate da aggiungere
      */

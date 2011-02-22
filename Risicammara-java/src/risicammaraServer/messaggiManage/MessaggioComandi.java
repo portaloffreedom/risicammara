@@ -16,6 +16,7 @@ public class MessaggioComandi implements Messaggio{
      * @param giocatorecheattacca l'indice di chi sta attaccando
      * @param giocatorecheDifende l'indice di chi viene attaccato
      * @return l'oggetto Messaggio IniziaAttacco.
+     * @deprecated si usa MessaggioDichiaraAttacco
      */
     public static MessaggioComandi creaMsgIniziaAttacco(int giocatorecheattacca,int giocatorecheDifende){
         return new MessaggioComandi(comandi_t.INIZIAATTACCO, giocatorecheattacca, giocatorecheDifende);
@@ -25,8 +26,8 @@ public class MessaggioComandi implements Messaggio{
      * @param giocatorecheAttaccava il giocatore che effettuava l'attacco.
      * @return l'oggetto MessaggioAttaccoTerminato.
      */
-    public static MessaggioComandi creaMsgAttaccoterminato(int giocatorecheAttaccava){
-        return new MessaggioComandi(comandi_t.ATTACCOTERMINATO, giocatorecheAttaccava);
+    public static MessaggioComandi creaMsgAttaccoterminato(int giocatorecheAttaccava,int giocatoreCheDifendeva){
+        return new MessaggioComandi(comandi_t.ATTACCOTERMINATO, giocatorecheAttaccava,giocatoreCheDifendeva);
     }
     /**
      * Lancia un certo numero di dadi
@@ -49,6 +50,7 @@ public class MessaggioComandi implements Messaggio{
      * Crea un messaggio di passaggio alla prossima fase
      * @param giocatoreChePassa il giocatore che passa alla fase successiva
      * @return l'oggetto MessaggioProssimaFase
+     * @deprecated Usare MessaggioFase al posto di questo
      */
     public static MessaggioComandi creaMsgProssimaFase(int giocatoreChePassa){
         return new MessaggioComandi(comandi_t.PASSAFASE, giocatoreChePassa);
