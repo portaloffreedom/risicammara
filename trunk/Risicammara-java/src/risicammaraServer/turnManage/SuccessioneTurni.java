@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import risicammaraClient.Bonus_t;
 import risicammaraClient.Continente_t;
 import risicammaraClient.territori_t;
@@ -247,6 +249,12 @@ public class SuccessioneTurni {
                     if(proxfase == Fasi_t.FINETURNO) saltare = true;
                     break;
                 }
+
+                if(msgReceived.getType() == messaggio_t.SPOSTAARMATE){
+                    MessaggioSpostaArmate msposta = (MessaggioSpostaArmate) msgReceived;
+                    partita.spostamento(msposta.getSorgente(), msposta.getArrivo(), msposta.getNumarmate());
+                    msgReceived = MessaggioComandi.creaMsgRitirati(gioint);
+                }
                 // I messaggi  comando sono della fase "attaccando" e vengono accettati
                 //in automatico dalla funzione precedente se si sta attaccando.
                 //Sono praticamente sicuro che se entro qui e non sto attaccando allora
@@ -254,11 +262,32 @@ public class SuccessioneTurni {
                 if(msgReceived.getType() != messaggio_t.DICHIARAATTACCO){
                     MessaggioComandi cmd = (MessaggioComandi)msgReceived;
                         switch(cmd.getComando()){
-                            case PASSAFASE:
-                                proxfase = Fasi_t.SPOSTAMENTO;
-                                break;
                             case LANCIADADO:
                                 risolviAttacco(cmd.getOptParameter());
+                                if(partita.getArmateTerrDifensore() == 0){
+                                    int armterrat = partita.getArmateTerrAttaccante() -1;
+                                    switch(armterrat){
+                                        case 1:
+                                        case 2:
+                                        case 3:
+                                            break;
+                                        default:
+                                            armterrat = 3;
+                                            break;
+                                    }
+                                    conquistato = true;
+                                    try {
+                                        Server.SpedisciMsgTutti(
+                                                new MessaggioAttaccoVinto(
+                                                                armterrat,
+                                                                partita.getTerritorioAttaccato()),
+                                                listaGiocatori,
+                                                -1);
+                                    } catch (IOException ex) {
+                                        System.err.println("Errore invio AttaccoVinto"+ex);
+                                    }
+                                    return;
+                                }
                             //non uso return perché se no duplico codice.
                             //Ritirati è deprecato perché non esiste l'attacco perpetuo
                             //Si fa un attacco e ci si ritira
@@ -270,7 +299,8 @@ public class SuccessioneTurni {
                                 try {
                                   Server.SpedisciMsgTutti(
                                        MessaggioComandi.creaMsgAttaccoterminato(
-                                                                        gioint),
+                                                                        gioint,
+                                                                        partita.getGiocattaccato()),
                                        listaGiocatori,
                                        -1);
                                 } catch (IOException ex) {
@@ -287,11 +317,9 @@ public class SuccessioneTurni {
                 partita.setTerritorioAttaccato(msgatt.getTerritorio_difensore());
                 partita.setAttacking(true);
                 try {
-                  Server.SpedisciMsgTutti(MessaggioComandi.creaMsgIniziaAttacco(
-                                                    gioint,
-                                                    partita.getGiocattaccato()),
+                  Server.SpedisciMsgTutti(msgReceived,
                   listaGiocatori,
-                  -1);
+                  gioint);
                 } catch (IOException ex) {
                     System.err.println(
                            "Errore nell'invio del messaggio di inizio attacco: "
@@ -451,7 +479,7 @@ public class SuccessioneTurni {
             partita.removeArmateTerrAttaccante(rimuovi_att);
             try {
                 Server.SpedisciMsgTutti(new MessaggioCambiaArmateTerritorio(partita.getGiocatoreTurnoIndice(),
-                        partita.getArmateTerrAttaccante(),
+                        -rimuovi_att,
                         partita.getTerritorioAttaccante()),
                         listaGiocatori,
                         -1);
@@ -463,7 +491,7 @@ public class SuccessioneTurni {
             partita.removeArmateTerrDifensore(rimuovi_dif);
             try{
             Server.SpedisciMsgTutti(new MessaggioCambiaArmateTerritorio(partita.getGiocattaccato(),
-                    partita.getArmateTerrDifensore(),
+                    -rimuovi_dif,
                     partita.getTerritorioAttaccato()),
                     listaGiocatori,
                     -1);
@@ -483,8 +511,6 @@ public class SuccessioneTurni {
             case COMMAND:
             MessaggioComandi cmd = ((MessaggioComandi)msg);
             switch(cmd.getComando()){
-                case PASSAFASE:
-                    break;
                 default:
                     return false;
             }
@@ -505,6 +531,9 @@ public class SuccessioneTurni {
             case COMMAND:
                 if(partita.isAttacking()) return parseCmdAttaccando((MessaggioComandi)msg);
                 return parseCommandAttacco((MessaggioComandi)msg);
+            case SPOSTAARMATE:
+                if(conquistato) return true;
+                return false;
             case FASE:
             case DICHIARAATTACCO:
                 if(partita.isAttacking()) return false;
@@ -534,8 +563,6 @@ public class SuccessioneTurni {
      */
     private boolean parseCommandAttacco(MessaggioComandi msg){
         switch(msg.getComando()){
-            case PASSAFASE:
-                return true;
             default:
                 return false;
         }

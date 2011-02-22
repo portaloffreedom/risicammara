@@ -77,12 +77,14 @@ public enum comandi_t {
     /**
      * Indica che una sessione di attacco è terminata.
      * getSender = Il giocatore che effettuava l'attacco
+     * getOptParameter = Il giocatore che si difendeva.
      */
     ATTACCOTERMINATO, // Indica che l'attacco in corso è terminato
     /**
      * Indica che una sessione di attacco è iniziata.
      * getSender = Il giocatore che sta attaccando
      * getOptParameter = Il giocatore che si deve difendere.
+     * @deprecated Si usa MessaggioDichiaraAttacco.
      */
     INIZIAATTACCO,      //Indica un attacco.
     //--------generale

@@ -171,18 +171,4 @@ public class Giocatore_Net extends Giocatore {
         clientOut.flush();
         System.out.println("messaggio "+mess.toString()+" inviato!");
     }
-/**
- * Chiede se il giocatore deve ricevere le armate.
- * @return
- */
-    public boolean isFirst(){
-        return ((PlayerThread)thread_player).isFirst();
-    }
-/**
- * Imposta se il giocatore dovrà ricevere armate.
- * @param first
- */
-    public void setFirst(boolean first){
-        ((PlayerThread)thread_player).setFirst(first);
-    }
 }

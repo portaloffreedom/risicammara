@@ -1,9 +1,6 @@
 package risicammaraJava.turnManage;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import risicammaraClient.Continente_t;
 import risicammaraClient.Obbiettivi_t;
 import risicammaraJava.boardManage.Plancia;
@@ -15,8 +12,6 @@ import risicammaraClient.territori_t;
 import risicammaraClient.tipovittoria_t;
 import risicammaraJava.deckManage.Carta;
 import risicammaraJava.fightManage.Dado;
-import risicammaraServer.Giocatore_Net;
-import risicammaraServer.messaggiManage.MessaggioArmateDisponibili;
 
 /**
 * Questa classe ha il compito di inizializzare tutti gli oggetti che servono per
