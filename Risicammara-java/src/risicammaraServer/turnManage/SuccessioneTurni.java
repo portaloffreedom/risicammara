@@ -37,6 +37,8 @@ public class SuccessioneTurni {
     /** Stabilisce se il giocatore ha conquistato uno o più territori nel suo turno. */
     protected boolean conquistato; //Se il giocatore ha conquistato almeno un territorio
 
+    private boolean saltare;
+
     /**
      * Costruttore per inizializzare correttamente le variabili per la successione
      * dei turni di Risicammara.
@@ -44,6 +46,7 @@ public class SuccessioneTurni {
      * @param coda coda per i messaggi ricevuti via rete.
      */
     public SuccessioneTurni(ListaPlayers listaGiocatori,CodaMsg coda){
+        saltare = false;
         this.coda = coda;
         this.listaGiocatori = listaGiocatori;
         this.vincitore = false;
@@ -100,8 +103,13 @@ public class SuccessioneTurni {
 
         // Ciclo principale
         while(!vincitore){
-            Messaggio msgReceived = coda.get();
-            if(!validitaMessaggio(msgReceived)) continue;
+            Messaggio msgReceived = null;
+            if(saltare){
+
+                saltare = false;
+            }
+            else msgReceived = coda.get();
+            if(partita.getFase() != Fasi_t.FINETURNO && !validitaMessaggio(msgReceived)) continue;
             //Processa i messaggi finché non c'è un vincitore.
             //Il server legge il messaggio e lo smista a seconda del messaggio ricevuto.
             //es. se è un messaggio di chat viene processato subito, se è un messaggio da un giocatore non di turno
@@ -237,6 +245,7 @@ public class SuccessioneTurni {
                 if(msgReceived.getType() ==  messaggio_t.FASE) {
                     MessaggioFase msgFase = (MessaggioFase) msgReceived;
                     proxfase = msgFase.getFase();
+                    saltare = true;
                     break;
                 }
                 // I messaggi  comando sono della fase "attaccando" e vengono accettati
