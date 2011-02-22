@@ -2,14 +2,11 @@ package risicammaraClient;
 
 import PacchettoGrafico.CollegatiPartita;
 import PacchettoGrafico.FinestraGioco;
-import PacchettoGrafico.ListaGiocatoriClient;
 import PacchettoGrafico.PannelloGioco;
 import PacchettoGrafico.salaAttesa.SalaAttesa;
 import java.net.Socket;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import risicammaraJava.boardManage.Plancia;
-import risicammaraJava.boardManage.PlanciaClient;
 import risicammaraJava.turnManage.PartitaClient;
 import risicammaraJava.turnManage.PartitaServer;
 
@@ -23,7 +20,9 @@ import risicammaraJava.turnManage.PartitaServer;
  * @author matteo
  */
 public class Client implements Runnable {
-
+    public static final String RISICAMLOGO = "risorse/risicamlogo.png";
+    public static final String RISICAMMATA_PLANCIA = "risorse/risicammara_plancia.jpg";
+    public static final String RISICAMMARA_NEGATIVO = "risorse/risicammara_plancia.bmp";
     /** Rappresenta la Porta di default che deve utilizzare il programma. Viene
      * utlizzata anche dal lato server come porta di DEFAULT */
     public static int PORT = 12345;

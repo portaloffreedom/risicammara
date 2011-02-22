@@ -26,6 +26,7 @@ public enum comandi_t {
      * getSender = Il giocatore che invia il messaggio.
      * @see messaggio_t
      * @see MessaggioFase
+     * @deprecated 
      */
     PASSAFASE,      //Passa la fase corrente.
 

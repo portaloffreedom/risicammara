@@ -105,7 +105,6 @@ public class SuccessioneTurni {
         while(!vincitore){
             Messaggio msgReceived = null;
             if(saltare){
-
                 saltare = false;
             }
             else msgReceived = coda.get();
@@ -245,7 +244,7 @@ public class SuccessioneTurni {
                 if(msgReceived.getType() ==  messaggio_t.FASE) {
                     MessaggioFase msgFase = (MessaggioFase) msgReceived;
                     proxfase = msgFase.getFase();
-                    saltare = true;
+                    if(proxfase == Fasi_t.FINETURNO) saltare = true;
                     break;
                 }
                 // I messaggi  comando sono della fase "attaccando" e vengono accettati
@@ -304,8 +303,9 @@ public class SuccessioneTurni {
             case SPOSTAMENTO:
                 //Da qui passano solo spostaarmate e passafase
                 if(!validoSpostamento(msgReceived)) return;
-                if(msgReceived.getType() != messaggio_t.SPOSTAARMATE){
+                if(msgReceived.getType() == messaggio_t.FASE || msgReceived.getType() != messaggio_t.SPOSTAARMATE){
                     proxfase = Fasi_t.FINETURNO;
+                    saltare = true;
                     break;
                 }
                 MessaggioSpostaArmate msgSpostamento = (MessaggioSpostaArmate)msgReceived;
@@ -488,6 +488,7 @@ public class SuccessioneTurni {
                 default:
                     return false;
             }
+            case FASE:
             case SPOSTAARMATE:
                 return true;
             default:
