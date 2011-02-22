@@ -7,7 +7,6 @@ package risicammaraJava.boardManage;
 import java.io.Serializable;
 import risicammaraClient.Continente_t;
 import risicammaraClient.territori_t;
-import risicammaraJava.playerManage.Giocatore;
 
 /**
  * Classe che rappresenta un territorio della plancia di gioco e tutte
@@ -45,6 +44,15 @@ public class TerritorioPlancia implements Serializable{
      */
     public void setArmate(int num){
         this.armate_presenti = num;
+    }
+    
+    /**
+     * Modifica il numero di armate nel territorio (sommando il numero passato 
+     * in ingresso - num deve essere negativo se si vogliono togliere armate)
+     * @param num numero di armate aggiunte (o tolte se negativo)
+     */
+    public void aggiornaArmate(int num){
+        this.armate_presenti += num;
     }
 
     /**
