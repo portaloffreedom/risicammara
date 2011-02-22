@@ -1,6 +1,7 @@
 package risicammaraJava.turnManage;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import risicammaraClient.Continente_t;
 import risicammaraClient.Obbiettivi_t;
 import risicammaraJava.boardManage.Plancia;
@@ -41,14 +42,15 @@ public class PartitaServer extends GestionePartita {
         //Distribuzione territori per i giocatori
         territori_t car;
         int numgioc = listagiocatori.getSize();
-        int gio = numgioc-1;
+        LinkedList<Integer> sequenza = new LinkedList<Integer>();
+        for(int i:sequenzaDiGioco){
+            sequenza.addLast(i);
+        }
+        int gio = sequenza.pollLast();
+        sequenza.addFirst(gio);
         int inc = 1;
                 while(mazzo.getCard(inc)!= null){
                     Giocatore giocorrente = listagiocatori.get(gio);
-                    while(giocorrente == null){
-                        gio--;
-                        giocorrente = listagiocatori.get(gio);
-                    }
                     car = mazzo.getCard(inc);
                     inc++;
                     while((car == territori_t.Jolly1)||(car == territori_t.Jolly2)){
@@ -58,18 +60,17 @@ public class PartitaServer extends GestionePartita {
                     if(car == null) break;
                     planciadigioco.getTerritorio(car).setProprietario(gio);
                     giocorrente.addTerr(car);
-                    if(gio==0) gio = numgioc-1;
-                    else gio--;
+                    gio = sequenza.pollLast();
+                    sequenza.addFirst(gio);
                 }
-        for(int i=0;i<ListaPlayers.MAXPLAYERS;i++){
+        for(int i : sequenza){
             Giocatore g = listagiocatori.get(i);
-            if(g==null)continue;
             int armd = NumeroArmate(numgioc)-g.getNumTerritori();
             g.setArmatedisponibili(armd);
         }
         //Distribuzione obbiettivi
         MazzoObbiettivi mazzoobj = new MazzoObbiettivi();
-        for(int i = 0; i<numgioc;i++){
+        for(int i : sequenza){
             Obbiettivi_t ob = (Obbiettivi_t)mazzoobj.Pesca();
             switch(ob.VictoryType()){
                 case DISTRUZIONE:
@@ -92,6 +93,8 @@ public class PartitaServer extends GestionePartita {
                     break;
             }
         }
+        sequenzaDiGioco.pollFirst();
+        sequenzaDiGioco.addLast(giocturno);
     }
 
     //Metodi di partita (informazioni)

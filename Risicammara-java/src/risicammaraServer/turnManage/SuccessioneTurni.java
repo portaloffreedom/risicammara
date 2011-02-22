@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import risicammaraClient.Bonus_t;
 import risicammaraClient.Continente_t;
 import risicammaraClient.territori_t;
@@ -38,6 +40,7 @@ public class SuccessioneTurni {
     protected boolean conquistato; //Se il giocatore ha conquistato almeno un territorio
 
     private boolean saltare;
+    private boolean spostaattacco;
 
     /**
      * Costruttore per inizializzare correttamente le variabili per la successione
@@ -51,6 +54,7 @@ public class SuccessioneTurni {
         this.listaGiocatori = listaGiocatori;
         this.vincitore = false;
         this.conquistato = false;
+        this.spostaattacco = false;
     };
     /**
      * Fa iniziare una successione turni (esattamente inizia una nuova partita)
@@ -187,8 +191,8 @@ public class SuccessioneTurni {
                 if(pthread.isMustpass()){
                     pthread.setMustpass(false);
                     partita.ProssimoGiocatore();
-                    prossimo = partita.getGiocatoreTurnoIndice();
                     gio = (Giocatore_Net) partita.getGiocatoreDiTurno();
+                    prossimo = gio.getPlayerIndex();
                     if(gio.getArmateperturno() == 0){
                         proxfase = Fasi_t.RINFORZO;
                         break;
@@ -254,6 +258,13 @@ public class SuccessioneTurni {
                 if(msgReceived.getType() == messaggio_t.SPOSTAARMATE){
                     MessaggioSpostaArmate msposta = (MessaggioSpostaArmate) msgReceived;
                     partita.spostamento(msposta.getSorgente(), msposta.getArrivo(), msposta.getNumarmate());
+                    spostaattacco = false;
+                    try {
+                        Server.SpedisciMsgTutti(msgReceived, listaGiocatori, -1);
+                    } catch (IOException ex) {
+                        System.err.println("Errore invio spostamento dopo attacco: "
+                                +ex.getMessage());
+                    }
                     msgReceived = MessaggioComandi.creaMsgRitirati(gioint);
                 }
                 // I messaggi  comando sono della fase "attaccando" e vengono accettati
@@ -277,6 +288,7 @@ public class SuccessioneTurni {
                                             break;
                                     }
                                     conquistato = true;
+                                    spostaattacco = true;
                                     partita.attaccoVinto();
                                     partita.spostamento(partita.getTerritorioAttaccante(), partita.getTerritorioAttaccato(), armterrat);
                                     try {
@@ -533,7 +545,7 @@ public class SuccessioneTurni {
     private boolean parseMsgAttacco(Messaggio msg){
         switch(msg.getType()){
             case COMMAND:
-                if(conquistato) return false;
+                if(partita.isAttacking() && spostaattacco) return false;
                 if(partita.isAttacking()) return parseCmdAttaccando((MessaggioComandi)msg);
                 return parseCommandAttacco((MessaggioComandi)msg);
             case SPOSTAARMATE:

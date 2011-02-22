@@ -1,5 +1,7 @@
 package risicammaraJava.turnManage;
 
+import java.util.LinkedList;
+import java.util.Queue;
 import risicammaraClient.territori_t;
 import risicammaraJava.boardManage.Plancia;
 import risicammaraJava.boardManage.TerritorioPlancia;
@@ -21,6 +23,7 @@ public abstract class GestionePartita {
     protected boolean nuovogiro;
     protected int giocattaccato;
     protected territori_t territorioAttaccato,territorioAttaccante;
+    protected LinkedList<Integer> sequenzaDiGioco;
 
     protected GestionePartita(ListaPlayers listagiocatori){
         this.listagiocatori = listagiocatori;
@@ -30,8 +33,14 @@ public abstract class GestionePartita {
         this.territorioAttaccante = null;
         this.giocattaccato = -1;
         this.nuovogiro = false;
-        giocturno = 0;
         this.fase_attuale = Fasi_t.PREPARTITA;
+        this.sequenzaDiGioco = new LinkedList<Integer>();
+        for(int i=0;i<ListaPlayers.MAXPLAYERS;i++){
+            Giocatore_Net g = (Giocatore_Net) listagiocatori.get(i);
+            if(g==null)continue;
+            sequenzaDiGioco.addLast(i);
+        }
+        this.giocturno = sequenzaDiGioco.peekFirst();
     }
 
     /**
@@ -243,12 +252,8 @@ public abstract class GestionePartita {
      * Passa al prossimo giocatore di turno
      */
     public void ProssimoGiocatore(){
-            Giocatore_Net tmp = (Giocatore_Net)listagiocatori.getFirst(giocturno);
-            if(tmp == null){
-                giocturno = 0;
-                return;
-            }
-            giocturno = tmp.getPlayerIndex();
+            giocturno = sequenzaDiGioco.pollFirst();
+            sequenzaDiGioco.addLast(giocturno);
             return;
     };
     /**
