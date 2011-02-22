@@ -75,6 +75,12 @@ public abstract class GestionePartita {
         }
         this.giocattaccato = getProprietarioTerritorio(terr);
     }
+
+    public void attaccoVinto(){
+        if(territorioAttaccato == null) return;
+        TerritorioPlancia tpla = planciadigioco.getTerritorio(territorioAttaccato);
+        tpla.setProprietario(giocturno);
+    }
     /**
      * restituisci il territorio del difensore
      * @return il territori odel difensore
