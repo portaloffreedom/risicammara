@@ -34,21 +34,22 @@ public abstract class GestionePartita {
         this.fase_attuale = Fasi_t.PREPARTITA;
     }
 
-        /**
+    /**
      * Ottiene il giocatore che viene attaccato
      * @return il giocatore difensore
      */
     public int getGiocattaccato() {
         return giocattaccato;
     }
-        /**
+    /**
      * imposta il giocatore che viene attaccato
      * @param giocattaccato l'indice del giocoatore che viene attaccato
+     * @deprecated Si imposta automaticamente da "territorio attaccato"
      */
     public void setGiocattaccato(int giocattaccato) {
         this.giocattaccato = giocattaccato;
     }
-        /**
+    /**
      * Informa se c'è un attacco in corso
      * @return true se c'è un attacco, false altrimenti
      */
@@ -68,6 +69,10 @@ public abstract class GestionePartita {
      */
     public void setTerritorioAttaccato(territori_t terr){
         this.territorioAttaccato = terr;
+        if(terr==null){
+            giocattaccato = -1;
+            return;
+        }
         this.giocattaccato = getProprietarioTerritorio(terr);
     }
     /**
