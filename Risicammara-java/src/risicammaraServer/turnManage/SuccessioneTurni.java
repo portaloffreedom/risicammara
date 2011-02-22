@@ -277,6 +277,7 @@ public class SuccessioneTurni {
                                             break;
                                     }
                                     conquistato = true;
+                                    partita.attaccoVinto();
                                     partita.spostamento(partita.getTerritorioAttaccante(), partita.getTerritorioAttaccato(), armterrat);
                                     try {
                                         Server.SpedisciMsgTutti(
