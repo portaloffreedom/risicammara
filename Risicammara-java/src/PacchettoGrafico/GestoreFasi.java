@@ -57,7 +57,7 @@ final public class GestoreFasi {
         
         this.ascoltatorePlanciaEvidenziatore = new AscoltatorePlanciaEvidenziatore(planciaImmagine, ag);
         this.ascoltatorePlanciaRinforzo = new AscoltatorePlanciaRinforzo(planciaImmagine, server, listaGiocatori.meStessoIndex());
-        this.ascoltatorePlanciaAttacco = new AscoltatorePlanciaAttacco(planciaImmagine, server, partita);
+        this.ascoltatorePlanciaAttacco = new AscoltatorePlanciaAttacco(planciaImmagine, this, server, partita);
         faseToAttesa();
     }
 
@@ -101,7 +101,7 @@ final public class GestoreFasi {
         }
     }
 
-    private void setAscoltatore(boolean fineTurno, boolean spostamenti){
+    public void setAscoltatore(boolean fineTurno, boolean spostamenti){
         //FINE TURNO
         if (fineTurno)
             barraFasi.setAscoltatoreFineTurno(ascoltatoreFineTurno);
