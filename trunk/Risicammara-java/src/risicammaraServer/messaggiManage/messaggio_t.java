@@ -69,6 +69,7 @@ public enum messaggio_t {
     ARMATEDISPONIBILI, // Le armate a disposizione
     /**
      * Il risultato di un lancio di dado.
+     * @see risicammaraServer.messaggiManage.MessaggioRisultatoDado
      */
     RISULTATODADO,      //Il server invia il risultato del lancio di UN dado
     /**
