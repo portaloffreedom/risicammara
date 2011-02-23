@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.PriorityQueue;
 import risicammaraClient.Bonus_t;
+import risicammaraClient.Colore_t;
 import risicammaraClient.Continente_t;
+import risicammaraClient.Obbiettivi_t;
 import risicammaraClient.territori_t;
 import risicammaraJava.deckManage.Carta;
 import risicammaraJava.playerManage.Giocatore;
@@ -274,6 +276,17 @@ public class SuccessioneTurni {
                             case LANCIADADO:
                                 risolviAttacco(cmd.getOptParameter());
                                 if(partita.getArmateTerrDifensore() == 0){
+                                    if(partita.hasDistruggiArmate(gio)){
+                                        Colore_t eliminato = listaGiocatori.get(partita.getGiocattaccato()).getArmyColour();
+                                        if(vittoriaDistruzione(gio,eliminato)){
+                                            vincitore = true;
+                                            return;
+                                        }
+                                        partita.eliminaGiocatoreAttaccato();
+                                        partita.modificaDistruzione(eliminato);
+
+
+                                    }
                                     int armterrat = partita.getArmateTerrAttaccante() -1;
                                     if(armterrat > cmd.getOptParameter()) armterrat = cmd.getOptParameter();
                                     conquistato = true;
@@ -406,6 +419,32 @@ public class SuccessioneTurni {
             }
         }
     }
+
+    private boolean vittoriaDistruzione(Giocatore gio,Colore_t eliminato){
+        Obbiettivi_t ob = gio.getObbiettivo();
+        switch(ob){
+            case BLU:
+                if(eliminato == Colore_t.BLU) return true;
+                break;
+            case GIALLO:
+                if(eliminato == Colore_t.GIALLO) return true;
+                break;
+            case NERO:
+                if(eliminato == Colore_t.NERO) return true;
+                break;
+            case ROSSO:
+                if(eliminato == Colore_t.ROSSO) return true;
+                break;
+            case VERDE:
+                if(eliminato == Colore_t.VERDE) return true;
+                break;
+            case VIOLA:
+                if(eliminato == Colore_t.VIOLA) return true;
+            default:
+                break;
+        }
+        return false;
+    }
     /**
      * Spedisce a tutti i giocatori il messaggio di avvenuto cambio turno di
      * un giocatore e spedisce al giocatore di turno il messaggio che indica
@@ -455,6 +494,7 @@ public class SuccessioneTurni {
             Server.SpedisciMsgTutti(
                     new MessaggioRisultatoLanci(lanciattaccante,
                                                 lancidifensore,
+                                                partita.getGiocatoreTurnoIndice(),
                                                 partita.getGiocattaccato()),
                     listaGiocatori,
                     -1);

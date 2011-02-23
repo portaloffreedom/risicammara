@@ -10,12 +10,15 @@ import java.util.PriorityQueue;
 public class MessaggioRisultatoLanci implements Messaggio {
     private PriorityQueue<Integer> lancioAttacco;
     private PriorityQueue<Integer> lancioDifesa;
-    private int sender;
+    private int attaccante;
+    private int difensore;
 
-    public MessaggioRisultatoLanci(PriorityQueue<Integer> lancioAttacco, PriorityQueue<Integer> lancioDifesa, int sender) {
+    public MessaggioRisultatoLanci(PriorityQueue<Integer> lancioAttacco, 
+            PriorityQueue<Integer> lancioDifesa, int attaccante,int difensore) {
         this.lancioAttacco = lancioAttacco;
         this.lancioDifesa = lancioDifesa;
-        this.sender = sender;
+        this.attaccante = attaccante;
+        this.difensore = difensore;
     }
 /**
  * Fornisce ad ogni chiamata il risultato di un dado lanciato dall'attaccante.
@@ -35,13 +38,21 @@ public class MessaggioRisultatoLanci implements Messaggio {
         if(result == null) result = 1;
         return -result;
     }
+
+    public int getAttaccante() {
+        return attaccante;
+    }
+
+    public int getDifensore() {
+        return difensore;
+    }
     
     public messaggio_t getType() {
         return messaggio_t.RISULTATOLANCI;
     }
 
     public int getSender() {
-        return sender;
+        return -1;
     }
 
 }
