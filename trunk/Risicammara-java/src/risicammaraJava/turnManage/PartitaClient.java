@@ -31,4 +31,12 @@ public class PartitaClient extends GestionePartita {
     public Giocatore getMeStesso(){
         return getListaGiocatori().meStesso();
     }
+    
+    public boolean eMioTurno(){
+        return (giocTurno == getMeStessoIndex());
+    }
+    
+    public void setGiocatoreDiTurno(int giocatore){
+        this.giocTurno = giocatore;
+    }
 }

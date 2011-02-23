@@ -12,7 +12,6 @@ import javax.swing.JFrame;
 import risicammaraClient.Client;
 import risicammaraClient.Connessione;
 import risicammaraClient.territori_t;
-import risicammaraJava.boardManage.TerritorioNonValido;
 import risicammaraJava.boardManage.TerritorioPlanciaClient;
 import risicammaraJava.turnManage.Fasi_t;
 import risicammaraJava.turnManage.PartitaClient;
@@ -23,6 +22,7 @@ import risicammaraServer.messaggiManage.MessaggioCambiaArmateTerritorio;
 import risicammaraServer.messaggiManage.MessaggioComandi;
 import risicammaraServer.messaggiManage.MessaggioDichiaraAttacco;
 import risicammaraServer.messaggiManage.MessaggioFase;
+import risicammaraServer.messaggiManage.MessaggioRisultatoLanci;
 import risicammaraServer.messaggiManage.MessaggioSpostaArmate;
 import risicammaraServer.messaggiManage.comandi_t;
 
@@ -121,7 +121,7 @@ public class FinestraGioco extends JFrame implements Runnable {
                 case CAMBIAARMATETERRITORIO:
                     MessaggioCambiaArmateTerritorio msgArmate = (MessaggioCambiaArmateTerritorio) msg;
                     plancia.aggiornaArmateTerritorio(msgArmate.getArmate(), msgArmate.getTerritorio());
-                    if (gestoreFasi.getFaseCorrente() == ContatoreFasi.RINFORZO)
+                    if (gestoreFasi.getFaseCorrente() == Fasi_t.RINFORZO)
                         gestoreFasi.diminuisciArmateRinforzoDisponibili();
                     break;
 
@@ -145,11 +145,11 @@ public class FinestraGioco extends JFrame implements Runnable {
                     switch (msgComandi.getComando()) {
                         case TURNOFPLAYER: {
                             int giocatoreDiTurno = msg.getSender();
-                            //partita.setGiocatoreDiTurno(giocatoreDiTurno);
+                            partita.setGiocatoreDiTurno(giocatoreDiTurno);
                             
                             if (msgComandi.getSender() == listaGiocatori.meStessoIndex()) {
-                                gestoreFasi.avanzaFase();
                                 //TODO rimpicciolisci tutte le frecce degli altri
+                                System.out.println("tocca a te");
                             }
                             else {
                                 //TODO tocca al giocatore avanza le frecce
@@ -182,7 +182,7 @@ public class FinestraGioco extends JFrame implements Runnable {
                 case CAMBIAARMATETERRITORIO: {
                     MessaggioCambiaArmateTerritorio msgArmate = (MessaggioCambiaArmateTerritorio) msg;
                     plancia.aggiornaArmateTerritorio(msgArmate.getArmate(), msgArmate.getTerritorio());
-                    if (gestoreFasi.getFaseCorrente() == ContatoreFasi.RINFORZO)
+                    if (gestoreFasi.getFaseCorrente() == Fasi_t.RINFORZO)
                         gestoreFasi.diminuisciArmateRinforzoDisponibili();
                     break;
                 }
@@ -193,10 +193,15 @@ public class FinestraGioco extends JFrame implements Runnable {
                     plancia.aggiornaArmateTerritorio(armateSpostate, msgSpostaArmate.getArrivo());
                 }
 
-                case FASE:
-                    if (gestoreFasi.getFaseCorrente() == ContatoreFasi.RINFORZO)
-                        gestoreFasi.avanzaFase();
+                case FASE: {
+                    if (!partita.eMioTurno())
+                        break;
+                    MessaggioFase msgFase = (MessaggioFase) msg;
+                    gestoreFasi.setFase(msgFase.getFase());
+                    if (Client.DEBUG)
+                        System.out.println("Fase impostata a:"+gestoreFasi.getFaseCorrente()+" = "+msgFase.getFase());
                     break;
+                }
 
                 case DICHIARAATTACCO: {
                     MessaggioDichiaraAttacco msgAttacco = (MessaggioDichiaraAttacco) msg;
@@ -233,6 +238,26 @@ public class FinestraGioco extends JFrame implements Runnable {
                         armateSpostateListener.setRichiestaNumeroArmate(richiestaNumeroArmate);
                         richiestaNumeroArmate.addOKActionListener(armateSpostateListener);
                     }
+                    break;
+                }
+                case RISULTATOLANCI: {
+                    MessaggioRisultatoLanci msgDado = (MessaggioRisultatoLanci) msg;
+                    int valoreLancio = 0;
+                    
+                    String attaccante = partita.getGiocatoreAttaccante().getNome();
+                    System.out.println("Risultato dado ("+attaccante+") :");
+                    while (valoreLancio >= 0) {
+                        System.out.print(" "+msgDado.getLancioAttacco());
+                    }
+                    System.out.println();
+                    
+                    String difensore = partita.getGiocatoreAttaccato().getNome();
+                    System.out.println("Risultato dado ("+difensore+") :");
+                    while (valoreLancio >= 0) {
+                        System.out.print(" "+msgDado.getLancioDifesa());
+                    }
+                    System.out.println();
+                    
                     break;
                 }
 
