@@ -247,18 +247,20 @@ public class FinestraGioco extends JFrame implements Runnable {
                     
                     String attaccante = partita.getGiocatoreAttaccante().getNome();
                     System.out.println("Risultato dado ("+attaccante+") :");
-                    do {
+                    while (true) {
                         valoreLancio = msgDado.getLancioAttacco();
+                        if (valoreLancio < 0) break;
                         System.out.print(" "+valoreLancio);
-                    } while (valoreLancio >= 0);
+                    }
                     System.out.println();
                     
                     String difensore = partita.getGiocatoreAttaccato().getNome();
                     System.out.println("Risultato dado ("+difensore+") :");
-                    do {
+                    while (true) {
                         valoreLancio = msgDado.getLancioDifesa();
+                        if (valoreLancio < 0) break;
                         System.out.print(" "+valoreLancio);
-                    } while (valoreLancio >= 0);
+                    }
                     System.out.println();
                     
                     break;

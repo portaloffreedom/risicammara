@@ -98,7 +98,7 @@ final public class GestoreFasi {
             case SPOSTAMENTO:
                 setAscoltatore(true, false);
                 barraFasi.attacco.setDisegnaTestoSmosciato(true);
-                planciaImmagine.setActionListener(null);
+                planciaImmagine.setActionListener(ascoltatorePlanciaSpostamento);
                 return;
         }
     }
