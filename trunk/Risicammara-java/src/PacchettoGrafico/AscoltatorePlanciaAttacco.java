@@ -68,26 +68,42 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener, Acti
                 throw new TerritorioNonValido("Non possiedi abbastanza armate"
                         + " in questo territorio");
             }
-
-            //plancia.colora(idTerritorio, Attacco);
-            plancia.coloraSfumato(idTerritorio, Attacco, pesantezzaSfumatura);
-            plancia.aggiornaTerritorio(idTerritorio);
-
         } catch (TerritorioNonValido ex) {
             System.err.println("Punto non valido:\n"+ex);
             territorioAttaccante =  null;
             return;
         }
+        
+        plancia.coloraSfumato(territorioAttaccante, Attacco, pesantezzaSfumatura);
         fasi.setAscoltatore(false, false);
     }
     
     private void selezionaTerritorioDifensore(int idTerritorio) {
-        territori_t territorioDifensore = null;
+        territori_t difensore = null;
+        TerritorioPlanciaClient territorioDifensore = null;
         try {
-            territorioDifensore = territori_t.GetTerritorio(idTerritorio);
-            if (plancia.plancia.getTerritorio(territorioDifensore).getProprietario() == partita.getMeStessoIndex())
+            difensore = territori_t.GetTerritorio(idTerritorio);
+            
+            //controllo di deselezione del territorio
+            if (difensore == territorioAttaccante.getTerritorio()) {
+                attaccoInCorso(false);
+                plancia.ripristinaTerritorio(territorioAttaccante);
+                territorioAttaccante = null;
+                return;
+            }
+            
+            territorioDifensore = plancia.plancia.getTerritorio(difensore);
+            
+            //controllo che il giocatore non cerchi di attaccare se stesso
+            if (territorioDifensore.getProprietario() == partita.getMeStessoIndex())
                 throw new TerritorioNonValido("Non puoi attaccare te stesso!");
-            server.spedisci(new MessaggioDichiaraAttacco(territorioAttaccante.getTerritorio(), territorioDifensore, partita.getMeStessoIndex()));
+            
+            //controllo che il territorio stia nelle adiacenze di quello attaccante
+            if (!territorioAttaccante.isAdiacent(difensore))
+                throw new TerritorioNonValido("Non puoi attaccare un territorio troppo distante!");
+            
+            server.spedisci(new MessaggioDichiaraAttacco(territorioAttaccante.getTerritorio(), difensore, partita.getMeStessoIndex()));
+            
         } catch (TerritorioNonValido ex) {
             System.err.println("Punto non valido:\n"+ex);
             return;
@@ -96,16 +112,11 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener, Acti
             return;
         }
 
-        try {
-            //plancia.colora(idTerritorio, Difesa);
-            plancia.coloraSfumato(idTerritorio, Difesa, pesantezzaSfumatura);
-            plancia.aggiornaTerritorio(idTerritorio);
-        } catch (TerritorioNonValido ex) {
-            System.err.println("Impossibile trovare il territorio da colorare:\n"+ex);
-        }
+        //plancia.colora(idTerritorio, Difesa);
+        plancia.coloraSfumato(difensore, Difesa, pesantezzaSfumatura);
 
         partita.setTerritorioAttaccante(territorioAttaccante.getTerritorio());
-        partita.setTerritorioAttaccato(territorioDifensore);
+        partita.setTerritorioAttaccato(difensore);
 
         //TODO chiedere con quante armate lanciare
         int maxArmateAttaccanti = territorioAttaccante.getArmate()-1;

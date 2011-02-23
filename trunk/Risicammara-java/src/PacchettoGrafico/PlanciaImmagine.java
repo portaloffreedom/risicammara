@@ -1,9 +1,3 @@
-/*
- *
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package PacchettoGrafico;
 
 import java.awt.Color;
@@ -26,7 +20,8 @@ import risicammaraJava.boardManage.TerritorioPlanciaClient;
 import risicammaraJava.turnManage.PartitaClient;
  
 /**
- *
+ * Classe che gestisce tutta l'immagine della plancia. Questo significa sia la
+ * sua colorazione, sia la gestione degli eventi (mouse) sull'immagine.
  * @author matteo
  */
 public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
@@ -168,50 +163,108 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         return img;
     }
 
-    final public Rectangle colora(int idTerritorio, Color colore) throws TerritorioNonValido{
-        Rectangle rettangolo = plancia.getTerritorio(idTerritorio).getPosizione();
-        for (int r=rettangolo.y; r<(rettangolo.height+rettangolo.y); r++){
-            for (int c=rettangolo.x; c<(rettangolo.width+rettangolo.x); c++){
-                int tempRGB = this.planciaBMP.getRGB(c, r);
-                if (tempRGB == idTerritorio)
-                    this.planciaPNG.setRGB(c, r, colore.getRGB());
-            }
-        }
-        return rettangolo;
+    //<editor-fold defaultstate="collapsed" desc="Colora">
+    public void colora(TerritorioPlanciaClient territorio, Color colore){
+        coloraSfumato(territorio, colore, 1);
+    }
+    
+    public void colora(territori_t territorio, Color colore) {
+        coloraSfumato(territorio, colore, 1);
+    }
+    
+    public Rectangle colora(int idTerritorio, Color colore) throws TerritorioNonValido {
+        /*
+         * Rectangle rettangolo = plancia.getTerritorio(idTerritorio).getPosizione();
+         * for (int r=rettangolo.y; r<(rettangolo.height+rettangolo.y); r++){
+         * for (int c=rettangolo.x; c<(rettangolo.width+rettangolo.x); c++){
+         * int tempRGB = this.planciaBMP.getRGB(c, r);
+         * if (tempRGB == idTerritorio)
+         * this.planciaPNG.setRGB(c, r, colore.getRGB());
+         * }
+         * }
+         * return rettangolo;
+         */
+        return coloraSfumato(idTerritorio, colore, 1);
+    }
+    
+    private void colora(int idTerritorio, Rectangle rettangolo, Color colore) {
+        coloraSfumato(idTerritorio, rettangolo, colore, 1);
+    }
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="ColoraSfumato"> 
+
+    public void coloraSfumato(TerritorioPlanciaClient territorio, Color colore, double trasparenza) {
+        coloraSfumato(territorio.getTerritorio().getIdTerritorio(), territorio.getPosizione(), colore, trasparenza);
+        this.aggiornaTerritorio(territorio);
     }
 
-    final public Rectangle coloraSfumato(int idTerritorio, Color colore, double trasparenza) throws TerritorioNonValido{
-        Rectangle rettangolo = plancia.getTerritorio(idTerritorio).getPosizione();
-        for (int r=rettangolo.y; r<(rettangolo.height+rettangolo.y); r++){
-            for (int c=rettangolo.x; c<(rettangolo.width+rettangolo.x); c++){
-                int tempRGB = this.planciaBMP.getRGB(c, r);
-                if (tempRGB == idTerritorio)
-                    this.planciaPNG.setRGB(c, r, Sfuma(colore.getRGB(), this.planciaPNGfinal.getRGB(c, r), trasparenza));
-            }
-        }
-        return rettangolo;
+    public void coloraSfumato(territori_t territorio, Color colore, double trasparenza) {
+        coloraSfumato(plancia.getTerritorio(territorio), colore, trasparenza);
+    }
+    
+    public Rectangle coloraSfumato(int idTerritorio, Color colore, double trasparenza) throws TerritorioNonValido {
+       Rectangle rettangolo = plancia.getTerritorio(idTerritorio).getPosizione();
+       coloraSfumato(idTerritorio, rettangolo, colore, trasparenza);
+       return rettangolo;
+    }
+    
+    private void coloraSfumato (int idTerritorio, Rectangle rettangolo, Color colore, double trasparenza){  
+       for (int r=rettangolo.y; r<(rettangolo.height+rettangolo.y); r++){
+           for (int c=rettangolo.x; c<(rettangolo.width+rettangolo.x); c++){
+               int tempRGB = this.planciaBMP.getRGB(c, r);
+               if (tempRGB == idTerritorio)
+                   this.planciaPNG.setRGB(c, r, Sfuma(colore.getRGB(), this.planciaPNGfinal.getRGB(c, r), trasparenza));
+           }
+       }
     }
 
     private static int Sfuma(int RGB1, int RGB2, double trasparenza){
-        int RGBsfumato = 0;
-          int  mask = 0x000000ff;
-        //int Rmask = 0x0000ff00;
-        //int Gmask = 0x00ff0000;
-        //int Bmask = 0xff000000;
+       int RGBsfumato = 0;
+       int  mask = 0x000000ff;
+       //int Rmask = 0x0000ff00;
+       //int Gmask = 0x00ff0000;
+       //int Bmask = 0xff000000;
 
-        for (int i=0; i<4; i++){
-            int tempColor1 = (RGB1 & mask)>>i*8;
-            int tempColor2 = (RGB2 & mask)>>i*8;
-            tempColor1 = (int) (tempColor1*trasparenza + tempColor2*(1-trasparenza));
-            RGBsfumato = RGBsfumato | (tempColor1<<i*8);
-            mask = mask<<8;
-        }
+       for (int i=0; i<4; i++){
+           int tempColor1 = (RGB1 & mask)>>i*8;
+           int tempColor2 = (RGB2 & mask)>>i*8;
+           tempColor1 = (int) (tempColor1*trasparenza + tempColor2*(1-trasparenza));
+           RGBsfumato = RGBsfumato | (tempColor1<<i*8);
+           mask = mask<<8;
+       }
 
-        return RGBsfumato;
+       return RGBsfumato;
     }
-
-    public Rectangle ripristinaTerritorio(int idTerritorio) throws TerritorioNonValido{
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="RipristinaTerritorio">
+    /**
+     * Ripristina il territorio del colore originale. Inoltre chiama un repaint
+     * sul territorio
+     * @param territorio territorio da ripristinare.
+     */
+    public void ripristinaTerritorio(TerritorioPlanciaClient territorio) {
+        ripristinaTerritorio(territorio.getTerritorio().getIdTerritorio(), territorio.getPosizione());
+        this.aggiornaTerritorio(territorio);
+    }
+    
+    /**
+     * Ripristina il territorio del colore originale. Inoltre chiama un repaint
+     * sul territorio
+     * @param territorio territorio da ripristinare.
+     */
+    public void ripristinaTerritorio(territori_t territorio) {
+        ripristinaTerritorio(plancia.getTerritorio(territorio));
+    }
+    
+    public Rectangle ripristinaTerritorio(int idTerritorio) throws TerritorioNonValido {
         Rectangle rettangolo = plancia.getTerritorio(idTerritorio).getPosizione();
+        ripristinaTerritorio(idTerritorio, rettangolo);
+        return rettangolo;
+    }
+    
+    private void ripristinaTerritorio(int idTerritorio, Rectangle rettangolo){
         for (int r=rettangolo.y; r<(rettangolo.height+rettangolo.y); r++){
             for (int c=rettangolo.x; c<(rettangolo.width+rettangolo.x); c++){
                 int tempRGB = this.planciaBMP.getRGB(c, r);
@@ -219,8 +272,9 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
                     this.planciaPNG.setRGB(c, r, this.planciaPNGfinal.getRGB(c, r));
             }
         }
-        return rettangolo;
     }
+    
+    //</editor-fold>
 
     public static int GetIdTerritorio(int continente, int territorio){
         int idTerritorio = 0xff000000;
@@ -335,15 +389,15 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         rect.height = transformYPointFromImage(rect.height, false);
     }
 
-    public void aggiornaTerritorio(territori_t territorio){
+    private void aggiornaTerritorio(territori_t territorio){
         aggiornaTerritorio(plancia.getTerritorio(territorio));
     }
 
-    public void aggiornaTerritorio(int idTerritorio) throws TerritorioNonValido{
+    private void aggiornaTerritorio(int idTerritorio) throws TerritorioNonValido{
         aggiornaTerritorio(plancia.getTerritorio(idTerritorio));
     }
 
-    public void aggiornaTerritorio(TerritorioPlanciaClient territorio){
+    private void aggiornaTerritorio(TerritorioPlanciaClient territorio){
         repaintPlancia(territorio.getPosizione());
     }
 
@@ -355,10 +409,22 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         rettangoloImmagine.height++;
         ag.panelRepaint(rettangoloImmagine);
     }
+    
+    public void aggiornaArmateTerritorio(int armate, TerritorioPlanciaClient territorio){
+        territorio.aggiornaArmate(armate);
+        aggiornaTerritorio(territorio);
+    }
 
     public void aggiornaArmateTerritorio(int armate, territori_t territorioT){
-        TerritorioPlanciaClient territorio = plancia.getTerritorio(territorioT);
-        territorio.setArmate(armate+territorio.getArmate());
+        this.aggiornaArmateTerritorio(armate, plancia.getTerritorio(territorioT));
+    }
+    
+    public void setArmateTerritorio(int armate, TerritorioPlanciaClient territorio) {
+        territorio.setArmate(armate);
         aggiornaTerritorio(territorio);
+    }
+    
+    public void setArmateTerritorio(int armate, territori_t territorioT){
+        this.setArmateTerritorio(armate, plancia.getTerritorio(territorioT));
     }
 }

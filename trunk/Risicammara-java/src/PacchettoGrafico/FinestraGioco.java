@@ -159,16 +159,10 @@ public class FinestraGioco extends JFrame implements Runnable {
                         }
 
                         case ATTACCOTERMINATO: {
-                            try {
-                                territori_t attaccante = partita.getTerritorioAttaccante();
-                                territori_t difensore  = partita.getTerritorioAttaccato();
-                                plancia.ripristinaTerritorio(attaccante.getIdTerritorio());
-                                plancia.aggiornaTerritorio(attaccante.getIdTerritorio());
-                                plancia.ripristinaTerritorio(difensore.getIdTerritorio());
-                                plancia.aggiornaTerritorio(difensore);
-                            } catch (TerritorioNonValido ex) {
-                                System.err.println("Non è riuscito a decolorare i territori:\n"+ex);
-                            }
+                            territori_t attaccante = partita.getTerritorioAttaccante();
+                            territori_t difensore  = partita.getTerritorioAttaccato();
+                            plancia.ripristinaTerritorio(attaccante);
+                            plancia.ripristinaTerritorio(difensore);
                             break;
                         }
                             
@@ -195,13 +189,8 @@ public class FinestraGioco extends JFrame implements Runnable {
                 case SPOSTAARMATE: {
                     MessaggioSpostaArmate msgSpostaArmate = (MessaggioSpostaArmate) msg;
                     int armateSpostate = msgSpostaArmate.getNumarmate();
-                    TerritorioPlanciaClient sorgente = plancia.plancia.getTerritorio(msgSpostaArmate.getSorgente());
-                    TerritorioPlanciaClient destinazione = plancia.plancia.getTerritorio(msgSpostaArmate.getArrivo());
-                    sorgente.aggiornaArmate(-armateSpostate);
-                    destinazione.aggiornaArmate(armateSpostate);
-                    
-                    plancia.aggiornaTerritorio(sorgente);
-                    plancia.aggiornaTerritorio(destinazione);
+                    plancia.aggiornaArmateTerritorio(-armateSpostate, msgSpostaArmate.getSorgente());
+                    plancia.aggiornaArmateTerritorio(armateSpostate, msgSpostaArmate.getArrivo());
                 }
 
                 case FASE:
@@ -213,19 +202,12 @@ public class FinestraGioco extends JFrame implements Runnable {
                     MessaggioDichiaraAttacco msgAttacco = (MessaggioDichiaraAttacco) msg;
                     if (msgAttacco.getSender() == listaGiocatori.meStessoIndex())
                         break;
-                    //TODO colora di rosso e di blu
                     territori_t attaccante = msgAttacco.getTerritorio_attaccante();
                     territori_t difensore  = msgAttacco.getTerritorio_difensore();
                     partita.setTerritorioAttaccante(attaccante);
                     partita.setTerritorioAttaccato(difensore);
-                    try {
-                        plancia.coloraSfumato(attaccante.getIdTerritorio(), AscoltatorePlanciaAttacco.Attacco, AscoltatorePlanciaAttacco.pesantezzaSfumatura);
-                        plancia.aggiornaTerritorio(attaccante);
-                        plancia.coloraSfumato(difensore.getIdTerritorio(), AscoltatorePlanciaAttacco.Difesa, AscoltatorePlanciaAttacco.pesantezzaSfumatura);
-                        plancia.aggiornaTerritorio(difensore);
-                    } catch (TerritorioNonValido ex) {
-                        System.err.println("Non è riuscito a colorare i territori:\n"+ex);
-                    }
+                    plancia.coloraSfumato(attaccante, AscoltatorePlanciaAttacco.Attacco, AscoltatorePlanciaAttacco.pesantezzaSfumatura);
+                    plancia.coloraSfumato(difensore, AscoltatorePlanciaAttacco.Difesa, AscoltatorePlanciaAttacco.pesantezzaSfumatura);
                     break;
                 }
                     
@@ -234,12 +216,10 @@ public class FinestraGioco extends JFrame implements Runnable {
                     int armateSpostate = msgVincita.getArmSpost();
                     TerritorioPlanciaClient attaccante = plancia.plancia.getTerritorio(partita.getTerritorioAttaccante());
                     TerritorioPlanciaClient difensore = plancia.plancia.getTerritorio(partita.getTerritorioAttaccato());
-                    difensore.setProprietario(attaccante.getProprietario());
-                    attaccante.aggiornaArmate(-armateSpostate);
-                    difensore.setArmate(armateSpostate);
                     
-                    plancia.aggiornaTerritorio(difensore);
-                    plancia.aggiornaTerritorio(attaccante);
+                    difensore.setProprietario(attaccante.getProprietario());
+                    plancia.aggiornaArmateTerritorio(-armateSpostate, attaccante);
+                    plancia.setArmateTerritorio(armateSpostate, difensore);
                     
                     if (attaccante.getProprietario() == listaGiocatori.meStessoIndex()){
                         //chiedere se vuoi spostare altre armate
