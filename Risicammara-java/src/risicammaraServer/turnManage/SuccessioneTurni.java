@@ -369,6 +369,8 @@ public class SuccessioneTurni {
                     System.err.print("Errore invio spostamento armate: "
                             +ex.getMessage());
                 }
+                proxfase = Fasi_t.FINETURNO;
+                saltare = true;
                 //Il giocatore sceglie di spostare n armate da un territorio all'altro.
                 //Questa fase finisce se il giocatore passa all'altro turno o se effettua
                 //Il suo spostamento.

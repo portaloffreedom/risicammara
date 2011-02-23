@@ -341,8 +341,8 @@ public class TerritorioPlancia implements Serializable{
                 break;
             case Siam:
                 adiacenze[0] = territori_t.Indonesia;
-                adiacenze[0] = territori_t.India;
-                adiacenze[0] = territori_t.Cina;
+                adiacenze[1] = territori_t.India;
+                adiacenze[2] = territori_t.Cina;
                 break;
                         //Oceania
             case Indonesia:
