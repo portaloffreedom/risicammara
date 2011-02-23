@@ -47,8 +47,8 @@ public class FinestraGioco extends JFrame implements Runnable {
         this.listaGiocatori = partita.getListaGiocatori();
         this.partita = partita;
         this.richiestaNumeroArmate = null;
-
-        this.setIconImage(new ImageIcon("./risorse/risicamlogo.png").getImage());
+        ImageIcon icona = new ImageIcon(this.getClass().getResource(Client.RISICAMLOGO));
+        this.setIconImage(icona.getImage());
 
         Container contestoFinestra = this.getContentPane();
         this.pannello = new PannelloGioco(240, partita);

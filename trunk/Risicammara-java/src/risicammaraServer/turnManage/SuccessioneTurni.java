@@ -159,7 +159,7 @@ public class SuccessioneTurni {
      */
     private void cicloFasi(Messaggio msgReceived){
         Fasi_t proxfase = null;
-        int prossimo = -1;
+        int prossimo = partita.getGiocatoreTurnoIndice();
         int gioint = partita.getGiocatoreTurnoIndice();
         Giocatore_Net gio = (Giocatore_Net)partita.getGiocatoreDiTurno();
         PlayerThread pthread = (PlayerThread)gio.getThread();
