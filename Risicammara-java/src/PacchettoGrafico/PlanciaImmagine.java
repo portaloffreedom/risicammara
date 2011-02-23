@@ -4,13 +4,19 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import javax.imageio.ImageIO;
+import risicammaraClient.Client;
 import risicammaraClient.Colore_t;
 import risicammaraJava.boardManage.TerritorioNonValido;
 import risicammaraClient.territori_t;
@@ -43,9 +49,16 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         this.partita = partita;
         this.plancia = partita.getPlancia();
         this.ag = ag;
-        planciaBMP = loadImage("./risorse/risicammara_plancianew.bmp");
-        planciaPNG = loadImage("./risorse/risicammara_plancianew.png");
-        planciaPNGfinal = loadImage("./risorse/risicammara_plancianew.png");
+        try{
+        planciaBMP = ImageIO.read(this.getClass().getResource(Client.RISICAMMARA_NEGATIVO));
+        URL rispng = this.getClass().getResource(Client.RISICAMMARA_PLANCIA);
+        planciaPNG = ImageIO.read(rispng);
+        planciaPNGfinal = ImageIO.read(rispng);
+        }
+        catch(IOException ex){
+            System.err.println("Errore nella lettura delle immagini: "
+                    +ex.getMessage());
+        }
         Rectangle rettangolo = new Rectangle(posizione);
         rettangolo.setSize(planciaPNG.getWidth(null), planciaPNG.getHeight(null));
         super.setShape(rettangolo);

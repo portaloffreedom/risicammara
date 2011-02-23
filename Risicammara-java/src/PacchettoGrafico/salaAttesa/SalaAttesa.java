@@ -43,7 +43,8 @@ public class SalaAttesa extends JFrame implements Runnable {
         super("Sala d'Attesa");
         this.server = null;
         this.meStesso = meStesso;
-        this.setIconImage(new ImageIcon("./risorse/risicamlogo.png").getImage());
+        ImageIcon icona = new ImageIcon(this.getClass().getResource(Client.RISICAMLOGO));
+        this.setIconImage(icona.getImage());
 
         this.indexGiocatore = -2;
         this.listaGiocatori = null;

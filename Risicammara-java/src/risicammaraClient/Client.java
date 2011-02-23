@@ -21,9 +21,9 @@ import risicammaraJava.turnManage.PartitaServer;
  * @author matteo
  */
 public class Client implements Runnable {
-    public static final String RISICAMLOGO = "risorse/risicamlogo.png";
-    public static final String RISICAMMATA_PLANCIA = "risorse/risicammara_plancia.jpg";
-    public static final String RISICAMMARA_NEGATIVO = "risorse/risicammara_plancia.bmp";
+    public static final String RISICAMLOGO = "/Images/risicamlogo.png";
+    public static final String RISICAMMARA_PLANCIA = "/Images/risicammara_plancia.png";
+    public static final String RISICAMMARA_NEGATIVO = "/Images/risicammara_plancia.bmp";
     /** Rappresenta la Porta di default che deve utilizzare il programma. Viene
      * utlizzata anche dal lato server come porta di DEFAULT */
     public static int PORT = 12345;
