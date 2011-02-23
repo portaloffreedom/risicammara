@@ -44,7 +44,8 @@ public class CollegatiPartita extends JFrame {
         super("Collegati al server");
         //this.addWindowListener(this);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setBounds(100, 100, 300, 100);
+        super.setSize(300, 100);
+        super.setLocationByPlatform(true);
         this.setResizable(false);
         this.main = main;
         this.porta = porta;
@@ -76,6 +77,7 @@ public class CollegatiPartita extends JFrame {
             this.stringaIndirizzo=stringaIndirizzo;
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             JCheckBox culo = (JCheckBox) e.getSource();
             this.stringaIndirizzo.setEnabled(!culo.isSelected());
@@ -92,6 +94,7 @@ public class CollegatiPartita extends JFrame {
             this.porta = porta;
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             setWorking(true);
 
@@ -119,6 +122,9 @@ public class CollegatiPartita extends JFrame {
 
             memoria.setVisible(false);
             memoria.main.salaAttesa(memoria.getServer());
+
+            //libera la memoria della finestra di "collegati partita"
+            memoria.dispose();
         }
 
         private void setWorking (boolean lavorante){

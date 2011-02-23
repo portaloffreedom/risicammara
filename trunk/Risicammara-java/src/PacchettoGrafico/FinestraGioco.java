@@ -1,6 +1,7 @@
 package PacchettoGrafico;
 
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -53,9 +54,9 @@ public class FinestraGioco extends JFrame implements Runnable {
         this.pannello = new PannelloGioco(240, partita);
         contestoFinestra.add(pannello);
 
-        Rectangle rect = new Rectangle(50, 50, 900, 600);
-        this.setBounds(rect);
-        this.setMinimumSize(rect.getSize());
+        Dimension dimensioniMinime = new Dimension(900, 600);
+        super.setLocationByPlatform(true);
+        this.setMinimumSize(dimensioniMinime);
         
         this.plancia = pannello.getPlanciaImmagine();
         this.gestoreFasi = new GestoreFasi(pannello.getBarraFasi(),server, partita,plancia ,pannello.getAttivatoreGrafica());

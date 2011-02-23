@@ -156,6 +156,7 @@ public class Client implements Runnable {
     /**
      * Fa partire il client costruito.
      */
+    @Override
     public void run() {
         //TODO dialogo di "crea inizializzaPartita"
         this.collegatiPartita();

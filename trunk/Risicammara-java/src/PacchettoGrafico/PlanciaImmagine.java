@@ -43,9 +43,9 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         this.partita = partita;
         this.plancia = partita.getPlancia();
         this.ag = ag;
-        planciaBMP = loadImage("./risorse/risicammara_plancia.bmp");
-        planciaPNG = loadImage("./risorse/risicammara_plancia.png");
-        planciaPNGfinal = loadImage("./risorse/risicammara_plancia.png");
+        planciaBMP = loadImage("./risorse/risicammara_plancianew.bmp");
+        planciaPNG = loadImage("./risorse/risicammara_plancianew.png");
+        planciaPNGfinal = loadImage("./risorse/risicammara_plancianew.png");
         Rectangle rettangolo = new Rectangle(posizione);
         rettangolo.setSize(planciaPNG.getWidth(null), planciaPNG.getHeight(null));
         super.setShape(rettangolo);
@@ -88,6 +88,7 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         return new Rectangle(sinistra, alto, destra-sinistra+1, basso-alto+1);
     }
 
+    @Override
     public void disegna(Graphics2D g2, GraphicsAdvanced colori) {
         Rectangle rect = (Rectangle) posizione;
         rect.width = dimensioniPannello.width-rect.x;
@@ -276,53 +277,60 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
     
     //</editor-fold>
 
-    public static int GetIdTerritorio(int continente, int territorio){
+    // <editor-fold defaultstate="collapsed" desc="Gestione idTerritorio">
+    public static int GetIdTerritorio(int continente, int territorio) {
         int idTerritorio = 0xff000000;
-        
-        idTerritorio = (idTerritorio | (continente <<(2*4)));
-        idTerritorio = (idTerritorio | (territorio <<(4*4)));
+
+        idTerritorio = (idTerritorio | (continente << (2 * 4)));
+        idTerritorio = (idTerritorio | (territorio << (4 * 4)));
 
         return idTerritorio;
     }
 
-    public static int GetContinente (int idTerritorio){
+    public static int GetContinente(int idTerritorio) {
         int continenteMask = 0x00000f00;
-        return ((idTerritorio & continenteMask)>>2*4);
+        return ((idTerritorio & continenteMask) >> 2 * 4);
     }
 
-    public static int GetTerritorio (int idTerritorio){
+    public static int GetTerritorio(int idTerritorio) {
         int territorioMask = 0x000f0000;
-        return ((idTerritorio & territorioMask)>>4*4);
+        return ((idTerritorio & territorioMask) >> 4 * 4);
     }
 
-    public static boolean eTerritorio(int idTerritorio){
+    public static boolean eTerritorio(int idTerritorio) {
         boolean territorio = false;
         int mask = 0x00f0f0ff;
         idTerritorio = (idTerritorio & mask);
-        if( (idTerritorio & mask) == 0)
+        if ((idTerritorio & mask) == 0) {
             territorio = true;
 
+
+        }
         return territorio;
     }
 
-    public static void StampaA4Bit(int RGB){
-        for (int i=0; i<(8); i++){
-            System.out.print(((RGB>>(i*4)) & 0x0000000f)+" ");
+    public static void StampaA4Bit(int RGB) {
+        for (int i = 0; i < (8); i++) {
+            System.out.print(((RGB >> (i * 4)) & 0x0000000f) + " ");
         }
         System.out.println();
     }
 
-    public static void StampaA8Bit(int RGB){
-        for (int i=0; i<(4); i++){
-            System.out.print(((RGB>>(i*8)) & 0x000000ff)+" ");
+    public static void StampaA8Bit(int RGB) {
+        for (int i = 0; i < (4); i++) {
+            System.out.print(((RGB >> (i * 8)) & 0x000000ff) + " ");
         }
         System.out.println();
-    }
+    }// </editor-fold>
 
     @Override
     protected void actionPressed(MouseEvent e) {
+        //transforma il punto translandadolo dallo spazio del pannello allo spazio
+            //dell'immagine. (traslazione necessaria causa ridimensionamento
+            //possibile dell'immagine)
         Point p = getTransformedPointToImage(e.getPoint());
         e = new MouseEvent(e.getComponent(), e.getID(), e.getWhen(), e.getModifiers(), p.x, p.y, e.getClickCount(), false);
+        
         super.actionPressed(e);
     }
 
