@@ -87,8 +87,9 @@ public class SuccessioneTurni {
                     +ex.getMessage());
         }
         //Ciclo dei turni
+        int giotin = partita.getGiocatoreTurnoIndice();
         try{
-            int giotin = partita.getGiocatoreTurnoIndice();
+            
             Server.SpedisciMsgTutti(new MessaggioFase(Fasi_t.PREPARTITA, -1),
                     listaGiocatori, -1);            
             Server.SpedisciMsgTutti(MessaggioComandi.creaMsgTurnOfPlayer(giotin),
@@ -98,7 +99,8 @@ public class SuccessioneTurni {
             System.err.println("Errore nell'invio messaggio di inizio: "
                     +ex.getMessage());
         }
-
+        
+        spedisciMsgCambioTurno(giotin);
         try {
             inviaArmateDisponibili();
         } catch (IOException ex) {
