@@ -1,7 +1,6 @@
 package risicammaraJava.turnManage;
 
 import java.util.LinkedList;
-import java.util.Queue;
 import risicammaraClient.territori_t;
 import risicammaraJava.boardManage.Plancia;
 import risicammaraJava.boardManage.TerritorioPlancia;
@@ -16,7 +15,7 @@ import risicammaraServer.Giocatore_Net;
 public abstract class GestionePartita {
     protected Plancia planciadigioco;
     protected ListaPlayers listagiocatori;
-    protected int giocturno;
+    protected int giocTurno;
     protected Fasi_t fase_attuale;
     protected boolean giocato_tris;
     protected boolean attacking;
@@ -40,7 +39,7 @@ public abstract class GestionePartita {
             if(g==null)continue;
             sequenzaDiGioco.addLast(i);
         }
-        this.giocturno = sequenzaDiGioco.peekFirst();
+        this.giocTurno = sequenzaDiGioco.peekFirst();
     }
 
     /**
@@ -88,23 +87,51 @@ public abstract class GestionePartita {
     public void attaccoVinto(){
         if(territorioAttaccato == null) return;
         TerritorioPlancia tpla = planciadigioco.getTerritorio(territorioAttaccato);
-        tpla.setProprietario(giocturno);
-        listagiocatori.get(giocturno).addTerr(territorioAttaccato);
+        tpla.setProprietario(giocTurno);
+        listagiocatori.get(giocTurno).addTerr(territorioAttaccato);
         listagiocatori.get(giocattaccato).remTerr(territorioAttaccato);
     }
     /**
      * restituisci il territorio del difensore
-     * @return il territori odel difensore
+     * @return il territorio del difensore
      */
     public territori_t getTerritorioAttaccato(){
         return this.territorioAttaccato;
     }
     /**
+     * restituisci il territorio del difensore
+     * @return il territorio del difensore
+     */
+    public TerritorioPlancia getTerritorioPlanciaAttaccato() {
+        return planciadigioco.getTerritorio(territorioAttaccato);
+    }
+    /**
+     * Restituisce il giocatore sotto attacco
+     * @return giocatore sotto attacco
+     */
+    public Giocatore getGiocatoreAttaccato() {
+        return listagiocatori.get(getTerritorioPlanciaAttaccato().getProprietario());
+    }
+    /**
      * restituisce il territorio dell'attaccante
-     * @return territorio attaccato
+     * @return territorio attaccante
      */
     public territori_t getTerritorioAttaccante() {
         return territorioAttaccante;
+    }
+    /**
+     * restituisce il territorio dell'attaccante
+     * @return territorio attaccante
+     */
+    public TerritorioPlancia getTerritorioPlanciaAttaccante() {
+        return planciadigioco.getTerritorio(territorioAttaccante);
+    }
+    /**
+     * Restituisce il giocatore attaccante
+     * @return giocatore attaccante
+     */
+    public Giocatore getGiocatoreAttaccante() {
+        return listagiocatori.get(getTerritorioPlanciaAttaccante().getProprietario());
     }
     /**
      * Imposta il territorio da cui parte l'attacco
@@ -129,7 +156,7 @@ public abstract class GestionePartita {
      * @return il numero di territori del gicoatore di turno
      */
     public int getNumTerritoriGiocatoreTurno(){
-        return listagiocatori.get(giocturno).getNumTerritori();
+        return listagiocatori.get(giocTurno).getNumTerritori();
     }
     /**
      * Controlla se è stato giocato un tris nel turno
@@ -241,21 +268,21 @@ public abstract class GestionePartita {
      * @return
      */
     public Giocatore getGiocatoreDiTurno(){
-        return listagiocatori.get(giocturno);
+        return listagiocatori.get(giocTurno);
     };
     /**
      * Restituisce l'indice del giocatore di turno
      * @return
      */
     public int getGiocatoreTurnoIndice(){
-        return giocturno;
+        return giocTurno;
     }
     /**
      * Passa al prossimo giocatore di turno
      */
     public void ProssimoGiocatore(){
-            giocturno = sequenzaDiGioco.pollFirst();
-            sequenzaDiGioco.addLast(giocturno);
+            giocTurno = sequenzaDiGioco.pollFirst();
+            sequenzaDiGioco.addLast(giocTurno);
             return;
     };
     /**

@@ -24,9 +24,10 @@ final public class GestoreFasi {
     //private AscoltatoreAttacco     ascoltatoreAttacco;
     private AscoltatoreSpostamento ascoltatoreSpostamento;
     private int armateRinforzoDisponibili;
-    private AscoltatorePlanciaRinforzo ascoltatorePlanciaRinforzo;
+    private AscoltatorePlanciaRinforzo      ascoltatorePlanciaRinforzo;
     private AscoltatorePlanciaEvidenziatore ascoltatorePlanciaEvidenziatore;
-    private AscoltatorePlanciaAttacco ascoltatorePlanciaAttacco;
+    private AscoltatorePlanciaAttacco       ascoltatorePlanciaAttacco;
+    private AscoltatorePlanciaSpostamento   ascoltatorePlanciaSpostamento;
 
     private Connessione server;
     private AttivatoreGrafica ag;
@@ -58,6 +59,7 @@ final public class GestoreFasi {
         this.ascoltatorePlanciaEvidenziatore = new AscoltatorePlanciaEvidenziatore(planciaImmagine, ag);
         this.ascoltatorePlanciaRinforzo = new AscoltatorePlanciaRinforzo(planciaImmagine, server, listaGiocatori.meStessoIndex());
         this.ascoltatorePlanciaAttacco = new AscoltatorePlanciaAttacco(planciaImmagine, this, server, partita);
+        this.ascoltatorePlanciaSpostamento = new AscoltatorePlanciaSpostamento(planciaImmagine, this, server, partita);
         faseToAttesa();
     }
 
@@ -77,27 +79,34 @@ final public class GestoreFasi {
     public void avanzaFase(){
         barraFasi.avanzaFase();
         switch(barraFasi.getFase()){
-            case ContatoreFasi.FINETURNO:
+            case FINETURNO:
                 setAscoltatore(false, false);
                 planciaImmagine.setActionListener(ascoltatorePlanciaEvidenziatore);
                 return;
 
-            case ContatoreFasi.RINFORZO:
+            case RINFORZO:
                 setAscoltatore(false, false);
                 planciaImmagine.setActionListener(ascoltatorePlanciaRinforzo);
                 return;
 
-            case ContatoreFasi.ATTACCO:
+            case ATTACCO:
                 setAscoltatore(true, true);
                 barraFasi.rinforzi.setDisegnaTestoSmosciato(true);
                 planciaImmagine.setActionListener(ascoltatorePlanciaAttacco);
                 return;
 
-            case ContatoreFasi.SPOSTAMENTI:
+            case SPOSTAMENTO:
                 setAscoltatore(true, false);
                 barraFasi.attacco.setDisegnaTestoSmosciato(true);
                 planciaImmagine.setActionListener(null);
                 return;
+        }
+    }
+    
+    public void setFase(Fasi_t fase) {
+        int avanzamento = Fasi_t.getDistanzaFasi(getFaseCorrente(), fase);
+        for (int i=0; i<avanzamento; i++){
+            this.avanzaFase();
         }
     }
 
@@ -107,56 +116,12 @@ final public class GestoreFasi {
             barraFasi.setAscoltatoreFineTurno(ascoltatoreFineTurno);
         else
             barraFasi.setAscoltatoreFineTurno(null);
-        
-        //RINFONZO
-        /*if (rinforzo)
-            barraFasi.setAscoltatoreRinforzi(ascoltatoreRinforzo);
-        else
-            barraFasi.setAscoltatoreRinforzi(null);*/
-
-        //ATTACCO
-        /*if (attacco)
-            barraFasi.setAscoltatoreAttacco(ascoltatoreAttacco);
-        else
-            barraFasi.setAscoltatoreAttacco(null);*/
 
         //SPOSTAMENTI
         if (spostamenti)
             barraFasi.setAscoltatoreSpostamento(ascoltatoreSpostamento);
         else
             barraFasi.setAscoltatoreSpostamento(null);
-    }
-
-    private void setAscoltatore(int fase, boolean attivo){
-        switch (fase) {
-            case ContatoreFasi.FINETURNO:
-                if (attivo)
-                    barraFasi.setAscoltatoreFineTurno(ascoltatoreFineTurno);
-                else
-                    barraFasi.setAscoltatoreFineTurno(null);
-                return;
-
-            case ContatoreFasi.RINFORZO:/*
-                if (attivo)
-                    barraFasi.setAscoltatoreRinforzi(ascoltatoreRinforzo);
-                else
-                    barraFasi.setAscoltatoreRinforzi(null);*/
-                return;
-
-            case ContatoreFasi.ATTACCO:/*
-                if (attivo)
-                    barraFasi.setAscoltatoreAttacco(ascoltatoreAttacco);
-                else
-                    barraFasi.setAscoltatoreAttacco(null);*/
-                return;
-
-            case ContatoreFasi.SPOSTAMENTI:
-                if (attivo)
-                    barraFasi.setAscoltatoreSpostamento(ascoltatoreSpostamento);
-                else
-                    barraFasi.setAscoltatoreSpostamento(null);
-                return;
-        }
     }
 
     final public void setArmateRinforzoDisponibili(int armate){
@@ -171,7 +136,7 @@ final public class GestoreFasi {
         setArmateRinforzoDisponibili(armateRinforzoDisponibili);
     }
 
-    public int getFaseCorrente(){
+    public Fasi_t getFaseCorrente(){
         return barraFasi.getFase();
     }
 

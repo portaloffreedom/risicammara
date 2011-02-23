@@ -5,12 +5,10 @@
 
 package PacchettoGrafico;
 
+import risicammaraJava.turnManage.Fasi_t;
+
 /**
- * Contatore delle fasi per la BarraFasi.<p>
- * Fase 0 = turno di altri giocatori.<br>
- * Fase 1 = rinforzo - posiziona armate.<br>
- * Fase 2 = attacco.<br>
- * Fase 3 = spostamenti.<br>
+ * Contatore delle fasi per la BarraFasi.
  * @author matteo
  */
 public class ContatoreFasi {
@@ -36,8 +34,23 @@ public class ContatoreFasi {
      * Fase SPOSTAMENTI (3) = spostamenti.<br>
      * @return
      */
-    public int getFase(){
-        return fase;
+    public Fasi_t getFase(){
+        switch (fase){
+            default:
+                System.err.println("Errore nel prelevare la fase: fase prelevata"
+                        + " come fineturno");
+            case FINETURNO:
+                return Fasi_t.FINETURNO;
+                
+            case RINFORZO:
+                return Fasi_t.RINFORZO;
+                
+            case ATTACCO:
+                return Fasi_t.ATTACCO;
+                
+            case SPOSTAMENTI:
+                return Fasi_t.SPOSTAMENTO;
+        }
     }
 
     /**
@@ -54,10 +67,6 @@ public class ContatoreFasi {
      */
     public void avanzaFase(int avanzamento){
         fase = (fase+avanzamento)%4;
-    }
-
-    public void setFase(int fase){
-        this.fase = fase;
     }
 
     /**

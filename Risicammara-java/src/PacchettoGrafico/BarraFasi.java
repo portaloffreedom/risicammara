@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import risicammaraJava.turnManage.Fasi_t;
 
 /**
  * Barra costituita dai necessari bottoni delle fasi
@@ -95,21 +96,25 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
 
     @Override
     protected void actionPressed(MouseEvent e) {
-        int who = whoIsPressed(e.getPoint());
+        Fasi_t who = whoIsPressed(e.getPoint());
         switch (who){
             default:
                 System.err.println("Errore nel pulsante schiacciato\n"
                         + "di default viene premuto il pulsante FineTurno");
-            case ContatoreFasi.ATTESA:
+            //case ContatoreFasi.ATTESA:
+            case FINETURNO:
                 azionaAscoltatore(ascoltatoreFineTurno, e);
                 break;
-            case ContatoreFasi.RINFORZO:
+            //case ContatoreFasi.RINFORZO:
+            case RINFORZO:
                 azionaAscoltatore(ascoltatoreRinforzi, e);
                 break;
-            case ContatoreFasi.ATTACCO:
+            //case ContatoreFasi.ATTACCO:
+            case ATTACCO:
                 azionaAscoltatore(ascoltatoreAttacco, e);
                 break;
-            case ContatoreFasi.SPOSTAMENTI:
+            //case ContatoreFasi.SPOSTAMENTI:
+            case SPOSTAMENTO:
                 azionaAscoltatore(ascoltatoreSpostamento, e);
                 break;
         }
@@ -124,21 +129,25 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
         }
     }
 
-    private int whoIsPressed(Point p){
+    private Fasi_t whoIsPressed(Point p){
         if (spostamento.isClicked(p)){
-            return ContatoreFasi.SPOSTAMENTI;
+            //return ContatoreFasi.SPOSTAMENTI;
+            return Fasi_t.SPOSTAMENTO;
         }
 
         if (attacco.isClicked(p)){
-            return ContatoreFasi.ATTACCO;
+            //return ContatoreFasi.ATTACCO;
+            return Fasi_t.ATTACCO;
         }
 
         if (rinforzi.isClicked(p)){
-            return ContatoreFasi.RINFORZO;
+            //return ContatoreFasi.RINFORZO;
+            return Fasi_t.RINFORZO;
         }
 
         else {
-            return ContatoreFasi.ATTESA;
+            //return ContatoreFasi.ATTESA;
+            return Fasi_t.FINETURNO;
         }
     }
 
@@ -214,27 +223,34 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
         contatoreFasi.avanzaFase();
         switch(contatoreFasi.getFase()){
 
-            case ContatoreFasi.RINFORZO: //Passo a RINFORZO
+            case RINFORZO: //Passo a RINFORZO
                 rinforzi.setSmosciato(false);
                 break;
 
-            case ContatoreFasi.ATTACCO: //Passo ad ATTACCO
+            case ATTACCO: //Passo ad ATTACCO
                 rinforzi.setDisegnaTestoSmosciato(true);
                 attacco.setSmosciato(false);
                 break;
 
-            case ContatoreFasi.SPOSTAMENTI: //Passo a SPOSTAMENTO
+            case SPOSTAMENTO: //Passo a SPOSTAMENTO
                 attacco.setDisegnaTestoSmosciato(true);
                 spostamento.setSmosciato(false);
                 break;
 
             default: //ERRORE
                 System.err.println("Errore fase. Impostata come fase d'attesa");
-            case ContatoreFasi.ATTESA: //Passo ad ATTESA
+            case FINETURNO: //Passo ad ATTESA
                 rinforzi.setSmosciato(true);
                 attacco.setSmosciato(true);
                 spostamento.setSmosciato(true);
                 break;
+        }
+    }
+    
+    public void setFase(Fasi_t fase) {
+        int avanzamento = Fasi_t.getDistanzaFasi(contatoreFasi.getFase(), fase);
+        for (int i=0; i<avanzamento; i++){
+            this.avanzaFase();
         }
     }
 
@@ -256,7 +272,7 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
      * ContatoreFase.SPOSTAMENTO = 3<br>
      * @return un intero rappresentante la fase in cui si è.
      */
-    public int getFase(){
+    public Fasi_t getFase(){
         return contatoreFasi.getFase();
     }
 

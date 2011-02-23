@@ -109,7 +109,7 @@ public class PartitaServer extends GestionePartita {
             }
         }
         sequenzaDiGioco.pollFirst();
-        sequenzaDiGioco.addLast(giocturno);
+        sequenzaDiGioco.addLast(giocTurno);
     }
 
     //Metodi di partita (informazioni)

@@ -66,5 +66,42 @@ public enum Fasi_t {
     public boolean mustEnd(){
         return mustend;
     }
+   
+    /**
+     * Calcola il numero di passi necessari per passare dalla fase1 alla fase2
+     * @param fase1 fase di partenza
+     * @param fase2 fase di arrivo
+     * @return numero di passi necessari
+     */
+    public static int getDistanzaFasi(Fasi_t fase1, Fasi_t fase2){
+        int fase1I = getNumeroFase(fase1);
+        int fase2I = getNumeroFase(fase2);
+        
+        int numeroPassi = fase2I - fase1I;
+        
+        if (numeroPassi < 0)
+            numeroPassi += 4;
+        
+        return numeroPassi;
+        
+    }
+    
+    private static int getNumeroFase(Fasi_t fase){
+        switch (fase){
+            default:
+            case FINETURNO:
+                return 0;
+
+            case RINFORZO:
+                return 1;
+
+            case ATTACCO:
+                return 2;
+
+            case SPOSTAMENTO:
+                return 3;
+        }
+        
+    }
 
 }
