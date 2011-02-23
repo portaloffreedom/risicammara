@@ -28,7 +28,7 @@ import risicammaraJava.fightManage.Dado;
 public class PartitaServer extends GestionePartita {
     private MazzoTerritori mazzo;
     private Dado dado;
-    private ArrayList vittoriaDistruzione;
+    private ArrayList<Integer> vittoriaDistruzione;
 
     /**
      * Costruttore PartitaServer che inizializza tutti gli oggetti
@@ -39,7 +39,7 @@ public class PartitaServer extends GestionePartita {
         this.planciadigioco = new Plancia();
         this.mazzo = new MazzoTerritori();
         this.dado = new Dado(6);
-        this.vittoriaDistruzione = new ArrayList();
+        this.vittoriaDistruzione = new ArrayList<Integer>();
         //Distribuzione territori per i giocatori
         territori_t car;
         int numgioc = listagiocatori.getSize();
@@ -139,8 +139,62 @@ public class PartitaServer extends GestionePartita {
     }
     //Metodi per le fasi
 
+    //Metodi Obbietttivi
+    public boolean hasDistruggiArmate(Giocatore gio){
+        Obbiettivi_t ob = gio.getObbiettivo();
+        if(getVictoryType(ob) == tipovittoria_t.DISTRUZIONE) return true;
+        return false;
+    }
 
+    public void eliminaGiocatoreAttaccato(){
+        sequenzaDiGioco.remove(giocattaccato);
+    }
 
+    public void modificaDistruzione(Colore_t eliminato){
+        for(Integer i:vittoriaDistruzione){
+            Giocatore g = listagiocatori.get(i);
+            switch(g.getObbiettivo()){
+                case BLU:
+                    if(eliminato == Colore_t.BLU){
+                        vittoriaDistruzione.remove(i);
+                        g.setObj(Obbiettivi_t.VENTIQUATTRO);
+                    }
+                    break;
+                case GIALLO:
+                    if(eliminato == Colore_t.GIALLO){
+                        vittoriaDistruzione.remove(i);
+                        g.setObj(Obbiettivi_t.VENTIQUATTRO);
+                    }
+                    break;
+                case ROSSO:
+                    if(eliminato == Colore_t.ROSSO){
+                        vittoriaDistruzione.remove(i);
+                        g.setObj(Obbiettivi_t.VENTIQUATTRO);
+                    }
+                    break;
+                case NERO:
+                    if(eliminato == Colore_t.NERO){
+                        vittoriaDistruzione.remove(i);
+                        g.setObj(Obbiettivi_t.VENTIQUATTRO);
+                    }
+                    break;
+                case VERDE:
+                    if(eliminato == Colore_t.VERDE){
+                        vittoriaDistruzione.remove(i);
+                        g.setObj(Obbiettivi_t.VENTIQUATTRO);
+                    }
+                    break;
+                case VIOLA:
+                    if(eliminato == Colore_t.VIOLA){
+                        vittoriaDistruzione.remove(i);
+                        g.setObj(Obbiettivi_t.VENTIQUATTRO);
+                    }
+                default:
+                    break;
+            }
+
+        }
+    }
     /**
      * Verifica qual è il giocatore che ha vinto per territori.
      * @return l'indice del giocatore che soddisfa i requisiti. se è minore di 0
