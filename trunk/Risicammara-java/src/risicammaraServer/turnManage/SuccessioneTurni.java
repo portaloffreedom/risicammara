@@ -386,7 +386,8 @@ public class SuccessioneTurni {
                         if(ctmp != null){
                             gio.addCard(ctmp);
                             try {
-                                gio.sendMessage(new MessaggioCarta(ctmp, -1));
+                                gio.sendMessage(new MessaggioCarta(ctmp, gio.getPlayerIndex()));
+                                Server.SpedisciMsgTutti(new MessaggioCarta(null, gio.getPlayerIndex()), listaGiocatori, gio.getPlayerIndex());
                             } catch (IOException ex) {
                                 System.err.println("Errore invio carta pescata: "
                                         +ex.getMessage());
