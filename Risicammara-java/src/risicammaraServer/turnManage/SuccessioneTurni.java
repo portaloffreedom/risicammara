@@ -275,17 +275,18 @@ public class SuccessioneTurni {
                         switch(cmd.getComando()){
                             case LANCIADADO:
                                 risolviAttacco(cmd.getOptParameter());
+                                Giocatore difensore = listaGiocatori.get(partita.getGiocattaccato());
                                 if(partita.getArmateTerrDifensore() == 0){
-                                    if(partita.hasDistruggiArmate(gio)){
-                                        Colore_t eliminato = listaGiocatori.get(partita.getGiocattaccato()).getArmyColour();
-                                        if(vittoriaDistruzione(gio,eliminato)){
-                                            vincitore = true;
-                                            return;
+                                    if(difensore.getNumTerritori() == 0){
+                                        Colore_t eliminato = difensore.getArmyColour();
+                                        if(partita.hasDistruggiArmate(gio)){
+                                            if(vittoriaDistruzione(gio,eliminato)){
+                                                vincitore = true;
+                                                return;
+                                            }
                                         }
                                         partita.eliminaGiocatoreAttaccato();
                                         partita.modificaDistruzione(eliminato);
-
-
                                     }
                                     int armterrat = partita.getArmateTerrAttaccante() -1;
                                     if(armterrat > cmd.getOptParameter()) armterrat = cmd.getOptParameter();
@@ -395,17 +396,6 @@ public class SuccessioneTurni {
                 break;
         }
         partita.setFase(proxfase);
-        try {
-            Server.SpedisciMsgTutti(new MessaggioFase( proxfase,
-                    prossimo),
-                    listaGiocatori,
-                    -1);
-            //messaggi per il cambio di fase
-        } catch (IOException ex) {
-            System.err.println("Errore nell'invio del messaggio di CambioFase: "
-                    +ex.getMessage());
-        }
-
         if(proxfase == Fasi_t.RINFORZO) {
             spedisciMsgCambioTurno(prossimo);
             int abon = (gio.getNumTerritori()/3)+getTotalContinentalBonus(gio);
@@ -417,6 +407,16 @@ public class SuccessioneTurni {
                         "Errore nell'invio Armate disponibili: "
                         +ex.getMessage());
             }
+        }
+                try {
+            Server.SpedisciMsgTutti(new MessaggioFase( proxfase,
+                    prossimo),
+                    listaGiocatori,
+                    -1);
+            //messaggi per il cambio di fase
+        } catch (IOException ex) {
+            System.err.println("Errore nell'invio del messaggio di CambioFase: "
+                    +ex.getMessage());
         }
     }
 
