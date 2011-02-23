@@ -5,8 +5,6 @@
 
 package risicammaraServer.messaggiManage;
 
-import risicammaraServer.messaggiManage.messaggio_t;
-
 /**
  *
  * @author stengun
@@ -29,6 +27,11 @@ public class MessaggioRisultatoDado implements Messaggio {
 
     public int getSender() {
         return sender;
+    }
+
+    @Override
+    public String toString() {
+        return "Risultato Dado (lanciato da "+sender+") :"+lancio;
     }
 
 }
