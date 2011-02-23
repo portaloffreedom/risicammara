@@ -3,9 +3,6 @@ package risicammaraServer.turnManage;
 import java.io.IOException;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.Queue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import risicammaraClient.Bonus_t;
 import risicammaraClient.Continente_t;
 import risicammaraClient.territori_t;
@@ -278,19 +275,7 @@ public class SuccessioneTurni {
                                 risolviAttacco(cmd.getOptParameter());
                                 if(partita.getArmateTerrDifensore() == 0){
                                     int armterrat = partita.getArmateTerrAttaccante() -1;
-                                    switch(armterrat){
-                                        case 0:
-                                            System.err.println("Erorre armate");
-                                            armterrat = 0;
-                                            break;
-                                        case 1:
-                                        case 2:
-                                        case 3:
-                                            break;
-                                        default:
-                                            armterrat = 3;
-                                            break;
-                                    }
+                                    if(armterrat > cmd.getOptParameter()) armterrat = cmd.getOptParameter();
                                     conquistato = true;
                                     spostaattacco = true;
                                     partita.attaccoVinto();
@@ -377,20 +362,22 @@ public class SuccessioneTurni {
                 if(conquistato){
                     conquistato = false;
                     Carta ctmp = partita.getCarta();
-                    if(ctmp != null) gio.addCard(ctmp);
-                }
-                partita.ProssimoGiocatore();
-                if(partita.isNuovogiro()){
-                    int vitt = partita.Vincitore();
-                    if(vitt >=0){
-                        //TODO inviare il messaggio di vittoria a tutti
-                        System.out.println("Il vincitore è il giocatore "+vitt);
-                        return;
+                    if(ctmp != null){
+                        gio.addCard(ctmp);
+                        try {
+                            gio.sendMessage(new MessaggioCarta(ctmp, -1));
+                        } catch (IOException ex) {
+                            System.err.println("Errore invio carta pescata: "
+                                    +ex.getMessage());
+                        }
+                        //TODO invio a tutti i giocatori "giocatore ha pescato la carta"
                     }
                 }
+                partita.ProssimoGiocatore();
                 prossimo = partita.getGiocatoreTurnoIndice();
                 proxfase = Fasi_t.RINFORZO;
                 gio = (Giocatore_Net) partita.getGiocatoreDiTurno();
+                if(partita.isVincitore(gio)) vincitore = true;
             default:                
                 break;
         }
@@ -441,23 +428,13 @@ public class SuccessioneTurni {
     /** Risolve l'attacco effettuando il lancio dei dadi e la rimozione delle
      * armate. */
     private void risolviAttacco(int numdadi){
-        Queue<Integer> lancidifensore = new PriorityQueue<Integer>();
-        Queue<Integer> lanciattaccante = new PriorityQueue<Integer>();
+        PriorityQueue<Integer> lancidifensore = new PriorityQueue<Integer>();
+        PriorityQueue<Integer> lanciattaccante = new PriorityQueue<Integer>();
         //--------------------------------------- difesa
         int armdif = partita.getArmateTerrDifensore();
         if(armdif > 2) armdif = 3;
         for(int i=0;i<armdif;i++){
             int lancio = partita.lanciaDado();
-            try {
-                Server.SpedisciMsgTutti(
-                        new MessaggioRisultatoDado(
-                                                    lancio,
-                                                    partita.getGiocattaccato()),
-                        listaGiocatori,
-                        -1);
-            } catch (IOException ex) {
-                System.err.println("Errore nell'invio del risultato dei dadi Difensore: "+ex.getMessage());
-            }
             lancidifensore.offer(new Integer(-lancio));
         }
         //-------------------------------------- attacco
@@ -472,18 +449,18 @@ public class SuccessioneTurni {
         }
         for(int i=0;i<att;i++){
             int lancio = partita.lanciaDado();
-            try {
-                Server.SpedisciMsgTutti(
-                        new MessaggioRisultatoDado(
-                                            lancio,
-                                            partita.getGiocatoreTurnoIndice()
-                                            ),
-                        listaGiocatori,
-                        -1);
-            } catch (IOException ex) {
-                System.err.println("Errore nell'invio del risultato dei dadi Attaccante: "+ex.getMessage());
-            }
             lanciattaccante.offer(new Integer(-lancio));
+        }
+        try {
+            Server.SpedisciMsgTutti(
+                    new MessaggioRisultatoLanci(lanciattaccante,
+                                                lancidifensore,
+                                                partita.getGiocattaccato()),
+                    listaGiocatori,
+                    -1);
+        }
+        catch (IOException ex) {
+            System.err.println("Errore nell'invio del risultato dei dadi Difensore: "+ex.getMessage());
         }
         int rimuovi_att = 0;
         int rimuovi_dif = 0;

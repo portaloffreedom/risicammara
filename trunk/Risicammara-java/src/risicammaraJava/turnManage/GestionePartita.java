@@ -261,6 +261,7 @@ public abstract class GestionePartita {
     /**
      * Chiede se questo è un nuovo giro.
      * @return true se lo è, false altrimenti
+     * @deprecated
      */
     public boolean isNuovogiro() {
         return nuovogiro;
@@ -269,6 +270,7 @@ public abstract class GestionePartita {
      * Imposta lo stato di NuovoGiro (se tutti i giocatori hanno terminato il
      * turno )
      * @param nuovogiro true se è un nuovo giro, false altrimenti
+     * @deprecated 
      */
     public void setNuovogiro(boolean nuovogiro) {
         this.nuovogiro = nuovogiro;

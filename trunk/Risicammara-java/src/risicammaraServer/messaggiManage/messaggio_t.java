@@ -60,6 +60,10 @@ public enum messaggio_t {
 
     //------------ Messaggi di partita e svolgimento partita
     /**
+     * La carta appena pescata dal mazzo.
+     */
+    CARTA,
+    /**
      * L'attacco ha portato alla conquista del territorio.
      */
     ATTACCOVINTO,
@@ -71,7 +75,7 @@ public enum messaggio_t {
      * Il risultato di un lancio di dado.
      * @see risicammaraServer.messaggiManage.MessaggioRisultatoDado
      */
-    RISULTATODADO,      //Il server invia il risultato del lancio di UN dado
+    RISULTATOLANCI,      //Il server invia il risultato del lancio di UN dado
     /**
      * Pacchetto che indica uno spostamento di armate da parte dei giocatori.
      * @see risicammaraServer.messaggiManage.MessaggioSpostaArmate
