@@ -33,4 +33,9 @@ public class MessaggioFase implements Messaggio {
         return sender;
     }
 
+    @Override
+    public String toString() {
+        return "MessaggioFase: "+fase+" (sender="+sender+")";
+    }
+
 }
