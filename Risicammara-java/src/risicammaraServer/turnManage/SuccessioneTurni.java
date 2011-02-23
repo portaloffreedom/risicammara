@@ -393,9 +393,10 @@ public class SuccessioneTurni {
                         }
                     }
                     partita.ProssimoGiocatore();
-                    prossimo = partita.getGiocatoreTurnoIndice();
+                    
                 }
                 else saltafine = false;
+                prossimo = partita.getGiocatoreTurnoIndice();
                 proxfase = Fasi_t.RINFORZO;
                 gio = (Giocatore_Net) partita.getGiocatoreDiTurno();
                 if(partita.isVincitore(gio)) vincitore = true;
