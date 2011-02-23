@@ -7,6 +7,7 @@ import PacchettoGrafico.salaAttesa.SalaAttesa;
 import java.net.Socket;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 import risicammaraJava.turnManage.PartitaClient;
 import risicammaraJava.turnManage.PartitaServer;
 
@@ -129,8 +130,8 @@ public class Client implements Runnable {
 
         try {
             if (!laf.equals("")) {
-                if (laf.equalsIgnoreCase("kde"))
-                    System.err.println(laf+" non ancora implementato");
+                if (laf.equalsIgnoreCase("metal"))
+                    UIManager.setLookAndFeel(new MetalLookAndFeel());
                 else
                     UIManager.setLookAndFeel(laf);
                 
