@@ -65,13 +65,16 @@ public class SalaAttesa extends JFrame implements Runnable {
 
         this.addWindowListener(new WindowListenerSalaAttesa(this));
         this.setMinimumSize(finestraR.getSize());
-        this.setBounds(finestraR);
+        super.setMinimumSize(finestraR.getSize());
+        super.setLocationByPlatform(true);
+        //this.setBounds(finestraR);
         //this.setResizable(false);
 
         this.pannello = new PannelloSalaAttesa(indexGiocatore, listaGiocatori, this);
         this.getContentPane().add(pannello);
     }
 
+    @Override
     public void run() {
         this.setVisible(true);
         Messaggio arrivo = null;
@@ -217,6 +220,9 @@ public class SalaAttesa extends JFrame implements Runnable {
         PlanciaClient planciaClient = new PlanciaClient(veicoloPlancia.getPlancia());
         PartitaClient partita = new PartitaClient(listaGiocatoriClient,planciaClient);
         meStesso.inizializzaPartita(server, partita);
+
+        //libera la memoria della finestra di SalaAttesa
+        super.dispose();
     }
 
     /** Funzione da chiamare per fare diventare leader il giocatore */

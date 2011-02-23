@@ -8,6 +8,8 @@ package PacchettoGrafico;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 import risicammaraClient.Connessione;
 import risicammaraClient.territori_t;
@@ -21,7 +23,7 @@ import risicammaraServer.messaggiManage.MessaggioDichiaraAttacco;
  *
  * @author matteo
  */
-public class AscoltatorePlanciaAttacco implements RisicammaraEventListener, ActionListener {
+public class AscoltatorePlanciaAttacco implements RisicammaraEventListener, ActionListener, WindowListener {
     public static final Color Attacco = Color.RED;
     public static final Color Difesa  = Color.BLUE;
     public static final double pesantezzaSfumatura = 0.86;
@@ -33,6 +35,7 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener, Acti
     private RichiestaNumeroArmate numeroArmate;
 
     private TerritorioPlanciaClient territorioAttaccante;
+    private TerritorioPlanciaClient territorioDifensore;
     private boolean attaccoInCorso;
 
     public AscoltatorePlanciaAttacco(PlanciaImmagine plancia, GestoreFasi fasi, Connessione server, PartitaClient partita) {
@@ -41,11 +44,13 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener, Acti
         this.server = server;
         this.partita = partita;
         this.territorioAttaccante = null;
+        this.territorioDifensore = null;
     }
 
     /**
      * Metodo che viene chiamato dopo che viene premuta la plancia
      */
+    @Override
     public void actionPerformed(EventoAzioneRisicammara e) {
         int idTerritorio = plancia.getidTerritorio(e.getPoint());
         if (!PlanciaImmagine.eTerritorio(idTerritorio))
@@ -80,7 +85,6 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener, Acti
     
     private void selezionaTerritorioDifensore(int idTerritorio) {
         territori_t difensore = null;
-        TerritorioPlanciaClient territorioDifensore = null;
         try {
             difensore = territori_t.GetTerritorio(idTerritorio);
             
@@ -125,6 +129,7 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener, Acti
         }
         numeroArmate = new RichiestaNumeroArmate("Con quante armate vuoi attaccare?", maxArmateAttaccanti);
         numeroArmate.addOKActionListener(this);
+        numeroArmate.addWindowListener(this);
         attaccoInCorso(true);
     }
 
@@ -132,24 +137,22 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener, Acti
      * Metodo che viene azionato dopo che viene premuto ok nella finestra di 
      * richiesta armate
      */
+    @Override
     public void actionPerformed(ActionEvent ae) {
         int armateAttaccanti = numeroArmate.getNumArmate();
         try {
+            if (armateAttaccanti == 0){
+                ritiratiAttacco();
+                terminaAttacco();
+                return;
+            }
             server.spedisci(MessaggioComandi.creaMsgLanciadado(partita.getMeStessoIndex(), armateAttaccanti));
         } catch (IOException ex) {
-            System.err.println("Messaggio lancio dadi non riuscito!: "+ex);
+            System.err.println("Messaggio lancio dadi o ritirati non riuscito!: "+ex);
             return;
         }
 
-        //ripristina il territorio attacco selezionato
-        territorioAttaccante = null;
-            //il colore territori viene ripristinato solo quando arriva il
-            //messaggio fine attacco    
-        attaccoInCorso(false);
-        
-        numeroArmate.setVisible(false);
-        numeroArmate.dispose();
-        numeroArmate = null;
+        terminaAttacco();
     }
     
     /**
@@ -160,5 +163,57 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener, Acti
     private void attaccoInCorso(boolean attacco){
         this.attaccoInCorso = attacco;
         this.fasi.setAscoltatore(!attacco, !attacco);
+    }
+
+    private void ritiratiAttacco() throws IOException {
+        server.spedisci(MessaggioComandi.creaMsgRitirati(partita.getMeStessoIndex()));
+    }
+
+    private void terminaAttacco() {
+        attaccoInCorso(false);
+        plancia.ripristinaTerritorio(territorioAttaccante);
+        plancia.ripristinaTerritorio(territorioDifensore);
+        territorioAttaccante = null;
+        territorioDifensore = null;
+        if (numeroArmate != null){
+            numeroArmate.setVisible(false);
+            numeroArmate.dispose();
+            numeroArmate = null;
+        }
+    }
+
+    @Override
+    public void windowOpened(WindowEvent we) {
+    }
+
+    @Override
+    public void windowClosing(WindowEvent we) {
+        try {
+            ritiratiAttacco();
+        } catch (IOException ex) {
+            System.err.println("Messaggio ritirati non riuscito!: "+ex);
+            //qui va in palla
+        }
+        terminaAttacco();
+    }
+
+    @Override
+    public void windowClosed(WindowEvent we) {
+    }
+
+    @Override
+    public void windowIconified(WindowEvent we) {
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent we) {
+    }
+
+    @Override
+    public void windowActivated(WindowEvent we) {
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent we) {
     }
 }

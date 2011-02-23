@@ -38,7 +38,11 @@ public class RichiestaNumeroArmate extends JFrame{
         
         bottoneOK = new JButton("OK");
         pannello.add(bottoneOK);
-        
+
+        //imposta operazioni di chiusura
+        super.setAlwaysOnTop(true);
+        super.setLocationByPlatform(true);
+
         super.pack();
         super.setVisible(true);
     }
@@ -59,15 +63,18 @@ public class RichiestaNumeroArmate extends JFrame{
             this.ascoltatore = ascoltatore;
         }
 
+        @Override
         public void keyTyped(KeyEvent ke) {
         }
 
+        @Override
         public void keyPressed(KeyEvent ke) {
             System.err.println(ke.getKeyCode());
             if (ke.isActionKey())
                 ascoltatore.actionPerformed(null);
         }
 
+        @Override
         public void keyReleased(KeyEvent ke) {
         }
     }
