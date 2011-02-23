@@ -99,8 +99,6 @@ public class SuccessioneTurni {
             System.err.println("Errore nell'invio messaggio di inizio: "
                     +ex.getMessage());
         }
-        
-        spedisciMsgCambioTurno(giotin);
         try {
             inviaArmateDisponibili();
         } catch (IOException ex) {
