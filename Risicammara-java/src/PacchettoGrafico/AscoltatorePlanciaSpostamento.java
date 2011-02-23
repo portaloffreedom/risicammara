@@ -51,6 +51,7 @@ public class AscoltatorePlanciaSpostamento implements RisicammaraEventListener, 
     /**
      * Metodo che viene chiamato dopo che viene premuta la plancia
      */
+    @Override
     public void actionPerformed(EventoAzioneRisicammara e) {
         int idTerritorio = plancia.getidTerritorio(e.getPoint());
         if (!PlanciaImmagine.eTerritorio(idTerritorio))
@@ -128,6 +129,7 @@ public class AscoltatorePlanciaSpostamento implements RisicammaraEventListener, 
      * Metodo che viene azionato dopo che viene premuto ok nella finestra di 
      * richiesta armate
      */
+    @Override
     public void actionPerformed(ActionEvent ae) {
         int armateDaSpostare = numeroArmate.getNumArmate();
         try {
@@ -145,7 +147,9 @@ public class AscoltatorePlanciaSpostamento implements RisicammaraEventListener, 
             return;
         }
 
-        //ripristina il territorio attacco selezionato
+        //ripristina i territori selezionati selezionato
+        plancia.ripristinaTerritorio(territorioSorgente);
+        plancia.ripristinaTerritorio(territorioDesitanzione);
         territorioSorgente = null;
         territorioDesitanzione = null;
             //il colore territori viene ripristinato solo quando arriva il
