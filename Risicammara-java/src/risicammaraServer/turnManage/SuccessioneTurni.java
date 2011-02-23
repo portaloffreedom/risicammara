@@ -40,6 +40,7 @@ public class SuccessioneTurni {
 
     private boolean saltare;
     private boolean spostaattacco;
+    private boolean saltafine;
 
     /**
      * Costruttore per inizializzare correttamente le variabili per la successione
@@ -48,6 +49,7 @@ public class SuccessioneTurni {
      * @param coda coda per i messaggi ricevuti via rete.
      */
     public SuccessioneTurni(ListaPlayers listaGiocatori,CodaMsg coda){
+        saltafine = false;
         saltare = false;
         this.coda = coda;
         this.listaGiocatori = listaGiocatori;
@@ -193,7 +195,9 @@ public class SuccessioneTurni {
                     gio = (Giocatore_Net) partita.getGiocatoreDiTurno();
                     prossimo = gio.getPlayerIndex();
                     if(gio.getArmateperturno() == 0){
-                        proxfase = Fasi_t.RINFORZO;
+                        proxfase = Fasi_t.FINETURNO;
+                        saltafine = true;
+                        saltare = true;
                         break;
                     }
                     spedisciMsgCambioTurno(prossimo);
@@ -373,22 +377,25 @@ public class SuccessioneTurni {
             case FINETURNO:
                 //Se il giocatore ha conquistato un territorio allora pesca una carta.
                 //Viene settato il prossimo giocatore.
-                if(conquistato){
-                    conquistato = false;
-                    Carta ctmp = partita.getCarta();
-                    if(ctmp != null){
-                        gio.addCard(ctmp);
-                        try {
-                            gio.sendMessage(new MessaggioCarta(ctmp, -1));
-                        } catch (IOException ex) {
-                            System.err.println("Errore invio carta pescata: "
-                                    +ex.getMessage());
+                if(!saltafine){if(partita.isVincitore(gio)) vincitore = true;
+                    if(conquistato){
+                        conquistato = false;
+                        Carta ctmp = partita.getCarta();
+                        if(ctmp != null){
+                            gio.addCard(ctmp);
+                            try {
+                                gio.sendMessage(new MessaggioCarta(ctmp, -1));
+                            } catch (IOException ex) {
+                                System.err.println("Errore invio carta pescata: "
+                                        +ex.getMessage());
+                            }
+                            //TODO invio a tutti i giocatori "giocatore ha pescato la carta"
                         }
-                        //TODO invio a tutti i giocatori "giocatore ha pescato la carta"
                     }
+                    partita.ProssimoGiocatore();
+                    prossimo = partita.getGiocatoreTurnoIndice();
                 }
-                partita.ProssimoGiocatore();
-                prossimo = partita.getGiocatoreTurnoIndice();
+                else saltafine = false;
                 proxfase = Fasi_t.RINFORZO;
                 gio = (Giocatore_Net) partita.getGiocatoreDiTurno();
                 if(partita.isVincitore(gio)) vincitore = true;
