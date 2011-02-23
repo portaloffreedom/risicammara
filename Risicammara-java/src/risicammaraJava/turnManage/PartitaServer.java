@@ -2,6 +2,7 @@ package risicammaraJava.turnManage;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import risicammaraClient.Colore_t;
 import risicammaraClient.Continente_t;
 import risicammaraClient.Obbiettivi_t;
 import risicammaraJava.boardManage.Plancia;
@@ -74,20 +75,34 @@ public class PartitaServer extends GestionePartita {
             Obbiettivi_t ob = (Obbiettivi_t)mazzoobj.Pesca();
             switch(ob.VictoryType()){
                 case DISTRUZIONE:
-//                    for(int f = 0;f<ListaPlayers.MAXPLAYERS;f++){
-//                        if(f == i) continue;
-//                        if(listagiocatori.get(f) == null) continue;
-//                        switch(ob){
-//                            case ROSSO:
-//                            case BLU:
-//                            case GIALLO:
-//                            case VERDE:
-//                            case NERO:
-//                            case VIOLA:
-//                            default:
-//                                break;
-//                        }
-//                    }
+                    boolean isnot = true;
+                    for(int f :sequenzaDiGioco){
+                        if(f == i) continue;
+                        Giocatore g = listagiocatori.get(f);
+                        switch(ob){
+                            case ROSSO:
+                                if(g.getArmyColour() == Colore_t.ROSSO) isnot = false;
+                                break;
+                            case BLU:
+                                if(g.getArmyColour() == Colore_t.BLU) isnot = false;
+                                break;
+                            case GIALLO:
+                                if(g.getArmyColour() == Colore_t.GIALLO) isnot = false;
+                                break;
+                            case VERDE:
+                                if(g.getArmyColour() == Colore_t.VERDE) isnot = false;
+                                break;
+                            case NERO:
+                                if(g.getArmyColour() == Colore_t.NERO) isnot = false;
+                                break;
+                            case VIOLA:
+                                if(g.getArmyColour() == Colore_t.VIOLA) isnot = false;
+                            default:
+                                break;
+                        }
+                    }
+                    if(isnot) ob = Obbiettivi_t.VENTIQUATTRO;
+                    else vittoriaDistruzione.add(i);
                 default:
                     listagiocatori.get(i).setObj(ob);
                     break;
@@ -131,19 +146,15 @@ public class PartitaServer extends GestionePartita {
      * @return l'indice del giocatore che soddisfa i requisiti. se è minore di 0
      * allora non c'è nessun vincitore.
      */
-    public int Vincitore(){
-        for(int i = 0;i<ListaPlayers.MAXPLAYERS;i++){
-            Giocatore giocat = listagiocatori.get(i);
-            if(giocat == null) continue;
-            Obbiettivi_t obj = giocat.getObbiettivo();
+    public boolean isVincitore(Giocatore giocatore){
+            Obbiettivi_t obj = giocatore.getObbiettivo();
             if(getVictoryType(obj) == tipovittoria_t.TERRITORIALE){
-                if(Verifica_territoriale(giocat)) return i;
+                if(Verifica_territoriale(giocatore)) return true;
             }
             if(getVictoryType(obj) == tipovittoria_t.CONTINENTALE){
-                if(Verifica_continentale(giocat)) return i;
+                if(Verifica_continentale(giocatore)) return true;
             }
-        }
-        return -1;
+        return false;
     };
 
     //METODI PRIVATI
