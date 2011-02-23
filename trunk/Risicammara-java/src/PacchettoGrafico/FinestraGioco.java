@@ -147,7 +147,7 @@ public class FinestraGioco extends JFrame implements Runnable {
                             int giocatoreDiTurno = msg.getSender();
                             partita.setGiocatoreDiTurno(giocatoreDiTurno);
                             
-                            if (msgComandi.getSender() == listaGiocatori.meStessoIndex()) {
+                            if (giocatoreDiTurno == listaGiocatori.meStessoIndex()) {
                                 //TODO rimpicciolisci tutte le frecce degli altri
                                 System.out.println("tocca a te");
                             }
@@ -191,6 +191,7 @@ public class FinestraGioco extends JFrame implements Runnable {
                     int armateSpostate = msgSpostaArmate.getNumarmate();
                     plancia.aggiornaArmateTerritorio(-armateSpostate, msgSpostaArmate.getSorgente());
                     plancia.aggiornaArmateTerritorio(armateSpostate, msgSpostaArmate.getArrivo());
+                    break;
                 }
 
                 case FASE: {
@@ -242,20 +243,22 @@ public class FinestraGioco extends JFrame implements Runnable {
                 }
                 case RISULTATOLANCI: {
                     MessaggioRisultatoLanci msgDado = (MessaggioRisultatoLanci) msg;
-                    int valoreLancio = 0;
+                    int valoreLancio;
                     
                     String attaccante = partita.getGiocatoreAttaccante().getNome();
                     System.out.println("Risultato dado ("+attaccante+") :");
-                    while (valoreLancio >= 0) {
-                        System.out.print(" "+msgDado.getLancioAttacco());
-                    }
+                    do {
+                        valoreLancio = msgDado.getLancioAttacco();
+                        System.out.print(" "+valoreLancio);
+                    } while (valoreLancio >= 0);
                     System.out.println();
                     
                     String difensore = partita.getGiocatoreAttaccato().getNome();
                     System.out.println("Risultato dado ("+difensore+") :");
-                    while (valoreLancio >= 0) {
-                        System.out.print(" "+msgDado.getLancioDifesa());
-                    }
+                    do {
+                        valoreLancio = msgDado.getLancioDifesa();
+                        System.out.print(" "+valoreLancio);
+                    } while (valoreLancio >= 0);
                     System.out.println();
                     
                     break;
