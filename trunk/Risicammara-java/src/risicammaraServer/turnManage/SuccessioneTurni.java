@@ -227,6 +227,15 @@ public class SuccessioneTurni {
                     partita.setPlayedTris(true);
                 }
                 int armattu = gio.getArmateperturno();
+                if(armattu == 0){
+                    if(msgReceived.getType() ==  messaggio_t.FASE) {
+                    MessaggioFase msgFase = (MessaggioFase) msgReceived;
+                    proxfase = msgFase.getFase();
+                    if(proxfase == Fasi_t.FINETURNO) saltare = true;
+                    break;
+                    }
+                    return;
+                }
                 MessaggioCambiaArmateTerritorio msgArmate = (MessaggioCambiaArmateTerritorio)msgReceived;
                 partita.addArmateTerritorio(msgArmate.getTerritorio(), msgArmate.getArmate());
                 gio.setArmatedisponibili(armattu-msgArmate.getArmate());
