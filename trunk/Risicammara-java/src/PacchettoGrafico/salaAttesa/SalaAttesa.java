@@ -220,7 +220,7 @@ public class SalaAttesa extends JFrame implements Runnable {
         }
         ListaGiocatoriClient listaGiocatoriClient = new ListaGiocatoriClient(listaGiocatori, indexGiocatore, mioObbiettivo);
         PlanciaClient planciaClient = new PlanciaClient(veicoloPlancia.getPlancia());
-        PartitaClient partita = new PartitaClient(listaGiocatoriClient,planciaClient);
+        PartitaClient partita = new PartitaClient(listaGiocatoriClient, planciaClient);
         meStesso.inizializzaPartita(server, partita);
 
         //libera la memoria della finestra di SalaAttesa

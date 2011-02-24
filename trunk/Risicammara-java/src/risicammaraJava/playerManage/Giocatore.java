@@ -90,11 +90,19 @@ public class Giocatore implements Serializable {
     }
 
     /**
-     * Ritorna il numero di carte possedute dal giocatore
+     * Ritorna il numero di carte possedute dal giocatore.
      * @return Numero di carte del giocatore
      */
     public int numCarte(){
         return carte.size();
+    }
+
+    /**
+     * Restiusce la lista delle carte del giocatore.
+     * @return lista delle carte del giocatore.
+     */
+    public ArrayList<Carta> getCarte() {
+        return carte;
     }
 
     /**
