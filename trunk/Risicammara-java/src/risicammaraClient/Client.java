@@ -4,12 +4,19 @@ import PacchettoGrafico.CollegatiPartita;
 import PacchettoGrafico.FinestraGioco;
 import PacchettoGrafico.PannelloGiocoPackage.PannelloGioco;
 import PacchettoGrafico.salaAttesa.SalaAttesa;
+import java.io.IOException;
 import java.net.Socket;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.metal.MetalLookAndFeel;
+import risicammaraJava.boardManage.PlanciaClient;
+import risicammaraJava.playerManage.ListaGiocatoriClient;
+import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraJava.turnManage.PartitaClient;
 import risicammaraJava.turnManage.PartitaServer;
+import risicammaraServer.messaggiManage.MessaggioObbiettivo;
+import risicammaraServer.messaggiManage.MessaggioPlancia;
+import risicammaraServer.messaggiManage.MessaggioSequenzaGioco;
 
 //TODO Stampare un messaggio: "ho cambiato nick"
 //TODO provare ad usare OpenGL
@@ -135,7 +142,7 @@ public class Client implements Runnable {
     }
 
     private PannelloGioco pannello;
-    private PartitaServer partita;
+    private PartitaClient partita;
     private Socket server;
     private int porta;
 
@@ -194,10 +201,29 @@ public class Client implements Runnable {
         salaAttesa.start();
     }
 
-    public void inizializzaPartita (Connessione server, PartitaClient partita){
+    public void inizializzaPartita (Connessione connessioneServer, ListaPlayers listaGiocatori, int indexGiocatore){
+        MessaggioPlancia veicoloPlancia = null;
+        Obbiettivi_t mioObbiettivo = null;
+        MessaggioSequenzaGioco sequenzaGioco = null;
+        try {
+            veicoloPlancia = (MessaggioPlancia) connessioneServer.ricevi();
+            sequenzaGioco = (MessaggioSequenzaGioco) connessioneServer.ricevi();
+            mioObbiettivo = ((MessaggioObbiettivo) connessioneServer.ricevi()).getObj();
+        } catch (IOException ex) {
+            System.err.println("Errore nel leggere la plancia (lettura da stream): "+ex);
+            System.exit(10);
+        } catch (ClassNotFoundException ex) {
+            System.err.println("Errore nel leggere la plancia (interpretazione oggetto): "+ex);
+            System.exit(11);
+        }
+        ListaGiocatoriClient listaGiocatoriClient = new ListaGiocatoriClient(listaGiocatori, indexGiocatore, mioObbiettivo);
+        PlanciaClient planciaClient = new PlanciaClient(veicoloPlancia.getPlancia());
+        partita = new PartitaClient(listaGiocatoriClient, planciaClient, sequenzaGioco.getSequenza());
         
-        FinestraGioco finestra =  new FinestraGioco(server, partita);
+        FinestraGioco finestra =  new FinestraGioco(connessioneServer, partita);
+
         //fa partire direttamente il ciclo di lettura dei messaggi
+        //TODO implementare la cosa all'esterno di finestra, magari in partitaClient
         Thread finestraThread = new Thread(finestra);
         finestraThread.start();
     }

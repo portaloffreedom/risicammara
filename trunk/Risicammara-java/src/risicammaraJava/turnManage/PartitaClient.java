@@ -16,16 +16,18 @@ public final class PartitaClient extends GestionePartita {
     private int sequenzaGiocatori[];
     private int posizioneSequenza;
     
-    public PartitaClient(ListaGiocatoriClient listagiocatori, PlanciaClient planciadigioco){
+    public PartitaClient(ListaGiocatoriClient listagiocatori, PlanciaClient planciadigioco, Integer[] sequenza){
         super(listagiocatori);
         this.planciadigioco = planciadigioco;
 
+        if (listagiocatori.getSize() != sequenza.length)
+            System.err.println("Incompatibilità della sequenza con la lista dei giocatori");
         sequenzaGiocatori = new int[listagiocatori.getSize()];
         posizioneSequenza = 0;
 
         //parte da rimpiazzare con la sequenza che arriva dal server
         for (int i=0; i<listagiocatori.getSize(); i++){
-            sequenzaGiocatori[i]=i;
+            sequenzaGiocatori[i]=sequenza[i].intValue();
         }
     }
 

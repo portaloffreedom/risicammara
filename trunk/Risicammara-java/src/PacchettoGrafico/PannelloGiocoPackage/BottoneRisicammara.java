@@ -1,17 +1,12 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package PacchettoGrafico.PannelloGiocoPackage;
 
 import PacchettoGrafico.GraphicsAdvanced;
-import PacchettoGrafico.PannelloGiocoPackage.Elemento_2DGraphicsCliccable;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 
 /**
@@ -91,5 +86,11 @@ public class BottoneRisicammara extends Elemento_2DGraphicsCliccable {
      */
     public void setPressed(boolean pressed){
         this.pressed = pressed;
+    }
+
+    @Override
+    protected void actionPressed(MouseEvent e) {
+        setPressed(!pressed);
+        super.actionPressed(e);
     }
 }

@@ -8,11 +8,9 @@ package PacchettoGrafico.PannelloGiocoPackage;
 import PacchettoGrafico.EventoAzioneRisicammara;
 import PacchettoGrafico.GraphicsAdvanced;
 import risicammaraJava.playerManage.ListaGiocatoriClient;
-import PacchettoGrafico.PannelloGiocoPackage.Elemento_2DGraphics;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
 
 /**
  *
@@ -26,15 +24,13 @@ public class MenuGiocatore implements RisicammaraEventListener, Elemento_2DGraph
     private AttivatoreGrafica attivatoreGrafica;
 
     private ListaGiocatoriClient listaGiocatori;
-    private BottoneRisicammara bottone;
 
 
-    public MenuGiocatore(Dimension dimensioni, ListaGiocatoriClient listaGiocatori, AttivatoreGrafica attivatoreGrafica, BottoneRisicammara giocatoreButton) {
+    public MenuGiocatore(Dimension dimensioni, ListaGiocatoriClient listaGiocatori, AttivatoreGrafica attivatoreGrafica) {
         this.dimensioni=dimensioni;
         this.visibile=false;
         this.attivatoreGrafica = attivatoreGrafica;
         this.listaGiocatori = listaGiocatori;
-        this.bottone = giocatoreButton;
         Rectangle rettangoloTesto = new Rectangle(5, 55, 200, 0);
         this.Obbiettivo = new RiquadroTesto(rettangoloTesto,
                                             listaGiocatori.meStesso().getObbiettivo().toString(),
@@ -49,10 +45,10 @@ public class MenuGiocatore implements RisicammaraEventListener, Elemento_2DGraph
         }
     }
 
+    @Override
     public void actionPerformed(EventoAzioneRisicammara e) {
         this.visibile = !this.visibile;
         this.attivatoreGrafica.panelRepaint();
-        this.bottone.setPressed(this.visibile);
         //attivatoreGrafica.attiva();
         //cambiato = true;
     }
