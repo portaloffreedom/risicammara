@@ -207,6 +207,7 @@ public class SalaAttesa extends JFrame implements Runnable {
         this.setVisible(false);
         MessaggioPlancia veicoloPlancia = null;
         Obbiettivi_t mioObbiettivo = null;
+        //Messaggio Ordine dei Giocatori = null;
         try {
             veicoloPlancia = (MessaggioPlancia) server.ricevi();
             mioObbiettivo = ((MessaggioObbiettivo) server.ricevi()).getObj();

@@ -4,15 +4,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import javax.imageio.ImageIO;
@@ -49,16 +44,11 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         this.partita = partita;
         this.plancia = partita.getPlancia();
         this.ag = ag;
-        try{
-        planciaBMP = ImageIO.read(this.getClass().getResource(Client.RISICAMMARA_NEGATIVO));
-        URL rispng = this.getClass().getResource(Client.RISICAMMARA_PLANCIA);
-        planciaPNG = ImageIO.read(rispng);
-        planciaPNGfinal = ImageIO.read(rispng);
-        }
-        catch(IOException ex){
-            System.err.println("Errore nella lettura delle immagini: "
-                    +ex.getMessage());
-        }
+
+        planciaBMP = loadImage(Client.RISICAMMARA_NEGATIVO);
+        planciaPNG = loadImage(Client.RISICAMMARA_PLANCIA);
+        planciaPNGfinal = loadImage(Client.RISICAMMARA_PLANCIA);
+
         Rectangle rettangolo = new Rectangle(posizione);
         rettangolo.setSize(planciaPNG.getWidth(null), planciaPNG.getHeight(null));
         super.setShape(rettangolo);
@@ -166,15 +156,19 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         return planciaBMP.getRGB(p.x, p.y);
     }
 
-    private BufferedImage loadImage (String pad){
+    private BufferedImage loadImage (URL pad){
         //return Toolkit.getDefaultToolkit().getImage(getClass().getResource(pad));
         BufferedImage img = null;
         try {
-            img = ImageIO.read(new File(pad));
+            img = ImageIO.read(pad);
         } catch (IOException e) {
             System.err.println("Errore nel caricare \""+pad+"\":"+e);
         }
         return img;
+    }
+
+    private BufferedImage loadImage (String pad){
+        return loadImage(this.getClass().getResource(pad));
     }
 
     //<editor-fold defaultstate="collapsed" desc="Colora">
