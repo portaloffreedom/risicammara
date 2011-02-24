@@ -2,7 +2,6 @@ package PacchettoGrafico;
 
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -42,7 +41,7 @@ public class FinestraGioco extends JFrame implements Runnable {
     private PannelloGioco pannello;
 
     public FinestraGioco(Connessione server, PartitaClient partita) {
-        super("Risicammara");
+        super("Risicammara - "+partita.getMeStesso().getNome());
         this.server = server;
         this.listaGiocatori = partita.getListaGiocatori();
         this.partita = partita;
@@ -65,6 +64,7 @@ public class FinestraGioco extends JFrame implements Runnable {
         this.setVisible(true);
     }
 
+    @Override
     public void run() {
         /* APPUNTI
          * A tutti i giocatori un MessaggioFase che dice la fase in cui siamo, a
@@ -146,7 +146,7 @@ public class FinestraGioco extends JFrame implements Runnable {
                     switch (msgComandi.getComando()) {
                         case TURNOFPLAYER: {
                             int giocatoreDiTurno = msg.getSender();
-                            partita.setGiocatoreDiTurno(giocatoreDiTurno);
+                            partita.avanzaGiocatoreDiTurno(giocatoreDiTurno);
                             
                             if (giocatoreDiTurno == listaGiocatori.meStessoIndex()) {
                                 //TODO rimpicciolisci tutte le frecce degli altri
@@ -331,6 +331,7 @@ public class FinestraGioco extends JFrame implements Runnable {
             this.richiestaNumeroArmate = richiestaNumeroArmate;
         }
 
+        @Override
         public void actionPerformed(ActionEvent ae) {
             int armateDaSpostare = richiestaNumeroArmate.getNumArmate();
             

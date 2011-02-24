@@ -8,6 +8,8 @@ package PacchettoGrafico;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 import risicammaraClient.Connessione;
 import risicammaraClient.territori_t;
@@ -20,7 +22,7 @@ import risicammaraServer.messaggiManage.MessaggioSpostaArmate;
  *
  * @author matteo
  */
-public class AscoltatorePlanciaSpostamento implements RisicammaraEventListener, ActionListener {
+public class AscoltatorePlanciaSpostamento implements RisicammaraEventListener, ActionListener, WindowListener {
 
     public static final Color Sorgente = Color.WHITE;
     public static final Color Destinazione  = Color.PINK;
@@ -169,6 +171,42 @@ public class AscoltatorePlanciaSpostamento implements RisicammaraEventListener, 
     private void spostamentoInCorso(boolean attacco){
         this.spostamentoInCorso = attacco;
         this.fasi.setAscoltatore(!attacco, false);
+    }
+
+    @Override
+    public void windowOpened(WindowEvent we) {
+    }
+
+    @Override
+    public void windowClosing(WindowEvent we) {
+        spostamentoInCorso(false);
+        plancia.ripristinaTerritorio(territorioSorgente);
+        plancia.ripristinaTerritorio(territorioDesitanzione);
+        territorioSorgente = null;
+        territorioDesitanzione = null;
+        numeroArmate.setVisible(false);
+        numeroArmate.dispose();
+        numeroArmate = null;
+    }
+
+    @Override
+    public void windowClosed(WindowEvent we) {
+    }
+
+    @Override
+    public void windowIconified(WindowEvent we) {
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent we) {
+    }
+
+    @Override
+    public void windowActivated(WindowEvent we) {
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent we) {
     }
 }
 

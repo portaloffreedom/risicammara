@@ -14,6 +14,7 @@ import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.JPanel;
+import risicammaraClient.Client;
 import risicammaraClient.Colore_t;
 import risicammaraJava.boardManage.PlanciaClient;
 import risicammaraJava.playerManage.Giocatore;
@@ -118,11 +119,69 @@ final public class PannelloGioco extends JPanel{
     }
 
     private void impostaContestoDisegno(Graphics g){
-        Graphics2D g2 = (Graphics2D)g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        //TODO impostazione per permettere le altre versioni dell'antialiasing
-        //g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HBGR);
+        Graphics2D g2 = (Graphics2D) g;
+        switch (Client.QUALITA) {
+            default:
+            case Client.QUALITA_BASSA:
+                impostaQualitàDisegno(g2,
+                        RenderingHints.VALUE_ANTIALIAS_OFF,
+                        RenderingHints.VALUE_TEXT_ANTIALIAS_OFF,
+                        RenderingHints.VALUE_ALPHA_INTERPOLATION_SPEED,
+                        RenderingHints.VALUE_COLOR_RENDER_SPEED,
+                        RenderingHints.VALUE_DITHER_DISABLE,
+                        RenderingHints.VALUE_FRACTIONALMETRICS_OFF,
+                        RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR,
+                        RenderingHints.VALUE_RENDER_SPEED,
+                        RenderingHints.VALUE_STROKE_NORMALIZE);
+                return;
+            case Client.QUALITA_MEDIA:
+                impostaQualitàDisegno(g2,
+                        RenderingHints.VALUE_ANTIALIAS_DEFAULT,
+                        RenderingHints.VALUE_TEXT_ANTIALIAS_GASP,
+                        RenderingHints.VALUE_ALPHA_INTERPOLATION_DEFAULT,
+                        RenderingHints.VALUE_COLOR_RENDER_DEFAULT,
+                        RenderingHints.VALUE_DITHER_DEFAULT,
+                        RenderingHints.VALUE_FRACTIONALMETRICS_DEFAULT,
+                        RenderingHints.VALUE_INTERPOLATION_BILINEAR,
+                        RenderingHints.VALUE_RENDER_DEFAULT,
+                        RenderingHints.VALUE_STROKE_DEFAULT);
+                return;
+            case Client.QUALITA_ALTA:
+                impostaQualitàDisegno(g2,
+                        RenderingHints.VALUE_ANTIALIAS_ON,
+                        RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB,
+                        RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY,
+                        RenderingHints.VALUE_COLOR_RENDER_SPEED,
+                        RenderingHints.VALUE_DITHER_ENABLE,
+                        RenderingHints.VALUE_FRACTIONALMETRICS_ON,
+                        RenderingHints.VALUE_INTERPOLATION_BICUBIC,
+                        RenderingHints.VALUE_RENDER_QUALITY,
+                        RenderingHints.VALUE_STROKE_PURE);
+
+        }
+    }
+
+    private void impostaQualitàDisegno(Graphics2D g,
+                                       Object antialias,
+                                       Object text_antialias,
+                                       Object alpha_interpolation,
+                                       Object color_rendering,
+                                       Object dithering,
+                                       Object fractionalmetrics,
+                                       Object interpolation,
+                                       Object rendering,
+                                       Object stroke_control){
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, antialias);
+        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, text_antialias);
+        //g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+        g.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, alpha_interpolation);
+        g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, color_rendering);
+        g.setRenderingHint(RenderingHints.KEY_DITHERING, dithering);
+        g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, fractionalmetrics);
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, interpolation);
+        g.setRenderingHint(RenderingHints.KEY_RENDERING, rendering);
+        g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, stroke_control);
+
     }
     
     public void mouseCliccato(MouseEvent e) {

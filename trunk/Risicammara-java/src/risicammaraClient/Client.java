@@ -34,6 +34,13 @@ public class Client implements Runnable {
      * di DEBUG */
     public static boolean DEBUG = false;
 
+    public static final int QUALITA_BASSA = 0;
+    public static final int QUALITA_MEDIA = 1;
+    public static final int QUALITA_ALTA = 2;
+
+    public static int QUALITA = 1;
+
+
     /**
      * Main per fare partire il programma lato client
      * @param args the command line arguments
@@ -54,33 +61,30 @@ public class Client implements Runnable {
         for (int i = 0; i < args.length; i++) {
 
             //DEBUG
-            if (args[i].equals("-d")) {
-                Debug(true);
-                continue;
-            }
-            if (args[i].equals("--debug")) {
+            if (args[i].equals("-d") || args[i].equals("--debug")) {
                 Debug(true);
                 continue;
             }
 
 
             //LOOK AND FEEL
-            if (args[i].equals("-laf")) {
+            if (args[i].equals("-laf") || args[i].equals("--lookandfeel")) {
                 i++;
                 Laf(args[i]);
                 continue;
             }
 
             //PORTA DA USARE
-            if (args[i].equals("-p")) {
+            if (args[i].equals("-p") || args[i].equals("--port")) {
                 i++;
                 Port(Integer.getInteger(args[i]));
                 continue;
             }
-            if (args[i].equals("--port")) {
+
+            //QUALITÀ DEL RENDERING
+            if (args[i].equals("-q") || args[i].equals("--quality")) {
                 i++;
-                Port(Integer.getInteger(args[i]));
-                continue;
+                Quality(args[i]);
             }
 
         }
@@ -112,6 +116,22 @@ public class Client implements Runnable {
      */
     private static void Port(int port) {
         Client.PORT = port;
+    }
+
+    private static void Quality(String quality){
+        if (quality.equals("bassa") || quality.equals("0")) {
+            QUALITA = QUALITA_BASSA;
+            return;
+        }
+        if (quality.equals("media") || quality.equals("1")) {
+            QUALITA = QUALITA_MEDIA;
+            return;
+        }
+        if (quality.equals("alta") || quality.equals("2")) {
+            QUALITA = QUALITA_ALTA;
+            return;
+        }
+
     }
 
     private PannelloGioco pannello;

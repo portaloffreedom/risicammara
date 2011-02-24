@@ -29,9 +29,9 @@ final public class GestoreFasi {
     private AscoltatorePlanciaAttacco       ascoltatorePlanciaAttacco;
     private AscoltatorePlanciaSpostamento   ascoltatorePlanciaSpostamento;
 
+    private PartitaClient partita;
     private Connessione server;
     private AttivatoreGrafica ag;
-    private ListaGiocatoriClient listaGiocatori;
 
     /**
      * Costruttore
@@ -46,18 +46,18 @@ final public class GestoreFasi {
     public GestoreFasi(BarraFasi barraFasi, Connessione server, PartitaClient partita, PlanciaImmagine planciaImmagine, AttivatoreGrafica ag) {
         this.barraFasi = barraFasi;
         this.planciaImmagine = planciaImmagine;
-        this.listaGiocatori = partita.getListaGiocatori();
         this.server = server;
         this.ag = ag;
+        this.partita = partita;
         this.setArmateRinforzoDisponibili(0);
 
-        this.ascoltatoreFineTurno = new AscoltatoreFineTurno(this, listaGiocatori.meStessoIndex());
+        this.ascoltatoreFineTurno = new AscoltatoreFineTurno(this, partita.getMeStessoIndex());
         //this.ascoltatoreRinforzo = new AscoltatoreRinforzo();
         //this.ascoltatoreAttacco = new AscoltatoreAttacco();
-        this.ascoltatoreSpostamento = new AscoltatoreSpostamento(this, listaGiocatori.meStessoIndex());
+        this.ascoltatoreSpostamento = new AscoltatoreSpostamento(this, partita.getMeStessoIndex());
         
         this.ascoltatorePlanciaEvidenziatore = new AscoltatorePlanciaEvidenziatore(planciaImmagine, ag);
-        this.ascoltatorePlanciaRinforzo = new AscoltatorePlanciaRinforzo(planciaImmagine, server, listaGiocatori.meStessoIndex());
+        this.ascoltatorePlanciaRinforzo = new AscoltatorePlanciaRinforzo(planciaImmagine, server, partita.getMeStessoIndex());
         this.ascoltatorePlanciaAttacco = new AscoltatorePlanciaAttacco(planciaImmagine, this, server, partita);
         this.ascoltatorePlanciaSpostamento = new AscoltatorePlanciaSpostamento(planciaImmagine, this, server, partita);
         faseToAttesa();
@@ -69,7 +69,11 @@ final public class GestoreFasi {
      */
     public void faseToAttesa(){
         barraFasi.resetFase();
-        setAscoltatore(true, false);
+        setAscoltatore(false, false);
+        planciaImmagine.setActionListener(ascoltatorePlanciaEvidenziatore);
+    }
+    public void avanzaTurno(){
+
     }
 
     /**
