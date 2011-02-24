@@ -6,14 +6,14 @@ package risicammaraServer.messaggiManage;
  * @author stengun
  */
 public class MessaggioSequenzaGioco implements Messaggio{
-    private Object[] sequenza;
+    private Integer[] sequenza;
     private int sender;
 
-    public Object[] getSequenza() {
+    public Integer[] getSequenza() {
         return sequenza;
     }
 
-    public MessaggioSequenzaGioco(Object[] sequenza, int sender) {
+    public MessaggioSequenzaGioco(Integer[] sequenza, int sender) {
         this.sequenza = sequenza;
         this.sender = sender;
     }

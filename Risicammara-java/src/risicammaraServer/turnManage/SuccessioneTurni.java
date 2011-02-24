@@ -74,7 +74,7 @@ public class SuccessioneTurni {
                     listaGiocatori,
                     -1);
             Server.SpedisciMsgTutti(new MessaggioSequenzaGioco(
-                                   (partita.getSequenzaGioco().toArray()),
+                                   partita.getSequenzaGioco().toArray(new Integer[partita.getNumeroGiocatori()]),
                                    partita.getGiocatoreTurnoIndice()), listaGiocatori, -1);
         } catch (IOException ex) {
             System.err.println(
