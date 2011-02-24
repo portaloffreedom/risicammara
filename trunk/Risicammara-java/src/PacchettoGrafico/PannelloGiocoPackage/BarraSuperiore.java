@@ -80,14 +80,14 @@ public class BarraSuperiore implements Elemento_2DGraphics {
         graphics2D.setColor(colori.getColoreScuro());
         graphics2D.fillRect(dimensioni.x, dimensioni.y, dimensioni.width, dimensioni.height);
 
+        //disegna i menù 
+        this.menuGiocatore.disegna(graphics2D, colori);
+        this.menuCarte.disegna(graphics2D, colori);
+
         //Disegna i pulsanti
         this.barraFasi.disegna(graphics2D, colori);
         this.giocatoreButton.disegna(graphics2D, colori);
         this.carteButton.disegna(graphics2D, colori);
-
-        //disegna i menù (da tenere per ultimi)
-        this.menuGiocatore.disegna(graphics2D, colori);
-        this.menuCarte.disegna(graphics2D, colori);
     }
 
     public BarraFasi getBarraFasi(){
