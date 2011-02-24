@@ -64,11 +64,10 @@ public enum comandi_t {
     //---------------- SERVER
     //--------partita
     /**
-     * Chi riceve questo messaggio può iniziare a giocare il proprio turno.
-     * getSender = Il giocatore che deve giocare
-     * @deprecated si usa solo turnofplayer
+     * Indica che è presente un vincitore.
+     * getSender = Indice del vincitore.
      */
-    STARTYOURTURN,  // Il giocatore a cui viene inviato questo messaggio inizia il suo turno
+    VINCITORE,
     /**
      * Questo messaggio informa su quale giocatore sta giocando adesso il turno.
      * getSender = il giocatore che deve giocare.

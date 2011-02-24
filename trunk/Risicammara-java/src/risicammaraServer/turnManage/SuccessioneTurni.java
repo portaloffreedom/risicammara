@@ -3,6 +3,8 @@ package risicammaraServer.turnManage;
 import java.io.IOException;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import risicammaraClient.Bonus_t;
 import risicammaraClient.Colore_t;
 import risicammaraClient.Continente_t;
@@ -41,6 +43,7 @@ public class SuccessioneTurni {
     private boolean saltare;
     private boolean spostaattacco;
     private boolean saltafine;
+    private int indexvincente;
 
     /**
      * Costruttore per inizializzare correttamente le variabili per la successione
@@ -49,6 +52,7 @@ public class SuccessioneTurni {
      * @param coda coda per i messaggi ricevuti via rete.
      */
     public SuccessioneTurni(ListaPlayers listaGiocatori,CodaMsg coda){
+        this.indexvincente = -1;
         saltafine = false;
         saltare = false;
         this.coda = coda;
@@ -69,11 +73,15 @@ public class SuccessioneTurni {
                     new MessaggioPlancia(partita.getPlancia()),
                     listaGiocatori,
                     -1);
+            Server.SpedisciMsgTutti(new MessaggioSequenzaGioco(
+                                   (partita.getSequenzaGioco().toArray()),
+                                   partita.getGiocatoreTurnoIndice()), listaGiocatori, -1);
         } catch (IOException ex) {
             System.err.println(
                     "Errore nell'invio della Plancia a tutti i giocatori "
                     +ex.getMessage());
         }
+        partita.preparaSequenza();
         //Assegna gli obbiettivi ai giocatori
         try {
             for(int i=0;i<ListaPlayers.MAXPLAYERS;i++){
@@ -90,7 +98,7 @@ public class SuccessioneTurni {
         int giotin = partita.getGiocatoreTurnoIndice();
         try{
             
-            Server.SpedisciMsgTutti(new MessaggioFase(Fasi_t.PREPARTITA, -1),
+            Server.SpedisciMsgTutti(new MessaggioFase(Fasi_t.PREPARTITA, giotin),
                     listaGiocatori, -1);            
             Server.SpedisciMsgTutti(MessaggioComandi.creaMsgTurnOfPlayer(giotin),
                                     listaGiocatori, -1);
@@ -124,6 +132,7 @@ public class SuccessioneTurni {
             //attuale di gioco (se è un messaggio premesso dalla fase)
             cicloFasi(msgReceived);
         }
+        inviaMessaggioVincitore();
 
         return null;
     }
@@ -290,11 +299,11 @@ public class SuccessioneTurni {
                                 risolviAttacco(cmd.getOptParameter());
                                 Giocatore difensore = listaGiocatori.get(partita.getGiocattaccato());
                                 if(partita.getArmateTerrDifensore() == 0){
-                                    if(difensore.getNumTerritori() == 0){
+                                    if(difensore.getNumTerritori()-1 == 0){
                                         Colore_t eliminato = difensore.getArmyColour();
                                         if(partita.hasDistruggiArmate(gio)){
                                             if(vittoriaDistruzione(gio,eliminato)){
-                                                vincitore = true;
+                                                setVincitore(gio.getPlayerIndex());
                                                 return;
                                             }
                                         }
@@ -388,7 +397,8 @@ public class SuccessioneTurni {
             case FINETURNO:
                 //Se il giocatore ha conquistato un territorio allora pesca una carta.
                 //Viene settato il prossimo giocatore.
-                if(!saltafine){if(partita.isVincitore(gio)) vincitore = true;
+                if(!saltafine){
+                    if(partita.isVincitore(gio)) vincitore = true;
                     if(conquistato){
                         conquistato = false;
                         Carta ctmp = partita.getCarta();
@@ -411,12 +421,12 @@ public class SuccessioneTurni {
                 prossimo = partita.getGiocatoreTurnoIndice();
                 proxfase = Fasi_t.RINFORZO;
                 gio = (Giocatore_Net) partita.getGiocatoreDiTurno();
-                if(partita.isVincitore(gio)) vincitore = true;
             default:                
                 break;
         }
         partita.setFase(proxfase);
         if(proxfase == Fasi_t.RINFORZO) {
+            if(partita.isVincitore(gio)) setVincitore(prossimo);
             spedisciMsgCambioTurno(prossimo);
             int abon = (gio.getNumTerritori()/3)+getTotalContinentalBonus(gio);
             gio.setArmatedisponibili(abon);
@@ -440,6 +450,19 @@ public class SuccessioneTurni {
         }
     }
 
+    private void setVincitore(int vincito){
+        this.indexvincente = vincito;
+        this.vincitore = true;
+    }
+    private void inviaMessaggioVincitore(){
+        try {
+            Server.SpedisciMsgTutti(MessaggioComandi.creaMsgVincitore(indexvincente), listaGiocatori, -1);
+        } catch (IOException ex) {
+            System.err.println(
+                    "Errore nell'invio del messaggio di vittoria a tutti i giocatori: "
+                    +ex.getMessage());
+        }
+    }
     private boolean vittoriaDistruzione(Giocatore gio,Colore_t eliminato){
         Obbiettivi_t ob = gio.getObbiettivo();
         switch(ob){

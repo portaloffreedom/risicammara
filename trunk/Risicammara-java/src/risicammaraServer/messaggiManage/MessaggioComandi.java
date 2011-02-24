@@ -12,6 +12,14 @@ public class MessaggioComandi implements Messaggio{
 // Qua ci vanno tutti i costruttori static per ogni tipo di messaggio, in modo da
     //facilitare la vita a chi crea i messaggi.
     /**
+     * Crea un messaggio di informazioni Vittoria.
+     * @param giocatore_che_ha_vinto l'indice del giocatore che ha vinto la partita.
+     * @return L'oggetto MessaggioComandi con valore VINCITORE corretto.
+     */
+    public static MessaggioComandi creaMsgVincitore(int giocatore_che_ha_vinto){
+        return new MessaggioComandi(comandi_t.VINCITORE, giocatore_che_ha_vinto);
+    }
+    /**
      * Crea un messaggio di inizio attacco
      * @param giocatorecheattacca l'indice di chi sta attaccando
      * @param giocatorecheDifende l'indice di chi viene attaccato
@@ -54,15 +62,6 @@ public class MessaggioComandi implements Messaggio{
      */
     public static MessaggioComandi creaMsgProssimaFase(int giocatoreChePassa){
         return new MessaggioComandi(comandi_t.PASSAFASE, giocatoreChePassa);
-    }
-    /**
-     * Comando che informa il giocatore che può iniziare il suo turno.
-     * @param giocatoreChePuoGiocare l'indice del giocatore che sta giocando e che può iniziare il turno.
-     * @return l'oggetto MessaggioComandi con comando STARTYOURTURN
-     * @deprecated
-     */
-    public static MessaggioComandi creaMsgStartYourTurn(int giocatoreChePuoGiocare){
-        return new MessaggioComandi(comandi_t.STARTYOURTURN, -1, giocatoreChePuoGiocare);
     }
 
     /**
