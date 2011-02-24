@@ -16,6 +16,7 @@ import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 import risicammaraClient.Client;
 import risicammaraClient.Colore_t;
+import risicammaraClient.territori_t;
 import risicammaraJava.boardManage.PlanciaClient;
 import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.turnManage.PartitaClient;
@@ -56,6 +57,12 @@ final public class PannelloGioco extends JPanel{
         this.durataFrame = (int) ((1.0/frameRateMassimo)*1000);
 
         this.barra = new BarraSuperiore(dimensioniPannello, ALTEZZAPANNELLO, this, listaGiocatori, attivatoreGrafica);
+        partita.setMenuCarte(barra.getMenuCarte());
+        
+        //prova carte
+        partita.aggiungiCartaMeStesso(territori_t.Cina);
+        partita.aggiungiCartaMeStesso(territori_t.Jolly1);
+
         this.addMouseListener(new MouseListenerImpl(this));
         this.planciaImmagine = new PlanciaImmagine(new Point(0, ALTEZZAPANNELLO), partita, dimensioniPannello, attivatoreGrafica);
         this.addPulsante(planciaImmagine);

@@ -17,6 +17,9 @@ import javax.swing.ImageIcon;
  * @author matteo
  */
 public class BottoneRisicammara extends Elemento_2DGraphicsCliccable {
+    static public int ALTEZZA = 50;
+    static public int LARGHEZZA = 100;
+
     private boolean pressed;
 
     private ImageIcon sfondo;

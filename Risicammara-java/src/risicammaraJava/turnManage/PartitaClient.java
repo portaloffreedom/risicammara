@@ -1,14 +1,19 @@
 package risicammaraJava.turnManage;
 
 import PacchettoGrafico.ListaGiocatoriClient;
+import PacchettoGrafico.MenuCarte;
+import risicammaraClient.territori_t;
 import risicammaraJava.boardManage.PlanciaClient;
+import risicammaraJava.deckManage.Carta;
 import risicammaraJava.playerManage.Giocatore;
 
 /**
  * Gestore della partita implementata per il client.
  * @author matteo
  */
-public class PartitaClient extends GestionePartita {
+public final class PartitaClient extends GestionePartita {
+    private MenuCarte menuCarte;
+
     private int sequenzaGiocatori[];
     private int posizioneSequenza;
     
@@ -23,6 +28,10 @@ public class PartitaClient extends GestionePartita {
         for (int i=0; i<listagiocatori.getSize(); i++){
             sequenzaGiocatori[i]=i;
         }
+    }
+
+    public void setMenuCarte(MenuCarte menuCarte) {
+        this.menuCarte = menuCarte;
     }
 
     @Override
@@ -53,5 +62,10 @@ public class PartitaClient extends GestionePartita {
         if (sequenzaGiocatori[posizioneSequenza] != giocTurno)
             System.err.println("Attenzione! sequenza dei giocatori non rispettata!"
                     + " ("+giocTurno+"!="+sequenzaGiocatori[posizioneSequenza]+")");
+    }
+
+    public void aggiungiCartaMeStesso(Carta carta) {
+        getListaGiocatori().meStesso().addCard(carta);
+        menuCarte.aggiungiCarta(carta);
     }
 }
