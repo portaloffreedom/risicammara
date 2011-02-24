@@ -38,7 +38,7 @@ public class SottoMenuCarta extends Elemento_2DGraphicsCliccable {
         //nome territorio
         int altezzaTesto = g2.getFontMetrics().getHeight();
         Point p = this.getPosizione();
-        Point posizioneTesto = new Point(p.x+MARGINE, p.y+(ALTEZZA_CARTA-altezzaTesto)/2);
+        Point posizioneTesto = new Point(p.x+MARGINE, p.y+altezzaTesto+(ALTEZZA_CARTA-altezzaTesto)/2);
 
 
         g2.drawString(testo, posizioneTesto.x, posizioneTesto.y);

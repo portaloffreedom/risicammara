@@ -11,7 +11,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.List;
 import risicammaraJava.deckManage.Carta;
 import risicammaraJava.playerManage.Giocatore;
 
@@ -23,10 +22,8 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
     static public int LARGHEZZA_CARTA = 200;
     static public int ALTEZZA_CARTA = 50;
 
-    //private Giocatore meStesso;
-    private List<Carta> listaCarte;
-    private ArrayList<CartaDisegnabile> listaCarteDisegnabili;
     private SottoMenuCarta richiestaSelezioneCarte;
+    private ArrayList<CartaDisegnabile> listaCarteDisegnabili;
 
     private boolean aperto;
     private boolean faseRinforzo;
@@ -37,15 +34,13 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
 
     /**
      *
-     * @param meStesso
-     * @param dimePanel
-     * @param ag
+     * @param dimePanel riferimento alle dimensioni del pannelloGioco intero
+     * @param ag riferimento all'attivatore grafica (per attivare ridisegnamenti,
+     * e quindi anche possibili animazioni)
      * @param altezza Quanto spazio dall'alto prima di disegnare il pannello.
      * @param distanzaLatoSinistro Quanto spazio da sinistra prima di disegnare il pannello.
      */
-    public MenuCarte(Giocatore meStesso, Dimension dimePanel, AttivatoreGrafica ag, int altezza, int distanzaLatoSinistro) {
-        //this.meStesso = meStesso;
-        this.listaCarte = meStesso.getCarte();
+    public MenuCarte(Dimension dimePanel, AttivatoreGrafica ag, int altezza, int distanzaLatoSinistro) {
         this.dimensioniPannello = dimePanel;
         this.distanzaLatoSinistro = distanzaLatoSinistro;
         this.distanzaLatoSuperiore = altezza;
