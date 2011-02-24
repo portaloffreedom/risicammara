@@ -17,14 +17,16 @@ import risicammaraClient.Client;
  * @author matteo
  */
 public class SottoMenuCarta extends Elemento_2DGraphicsCliccable {
-    static private int LARGHEZZA_CARTA = MenuCarte.LARGHEZZA_CARTA;
-    static private int ALTEZZA_CARTA   = MenuCarte.ALTEZZA_CARTA;
-    static private int MARGINE = 5;
-
+    static final int MARGINE = 5;
+    
+    private int larghezzaCarta;
+    private int altezzaCarta;
     private String testo;
 
-    public SottoMenuCarta(String testo) {
-        super(new Rectangle(LARGHEZZA_CARTA, ALTEZZA_CARTA));
+    public SottoMenuCarta(String testo, int altezzaCarta, int larghezzaCarta) {
+        super(new Rectangle(larghezzaCarta, altezzaCarta));
+        this.larghezzaCarta = larghezzaCarta;
+        this.altezzaCarta = altezzaCarta;
         this.testo = testo;
     }
 
@@ -39,7 +41,7 @@ public class SottoMenuCarta extends Elemento_2DGraphicsCliccable {
         //nome territorio
         int altezzaTesto = g2.getFontMetrics().getHeight();
         Point p = this.getPosizione();
-        Point posizioneTesto = new Point(p.x+MARGINE, p.y+altezzaTesto+(ALTEZZA_CARTA-altezzaTesto)/2);
+        Point posizioneTesto = new Point(p.x+MARGINE, p.y+altezzaTesto+(altezzaCarta-altezzaTesto)/2);
 
 
         g2.drawString(testo, posizioneTesto.x, posizioneTesto.y);
@@ -48,13 +50,17 @@ public class SottoMenuCarta extends Elemento_2DGraphicsCliccable {
         //TOTO bonus
             //mancano le immagini di roberto
     }
+    
+    protected Rectangle getContorni(){
+        return (Rectangle) posizione;
+    }
 
     public void setPosizione(Point p) {
-        ((Rectangle)super.posizione).setLocation(p);
+        getContorni().setLocation(p);
     }
 
     public Point getPosizione(){
-        return ((Rectangle)super.posizione).getLocation();
+        return getContorni().getLocation();
     }
 
     @Override

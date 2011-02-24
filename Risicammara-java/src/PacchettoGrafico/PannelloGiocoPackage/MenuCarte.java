@@ -47,10 +47,11 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
         this.distanzaLatoSuperiore = altezza;
         this.ag = ag;
 
-        this.richiestaSelezioneCarte = new SottoMenuCarta("Gioca un TRIS"); //TODO fallo disegnare al centro il testo
+        this.richiestaSelezioneCarte = new SottoMenuCarta("Gioca un TRIS", ALTEZZA_CARTA, LARGHEZZA_CARTA); //TODO fallo disegnare al centro il testo
         this.listaCarteDisegnabili = new ArrayList<CartaDisegnabile>();
 
         this.aperto = false;
+        this.faseRinforzo = true;
 
         super.posizione = new Rectangle(dimePanel.width-distanzaLatoSinistro-LARGHEZZA_CARTA, altezza, LARGHEZZA_CARTA, 0);
     }
@@ -87,8 +88,7 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
     public void aggiungiCarta(Carta carta){
         //this.listaCarte.add(carta); devo farlo in partitaClient
 
-        CartaDisegnabile cartaDis = new CartaDisegnabile(carta);
-        cartaDis.setPosizione(new Point());
+        CartaDisegnabile cartaDis = new CartaDisegnabile(carta, ALTEZZA_CARTA, LARGHEZZA_CARTA);
         listaCarteDisegnabili.add(cartaDis);
     }
 
@@ -118,6 +118,9 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
         Point posizioneCarta = getPosition();
         if (aperto){
             if (faseRinforzo){
+                richiestaSelezioneCarte.setPosizione(posizioneCarta);
+                richiestaSelezioneCarte.disegna(g2, ga);
+                posizioneCarta.y+=ALTEZZA_CARTA;
             }
             for (CartaDisegnabile cartaDisegnabile : listaCarteDisegnabili) {
                 cartaDisegnabile.setPosizione(posizioneCarta);

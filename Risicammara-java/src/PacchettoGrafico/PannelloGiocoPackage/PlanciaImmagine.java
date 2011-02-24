@@ -47,9 +47,9 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         this.plancia = partita.getPlancia();
         this.ag = ag;
 
-        planciaBMP = loadImage(Client.RISICAMMARA_NEGATIVO);
-        planciaPNG = loadImage(Client.RISICAMMARA_PLANCIA);
-        planciaPNGfinal = loadImage(Client.RISICAMMARA_PLANCIA);
+        planciaBMP = Client.loadImage(this, Client.RISICAMMARA_NEGATIVO);
+        planciaPNG = Client.loadImage(this, Client.RISICAMMARA_PLANCIA);
+        planciaPNGfinal = Client.loadImage(this, Client.RISICAMMARA_PLANCIA);
 
         Rectangle rettangolo = new Rectangle(posizione);
         rettangolo.setSize(planciaPNG.getWidth(null), planciaPNG.getHeight(null));
@@ -156,21 +156,6 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
 
     public int getidTerritorio(Point p){
         return planciaBMP.getRGB(p.x, p.y);
-    }
-
-    private BufferedImage loadImage (URL pad){
-        //return Toolkit.getDefaultToolkit().getImage(getClass().getResource(pad));
-        BufferedImage img = null;
-        try {
-            img = ImageIO.read(pad);
-        } catch (IOException e) {
-            System.err.println("Errore nel caricare \""+pad+"\":"+e);
-        }
-        return img;
-    }
-
-    private BufferedImage loadImage (String pad){
-        return loadImage(this.getClass().getResource(pad));
     }
 
     //<editor-fold defaultstate="collapsed" desc="Colora">

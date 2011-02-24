@@ -1,5 +1,6 @@
 package risicammaraJava.deckManage;
 
+import java.awt.image.BufferedImage;
 import java.io.Serializable;
 
 /**
@@ -10,11 +11,12 @@ import java.io.Serializable;
  * @author stengun
  */
 public interface Carta extends Serializable{
-
     /**
      * Indica di che tipo è la carta.
      * @return Stringa che descrive il tipo della carta
      */
     public String tipoCarta();
+    
+    public BufferedImage getIcona();
 
 }
