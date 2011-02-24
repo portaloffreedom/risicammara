@@ -3,8 +3,9 @@
  * and open the template in the editor.
  */
 
-package PacchettoGrafico;
+package PacchettoGrafico.PannelloGiocoPackage;
 
+import PacchettoGrafico.GraphicsAdvanced;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;

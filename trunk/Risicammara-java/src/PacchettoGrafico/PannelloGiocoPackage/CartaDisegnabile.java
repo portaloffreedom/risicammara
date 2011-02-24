@@ -3,8 +3,9 @@
  * and open the template in the editor.
  */
 
-package PacchettoGrafico;
+package PacchettoGrafico.PannelloGiocoPackage;
 
+import PacchettoGrafico.PannelloGiocoPackage.SottoMenuCarta;
 import risicammaraJava.deckManage.Carta;
 
 /**

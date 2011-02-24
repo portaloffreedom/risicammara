@@ -1,5 +1,6 @@
-package PacchettoGrafico;
+package PacchettoGrafico.PannelloGiocoPackage;
 
+import PacchettoGrafico.GraphicsAdvanced;
 import java.awt.Graphics2D;
 
 /**

@@ -1,5 +1,10 @@
 package PacchettoGrafico;
 
+import PacchettoGrafico.PannelloGiocoPackage.AscoltatorePlanciaAttacco;
+import PacchettoGrafico.PannelloGiocoPackage.GestoreFasi;
+import risicammaraJava.playerManage.ListaGiocatoriClient;
+import PacchettoGrafico.PannelloGiocoPackage.PannelloGioco;
+import PacchettoGrafico.PannelloGiocoPackage.PlanciaImmagine;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -221,8 +226,8 @@ public class FinestraGioco extends JFrame implements Runnable {
                 case ATTACCOVINTO: {
                     MessaggioAttaccoVinto msgVincita = (MessaggioAttaccoVinto) msg;
                     int armateSpostate = msgVincita.getArmSpost();
-                    TerritorioPlanciaClient attaccante = plancia.plancia.getTerritorio(partita.getTerritorioAttaccante());
-                    TerritorioPlanciaClient difensore = plancia.plancia.getTerritorio(partita.getTerritorioAttaccato());
+                    TerritorioPlanciaClient attaccante = plancia.getTerritorio(partita.getTerritorioAttaccante());
+                    TerritorioPlanciaClient difensore = plancia.getTerritorio(partita.getTerritorioAttaccato());
                     
                     difensore.setProprietario(attaccante.getProprietario());
                     plancia.aggiornaArmateTerritorio(-armateSpostate, attaccante);

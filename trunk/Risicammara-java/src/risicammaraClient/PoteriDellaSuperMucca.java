@@ -5,7 +5,7 @@
 
 package risicammaraClient;
 
-import PacchettoGrafico.ListaGiocatoriClient;
+import risicammaraJava.playerManage.ListaGiocatoriClient;
 import java.awt.Container;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
