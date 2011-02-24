@@ -26,8 +26,9 @@ public final class PartitaClient extends GestionePartita {
         posizioneSequenza = 0;
 
         //parte da rimpiazzare con la sequenza che arriva dal server
-        for (int i=0; i<listagiocatori.getSize(); i++){
-            sequenzaGiocatori[i]=sequenza[i].intValue();
+        int a = 0;
+        for (Integer i : sequenza){
+            sequenzaGiocatori[a++]=i.intValue();
         }
     }
 
