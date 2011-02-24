@@ -3,8 +3,9 @@
  * and open the template in the editor.
  */
 
-package PacchettoGrafico;
+package PacchettoGrafico.PannelloGiocoPackage;
 
+import PacchettoGrafico.EventoAzioneRisicammara;
 import java.io.IOException;
 import risicammaraClient.Connessione;
 import risicammaraJava.boardManage.TerritorioNonValido;

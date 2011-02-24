@@ -1,5 +1,6 @@
-package PacchettoGrafico;
+package PacchettoGrafico.PannelloGiocoPackage;
 
+import PacchettoGrafico.EventoAzioneRisicammara;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;

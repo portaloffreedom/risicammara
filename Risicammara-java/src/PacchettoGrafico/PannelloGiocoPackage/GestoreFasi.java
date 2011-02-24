@@ -3,8 +3,9 @@
  * and open the template in the editor.
  */
 
-package PacchettoGrafico;
+package PacchettoGrafico.PannelloGiocoPackage;
 
+import PacchettoGrafico.EventoAzioneRisicammara;
 import java.io.IOException;
 import risicammaraClient.Connessione;
 import risicammaraJava.turnManage.Fasi_t;
@@ -90,6 +91,7 @@ final public class GestoreFasi {
 
             case RINFORZO:
                 setAscoltatore(false, false);
+                ascoltatorePlanciaEvidenziatore.deSeleziona();
                 planciaImmagine.setActionListener(ascoltatorePlanciaRinforzo);
                 return;
 

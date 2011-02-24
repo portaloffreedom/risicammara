@@ -2,7 +2,7 @@ package risicammaraClient;
 
 import PacchettoGrafico.CollegatiPartita;
 import PacchettoGrafico.FinestraGioco;
-import PacchettoGrafico.PannelloGioco;
+import PacchettoGrafico.PannelloGiocoPackage.PannelloGioco;
 import PacchettoGrafico.salaAttesa.SalaAttesa;
 import java.net.Socket;
 import javax.swing.UIManager;

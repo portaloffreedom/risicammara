@@ -3,8 +3,12 @@
  * and open the template in the editor.
  */
 
-package PacchettoGrafico;
+package PacchettoGrafico.PannelloGiocoPackage;
 
+import PacchettoGrafico.EventoAzioneRisicammara;
+import PacchettoGrafico.GraphicsAdvanced;
+import risicammaraJava.playerManage.ListaGiocatoriClient;
+import PacchettoGrafico.PannelloGiocoPackage.Elemento_2DGraphics;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;

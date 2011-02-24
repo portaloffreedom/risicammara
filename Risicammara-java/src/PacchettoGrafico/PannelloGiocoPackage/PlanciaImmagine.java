@@ -1,5 +1,7 @@
-package PacchettoGrafico;
+package PacchettoGrafico.PannelloGiocoPackage;
 
+import PacchettoGrafico.GraphicsAdvanced;
+import PacchettoGrafico.PannelloGiocoPackage.Elemento_2DGraphicsCliccable;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
@@ -441,5 +443,13 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
     
     public void setArmateTerritorio(int armate, territori_t territorioT){
         this.setArmateTerritorio(armate, plancia.getTerritorio(territorioT));
+    }
+
+    public TerritorioPlanciaClient getTerritorio(int idTerritorio) throws TerritorioNonValido {
+        return plancia.getTerritorio(idTerritorio);
+    }
+
+    public TerritorioPlanciaClient getTerritorio(territori_t territorio) {
+        return plancia.getTerritorio(territorio);
     }
 }

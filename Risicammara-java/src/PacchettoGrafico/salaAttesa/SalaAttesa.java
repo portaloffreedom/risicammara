@@ -1,6 +1,6 @@
 package PacchettoGrafico.salaAttesa;
 
-import PacchettoGrafico.ListaGiocatoriClient;
+import risicammaraJava.playerManage.ListaGiocatoriClient;
 import java.awt.Rectangle;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;

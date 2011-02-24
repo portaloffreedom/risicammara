@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package PacchettoGrafico;
+package risicammaraJava.playerManage;
 
 import risicammaraClient.Obbiettivi_t;
 import risicammaraJava.playerManage.Giocatore;

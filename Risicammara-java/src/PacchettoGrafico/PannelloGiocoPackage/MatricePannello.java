@@ -3,8 +3,9 @@
  * and open the template in the editor.
  */
 
-package PacchettoGrafico;
+package PacchettoGrafico.PannelloGiocoPackage;
 
+import PacchettoGrafico.PannelloGiocoPackage.Elemento_2DGraphicsCliccable;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 

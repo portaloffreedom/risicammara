@@ -1,8 +1,7 @@
 package risicammaraJava.turnManage;
 
-import PacchettoGrafico.ListaGiocatoriClient;
-import PacchettoGrafico.MenuCarte;
-import risicammaraClient.territori_t;
+import risicammaraJava.playerManage.ListaGiocatoriClient;
+import PacchettoGrafico.PannelloGiocoPackage.MenuCarte;
 import risicammaraJava.boardManage.PlanciaClient;
 import risicammaraJava.deckManage.Carta;
 import risicammaraJava.playerManage.Giocatore;

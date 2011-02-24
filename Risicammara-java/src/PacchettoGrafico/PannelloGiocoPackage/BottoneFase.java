@@ -1,5 +1,8 @@
-package PacchettoGrafico;
+package PacchettoGrafico.PannelloGiocoPackage;
 
+import PacchettoGrafico.EventoAzioneRisicammara;
+import PacchettoGrafico.GraphicsAdvanced;
+import PacchettoGrafico.PannelloGiocoPackage.Elemento_2DGraphicsCliccable;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;

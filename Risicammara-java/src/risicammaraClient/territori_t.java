@@ -1,7 +1,7 @@
 package risicammaraClient;
 
 import risicammaraJava.boardManage.TerritorioNonValido;
-import PacchettoGrafico.PlanciaImmagine;
+import PacchettoGrafico.PannelloGiocoPackage.PlanciaImmagine;
 import risicammaraJava.deckManage.Carta;
 
 /**
