@@ -7,8 +7,6 @@ package PacchettoGrafico.PannelloGiocoPackage;
 
 import PacchettoGrafico.EventoAzioneRisicammara;
 import PacchettoGrafico.GraphicsAdvanced;
-import PacchettoGrafico.PannelloGiocoPackage.SottoMenuCarta;
-import PacchettoGrafico.PannelloGiocoPackage.Elemento_2DGraphicsCliccable;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -16,7 +14,6 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import risicammaraJava.deckManage.Carta;
-import risicammaraJava.playerManage.Giocatore;
 
 /**
  *

@@ -204,26 +204,12 @@ public class SalaAttesa extends JFrame implements Runnable {
     }
     
     private void avviaPartita(){
-        this.setVisible(false);
-        MessaggioPlancia veicoloPlancia = null;
-        Obbiettivi_t mioObbiettivo = null;
-        //Messaggio Ordine dei Giocatori = null;
-        try {
-            veicoloPlancia = (MessaggioPlancia) server.ricevi();
-            mioObbiettivo = ((MessaggioObbiettivo) server.ricevi()).getObj();
-        } catch (IOException ex) {
-            System.err.println("Errore nel leggere la plancia (lettura da stream): "+ex);
-            System.exit(10);
-        } catch (ClassNotFoundException ex) {
-            System.err.println("Errore nel leggere la plancia (interpretazione oggetto): "+ex);
-            System.exit(11);
-        }
-        ListaGiocatoriClient listaGiocatoriClient = new ListaGiocatoriClient(listaGiocatori, indexGiocatore, mioObbiettivo);
-        PlanciaClient planciaClient = new PlanciaClient(veicoloPlancia.getPlancia());
-        PartitaClient partita = new PartitaClient(listaGiocatoriClient, planciaClient);
-        meStesso.inizializzaPartita(server, partita);
+        this.pannello.stampaMessaggioComando("Caricamento Partita in corso...");
+        meStesso.inizializzaPartita(server, listaGiocatori, indexGiocatore);
+        this.pannello.stampaMessaggioComando("Partita Caricata!");
 
         //libera la memoria della finestra di SalaAttesa
+        this.setVisible(false);
         super.dispose();
     }
 
