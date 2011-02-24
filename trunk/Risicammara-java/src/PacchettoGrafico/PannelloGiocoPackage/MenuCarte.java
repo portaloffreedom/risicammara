@@ -59,8 +59,9 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
     public void setAperto(boolean aperto){
         this.aperto = aperto;
 
-        //ridisegna
-        ag.panelRepaint(getRectangle());
+        final int BORDO_OFFSET = 2;
+        Rectangle rect = getRectangle(); //rettangolo originale - serve pure per catturare le azioni del mouse
+        Rectangle rettangolo = null; //rettangolo copia, per fare un repaint più ampio
 
         if (aperto) {
             //ricava le sottodimensioni
@@ -68,17 +69,22 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
             int numeroSottoMenu = listaCarteDisegnabili.size();
             if (faseRinforzo)
                 numeroSottoMenu++;
-            getRectangle().height = (numeroSottoMenu*ALTEZZA_CARTA);
-
-            //ridisegna
-            ag.panelRepaint(getRectangle());
+            rect.height = (numeroSottoMenu*ALTEZZA_CARTA);
+            rettangolo = new Rectangle(rect);
         }
         else {
-            //ridisegna
-            ag.panelRepaint(getRectangle());
+            rettangolo = new Rectangle(rect);
             //imposta le dimensioni a 0 (non è più cliccabile)
-            getRectangle().height = 0;
+            rect.height = 0;
         }
+
+        //allarga i contorni di un pixel e poi ingloba anche parte del pulsante
+        rettangolo.y /= 2;
+        rettangolo.height+= rettangolo.y + BORDO_OFFSET;
+        rettangolo.x -= BORDO_OFFSET;
+        rettangolo.width += BORDO_OFFSET*2;
+        //ridisegna 
+        ag.panelRepaint(rettangolo);
     }
 
     public void setFaseRinforzo(boolean faseRinforzo) {
