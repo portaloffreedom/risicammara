@@ -108,10 +108,15 @@ public class PartitaServer extends GestionePartita {
                     break;
             }
         }
+    }
+
+    /**
+     * Da usare subito dopo aver mandato tutti i dati necessari ai client.
+     */
+    public void preparaSequenza(){
         sequenzaDiGioco.pollFirst();
         sequenzaDiGioco.addLast(giocTurno);
     }
-
     //Metodi di partita (informazioni)
 
     //metodi per azioni di gioco

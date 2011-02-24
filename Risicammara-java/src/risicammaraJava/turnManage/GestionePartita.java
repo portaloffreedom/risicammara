@@ -1,6 +1,14 @@
 package risicammaraJava.turnManage;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Stack;
+import java.util.Vector;
 import risicammaraClient.territori_t;
 import risicammaraJava.boardManage.Plancia;
 import risicammaraJava.boardManage.TerritorioPlancia;
@@ -24,6 +32,19 @@ public abstract class GestionePartita {
     protected territori_t territorioAttaccato,territorioAttaccante;
     protected LinkedList<Integer> sequenzaDiGioco;
 
+    private LinkedList<Integer> creaSequenzaGioco(){
+        Integer [] ve = new Integer[listagiocatori.getSize()];
+        int a = 0;
+        for(int i=0;i<ListaPlayers.MAXPLAYERS;i++){
+            Giocatore_Net g = (Giocatore_Net) listagiocatori.get(i);
+            if(g==null)continue;
+            ve[a++] = new Integer(i);
+        }
+        List<Integer> lista = Arrays.asList(ve);
+        Collections.shuffle(lista);
+        return new LinkedList<Integer>((Collection)lista);
+    }
+    
     protected GestionePartita(ListaPlayers listagiocatori){
         this.listagiocatori = listagiocatori;
         this.giocato_tris = false;
@@ -33,15 +54,13 @@ public abstract class GestionePartita {
         this.giocattaccato = -1;
         this.nuovogiro = false;
         this.fase_attuale = Fasi_t.PREPARTITA;
-        this.sequenzaDiGioco = new LinkedList<Integer>();
-        for(int i=0;i<ListaPlayers.MAXPLAYERS;i++){
-            Giocatore_Net g = (Giocatore_Net) listagiocatori.get(i);
-            if(g==null)continue;
-            sequenzaDiGioco.addLast(i);
-        }
-        this.giocTurno = sequenzaDiGioco.peekFirst();
+        this.sequenzaDiGioco = creaSequenzaGioco();
+        this.giocTurno = sequenzaDiGioco.peekFirst().intValue();
     }
 
+    public LinkedList<Integer> getSequenzaGioco(){
+        return sequenzaDiGioco;
+    }
     /**
      * Ottiene il giocatore che viene attaccato
      * @return il giocatore difensore

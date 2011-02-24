@@ -93,6 +93,10 @@ public enum messaggio_t {
      */
     GIOCATRIS,  //Messaggio che indica la giocata di un tris
     /**
+     * Invia a tutti i client la sequenza di come si svolgerà il gioco.
+     */
+    SEQUENZAGIOCO,
+    /**
      * Messaggio inviato dal server per dare la plancia di gioco a tutti i giocatori
      * che iniziano la partita.
      * @see risicammaraServer.messaggiManage.MessaggioPlancia
