@@ -1,5 +1,6 @@
 package risicammaraClient;
 
+import java.awt.image.BufferedImage;
 import risicammaraJava.deckManage.Carta;
 
 /**
@@ -95,5 +96,10 @@ public enum Obbiettivi_t implements Carta {
  */
     public tipovittoria_t VictoryType(){
         return tipovittoria;
+    }
+
+    @Override
+    public BufferedImage getIcona() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

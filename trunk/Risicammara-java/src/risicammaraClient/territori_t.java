@@ -1,5 +1,6 @@
 package risicammaraClient;
 
+import java.awt.image.BufferedImage;
 import risicammaraJava.boardManage.TerritorioNonValido;
 import PacchettoGrafico.PannelloGiocoPackage.PlanciaImmagine;
 import risicammaraJava.deckManage.Carta;
@@ -96,6 +97,7 @@ public enum territori_t implements Carta {
         return this.territori_adiacenti;
     }
     /** Implementa il metodo per TipoCarta */
+    @Override
     public String tipoCarta() {
         return this.toString();
     }
@@ -253,6 +255,12 @@ public enum territori_t implements Carta {
 
         throw new TerritorioNonValido("Non esiste il territorio="+territorio+" in Oceania");
         //return null;
+    }
+
+    @Override
+    public BufferedImage getIcona() {
+        String icona = this.getBonus().getPercorsoImmagine();
+        return Client.loadImage(this, icona);
     }
 
 

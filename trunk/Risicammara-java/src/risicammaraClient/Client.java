@@ -4,8 +4,11 @@ import PacchettoGrafico.CollegatiPartita;
 import PacchettoGrafico.FinestraGioco;
 import PacchettoGrafico.PannelloGiocoPackage.PannelloGioco;
 import PacchettoGrafico.salaAttesa.SalaAttesa;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.URL;
+import javax.imageio.ImageIO;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -232,5 +235,20 @@ public class Client implements Runnable {
         //TODO implementare finestra di dialogo
         //TODO implementare la richiesta di una nuova connessione ad un'altro server
         System.exit(4242);
+    }
+
+    static public BufferedImage loadImage (URL pad){
+        //return Toolkit.getDefaultToolkit().getImage(getClass().getResource(pad));
+        BufferedImage img = null;
+        try {
+            img = ImageIO.read(pad);
+        } catch (IOException e) {
+            System.err.println("Errore nel caricare \""+pad+"\":"+e);
+        }
+        return img;
+    }
+
+    static public BufferedImage loadImage (Object questo, String pad){
+        return loadImage(questo.getClass().getResource(pad));
     }
 }
