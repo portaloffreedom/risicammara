@@ -54,7 +54,7 @@ public class BarraSuperiore implements Elemento_2DGraphics {
         this.carteButton     = new BottoneRisicammara(posizioneCarte, "Carte");
         this.menuGiocatore = new MenuGiocatore(dimensioniPannello, listaGiocatori, attivatoreGrafica, giocatoreButton);
         this.barraFasi = new BarraFasi(dimensioniPannello, attivatoreGrafica, 125, 125, altezza-20, 10);
-        this.menuCarte = new MenuCarte(listaGiocatori.meStesso(), dimensioniPannello, attivatoreGrafica, 55, 5);
+        this.menuCarte = new MenuCarte(dimensioniPannello, attivatoreGrafica, 55, 5);
 
         
         this.giocatoreButton.setActionListener(menuGiocatore);
