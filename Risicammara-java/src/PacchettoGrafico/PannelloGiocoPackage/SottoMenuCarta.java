@@ -6,6 +6,7 @@
 package PacchettoGrafico.PannelloGiocoPackage;
 
 import PacchettoGrafico.GraphicsAdvanced;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -31,10 +32,10 @@ public class SottoMenuCarta extends Elemento_2DGraphicsCliccable {
     }
 
     @Override
-    public void disegna(Graphics2D g2, GraphicsAdvanced ga) {
-        g2.setColor(ga.getColoreGiocatore());
+    public void disegna(Graphics2D g2, GraphicsAdvanced ag) {
+        g2.setColor(ag.getColoreGiocatore());
         g2.fill(posizione);
-        g2.setColor(ga.getTesto());
+        g2.setColor(ag.getColoreScuro());
         g2.draw(posizione);
 
 
@@ -43,7 +44,7 @@ public class SottoMenuCarta extends Elemento_2DGraphicsCliccable {
         Point p = this.getPosizione();
         Point posizioneTesto = new Point(p.x+MARGINE, p.y+altezzaTesto+(altezzaCarta-altezzaTesto)/2);
 
-
+        g2.setColor(ag.getTesto());
         g2.drawString(testo, posizioneTesto.x, posizioneTesto.y);
 
 
