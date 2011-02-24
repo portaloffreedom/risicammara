@@ -1,7 +1,11 @@
 package risicammaraJava.turnManage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import risicammaraClient.Colore_t;
 import risicammaraClient.Continente_t;
 import risicammaraClient.Obbiettivi_t;
@@ -14,6 +18,7 @@ import risicammaraClient.territori_t;
 import risicammaraClient.tipovittoria_t;
 import risicammaraJava.deckManage.Carta;
 import risicammaraJava.fightManage.Dado;
+import risicammaraServer.Giocatore_Net;
 
 /**
 * Questa classe ha il compito di inizializzare tutti gli oggetti che servono per
@@ -30,12 +35,29 @@ public class PartitaServer extends GestionePartita {
     private Dado dado;
     private ArrayList<Integer> vittoriaDistruzione;
 
+    private LinkedList<Integer> creaSequenzaGioco(){
+        Integer [] ve = new Integer[listagiocatori.getSize()];
+        int a = 0;
+        for(int i=0;i<ListaPlayers.MAXPLAYERS;i++){
+            Giocatore_Net g = (Giocatore_Net) listagiocatori.get(i);
+            if(g==null)continue;
+            ve[a++] = new Integer(i);
+        }
+        List<Integer> lista = Arrays.asList(ve);
+        Collections.shuffle(lista);
+        Collection<Integer> lc = (Collection<Integer>)lista;
+        return new LinkedList<Integer>(lc);
+    }
+
     /**
      * Costruttore PartitaServer che inizializza tutti gli oggetti
      * @param listagiocatori L'oggetto che rappresenta la lista dei giocatori
      */
     public PartitaServer(ListaPlayers listagiocatori){
         super(listagiocatori);
+
+        this.sequenzaDiGioco = creaSequenzaGioco();
+        this.giocTurno = sequenzaDiGioco.peekFirst().intValue();
         this.planciadigioco = new Plancia();
         this.mazzo = new MazzoTerritori();
         this.dado = new Dado(6);
