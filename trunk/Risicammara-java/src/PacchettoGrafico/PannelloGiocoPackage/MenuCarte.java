@@ -56,7 +56,7 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
         this.listaCarteDisegnabili = new ArrayList<CartaDisegnabile>();
 
         this.aperto = false;
-        this.faseRinforzo = true;
+        this.faseRinforzo = false;
 
         super.posizione = new Rectangle(dimePanel.width-distanzaLatoSinistro-LARGHEZZA_CARTA, altezza, LARGHEZZA_CARTA, 0);
 
@@ -111,6 +111,14 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
 
     public void setFaseRinforzo(boolean faseRinforzo) {
         this.faseRinforzo = faseRinforzo;
+        if (faseRinforzo) {
+            getRectangle().height+=ALTEZZA_CARTA;
+            ridisegna();
+        }
+        else {
+            ridisegna();
+            getRectangle().height-=ALTEZZA_CARTA;
+        }
     }
 
     public void aggiungiCarta(Carta carta){
@@ -177,7 +185,6 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
         //cerca la posizione schiacciata
         int y = e.getY()-distanzaLatoSuperiore;
         y = y/ALTEZZA_CARTA;
-        y++;
         
         if (faseRinforzo) {
             if (y == 0) {

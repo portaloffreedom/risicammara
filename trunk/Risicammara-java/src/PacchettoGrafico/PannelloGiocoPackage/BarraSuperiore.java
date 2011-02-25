@@ -56,16 +56,13 @@ public class BarraSuperiore implements Elemento_2DGraphics {
         this.posizioneCarte     = new Point(dimensioni.width-5-100, 5);
         this.giocatoreButton = new BottoneRisicammara(posizioneGiocatore, partita.getMeStesso().getNome());
         this.carteButton     = new BottoneRisicammara(posizioneCarte, "Carte");
-        this.menuGiocatore = new MenuGiocatore(dimensioniPannello, partita.getListaGiocatori(), attivatoreGrafica);
+        this.menuGiocatore = new MenuGiocatore(dimensioniPannello, partita, attivatoreGrafica);
         this.menuCarte = new MenuCarte(dimensioniPannello, attivatoreGrafica, 55, 5, partita);
         this.barraFasi = new BarraFasi(dimensioniPannello, attivatoreGrafica, 125, 125, altezza-20, 10);
 
         
         this.giocatoreButton.setActionListener(menuGiocatore);
         this.carteButton.setActionListener(menuCarte);
-        pannello.addPulsante(giocatoreButton);
-        pannello.addPulsante(carteButton);
-        pannello.addPulsante(barraFasi);
     }
 
     @Override
@@ -98,4 +95,17 @@ public class BarraSuperiore implements Elemento_2DGraphics {
     public MenuCarte getMenuCarte() {
         return menuCarte;
     }
+
+    public MenuGiocatore getMenuGiocatore() {
+        return menuGiocatore;
+    }
+
+    public BottoneRisicammara getCarteButton() {
+        return carteButton;
+    }
+
+    public BottoneRisicammara getGiocatoreButton() {
+        return giocatoreButton;
+    }
+    
 }

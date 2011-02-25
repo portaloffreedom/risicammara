@@ -5,10 +5,17 @@
 
 package PacchettoGrafico.PannelloGiocoPackage;
 
+import PacchettoGrafico.EventoAzioneRisicammara;
+
 /**
  *
  * @author matteo
  */
-public class AscoltatoreGiocaTris {
+public class AscoltatoreGiocaTris implements RisicammaraEventListener {
+
+    @Override
+    public void actionPerformed(EventoAzioneRisicammara e) {
+        System.out.println("Tasto premuto");
+    }
 
 }

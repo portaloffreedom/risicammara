@@ -48,6 +48,10 @@ public class RiquadroTesto extends TestoACapo {
         this.setRettangolo(new Rectangle(posizione, rettangoloRiquadro.getSize()));
     }
 
+    public Rectangle getRettangoloRiquadro() {
+        return rettangoloRiquadro;
+    }
+
     static private Rectangle RimpicciolisciPerTesto(Rectangle rettangolo){
         return new Rectangle(rettangolo.x+4, rettangolo.y, rettangolo.width-6, 0);
     }
