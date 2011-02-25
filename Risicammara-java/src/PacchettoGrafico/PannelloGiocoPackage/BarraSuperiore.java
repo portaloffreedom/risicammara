@@ -7,6 +7,7 @@ package PacchettoGrafico.PannelloGiocoPackage;
 
 import PacchettoGrafico.GraphicsAdvanced;
 import risicammaraJava.playerManage.ListaGiocatoriClient;
+import risicammaraJava.turnManage.PartitaClient;
 import PacchettoGrafico.PannelloGiocoPackage.Elemento_2DGraphics;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -47,16 +48,16 @@ public class BarraSuperiore implements Elemento_2DGraphics {
      * per le animazioni.
      * @see MatricePannello
      */
-    public BarraSuperiore(Dimension dimensioniPannello, int altezza,PannelloGioco pannello, ListaGiocatoriClient listaGiocatori, AttivatoreGrafica attivatoreGrafica){
+    public BarraSuperiore(Dimension dimensioniPannello, int altezza,PannelloGioco pannello, PartitaClient partita, AttivatoreGrafica attivatoreGrafica){
         this.dimensioniPannello = dimensioniPannello;
         this.dimensioni= new Rectangle(dimensioniPannello);
         this.dimensioni.height = altezza;
         this.posizioneGiocatore = new Point(5, 5);
         this.posizioneCarte     = new Point(dimensioni.width-5-100, 5);
-        this.giocatoreButton = new BottoneRisicammara(posizioneGiocatore, listaGiocatori.meStesso().getNome());
+        this.giocatoreButton = new BottoneRisicammara(posizioneGiocatore, partita.getMeStesso().getNome());
         this.carteButton     = new BottoneRisicammara(posizioneCarte, "Carte");
-        this.menuGiocatore = new MenuGiocatore(dimensioniPannello, listaGiocatori, attivatoreGrafica);
-        this.menuCarte = new MenuCarte(dimensioniPannello, attivatoreGrafica, 55, 5);
+        this.menuGiocatore = new MenuGiocatore(dimensioniPannello, partita.getListaGiocatori(), attivatoreGrafica);
+        this.menuCarte = new MenuCarte(dimensioniPannello, attivatoreGrafica, 55, 5, partita);
         this.barraFasi = new BarraFasi(dimensioniPannello, attivatoreGrafica, 125, 125, altezza-20, 10);
 
         

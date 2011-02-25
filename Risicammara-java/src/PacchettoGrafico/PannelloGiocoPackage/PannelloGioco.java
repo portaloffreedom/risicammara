@@ -59,7 +59,7 @@ final public class PannelloGioco extends JPanel{
         this.performance = new MillisecondiDiEsecuzione(this.dimensioniPannello, cronometro);
         this.durataFrame = (int) ((1.0/frameRateMassimo)*1000);
 
-        this.barra = new BarraSuperiore(dimensioniPannello, ALTEZZAPANNELLO, this, listaGiocatori, attivatoreGrafica);
+        this.barra = new BarraSuperiore(dimensioniPannello, ALTEZZAPANNELLO, this, partita, attivatoreGrafica);
         partita.setMenuCarte(barra.getMenuCarte());
         
         //prova carte

@@ -14,6 +14,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import risicammaraJava.deckManage.Carta;
+import risicammaraJava.turnManage.PartitaClient;
 
 /**
  *
@@ -32,6 +33,7 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
     private AttivatoreGrafica ag;
     private int distanzaLatoSinistro;
     private int distanzaLatoSuperiore;
+    private PartitaClient partita;
 
     /**
      *
@@ -41,10 +43,11 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
      * @param altezza Quanto spazio dall'alto prima di disegnare il pannello.
      * @param distanzaLatoSinistro Quanto spazio da sinistra prima di disegnare il pannello.
      */
-    public MenuCarte(Dimension dimePanel, AttivatoreGrafica ag, int altezza, int distanzaLatoSinistro) {
+    public MenuCarte(Dimension dimePanel, AttivatoreGrafica ag, int altezza, int distanzaLatoSinistro, PartitaClient partita) {
         this.dimensioniPannello = dimePanel;
         this.distanzaLatoSinistro = distanzaLatoSinistro;
         this.distanzaLatoSuperiore = altezza;
+        this.partita = partita;
         this.ag = ag;
 
         this.richiestaSelezioneCarte = new SottoMenuCarta("Gioca un TRIS", ALTEZZA_CARTA, LARGHEZZA_CARTA); //TODO fallo disegnare al centro il testo
@@ -94,7 +97,7 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
     public void aggiungiCarta(Carta carta){
         //this.listaCarte.add(carta); devo farlo in partitaClient
 
-        CartaDisegnabile cartaDis = new CartaDisegnabile(carta, ALTEZZA_CARTA, LARGHEZZA_CARTA);
+        CartaDisegnabile cartaDis = new CartaDisegnabile(carta, ALTEZZA_CARTA, LARGHEZZA_CARTA, partita.getMeStesso());
         listaCarteDisegnabili.add(cartaDis);
     }
 
