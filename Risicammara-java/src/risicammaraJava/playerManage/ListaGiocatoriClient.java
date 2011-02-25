@@ -6,8 +6,6 @@
 package risicammaraJava.playerManage;
 
 import risicammaraClient.Obbiettivi_t;
-import risicammaraJava.playerManage.Giocatore;
-import risicammaraJava.playerManage.ListaPlayers;
 
 /**
  *
