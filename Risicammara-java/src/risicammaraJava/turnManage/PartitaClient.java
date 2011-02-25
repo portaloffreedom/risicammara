@@ -21,7 +21,7 @@ public final class PartitaClient extends GestionePartita {
         this.planciadigioco = planciadigioco;
 
         if (listagiocatori.getSize() != sequenza.length)
-            System.err.println("Incompatibilità della sequenza con la lista dei giocatori");
+            System.err.println("Incompatibilità della sequenza con la lista dei giocatori ("+listagiocatori.getSize()+" != "+sequenza.length+")");
         sequenzaGiocatori = new int[listagiocatori.getSize()];
         posizioneSequenza = 0;
 

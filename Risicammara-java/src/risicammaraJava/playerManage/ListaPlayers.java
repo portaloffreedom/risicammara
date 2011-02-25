@@ -39,6 +39,8 @@ public class ListaPlayers implements Serializable {
         for (int i=0;i<ListaPlayers.MAXPLAYERS;i++) {
             this.addPlayer(listaGiocatori.get(i));
         }
+        listaPlayers.trimToSize();
+        this.nullnumber = listaGiocatori.nullnumber;
     }
 
 
