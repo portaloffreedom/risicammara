@@ -69,7 +69,6 @@ final public class PannelloGioco extends JPanel{
 
         this.addMouseListener(new MouseListenerImpl(this));
         this.planciaImmagine = new PlanciaImmagine(new Point(0, ALTEZZAPANNELLO), partita, dimensioniPannello, attivatoreGrafica);
-        this.addPulsante(planciaImmagine);
         AscoltatorePlanciaEvidenziatore ascoltatorePlancia = new AscoltatorePlanciaEvidenziatore(planciaImmagine, attivatoreGrafica);
         planciaImmagine.setActionListener(ascoltatorePlancia);
 
@@ -78,6 +77,14 @@ final public class PannelloGioco extends JPanel{
         Dimension dimensioniMinime = this.getDimensioniMinime();
         this.setMinimumSize(dimensioniMinime);
         this.setSize(dimensioniMinime);
+
+        //mette a posto i pulsanti (l'ordine con cui vengono inseriti importa (invertito))
+        this.addCliccabile(barra.getGiocatoreButton());
+        this.addCliccabile(barra.getCarteButton());
+        this.addCliccabile(barra.getBarraFasi());
+        this.addCliccabile(barra.getMenuCarte());
+        this.addCliccabile(barra.getMenuGiocatore());
+        this.addCliccabile(planciaImmagine);
     }
 
     
@@ -199,7 +206,7 @@ final public class PannelloGioco extends JPanel{
         this.gestionePulsanti.aziona(e);
     }
 
-    public void addPulsante(Elemento_2DGraphicsCliccable elemento) {
+    private void addCliccabile(Elemento_2DGraphicsCliccable elemento) {
         gestionePulsanti.add(elemento);
     }
 
