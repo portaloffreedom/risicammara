@@ -22,17 +22,16 @@ import risicammaraJava.turnManage.PartitaClient;
  *
  * @author matteo
  */
-public class MenuCarte extends Elemento_2DGraphicsCliccable implements RisicammaraEventListener {
+public class MenuCarte extends MenuRisicammara {
     static public int LARGHEZZA_CARTA = 200;
     static public int ALTEZZA_CARTA = 50;
 
     private SottoMenuCarta richiestaSelezioneCarte;
     private ArrayList<CartaDisegnabile> listaCarteDisegnabili;
+    private AscoltatoreGiocaTris ascoltatoreTris;
 
-    private boolean aperto;
     private boolean faseRinforzo;
     private Dimension dimensioniPannello;
-    private AttivatoreGrafica ag;
     private int distanzaLatoSinistro;
     private int distanzaLatoSuperiore;
     private PartitaClient partita;
@@ -46,13 +45,15 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
      * @param distanzaLatoSinistro Quanto spazio da sinistra prima di disegnare il pannello.
      */
     public MenuCarte(Dimension dimePanel, AttivatoreGrafica ag, int altezza, int distanzaLatoSinistro, PartitaClient partita) {
+        super(ag);
         this.dimensioniPannello = dimePanel;
         this.distanzaLatoSinistro = distanzaLatoSinistro;
         this.distanzaLatoSuperiore = altezza;
         this.partita = partita;
-        this.ag = ag;
 
+        this.ascoltatoreTris = new AscoltatoreGiocaTris();
         this.richiestaSelezioneCarte = new SottoMenuCarta("Gioca un TRIS", ALTEZZA_CARTA, LARGHEZZA_CARTA); //TODO fallo disegnare al centro il testo
+        this.richiestaSelezioneCarte.setActionListener(ascoltatoreTris);
         this.listaCarteDisegnabili = new ArrayList<CartaDisegnabile>();
 
         this.aperto = false;
@@ -67,46 +68,6 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
             invertiColori = true;
         
         Bonus_t.caricaImmagini(invertiColori);
-    }
-
-    public void setAperto(boolean aperto){
-        this.aperto = aperto;
-        
-        Rectangle rect = getRectangle(); //rettangolo originale - serve pure per catturare le azioni del mouse
-
-        if (aperto) {
-            //ricava le sottodimensioni
-            riposiziona();
-            int numeroSottoMenu = listaCarteDisegnabili.size();
-            if (faseRinforzo)
-                numeroSottoMenu++;
-            rect.height = (numeroSottoMenu*ALTEZZA_CARTA);
-            ridisegna();
-        }
-        else {
-            ridisegna();
-            //imposta le dimensioni a 0 (non è più cliccabile)
-            rect.height = 0;
-        }
-    }
-
-    /**
-     * Chiamerà panel.repaint nelle dimensioni giuste
-     */
-    public void ridisegna(){
-        final int BORDO_OFFSET = 2;
-        
-        //rettangolo copia, per fare un repaint più ampio
-        Rectangle rettangolo = rettangolo = new Rectangle(getRectangle()); 
-
-        //allarga i contorni di un pixel e poi ingloba anche parte del pulsante
-        rettangolo.y /= 2;
-        rettangolo.height+= rettangolo.y + BORDO_OFFSET;
-        rettangolo.x -= BORDO_OFFSET;
-        rettangolo.width += BORDO_OFFSET*2;
-        
-        //ridisegna
-        ag.panelRepaint(rettangolo);
     }
 
     public void setFaseRinforzo(boolean faseRinforzo) {
@@ -125,11 +86,13 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
         //this.listaCarte.add(carta); devo farlo in partitaClient
 
         CartaDisegnabile cartaDis = new CartaDisegnabile(carta, ALTEZZA_CARTA, LARGHEZZA_CARTA, partita.getMeStesso());
+        cartaDis.setActionListener(ascoltatoreTris);
         listaCarteDisegnabili.add(cartaDis);
-        if (aperto){
-            getRectangle().height+=ALTEZZA_CARTA; //aggiunge l'altezza della carta aggiuta
+        
+        getRectangle().height+=ALTEZZA_CARTA; //aggiunge l'altezza della carta aggiuta
+        
+        if (aperto)
             ridisegna();
-        }
     }
 
     public void rimuoviCarta(CartaDisegnabile carta){
@@ -137,18 +100,10 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
         //listaCarte.remove(carta.getCarta()); da fare fare alla partitaClient
 
         //TODO ridisegna con la carta rimossa
-        if (aperto){
+        if (aperto)
             ridisegna();
-            getRectangle().height-=ALTEZZA_CARTA; //toglie l'altezza della carta tolta
-        }
-    }
 
-    private Point getPosition(){
-        return getRectangle().getLocation();
-    }
-
-    private Rectangle getRectangle(){
-        return (Rectangle) posizione;
+        getRectangle().height-=ALTEZZA_CARTA; //toglie l'altezza della carta tolta
     }
 
     private void riposiziona(){
