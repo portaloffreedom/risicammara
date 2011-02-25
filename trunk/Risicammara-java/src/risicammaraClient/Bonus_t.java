@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
     /** Bonus cavallo (tre cavalli = 8 armate in più)*/
     CAVALLO (8, "/Images/cavallo.png"),
     /** Bonus Jolly. Un jolly e due carte uguale 12 armate in più*/
-    JOLLY   (12, "/Images/cannone.png"); //TODO immagine per il jolly
+    JOLLY   (12, "/Images/jolly.png"); //TODO immagine per il jolly
 
     private int numarm;
     private String percorsoImmagine;
