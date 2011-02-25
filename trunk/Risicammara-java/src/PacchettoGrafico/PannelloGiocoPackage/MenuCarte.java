@@ -71,10 +71,8 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
 
     public void setAperto(boolean aperto){
         this.aperto = aperto;
-
-        final int BORDO_OFFSET = 2;
+        
         Rectangle rect = getRectangle(); //rettangolo originale - serve pure per catturare le azioni del mouse
-        Rectangle rettangolo = null; //rettangolo copia, per fare un repaint più ampio
 
         if (aperto) {
             //ricava le sottodimensioni
@@ -83,20 +81,31 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
             if (faseRinforzo)
                 numeroSottoMenu++;
             rect.height = (numeroSottoMenu*ALTEZZA_CARTA);
-            rettangolo = new Rectangle(rect);
+            ridisegna();
         }
         else {
-            rettangolo = new Rectangle(rect);
+            ridisegna();
             //imposta le dimensioni a 0 (non è più cliccabile)
             rect.height = 0;
         }
+    }
+
+    /**
+     * Chiamerà panel.repaint nelle dimensioni giuste
+     */
+    public void ridisegna(){
+        final int BORDO_OFFSET = 2;
+        
+        //rettangolo copia, per fare un repaint più ampio
+        Rectangle rettangolo = rettangolo = new Rectangle(getRectangle()); 
 
         //allarga i contorni di un pixel e poi ingloba anche parte del pulsante
         rettangolo.y /= 2;
         rettangolo.height+= rettangolo.y + BORDO_OFFSET;
         rettangolo.x -= BORDO_OFFSET;
         rettangolo.width += BORDO_OFFSET*2;
-        //ridisegna 
+        
+        //ridisegna
         ag.panelRepaint(rettangolo);
     }
 
@@ -109,6 +118,10 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
 
         CartaDisegnabile cartaDis = new CartaDisegnabile(carta, ALTEZZA_CARTA, LARGHEZZA_CARTA, partita.getMeStesso());
         listaCarteDisegnabili.add(cartaDis);
+        if (aperto){
+            getRectangle().height+=ALTEZZA_CARTA; //aggiunge l'altezza della carta aggiuta
+            ridisegna();
+        }
     }
 
     public void rimuoviCarta(CartaDisegnabile carta){
@@ -116,6 +129,10 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
         //listaCarte.remove(carta.getCarta()); da fare fare alla partitaClient
 
         //TODO ridisegna con la carta rimossa
+        if (aperto){
+            ridisegna();
+            getRectangle().height-=ALTEZZA_CARTA; //toglie l'altezza della carta tolta
+        }
     }
 
     private Point getPosition(){
@@ -150,7 +167,7 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
         
     }
 
-    @Override
+    @Override //cattura il mouse su se stesso
     protected void actionPressed(MouseEvent e) {
         if (!aperto)
             return;
@@ -175,7 +192,7 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
         return;
     }
 
-    @Override
+    @Override  //l'azione che deve fare quando si preme il pulsante menu
     public void actionPerformed(EventoAzioneRisicammara e) {
         //attiva questo menu :D
         setAperto(!aperto);
