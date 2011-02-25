@@ -13,6 +13,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import risicammaraClient.Bonus_t;
+import risicammaraClient.Colore_t;
 import risicammaraJava.deckManage.Carta;
 import risicammaraJava.turnManage.PartitaClient;
 
@@ -57,6 +59,14 @@ public class MenuCarte extends Elemento_2DGraphicsCliccable implements Risicamma
         this.faseRinforzo = true;
 
         super.posizione = new Rectangle(dimePanel.width-distanzaLatoSinistro-LARGHEZZA_CARTA, altezza, LARGHEZZA_CARTA, 0);
+
+
+        //carica in memoria le immagini dei bonus
+        boolean invertiColori = false;
+        if (partita.getMeStesso().getArmyColour() == Colore_t.NERO)
+            invertiColori = true;
+        
+        Bonus_t.caricaImmagini(invertiColori);
     }
 
     public void setAperto(boolean aperto){
