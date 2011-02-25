@@ -6,7 +6,6 @@
 package PacchettoGrafico.PannelloGiocoPackage;
 
 import PacchettoGrafico.GraphicsAdvanced;
-import risicammaraJava.playerManage.ListaGiocatoriClient;
 import PacchettoGrafico.OrologioTimer;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,7 +19,6 @@ import javax.swing.JPanel;
 import risicammaraClient.Client;
 import risicammaraClient.Colore_t;
 import risicammaraClient.territori_t;
-import risicammaraJava.boardManage.PlanciaClient;
 import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.turnManage.PartitaClient;
 
@@ -32,8 +30,7 @@ import risicammaraJava.turnManage.PartitaClient;
 final public class PannelloGioco extends JPanel{
     static public int ALTEZZAPANNELLO = 60;
 
-    private ListaGiocatoriClient listaGiocatori;
-    private PlanciaClient plancia;
+    private PartitaClient partita;
 
     private Dimension dimensioniPannello;
     private BarraSuperiore barra;
@@ -48,8 +45,7 @@ final public class PannelloGioco extends JPanel{
 
     public PannelloGioco(int frameRateMassimo, PartitaClient partita) {
         super();
-        this.listaGiocatori = partita.getListaGiocatori();
-        this.plancia = partita.getPlancia();
+        this.partita = partita;
         this.attivatoreGrafica = new AttivatoreGrafica(this);
         this.gestionePulsanti = new MatricePannello();
 
@@ -65,6 +61,9 @@ final public class PannelloGioco extends JPanel{
         //prova carte
         partita.aggiungiCartaMeStesso(territori_t.Cina);
         partita.aggiungiCartaMeStesso(territori_t.Jolly1);
+        partita.aggiungiCartaMeStesso(territori_t.Afghanistan);
+        partita.aggiungiCartaMeStesso(territori_t.Kamchatka);
+        partita.aggiungiCartaMeStesso(territori_t.Medio_Oriente);
 
         this.addMouseListener(new MouseListenerImpl(this));
         this.planciaImmagine = new PlanciaImmagine(new Point(0, ALTEZZAPANNELLO), partita, dimensioniPannello, attivatoreGrafica);
@@ -72,7 +71,7 @@ final public class PannelloGioco extends JPanel{
         AscoltatorePlanciaEvidenziatore ascoltatorePlancia = new AscoltatorePlanciaEvidenziatore(planciaImmagine, attivatoreGrafica);
         planciaImmagine.setActionListener(ascoltatorePlancia);
 
-        this.impostaColori(listaGiocatori.meStesso());
+        this.impostaColori(partita.getMeStesso());
 
         Dimension dimensioniMinime = this.getDimensioniMinime();
         this.setMinimumSize(dimensioniMinime);

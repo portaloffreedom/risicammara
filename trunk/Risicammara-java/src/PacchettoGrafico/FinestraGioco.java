@@ -18,12 +18,14 @@ import risicammaraClient.Client;
 import risicammaraClient.Connessione;
 import risicammaraClient.territori_t;
 import risicammaraJava.boardManage.TerritorioPlanciaClient;
+import risicammaraJava.deckManage.Carta;
 import risicammaraJava.turnManage.Fasi_t;
 import risicammaraJava.turnManage.PartitaClient;
 import risicammaraServer.messaggiManage.Messaggio;
 import risicammaraServer.messaggiManage.MessaggioArmateDisponibili;
 import risicammaraServer.messaggiManage.MessaggioAttaccoVinto;
 import risicammaraServer.messaggiManage.MessaggioCambiaArmateTerritorio;
+import risicammaraServer.messaggiManage.MessaggioCarta;
 import risicammaraServer.messaggiManage.MessaggioComandi;
 import risicammaraServer.messaggiManage.MessaggioDichiaraAttacco;
 import risicammaraServer.messaggiManage.MessaggioFase;
@@ -271,6 +273,18 @@ public class FinestraGioco extends JFrame implements Runnable {
                     
                     break;
                 }
+                case CARTA: {
+                    MessaggioCarta msgCarta = (MessaggioCarta) msg;
+                    Carta carta = msgCarta.getCarta();
+                    if (carta == null) {
+                        //TODO l'altro giocatore ha pescato una carta
+                    }
+                    else {
+                        partita.aggiungiCartaMeStesso(carta);
+                    }
+                    break;
+                }
+
 
                 default:
                     System.err.println("MESSAGGIO NON RICONOSCIUTO! "+msg);
