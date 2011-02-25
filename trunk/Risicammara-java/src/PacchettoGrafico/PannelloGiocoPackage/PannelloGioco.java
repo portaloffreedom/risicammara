@@ -59,11 +59,13 @@ final public class PannelloGioco extends JPanel{
         partita.setMenuCarte(barra.getMenuCarte());
         
         //prova carte
-        partita.aggiungiCartaMeStesso(territori_t.Cina);
-        partita.aggiungiCartaMeStesso(territori_t.Jolly1);
-        partita.aggiungiCartaMeStesso(territori_t.Afghanistan);
-        partita.aggiungiCartaMeStesso(territori_t.Kamchatka);
-        partita.aggiungiCartaMeStesso(territori_t.Medio_Oriente);
+        if (Client.DEBUG) {
+            partita.aggiungiCartaMeStesso(territori_t.Cina);
+            partita.aggiungiCartaMeStesso(territori_t.Jolly1);
+            partita.aggiungiCartaMeStesso(territori_t.Afghanistan);
+            partita.aggiungiCartaMeStesso(territori_t.Kamchatka);
+            partita.aggiungiCartaMeStesso(territori_t.Medio_Oriente);
+        }
 
         this.addMouseListener(new MouseListenerImpl(this));
         this.planciaImmagine = new PlanciaImmagine(new Point(0, ALTEZZAPANNELLO), partita, dimensioniPannello, attivatoreGrafica);
