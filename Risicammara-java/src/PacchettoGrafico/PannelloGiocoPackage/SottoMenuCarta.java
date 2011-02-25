@@ -6,7 +6,6 @@
 package PacchettoGrafico.PannelloGiocoPackage;
 
 import PacchettoGrafico.GraphicsAdvanced;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -70,6 +69,11 @@ public class SottoMenuCarta extends Elemento_2DGraphicsCliccable {
         if (Client.DEBUG)
             System.out.println("Sotto menu \""+this.testo+"\" premuto");
         super.actionPressed(e);
+    }
+
+    @Override
+    public String toString() {
+        return "SottoMenuCarta{" + "testo=" + testo + '}';
     }
 
 }
