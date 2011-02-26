@@ -83,6 +83,11 @@ public class AscoltatoreGiocaTris implements RisicammaraEventListener {
         for(int i=0; i<NUMERO_CARTE_TRIS; i++) {
             if (carte[i] == null) {
                 carte[i] = (CartaDisegnabile) pulsanteCarta;
+                //controllo se c'è un tris o se sono state selezionate tre carte a caso
+                if (contatoreSelezionate == 2 && !eTRIS(carte[0].getCarta().getBonus(), carte[1].getCarta().getBonus(), carte[2].getCarta().getBonus())) {
+                    carte[i] = null;
+                    return;
+                }
                 selezionaCarta(carte[i], true);
                 contatoreSelezionate++;
                 if (Client.DEBUG)
@@ -114,7 +119,29 @@ public class AscoltatoreGiocaTris implements RisicammaraEventListener {
             menuCarte.rimuoviCarta(carte[i]);
             carte[i] = null;
         }
+
         selezionaCarta(richiestaUsoTris, false);
+        menuCarte.setFaseRinforzo(false);
         return;
     }
+
+    static private boolean eTRIS (Bonus_t bonus1,Bonus_t bonus2,Bonus_t bonus3) {
+        if (bonus1 == Bonus_t.JOLLY || bonus2 == Bonus_t.JOLLY || bonus3 == Bonus_t.JOLLY) {
+            if (       ( bonus3 == Bonus_t.JOLLY && bonus1 == bonus2 )
+                    || ( bonus1 == Bonus_t.JOLLY && bonus2 == bonus3 )
+                    || ( bonus2 == Bonus_t.JOLLY && bonus1 == bonus3 ) )
+                return true;
+            else
+                return false;
+        }
+
+        if (bonus1 == bonus2 && bonus2 == bonus3)
+            return true;
+
+        if (bonus1 != bonus2 && bonus2 != bonus3 && bonus1 != bonus3)
+            return true;
+
+        return false;
+    }
+
 }

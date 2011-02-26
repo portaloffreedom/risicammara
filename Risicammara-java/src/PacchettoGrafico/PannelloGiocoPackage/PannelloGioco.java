@@ -62,6 +62,11 @@ final public class PannelloGioco extends JPanel{
         //prova carte
         if (Client.DEBUG) {
             partita.aggiungiCartaMeStesso(territori_t.Cina);
+            partita.aggiungiCartaMeStesso(territori_t.Argentina);
+            partita.aggiungiCartaMeStesso(territori_t.Egitto);
+            partita.aggiungiCartaMeStesso(territori_t.Gran_Bretagna);
+            partita.aggiungiCartaMeStesso(territori_t.Scandinavia);
+            partita.aggiungiCartaMeStesso(territori_t.Ucraina);
             partita.aggiungiCartaMeStesso(territori_t.Jolly1);
             partita.aggiungiCartaMeStesso(territori_t.Afghanistan);
             partita.aggiungiCartaMeStesso(territori_t.Kamchatka);
