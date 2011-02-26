@@ -14,10 +14,12 @@ import risicammaraClient.Colore_t;
  * @author matteo
  */
 public class GraphicsAdvanced {
+    static private final double FATTORE_EVIDENZIAZIONE = 0.3;
     private Color coloreScuro;
     private Color coloreChiaro;
     private Color testo;
     private Color coloreGiocatore;
+    private Color coloreGiocatoreEvidenziato;
 
     /**
      * Costruttore
@@ -36,6 +38,10 @@ public class GraphicsAdvanced {
         this.coloreChiaro = coloreChiaro;
         this.testo = coloreTesto;
         this.coloreGiocatore = coloreGiocatore;
+        if (coloreGiocatore == Color.black || coloreGiocatore == Color.blue)
+            this.coloreGiocatoreEvidenziato = getBrighter(coloreGiocatore);
+        else
+            this.coloreGiocatoreEvidenziato = coloreGiocatore.darker();
     }
 
     /**
@@ -91,5 +97,28 @@ public class GraphicsAdvanced {
             return Color.black;
         else 
             return Color.white;
+    }
+
+
+    public Color getColoreGiocatoreEvidenziato() {
+        return coloreGiocatoreEvidenziato;
+    }
+
+    private static Color getBrighter(Color partenza){
+        int r = partenza.getRed();
+        int g = partenza.getGreen();
+        int b = partenza.getBlue();
+
+        if (r==0)r++;
+        if (g==0)g++;
+        if (b==0)b++;
+
+        r *= (255*FATTORE_EVIDENZIAZIONE);
+        g *= (255*FATTORE_EVIDENZIAZIONE);
+        b *= (255*FATTORE_EVIDENZIAZIONE);
+
+        return new Color(Math.min(r, 255),
+                         Math.min(g, 255),
+                         Math.min(b, 255));
     }
 }
