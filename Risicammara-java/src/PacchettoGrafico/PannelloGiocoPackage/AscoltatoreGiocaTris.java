@@ -7,6 +7,7 @@ package PacchettoGrafico.PannelloGiocoPackage;
 
 import PacchettoGrafico.EventoAzioneRisicammara;
 import java.io.IOException;
+import risicammaraClient.Bonus_t;
 import risicammaraClient.Client;
 import risicammaraClient.Connessione;
 import risicammaraClient.territori_t;
@@ -101,7 +102,7 @@ public class AscoltatoreGiocaTris implements RisicammaraEventListener {
     private void mandaTris(){
         selezionaCarta(richiestaUsoTris, true);
         try {
-            server.spedisci(new MessaggioGiocaTris(NUMERO_CARTE_TRIS, carte[0].getCarta(), carte[1].getCarta(), carte[2].getCarta()));
+            server.spedisci(new MessaggioGiocaTris(partita.getMeStessoIndex(), carte[0].getCarta(), carte[1].getCarta(), carte[2].getCarta()));
         } catch (IOException ex) {
             System.out.println("Impossibile mandare il messaggio di Tris: "+ex);
         }
@@ -116,5 +117,4 @@ public class AscoltatoreGiocaTris implements RisicammaraEventListener {
         selezionaCarta(richiestaUsoTris, false);
         return;
     }
-
 }
