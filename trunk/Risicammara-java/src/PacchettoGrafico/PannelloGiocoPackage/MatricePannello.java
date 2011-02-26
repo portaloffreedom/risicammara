@@ -7,7 +7,6 @@ package PacchettoGrafico.PannelloGiocoPackage;
 
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 /**
  * Elemento che gestisce la distribuzione degli eventi (del mouse) sul pannello;

@@ -3,7 +3,6 @@ package PacchettoGrafico.PannelloGiocoPackage;
 import PacchettoGrafico.ContatoreFasi;
 import PacchettoGrafico.EventoAzioneRisicammara;
 import PacchettoGrafico.GraphicsAdvanced;
-import PacchettoGrafico.PannelloGiocoPackage.Elemento_2DGraphicsCliccable;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
@@ -25,7 +24,7 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
     BottoneFase spostamento;
     private RisicammaraEventListener ascoltatoreSpostamento;
 
-    BottoneFase attacco;
+    BottoneFaseAvanzato attacco;
     private RisicammaraEventListener ascoltatoreAttacco;
 
     BottoneFase rinforzi;
@@ -57,7 +56,7 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
         //TODO posizionare per bene i bottone fasi(uno sopra all'altro, poi vengono rimpiccioliti
         int larghezzaB = LarghezzaBottoniMassima(ret.width);
         this.spostamento = new BottoneFase(dimPannello, ag, new Point(inizio,     bordoSup),larghezzaB, altezza);
-        this.attacco     = new BottoneFase(dimPannello, ag, new Point(inizio+50,  bordoSup),larghezzaB, altezza);
+        this.attacco     = new BottoneFaseAvanzato(dimPannello, ag, new Point(inizio+50,  bordoSup),larghezzaB, altezza);
         this.rinforzi    = new BottoneFase(dimPannello, ag, new Point(inizio+100, bordoSup),larghezzaB, altezza);
 
         //this.spostamento.setActionListener(spostamento);
@@ -295,5 +294,13 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
 
     public void setAscoltatoreSpostamento(RisicammaraEventListener ascoltatoreSpostamento) {
         this.ascoltatoreSpostamento = ascoltatoreSpostamento;
+    }
+
+    public void setRisultato(int[] dadiAttacco, int[] dadiDifesa) {
+        attacco.setRisultato(dadiAttacco, dadiDifesa);
+    }
+
+    public void disattivaDadi() {
+        attacco.disattivaDadi();
     }
 }
