@@ -25,10 +25,10 @@ final public class GestoreFasi {
 
     private boolean preFase;
 
-    private AscoltatoreFineTurno   ascoltatoreFineTurno;
+    private AscoltatoreFasi ascoltatoreFineTurno;
     //private AscoltatoreRinforzo    ascoltatoreRinforzo;
-    //private AscoltatoreAttacco     ascoltatoreAttacco;
-    private AscoltatoreSpostamento ascoltatoreSpostamento;
+    private AscoltatoreFasi ascoltatoreAttacco;
+    private AscoltatoreFasi ascoltatoreSpostamento;
 
     private AscoltatorePlanciaRinforzo      ascoltatorePlanciaRinforzo;
     private AscoltatorePlanciaEvidenziatore ascoltatorePlanciaEvidenziatore;
@@ -60,10 +60,10 @@ final public class GestoreFasi {
 
         this.preFase = true;
 
-        this.ascoltatoreFineTurno = new AscoltatoreFineTurno(this, partita.getMeStessoIndex());
-        //this.ascoltatoreRinforzo = new AscoltatoreRinforzo();
-        //this.ascoltatoreAttacco = new AscoltatoreAttacco();
-        this.ascoltatoreSpostamento = new AscoltatoreSpostamento(this, partita.getMeStessoIndex());
+        this.ascoltatoreFineTurno   = new AscoltatoreFasi(this, server, partita.getMeStessoIndex(), Fasi_t.FINETURNO);
+        //this.ascoltatoreRinforzo  = new AscoltatoreFasi(this, server, partita.getMeStessoIndex(), Fasi_t.RINFORZO);
+        this.ascoltatoreAttacco     = new AscoltatoreFasi(this, server, partita.getMeStessoIndex(), Fasi_t.ATTACCO);
+        this.ascoltatoreSpostamento = new AscoltatoreFasi(this, server, partita.getMeStessoIndex(), Fasi_t.SPOSTAMENTO);
         
         this.ascoltatorePlanciaEvidenziatore = new AscoltatorePlanciaEvidenziatore(planciaImmagine, ag);
         this.ascoltatorePlanciaRinforzo = new AscoltatorePlanciaRinforzo(planciaImmagine, server, partita.getMeStessoIndex());
@@ -78,7 +78,9 @@ final public class GestoreFasi {
      */
     public void faseToAttesa(){
         barraFasi.resetFase();
-        setAscoltatore(false, false);
+        setAscoltatoreFineTurno(false);
+        setAscoltatoreSpostamenti(false);
+        setAscoltatoreAttacco(false);
         menuCarte.setFaseRinforzo(false);
         planciaImmagine.setActionListener(ascoltatorePlanciaEvidenziatore);
     }
@@ -95,30 +97,32 @@ final public class GestoreFasi {
     public void avanzaFase(){
         barraFasi.avanzaFase();
         switch(barraFasi.getFase()){
-            case FINETURNO:
-                setAscoltatore(false, false);
+            case FINETURNO: // - 
+                setAscoltatoreAttacco(false);
+                setAscoltatoreSpostamenti(false);
+                setAscoltatoreFineTurno(false);
                 planciaImmagine.setActionListener(ascoltatorePlanciaEvidenziatore);
                 return;
 
-            case RINFORZO:
-                setAscoltatore(false, false);
+            case RINFORZO: // (attacco)
                 if (!preFase) //non attiva la possibilità di giocare le carte se si è in prefase
                     menuCarte.setFaseRinforzo(true);
                 if (armateRinforzoDisponibili == 0) //attiva la possibilità di passare il turno non si hanno armate (si potrebbe giocare un tris)
-                    setAscoltatore(true, false);
-                ascoltatorePlanciaEvidenziatore.deSeleziona();
+                    setAscoltatoreFineTurno(true);
+                ascoltatorePlanciaEvidenziatore.pulisci(); //deseleziona i possibili rimasugli di ascoltatorePlanciaEvidenzazione
                 planciaImmagine.setActionListener(ascoltatorePlanciaRinforzo);
                 return;
 
-            case ATTACCO:
-                setAscoltatore(true, true);
+            case ATTACCO: //fineturno spostamenti
+                setAscoltatoreFineTurno(true);
+                setAscoltatoreSpostamenti(true);
                 menuCarte.setFaseRinforzo(false);
                 barraFasi.rinforzi.setDisegnaTestoSmosciato(true);
                 planciaImmagine.setActionListener(ascoltatorePlanciaAttacco);
                 return;
 
-            case SPOSTAMENTO:
-                setAscoltatore(true, false);
+            case SPOSTAMENTO: //fineturno
+                setAscoltatoreSpostamenti(false);
                 barraFasi.attacco.setDisegnaTestoSmosciato(true);
                 planciaImmagine.setActionListener(ascoltatorePlanciaSpostamento);
                 return;
@@ -132,13 +136,15 @@ final public class GestoreFasi {
         }
     }
 
-    public void setAscoltatore(boolean fineTurno, boolean spostamenti){
+    public void setAscoltatoreFineTurno(boolean fineTurno) {
         //FINE TURNO
         if (fineTurno)
             barraFasi.setAscoltatoreFineTurno(ascoltatoreFineTurno);
         else
             barraFasi.setAscoltatoreFineTurno(null);
+    }
 
+    public void setAscoltatoreSpostamenti (boolean spostamenti){
         //SPOSTAMENTI
         if (spostamenti)
             barraFasi.setAscoltatoreSpostamento(ascoltatoreSpostamento);
@@ -146,10 +152,20 @@ final public class GestoreFasi {
             barraFasi.setAscoltatoreSpostamento(null);
     }
 
+    public void setAscoltatoreAttacco (boolean attacco){
+        //SPOSTAMENTI
+        if (attacco)
+            barraFasi.setAscoltatoreAttacco(ascoltatoreAttacco);
+        else
+            barraFasi.setAscoltatoreAttacco(null);
+    }
+
     final public void setArmateRinforzoDisponibili(int armate){
         this.armateRinforzoDisponibili = armate;
-        if (armateRinforzoDisponibili > 0)
-            setAscoltatore(false, false);
+        if (armateRinforzoDisponibili > 0) {
+            setAscoltatoreFineTurno(false);
+            setAscoltatoreAttacco(false);
+        }
         barraFasi.rinforzi.setTestoDestra("Armate disponibili: "+armateRinforzoDisponibili);
         barraFasi.rinforzi.setTestoSmosciato(""+armateRinforzoDisponibili);
         ag.panelRepaint(barraFasi.rinforzi.getBounds());
@@ -164,45 +180,33 @@ final public class GestoreFasi {
         return barraFasi.getFase();
     }
 
-    // <editor-fold defaultstate="collapsed" desc="AscoltatoriPulsantiFase">
-    private class AscoltatoreFineTurno implements RisicammaraEventListener {
-        private GestoreFasi fasi;
-        private int meStesso;
-
-        public AscoltatoreFineTurno(GestoreFasi fasi, int meStesso) {
-            this.fasi = fasi;
-            this.meStesso = meStesso;
-        }
-
-        public void actionPerformed(EventoAzioneRisicammara e) {
-            try {
-                server.spedisci(new MessaggioFase(Fasi_t.FINETURNO, meStesso));
-            } catch (IOException ex) {
-                System.err.println("Messaggio fine turno non inviato: "+ex);
-                return;
-            }
-            fasi.faseToAttesa();
-        }
+    public void terminaAttaccoInCorso() {
+        ascoltatorePlanciaAttacco.terminaAttacco();
     }
 
-    private class AscoltatoreSpostamento implements RisicammaraEventListener {
+    // <editor-fold defaultstate="collapsed" desc="AscoltatoriPulsantiFase">
+    private class AscoltatoreFasi implements RisicammaraEventListener {
         private GestoreFasi gestoreFasi;
+        private Connessione server;
         private int meStesso;
+        private Fasi_t fase;
 
-        public AscoltatoreSpostamento(GestoreFasi gestoreFasi, int meStesso) {
+        public AscoltatoreFasi(GestoreFasi gestoreFasi, Connessione server, int meStesso, Fasi_t fase) {
             this.gestoreFasi = gestoreFasi;
+            this.server = server;
             this.meStesso = meStesso;
+            this.fase = fase;
         }
-        
+
+        @Override
         public void actionPerformed(EventoAzioneRisicammara e) {
-            //da attacco passa a spostamenti
             try {
-                server.spedisci(new MessaggioFase(Fasi_t.SPOSTAMENTO, meStesso));
+                server.spedisci(new MessaggioFase(fase, meStesso));
             } catch (IOException ex) {
-                System.err.println("Messaggio passaggio a turno spostamento non inviato: "+ex);
+                System.err.println("Messaggio "+fase+" non inviato: "+ex);
                 return;
             }
-            gestoreFasi.avanzaFase();
+            gestoreFasi.setFase(fase);
         }
     }
     // </editor-fold>

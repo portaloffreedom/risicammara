@@ -157,10 +157,14 @@ public class FinestraGioco extends JFrame implements Runnable {
                         }
 
                         case ATTACCOTERMINATO: {
-                            territori_t attaccante = partita.getTerritorioAttaccante();
-                            territori_t difensore  = partita.getTerritorioAttaccato();
-                            plancia.ripristinaTerritorio(attaccante);
-                            plancia.ripristinaTerritorio(difensore);
+                            if (partita.eMioTurno())
+                                gestoreFasi.terminaAttaccoInCorso();
+                            else {
+                                territori_t attaccante = partita.getTerritorioAttaccante();
+                                territori_t difensore  = partita.getTerritorioAttaccato();
+                                plancia.ripristinaTerritorio(attaccante);
+                                plancia.ripristinaTerritorio(difensore);
+                            }
                             break;
                         }
                             

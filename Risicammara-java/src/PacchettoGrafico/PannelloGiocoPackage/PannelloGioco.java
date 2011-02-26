@@ -18,7 +18,6 @@ import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 import risicammaraClient.Client;
 import risicammaraClient.Colore_t;
-import risicammaraClient.Connessione;
 import risicammaraClient.territori_t;
 import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.turnManage.PartitaClient;

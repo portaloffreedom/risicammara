@@ -82,7 +82,8 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener, Acti
         }
         
         plancia.coloraSfumato(territorioAttaccante, Attacco, pesantezzaSfumatura);
-        fasi.setAscoltatore(false, false);
+        fasi.setAscoltatoreFineTurno(false);
+        fasi.setAscoltatoreSpostamenti(false);
     }
     
     private void selezionaTerritorioDifensore(int idTerritorio) {
@@ -145,7 +146,7 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener, Acti
         try {
             if (armateAttaccanti == 0){
                 ritiratiAttacco();
-                terminaAttacco();
+                distruggiFinestraNumeroArmate();
                 return;
             }
             server.spedisci(MessaggioComandi.creaMsgLanciadado(partita.getMeStessoIndex(), armateAttaccanti));
@@ -154,7 +155,7 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener, Acti
             return;
         }
 
-        terminaAttacco();
+        distruggiFinestraNumeroArmate();
     }
     
     /**
@@ -164,22 +165,26 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener, Acti
      */
     private void attaccoInCorso(boolean attacco){
         this.attaccoInCorso = attacco;
-        this.fasi.setAscoltatore(!attacco, !attacco);
+        fasi.setAscoltatoreSpostamenti(!attacco);
+        fasi.setAscoltatoreFineTurno(!attacco);
     }
 
     private void ritiratiAttacco() throws IOException {
         server.spedisci(MessaggioComandi.creaMsgRitirati(partita.getMeStessoIndex()));
     }
 
-    private void terminaAttacco() {
+    public void terminaAttacco() {
         attaccoInCorso(false);
         plancia.ripristinaTerritorio(territorioAttaccante);
         plancia.ripristinaTerritorio(territorioDifensore);
         territorioAttaccante = null;
         territorioDifensore = null;
+        distruggiFinestraNumeroArmate();
+    }
+
+    public void distruggiFinestraNumeroArmate() {
         if (numeroArmate != null){
-            numeroArmate.setVisible(false);
-            numeroArmate.dispose();
+            numeroArmate.distruggiFinestra();
             numeroArmate = null;
         }
     }
@@ -196,7 +201,7 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener, Acti
             System.err.println("Messaggio ritirati non riuscito!: "+ex);
             //qui va in palla
         }
-        terminaAttacco();
+        //terminaAttaccoInCorso();
     }
 
     @Override

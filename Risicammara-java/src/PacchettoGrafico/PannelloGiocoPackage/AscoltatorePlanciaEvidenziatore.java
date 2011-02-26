@@ -73,7 +73,7 @@ public class AscoltatorePlanciaEvidenziatore implements RisicammaraEventListener
     /**
      * Deseleziona il territorio se ce n'è uno selezionato.
      */
-    public void deSeleziona() {
+    public void pulisci() {
         if (selezionato) {
             try {
                 
