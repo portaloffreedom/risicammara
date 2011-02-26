@@ -6,22 +6,115 @@
 package PacchettoGrafico.PannelloGiocoPackage;
 
 import PacchettoGrafico.EventoAzioneRisicammara;
+import java.io.IOException;
+import risicammaraClient.Client;
 import risicammaraClient.Connessione;
+import risicammaraClient.territori_t;
 import risicammaraJava.turnManage.PartitaClient;
+import risicammaraServer.messaggiManage.MessaggioGiocaTris;
 
 /**
  *
  * @author matteo
  */
 public class AscoltatoreGiocaTris implements RisicammaraEventListener {
+    private static final int NUMERO_CARTE_TRIS = 3;
+    private static final String TESTO_DESELEZIONE = "Gioca Tris";
+
     private MenuCarte menuCarte;
     private PartitaClient partita;
+    private AttivatoreGrafica attivatoreGrafica;
     private Connessione server;
+    private SottoMenuCarta richiestaUsoTris;
+
+    private int contatoreSelezionate;
+    private CartaDisegnabile carte[];
+    private boolean active;
+
+    public AscoltatoreGiocaTris(MenuCarte menuCarte, AttivatoreGrafica ag, PartitaClient partita) {
+        this.menuCarte = menuCarte;
+        this.attivatoreGrafica = ag;
+        this.partita = partita;
+        this.server = partita.getConnessione();
+        this.richiestaUsoTris = menuCarte.getRichiestaUsoTris();
+
+        this.active = false;
+        this.contatoreSelezionate = 0;
+        this.carte = new CartaDisegnabile[NUMERO_CARTE_TRIS];
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
     @Override
     public void actionPerformed(EventoAzioneRisicammara e) {
-        SottoMenuCarta carta = (SottoMenuCarta) e.getSource();
-        System.out.println("Tasto premuto: "+carta);
+        if (!active)
+            return;
+        
+        SottoMenuCarta pulsanteCarta = (SottoMenuCarta) e.getSource();
+        if (Client.DEBUG)
+            System.out.println("Tasto premuto: "+pulsanteCarta);
+
+        territori_t carta = pulsanteCarta.getCarta();
+
+        //controlla se è stato premuto il pulsante di GIOCA TRIS
+        if (carta == null) {
+            if (contatoreSelezionate == NUMERO_CARTE_TRIS)
+                mandaTris();
+            
+            return;
+        }
+
+        //cerca se la carte è già selezionata allora la deseleziona
+        for(int i=0; i<NUMERO_CARTE_TRIS; i++) {
+            if (carte[i] == pulsanteCarta) {
+                selezionaCarta(carte[i], false);
+                carte[i] = null;
+                contatoreSelezionate--;
+                if (Client.DEBUG)
+                    System.out.println("Deselezionato");
+                return;
+            }
+        }
+
+        //imposta alla prima posizione disponibile
+        for(int i=0; i<NUMERO_CARTE_TRIS; i++) {
+            if (carte[i] == null) {
+                carte[i] = (CartaDisegnabile) pulsanteCarta;
+                selezionaCarta(carte[i], true);
+                contatoreSelezionate++;
+                if (Client.DEBUG)
+                    System.out.println("Selezionato");
+                return;
+            }
+        }
+
+        
+    }
+
+    private void selezionaCarta(SottoMenuCarta carta, boolean selezionata) {
+        carta.setSelezionato(selezionata);
+        attivatoreGrafica.panelRepaint(carta.getContorni());
+    }
+
+    private void mandaTris(){
+        selezionaCarta(richiestaUsoTris, true);
+        try {
+            server.spedisci(new MessaggioGiocaTris(NUMERO_CARTE_TRIS, carte[0].getCarta(), carte[1].getCarta(), carte[2].getCarta()));
+        } catch (IOException ex) {
+            System.out.println("Impossibile mandare il messaggio di Tris: "+ex);
+        }
+        
+        contatoreSelezionate = 0;
+        richiestaUsoTris.setTesto(TESTO_DESELEZIONE);
+        for(int i=0; i<NUMERO_CARTE_TRIS; i++) {
+            partita.getMeStesso().remTerr(carte[i].getCarta());
+            menuCarte.rimuoviCarta(carte[i]);
+            carte[i] = null;
+        }
+        selezionaCarta(richiestaUsoTris, false);
+        return;
     }
 
 }

@@ -26,7 +26,7 @@ public class MenuCarte extends MenuRisicammara {
     static public int LARGHEZZA_CARTA = 200;
     static public int ALTEZZA_CARTA = 50;
 
-    private SottoMenuCarta richiestaSelezioneCarte;
+    private SottoMenuCarta richiestaUsoTris;
     private ArrayList<CartaDisegnabile> listaCarteDisegnabili;
     private AscoltatoreGiocaTris ascoltatoreTris;
 
@@ -51,9 +51,9 @@ public class MenuCarte extends MenuRisicammara {
         this.distanzaLatoSuperiore = altezza;
         this.partita = partita;
 
-        this.ascoltatoreTris = new AscoltatoreGiocaTris();
-        this.richiestaSelezioneCarte = new SottoMenuCarta("Gioca un TRIS", ALTEZZA_CARTA, LARGHEZZA_CARTA); //TODO fallo disegnare al centro il testo
-        this.richiestaSelezioneCarte.setActionListener(ascoltatoreTris);
+        this.richiestaUsoTris = new SottoMenuCarta("Gioca un TRIS", ALTEZZA_CARTA, LARGHEZZA_CARTA); //TODO fallo disegnare al centro il testo
+        this.ascoltatoreTris = new AscoltatoreGiocaTris(this, ag, partita);
+        this.richiestaUsoTris.setActionListener(ascoltatoreTris);
         this.listaCarteDisegnabili = new ArrayList<CartaDisegnabile>();
 
         this.aperto = false;
@@ -71,7 +71,11 @@ public class MenuCarte extends MenuRisicammara {
     }
 
     public void setFaseRinforzo(boolean faseRinforzo) {
+        if (this.faseRinforzo == faseRinforzo)
+            return;
+
         this.faseRinforzo = faseRinforzo;
+        ascoltatoreTris.setActive(faseRinforzo);
         if (faseRinforzo) {
             getRectangle().height+=ALTEZZA_CARTA;
             ridisegna();
@@ -110,6 +114,10 @@ public class MenuCarte extends MenuRisicammara {
         getRectangle().x = dimensioniPannello.width-distanzaLatoSinistro-LARGHEZZA_CARTA;
     }
 
+    public SottoMenuCarta getRichiestaUsoTris() {
+        return richiestaUsoTris;
+    }
+
     @Override
     public void disegna(Graphics2D g2, GraphicsAdvanced ga) {
         riposiziona(); //mette a posto le dimensioni
@@ -117,8 +125,8 @@ public class MenuCarte extends MenuRisicammara {
         Point posizioneCarta = getPosition();
         if (aperto){
             if (faseRinforzo){
-                richiestaSelezioneCarte.setPosizione(posizioneCarta);
-                richiestaSelezioneCarte.disegna(g2, ga);
+                richiestaUsoTris.setPosizione(posizioneCarta);
+                richiestaUsoTris.disegna(g2, ga);
                 posizioneCarta.y+=ALTEZZA_CARTA;
             }
             for (CartaDisegnabile cartaDisegnabile : listaCarteDisegnabili) {
@@ -143,7 +151,7 @@ public class MenuCarte extends MenuRisicammara {
         
         if (faseRinforzo) {
             if (y == 0) {
-                richiestaSelezioneCarte.doClicked(e);
+                richiestaUsoTris.doClicked(e);
                 return;
             }
             else

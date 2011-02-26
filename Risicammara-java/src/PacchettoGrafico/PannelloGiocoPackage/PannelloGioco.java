@@ -18,6 +18,7 @@ import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 import risicammaraClient.Client;
 import risicammaraClient.Colore_t;
+import risicammaraClient.Connessione;
 import risicammaraClient.territori_t;
 import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.turnManage.PartitaClient;
@@ -228,6 +229,10 @@ final public class PannelloGioco extends JPanel{
 
     public BarraFasi getBarraFasi(){
         return barra.getBarraFasi();
+    }
+
+    public MenuCarte getMenuCarte() {
+        return barra.getMenuCarte();
     }
 
     public AttivatoreGrafica getAttivatoreGrafica() {
