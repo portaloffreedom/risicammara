@@ -1,6 +1,7 @@
 package risicammaraServer.messaggiManage;
 
 import java.util.PriorityQueue;
+import risicammaraClient.Client;
 
 
 /**
@@ -20,23 +21,70 @@ public class MessaggioRisultatoLanci implements Messaggio {
         this.attaccante = attaccante;
         this.difensore = difensore;
     }
-/**
- * Fornisce ad ogni chiamata il risultato di un dado lanciato dall'attaccante.
- * @return se è minore di 0 allora non ci sono più risultati.
- */
-    public int getLancioAttacco(){
-        Integer result = lancioAttacco.poll();
+    private int[] getValori(PriorityQueue<Integer> sequenza) {
+        int valoreLancio = 0;
+        int contatoreLanci = 0;
+        int valori[] = new int[3];
+
+        if (Client.DEBUG) System.out.println("Risultato dado :");
+
+       while (true) {
+            valoreLancio = this.getLancio(sequenza);
+
+            if (valoreLancio < 0)
+                break; //se ha estratto -1 allora ha finito di estrarre
+
+            if (Client.DEBUG) System.out.print(" "+valoreLancio);
+            valori[contatoreLanci] = valoreLancio;
+            contatoreLanci++;
+        }
+
+        if (Client.DEBUG) System.out.println();
+
+        int valoriRitorno[] = new int[contatoreLanci];
+        System.arraycopy(valori, 0, valoriRitorno, 0, valoriRitorno.length);
+
+        return valoriRitorno;
+    }
+
+    private int getLancio(PriorityQueue<Integer> sequenza) {
+        Integer result = sequenza.poll();
         if(result == null) result = 1;
         return -result;
     }
-/**
- * Fornisce ad ogni chiamata il risultato di un dado lanciato dal difensore.
- * @return se è minore di 0 allora non ci sono più risultati.
- */
+
+    /**
+     * Fornisce ad ogni chiamata il risultato di un dado lanciato dall'attaccante.
+     * @return se è minore di 0 allora non ci sono più risultati.
+     * @deprecated 
+     */
+    public int getLancioAttacco(){
+        return getLancio(lancioAttacco);
+    }
+
+    /**
+     * Fornisce ad ogni chiamata il risultato di un dado lanciato dal difensore.
+     * @return se è minore di 0 allora non ci sono più risultati.
+     * @deprecated
+     */
     public int getLancioDifesa(){
-        Integer result =lancioDifesa.poll();
-        if(result == null) result = 1;
-        return -result;
+        return getLancio(lancioDifesa);
+    }
+
+    /**
+     * Fornisce l'array dei risultati dell'attaccante
+     * @return l'array dimensionato giusto dei dadi tirati dall'attaccante
+     */
+    public int[] getValoriAttacco(){
+        return getValori(lancioAttacco);
+    }
+
+    /**
+     * Fornisce l'array dei risultati dell'difensore
+     * @return l'array dimensionato giusto dei dadi tirati dal difensore
+     */
+    public int[] getValoriDifesa(){
+        return getValori(lancioDifesa);
     }
 
     public int getAttaccante() {
@@ -47,10 +95,12 @@ public class MessaggioRisultatoLanci implements Messaggio {
         return difensore;
     }
     
+    @Override
     public messaggio_t getType() {
         return messaggio_t.RISULTATOLANCI;
     }
 
+    @Override
     public int getSender() {
         return -1;
     }

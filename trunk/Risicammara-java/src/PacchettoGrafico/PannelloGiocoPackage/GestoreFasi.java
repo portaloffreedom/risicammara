@@ -21,6 +21,7 @@ final public class GestoreFasi {
     private BarraFasi barraFasi;
     private PlanciaImmagine planciaImmagine;
     private MenuCarte menuCarte;
+    private PannelloGioco pannello;
     private int armateRinforzoDisponibili;
 
     private boolean preFase;
@@ -49,12 +50,13 @@ final public class GestoreFasi {
      * visualizzazione della plancia). Serve per agganciarci gli ascoltatori.
      * @param ag riferimento all'Attivatore Grafica (per ridisegnare il pannello)
      */
-    public GestoreFasi(BarraFasi barraFasi, PartitaClient partita, PlanciaImmagine planciaImmagine, AttivatoreGrafica ag, MenuCarte menuCarte) {
-        this.menuCarte = menuCarte;
-        this.barraFasi = barraFasi;
+    public GestoreFasi(PartitaClient partita, PlanciaImmagine planciaImmagine, PannelloGioco pannello) {
+        this.pannello = pannello;
+        this.menuCarte = pannello.getMenuCarte();
+        this.barraFasi = pannello.getBarraFasi();
         this.planciaImmagine = planciaImmagine;
         this.server = partita.getConnessione();
-        this.ag = ag;
+        this.ag = pannello.getAttivatoreGrafica();
         this.partita = partita;
         this.setArmateRinforzoDisponibili(0);
 
@@ -82,6 +84,7 @@ final public class GestoreFasi {
         setAscoltatoreSpostamenti(false);
         setAscoltatoreAttacco(false);
         menuCarte.setFaseRinforzo(false);
+        pannello.disattivaRisultatoDadi();
         planciaImmagine.setActionListener(ascoltatorePlanciaEvidenziatore);
     }
 
@@ -101,6 +104,7 @@ final public class GestoreFasi {
                 setAscoltatoreAttacco(false);
                 setAscoltatoreSpostamenti(false);
                 setAscoltatoreFineTurno(false);
+                pannello.disattivaRisultatoDadi();
                 planciaImmagine.setActionListener(ascoltatorePlanciaEvidenziatore);
                 return;
 
@@ -110,6 +114,7 @@ final public class GestoreFasi {
                 if (armateRinforzoDisponibili == 0) //attiva la possibilità di passare il turno non si hanno armate (si potrebbe giocare un tris)
                     setAscoltatoreFineTurno(true);
                 ascoltatorePlanciaEvidenziatore.pulisci(); //deseleziona i possibili rimasugli di ascoltatorePlanciaEvidenzazione
+                pannello.disattivaRisultatoDadi();
                 planciaImmagine.setActionListener(ascoltatorePlanciaRinforzo);
                 return;
 
