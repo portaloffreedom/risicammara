@@ -125,19 +125,21 @@ public class RisultatoDadi implements Elemento_2DGraphics {
         //g2.setColor(Color.blue);
         for (int i=dadiDifesa.length-1; i>=0; i--) {
             bordiDado.x -= (dimensioneDado+spaziaturaDadi);
-            disegnaDado(g2, Color.blue, dadiDifesa[i], bordiDado);
+            disegnaDado(g2, Color.blue, dadiDifesa[i], bordiDado, ga);
         }
         //g2.setColor(Color.red);
         for (int i=dadiAttacco.length-1; i>=0; i--) {
             bordiDado.x -= (dimensioneDado+spaziaturaDadi);
-            disegnaDado(g2, Color.red, dadiAttacco[i], bordiDado);
+            disegnaDado(g2, Color.red, dadiAttacco[i], bordiDado, ga);
         }
     }
 
-    private void disegnaDado(Graphics2D g2, Color coloreDado, int numeroDado, Rectangle bordiDado) {
+    private void disegnaDado(Graphics2D g2, Color coloreDado, int numeroDado, Rectangle bordiDado, GraphicsAdvanced ga) {
         //disegna sfondo dado
         g2.setColor(coloreDado);
         g2.fillRoundRect(bordiDado.x, bordiDado.y, bordiDado.width, bordiDado.height, BOMBATURA_DADO, BOMBATURA_DADO);
+        g2.setColor(ga.getColoreScuro());
+        g2.drawRoundRect(bordiDado.x, bordiDado.y, bordiDado.width, bordiDado.height, BOMBATURA_DADO, BOMBATURA_DADO);
         //disegna valore dado
         String valoreDaDisegnare = Integer.toString(numeroDado);
         g2.setColor(Color.black);

@@ -20,10 +20,10 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable {
     static final int OFFSET = 8;
     static final int OFFSET_TESTO = 20;
     static final int DIMENSIONI_PUNTA = 27;
-    private Dimension dimPannello;
+    protected Dimension dimPannello;
+    protected boolean smosciato;
+    protected boolean animazione;
     private AttivatoreGrafica attivatoreGrafica;
-    private boolean smosciato;
-    private boolean animazione;
     private long inizioAnim;
     private double faseAnimPrec;
     private String testoDestra;
@@ -124,7 +124,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable {
     }
 
     private void cambiaLarghezza(int larghezza){
-        ((FrecciaDestra)posizione).cambiaLarghezza(larghezza);
+        getFrecciaDestra().cambiaLarghezza(larghezza);
     }
 
     /**
@@ -211,7 +211,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable {
      * del pulsante.
      */
     public Rectangle getMinBounds() {
-        return ((FrecciaDestra)posizione).getBounds(BarraFasi.LARGHEZZABORDO);
+        return getFrecciaDestra().getBounds(BarraFasi.LARGHEZZABORDO);
     }
 
     /**
@@ -219,9 +219,21 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable {
      * @return rettangolo che racchiude la freccia.
      */
     public Rectangle getBounds(){
-        return ((FrecciaDestra)posizione).getBounds();
+        return getFrecciaDestra().getBounds();
     }
 
+    public FrecciaDestra getFrecciaDestra(){
+        return (FrecciaDestra) posizione;
+    }
+
+    /**
+     * Verifica se il pulsante è effettivamente smosciato o no
+     * @return falso se il tasto è completamente visibile.
+     */
+    public boolean smosciato(){
+        return (smosciato || animazione);
+    }
+    
     /**
      * Imposta il testo da disegnare come smosciato anche se non è smosciato.
      * Serve per quando il pulsante non è smosciato ma coperto.
@@ -237,7 +249,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable {
      * sempre.
      */
     private Rectangle getExtraPuntaBounds() {
-        Rectangle rect = (((FrecciaDestra)posizione).getPuntaBounds());
+        Rectangle rect = getFrecciaDestra().getPuntaBounds();
         rect.x-= BarraFasi.LARGHEZZABORDO;
         rect.width += BarraFasi.LARGHEZZABORDO+5;
         return rect;
