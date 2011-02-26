@@ -23,6 +23,8 @@ final public class GestoreFasi {
     private MenuCarte menuCarte;
     private int armateRinforzoDisponibili;
 
+    private boolean preFase;
+
     private AscoltatoreFineTurno   ascoltatoreFineTurno;
     //private AscoltatoreRinforzo    ascoltatoreRinforzo;
     //private AscoltatoreAttacco     ascoltatoreAttacco;
@@ -56,6 +58,8 @@ final public class GestoreFasi {
         this.partita = partita;
         this.setArmateRinforzoDisponibili(0);
 
+        this.preFase = true;
+
         this.ascoltatoreFineTurno = new AscoltatoreFineTurno(this, partita.getMeStessoIndex());
         //this.ascoltatoreRinforzo = new AscoltatoreRinforzo();
         //this.ascoltatoreAttacco = new AscoltatoreAttacco();
@@ -79,6 +83,11 @@ final public class GestoreFasi {
         planciaImmagine.setActionListener(ascoltatorePlanciaEvidenziatore);
     }
 
+    public void finePreFase(){
+        this.preFase = false;
+        this.faseToAttesa();
+    }
+
     /**
      * Passa alla fase successiva. Le fasi sono cicliche. Questa funzione si
      * occupa di tutta la parte grafica e di tutta la parte degli ascoltatori.
@@ -93,7 +102,10 @@ final public class GestoreFasi {
 
             case RINFORZO:
                 setAscoltatore(false, false);
-                menuCarte.setFaseRinforzo(true);
+                if (!preFase) //non attiva la possibilità di giocare le carte se si è in prefase
+                    menuCarte.setFaseRinforzo(true);
+                if (armateRinforzoDisponibili == 0) //attiva la possibilità di passare il turno non si hanno armate (si potrebbe giocare un tris)
+                    setAscoltatore(true, false);
                 ascoltatorePlanciaEvidenziatore.deSeleziona();
                 planciaImmagine.setActionListener(ascoltatorePlanciaRinforzo);
                 return;
@@ -136,6 +148,8 @@ final public class GestoreFasi {
 
     final public void setArmateRinforzoDisponibili(int armate){
         this.armateRinforzoDisponibili = armate;
+        if (armateRinforzoDisponibili > 0)
+            setAscoltatore(false, false);
         barraFasi.rinforzi.setTestoDestra("Armate disponibili: "+armateRinforzoDisponibili);
         barraFasi.rinforzi.setTestoSmosciato(""+armateRinforzoDisponibili);
         ag.panelRepaint(barraFasi.rinforzi.getBounds());
