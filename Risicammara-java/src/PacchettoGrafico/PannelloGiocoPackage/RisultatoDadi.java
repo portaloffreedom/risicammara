@@ -29,7 +29,7 @@ public class RisultatoDadi implements Elemento_2DGraphics {
     private AttivatoreGrafica attivatoreGrafica;
 
     public RisultatoDadi(AttivatoreGrafica attivatoreGrafica, int altezza, Point posizione, int spaziaturaDadi) {
-        this.posizione = new Rectangle(posizione.x, posizione.y, spaziaturaDadi, altezza);
+        this.posizione = new Rectangle(posizione.x, posizione.y, spaziaturaDadi, altezza+1);
         this.attivatoreGrafica = attivatoreGrafica;
         this.dimensioneDado = altezza;
         this.spaziaturaDadi = spaziaturaDadi;
@@ -124,25 +124,48 @@ public class RisultatoDadi implements Elemento_2DGraphics {
 
         //g2.setColor(Color.blue);
         for (int i=dadiDifesa.length-1; i>=0; i--) {
+            boolean inverti = false;
+            Color coloreDado = Color.blue;
             bordiDado.x -= (dimensioneDado+spaziaturaDadi);
-            disegnaDado(g2, Color.blue, dadiDifesa[i], bordiDado, ga);
+            if (i >= dadiAttacco.length)
+                inverti = true;
+            else
+                if (dadiDifesa[i] < dadiAttacco[i])
+                    coloreDado = coloreDado.darker().darker();
+            disegnaDado(g2, coloreDado, dadiDifesa[i], bordiDado, ga, inverti);
         }
         //g2.setColor(Color.red);
         for (int i=dadiAttacco.length-1; i>=0; i--) {
+            boolean inverti = false;
+            Color coloreDado = Color.red;
             bordiDado.x -= (dimensioneDado+spaziaturaDadi);
-            disegnaDado(g2, Color.red, dadiAttacco[i], bordiDado, ga);
+            if (i >= dadiDifesa.length)
+                inverti = true;
+            else
+                if (dadiAttacco[i] <= dadiDifesa[i])
+                    coloreDado = coloreDado.darker().darker();
+            disegnaDado(g2, coloreDado, dadiAttacco[i], bordiDado, ga, inverti);
         }
     }
 
-    private void disegnaDado(Graphics2D g2, Color coloreDado, int numeroDado, Rectangle bordiDado, GraphicsAdvanced ga) {
+    private void disegnaDado(Graphics2D g2, Color coloreDado, int numeroDado, Rectangle bordiDado, GraphicsAdvanced ga, boolean inverti) {
+        Color bordo = ga.getColoreScuro();
+        Color testo = Color.BLACK;
+        Color sfondo = coloreDado;
+        if (inverti){
+            bordo = coloreDado;
+            testo = coloreDado;
+            sfondo = ga.getColoreScuro();
+        }
+
         //disegna sfondo dado
-        g2.setColor(coloreDado);
+        g2.setColor(sfondo);
         g2.fillRoundRect(bordiDado.x, bordiDado.y, bordiDado.width, bordiDado.height, BOMBATURA_DADO, BOMBATURA_DADO);
-        g2.setColor(ga.getColoreScuro());
+        g2.setColor(bordo);
         g2.drawRoundRect(bordiDado.x, bordiDado.y, bordiDado.width, bordiDado.height, BOMBATURA_DADO, BOMBATURA_DADO);
         //disegna valore dado
         String valoreDaDisegnare = Integer.toString(numeroDado);
-        g2.setColor(Color.black);
+        g2.setColor(testo);
         //disegna testo centrato
         FontMetrics metrica = g2.getFontMetrics();
         Rectangle rettangoloTesto = new Rectangle();
