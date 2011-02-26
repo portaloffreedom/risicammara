@@ -129,6 +129,7 @@ final public class GestoreFasi {
             case SPOSTAMENTO: //fineturno
                 setAscoltatoreSpostamenti(false);
                 barraFasi.attacco.setDisegnaTestoSmosciato(true);
+                pannello.disattivaRisultatoDadi();
                 planciaImmagine.setActionListener(ascoltatorePlanciaSpostamento);
                 return;
         }
