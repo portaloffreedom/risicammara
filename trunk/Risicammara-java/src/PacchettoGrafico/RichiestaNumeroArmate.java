@@ -78,4 +78,9 @@ public class RichiestaNumeroArmate extends JFrame{
         public void keyReleased(KeyEvent ke) {
         }
     }
+
+    public void distruggiFinestra() {
+        this.setVisible(false);
+        this.dispose();
+    }
 }

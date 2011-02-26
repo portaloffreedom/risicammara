@@ -85,7 +85,9 @@ public class AscoltatorePlanciaSpostamento implements RisicammaraEventListener, 
         }
         
         plancia.coloraSfumato(territorioSorgente, Sorgente, pesantezzaSfumatura);
-        fasi.setAscoltatore(false, false);
+        //fasi.setAscoltatore(false, false);
+        fasi.setAscoltatoreSpostamenti(false);
+        fasi.setAscoltatoreFineTurno(false);
     }
     
     private void selezionaTerritorioDestinazione(int idTerritorio) {
@@ -172,7 +174,8 @@ public class AscoltatorePlanciaSpostamento implements RisicammaraEventListener, 
      */
     private void spostamentoInCorso(boolean attacco){
         this.spostamentoInCorso = attacco;
-        this.fasi.setAscoltatore(!attacco, false);
+        fasi.setAscoltatoreSpostamenti(false);
+        fasi.setAscoltatoreFineTurno(!attacco);
     }
 
     @Override
