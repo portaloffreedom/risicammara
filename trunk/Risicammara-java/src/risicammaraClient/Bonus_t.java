@@ -34,7 +34,7 @@ import java.awt.image.BufferedImage;
      * @return Il valore del bonus corrispondente (territori esclusi)
      */
     public int TrisValue(boolean diversi){
-        if(diversi) return 12;
+        if(diversi) return 10;
         return numarm;
     }
 

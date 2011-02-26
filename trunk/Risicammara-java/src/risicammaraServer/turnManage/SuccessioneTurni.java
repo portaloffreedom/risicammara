@@ -169,7 +169,7 @@ public class SuccessioneTurni {
     private void cicloFasi(Messaggio msgReceived){
         Fasi_t proxfase = null;
         int prossimo = partita.getGiocatoreTurnoIndice();
-        int gioint = partita.getGiocatoreTurnoIndice();
+        int indice_giocatore_turno = partita.getGiocatoreTurnoIndice();
         Giocatore_Net gio = (Giocatore_Net)partita.getGiocatoreDiTurno();
         PlayerThread pthread = (PlayerThread)gio.getThread();
 
@@ -228,12 +228,14 @@ public class SuccessioneTurni {
                     gio.setArmatedisponibili(disp);
                     try {
                         gio.sendMessage(new MessaggioArmateDisponibili(disp, -1));
+                        Server.SpedisciMsgTutti(msgReceived, listaGiocatori, indice_giocatore_turno);
                     } catch (IOException ex) {
                         System.err.println(
                                 "Errore nell'invio Armate disponibili Tris: "
                                 +ex.getMessage());
                     }
                     partita.setPlayedTris(true);
+                    return;
                 }
                 int armattu = gio.getArmateperturno();
                 if(armattu == 0){
@@ -286,7 +288,7 @@ public class SuccessioneTurni {
                         System.err.println("Errore invio spostamento dopo attacco: "
                                 +ex.getMessage());
                     }
-                    msgReceived = MessaggioComandi.creaMsgRitirati(gioint);
+                    msgReceived = MessaggioComandi.creaMsgRitirati(indice_giocatore_turno);
                 }
                 // I messaggi  comando sono della fase "attaccando" e vengono accettati
                 //in automatico dalla funzione precedente se si sta attaccando.
@@ -335,7 +337,7 @@ public class SuccessioneTurni {
                                 try {
                                   Server.SpedisciMsgTutti(
                                        MessaggioComandi.creaMsgAttaccoterminato(
-                                                    gioint,
+                                                    indice_giocatore_turno,
                                                     partita.getGiocattaccato()),
                                        listaGiocatori,
                                        -1);
@@ -359,7 +361,7 @@ public class SuccessioneTurni {
                 try {
                   Server.SpedisciMsgTutti(msgReceived,
                   listaGiocatori,
-                  gioint);
+                  indice_giocatore_turno);
                 } catch (IOException ex) {
                     System.err.println(
                            "Errore nell'invio del messaggio di inizio attacco: "
