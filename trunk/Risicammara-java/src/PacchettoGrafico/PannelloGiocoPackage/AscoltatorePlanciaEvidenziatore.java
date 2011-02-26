@@ -78,7 +78,7 @@ public class AscoltatorePlanciaEvidenziatore implements RisicammaraEventListener
             try {
                 
                 Rectangle rect = deseleziona();
-                attivatoreGrafica.panelRepaint(rect);
+                planciaImmagine.repaintPlancia(rect);
                 
             } catch (TerritorioNonValido ex) {
                 System.err.println("Impossibile rispristinare territorio!");
