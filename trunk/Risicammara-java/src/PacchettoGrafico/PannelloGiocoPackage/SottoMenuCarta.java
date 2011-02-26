@@ -6,11 +6,11 @@
 package PacchettoGrafico.PannelloGiocoPackage;
 
 import PacchettoGrafico.GraphicsAdvanced;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
-import risicammaraClient.Client;
+import risicammaraClient.territori_t;
 
 /**
  *
@@ -22,17 +22,24 @@ public class SottoMenuCarta extends Elemento_2DGraphicsCliccable {
     private int larghezzaCarta;
     private int altezzaCarta;
     private String testo;
+    private boolean selezionato;
 
     public SottoMenuCarta(String testo, int altezzaCarta, int larghezzaCarta) {
         super(new Rectangle(larghezzaCarta, altezzaCarta));
         this.larghezzaCarta = larghezzaCarta;
         this.altezzaCarta = altezzaCarta;
         this.testo = testo;
+
+        this.selezionato = false;
     }
 
     @Override
     public void disegna(Graphics2D g2, GraphicsAdvanced ag) {
-        g2.setColor(ag.getColoreGiocatore());
+        Color coloreSfondo = ag.getColoreGiocatore();
+        if (selezionato)
+            coloreSfondo = coloreSfondo.brighter();
+        
+        g2.setColor(coloreSfondo);
         g2.fill(posizione);
         g2.setColor(ag.getColoreScuro());
         g2.draw(posizione);
@@ -50,25 +57,29 @@ public class SottoMenuCarta extends Elemento_2DGraphicsCliccable {
         //TOTO bonus
             //mancano le immagini di roberto
     }
-    
-    protected Rectangle getContorni(){
-        return (Rectangle) posizione;
-    }
 
     public void setPosizione(Point p) {
         getContorni().setLocation(p);
     }
 
+    public void setTesto(String testo) {
+        this.testo = testo;
+    }
+
+    public void setSelezionato(boolean selezionato) {
+        this.selezionato = selezionato;
+    }
+    
+    protected Rectangle getContorni(){
+        return (Rectangle) posizione;
+    }
+
     public Point getPosizione(){
         return getContorni().getLocation();
     }
-
-    @Override
-    protected void actionPressed(MouseEvent e) {
-        //mi serve per debuggare il codice delle carte premute :D
-        if (Client.DEBUG)
-            System.out.println("Sotto menu \""+this.testo+"\" premuto");
-        super.actionPressed(e);
+    
+    public territori_t getCarta(){
+        return null;
     }
 
     @Override

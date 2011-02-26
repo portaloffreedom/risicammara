@@ -221,7 +221,7 @@ public class Client implements Runnable {
         }
         ListaGiocatoriClient listaGiocatoriClient = new ListaGiocatoriClient(listaGiocatori, indexGiocatore, mioObbiettivo);
         PlanciaClient planciaClient = new PlanciaClient(veicoloPlancia.getPlancia());
-        partita = new PartitaClient(listaGiocatoriClient, planciaClient, sequenzaGioco.getSequenza());
+        partita = new PartitaClient(connessioneServer, listaGiocatoriClient, planciaClient, sequenzaGioco.getSequenza());
         
         FinestraGioco finestra =  new FinestraGioco(connessioneServer, partita);
 

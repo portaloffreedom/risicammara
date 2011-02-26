@@ -9,6 +9,7 @@ import PacchettoGrafico.GraphicsAdvanced;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import risicammaraClient.Bonus_t;
 import risicammaraClient.territori_t;
 import risicammaraJava.deckManage.Carta;
 import risicammaraJava.playerManage.Giocatore;
@@ -28,10 +29,10 @@ public class CartaDisegnabile extends SottoMenuCarta {
         tipo = ((territori_t)carta).getBonus().getImmagine();
     }
 
-    public Carta getCarta() {
-        return carta;
+    @Override
+    public territori_t getCarta() {
+        return (territori_t) carta;
     }
-
 
     @Override
     public void disegna(Graphics2D g2, GraphicsAdvanced ga) {
@@ -41,7 +42,6 @@ public class CartaDisegnabile extends SottoMenuCarta {
         int x = contorni.x+contorni.width-MARGINE-tipo.getWidth();
         int y = contorni.y+(contorni.height-tipo.getHeight())/2;
         
-        g2.drawImage(tipo, null, x, y);
-        
+        g2.drawImage(tipo, null, x, y);   
     }   
 }

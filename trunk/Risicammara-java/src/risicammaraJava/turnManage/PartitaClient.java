@@ -2,6 +2,7 @@ package risicammaraJava.turnManage;
 
 import risicammaraJava.playerManage.ListaGiocatoriClient;
 import PacchettoGrafico.PannelloGiocoPackage.MenuCarte;
+import risicammaraClient.Connessione;
 import risicammaraJava.boardManage.PlanciaClient;
 import risicammaraJava.deckManage.Carta;
 import risicammaraJava.playerManage.Giocatore;
@@ -15,9 +16,11 @@ public final class PartitaClient extends GestionePartita {
 
     private int sequenzaGiocatori[];
     private int posizioneSequenza;
+    private Connessione server;
     
-    public PartitaClient(ListaGiocatoriClient listagiocatori, PlanciaClient planciadigioco, Integer[] sequenza){
+    public PartitaClient(Connessione server, ListaGiocatoriClient listagiocatori, PlanciaClient planciadigioco, Integer[] sequenza){
         super(listagiocatori);
+        this.server = server;
         this.planciadigioco = planciadigioco;
 
         if (listagiocatori.getSize() != sequenza.length)
@@ -51,6 +54,10 @@ public final class PartitaClient extends GestionePartita {
 
     public Giocatore getMeStesso(){
         return getListaGiocatori().meStesso();
+    }
+
+    public Connessione getConnessione() {
+        return server;
     }
     
     public boolean eMioTurno(){

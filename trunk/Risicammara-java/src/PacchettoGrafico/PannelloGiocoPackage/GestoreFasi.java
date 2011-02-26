@@ -20,11 +20,14 @@ import risicammaraServer.messaggiManage.MessaggioFase;
 final public class GestoreFasi {
     private BarraFasi barraFasi;
     private PlanciaImmagine planciaImmagine;
+    private MenuCarte menuCarte;
+    private int armateRinforzoDisponibili;
+
     private AscoltatoreFineTurno   ascoltatoreFineTurno;
     //private AscoltatoreRinforzo    ascoltatoreRinforzo;
     //private AscoltatoreAttacco     ascoltatoreAttacco;
     private AscoltatoreSpostamento ascoltatoreSpostamento;
-    private int armateRinforzoDisponibili;
+
     private AscoltatorePlanciaRinforzo      ascoltatorePlanciaRinforzo;
     private AscoltatorePlanciaEvidenziatore ascoltatorePlanciaEvidenziatore;
     private AscoltatorePlanciaAttacco       ascoltatorePlanciaAttacco;
@@ -44,10 +47,11 @@ final public class GestoreFasi {
      * visualizzazione della plancia). Serve per agganciarci gli ascoltatori.
      * @param ag riferimento all'Attivatore Grafica (per ridisegnare il pannello)
      */
-    public GestoreFasi(BarraFasi barraFasi, Connessione server, PartitaClient partita, PlanciaImmagine planciaImmagine, AttivatoreGrafica ag) {
+    public GestoreFasi(BarraFasi barraFasi, PartitaClient partita, PlanciaImmagine planciaImmagine, AttivatoreGrafica ag, MenuCarte menuCarte) {
+        this.menuCarte = menuCarte;
         this.barraFasi = barraFasi;
         this.planciaImmagine = planciaImmagine;
-        this.server = server;
+        this.server = partita.getConnessione();
         this.ag = ag;
         this.partita = partita;
         this.setArmateRinforzoDisponibili(0);
@@ -71,10 +75,8 @@ final public class GestoreFasi {
     public void faseToAttesa(){
         barraFasi.resetFase();
         setAscoltatore(false, false);
+        menuCarte.setFaseRinforzo(false);
         planciaImmagine.setActionListener(ascoltatorePlanciaEvidenziatore);
-    }
-    public void avanzaTurno(){
-
     }
 
     /**
@@ -91,12 +93,14 @@ final public class GestoreFasi {
 
             case RINFORZO:
                 setAscoltatore(false, false);
+                menuCarte.setFaseRinforzo(true);
                 ascoltatorePlanciaEvidenziatore.deSeleziona();
                 planciaImmagine.setActionListener(ascoltatorePlanciaRinforzo);
                 return;
 
             case ATTACCO:
                 setAscoltatore(true, true);
+                menuCarte.setFaseRinforzo(false);
                 barraFasi.rinforzi.setDisegnaTestoSmosciato(true);
                 planciaImmagine.setActionListener(ascoltatorePlanciaAttacco);
                 return;

@@ -65,7 +65,7 @@ public class FinestraGioco extends JFrame implements Runnable {
         this.setMinimumSize(dimensioniMinime);
         
         this.plancia = pannello.getPlanciaImmagine();
-        this.gestoreFasi = new GestoreFasi(pannello.getBarraFasi(),server, partita,plancia ,pannello.getAttivatoreGrafica());
+        this.gestoreFasi = new GestoreFasi(pannello.getBarraFasi(),partita,plancia ,pannello.getAttivatoreGrafica(), pannello.getMenuCarte());
 
         this.addWindowListener(new WindowListenerImpl(server));
         this.setVisible(true);
