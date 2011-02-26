@@ -21,17 +21,7 @@ import risicammaraJava.boardManage.TerritorioPlanciaClient;
 import risicammaraJava.deckManage.Carta;
 import risicammaraJava.turnManage.Fasi_t;
 import risicammaraJava.turnManage.PartitaClient;
-import risicammaraServer.messaggiManage.Messaggio;
-import risicammaraServer.messaggiManage.MessaggioArmateDisponibili;
-import risicammaraServer.messaggiManage.MessaggioAttaccoVinto;
-import risicammaraServer.messaggiManage.MessaggioCambiaArmateTerritorio;
-import risicammaraServer.messaggiManage.MessaggioCarta;
-import risicammaraServer.messaggiManage.MessaggioComandi;
-import risicammaraServer.messaggiManage.MessaggioDichiaraAttacco;
-import risicammaraServer.messaggiManage.MessaggioFase;
-import risicammaraServer.messaggiManage.MessaggioRisultatoLanci;
-import risicammaraServer.messaggiManage.MessaggioSpostaArmate;
-import risicammaraServer.messaggiManage.comandi_t;
+import risicammaraServer.messaggiManage.*;
 
 /**
  * Finestra della interfaccia di gioco.
@@ -110,7 +100,7 @@ public class FinestraGioco extends JFrame implements Runnable {
                 System.out.println("Arrivato messaggio: "+msg);
             switch (msg.getType()) {
                 case FASE:
-                    gestoreFasi.faseToAttesa();
+                    gestoreFasi.finePreFase();
                     if (Client.DEBUG)
                         System.out.println("Finita la prefase");
                     return;  //è finita la prefase
