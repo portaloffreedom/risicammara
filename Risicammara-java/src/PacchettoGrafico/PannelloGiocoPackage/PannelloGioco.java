@@ -37,6 +37,7 @@ final public class PannelloGioco extends JPanel{
     private PlanciaImmagine planciaImmagine;
     private OrologioTimer cronometro;
     private MillisecondiDiEsecuzione performance;
+    private RisultatoDadi risultatoDadi;
     private int durataFrame;
 
     private AttivatoreGrafica attivatoreGrafica;
@@ -52,7 +53,7 @@ final public class PannelloGioco extends JPanel{
         dimensioniPannello = new Dimension();
 
         this.cronometro = new OrologioTimer();
-        this.performance = new MillisecondiDiEsecuzione(this.dimensioniPannello, cronometro);
+        this.risultatoDadi = new RisultatoDadi(attivatoreGrafica, 40, new Point(), 3);
         this.durataFrame = (int) ((1.0/frameRateMassimo)*1000);
 
         this.barra = new BarraSuperiore(dimensioniPannello, ALTEZZAPANNELLO, this, partita, attivatoreGrafica);
@@ -129,7 +130,9 @@ final public class PannelloGioco extends JPanel{
 
         this.planciaImmagine.disegna(g2, colori);
         this.barra.disegna(g2, colori);
-        this.performance.disegna(g2, colori);
+        //visualizzatoreDadi
+        this.risultatoDadi.risposiziona(new Point(dimensioniPannello.width, dimensioniPannello.height-45));
+        this.risultatoDadi.disegna(g2, colori);
 
         long tempoSleep = this.durataFrame-cronometro.getEsecTime();
         if (tempoSleep > 0) {
@@ -159,7 +162,7 @@ final public class PannelloGioco extends JPanel{
                 return;
             case Client.QUALITA_MEDIA:
                 impostaQualitàDisegno(g2,
-                        RenderingHints.VALUE_ANTIALIAS_DEFAULT,
+                        RenderingHints.VALUE_ANTIALIAS_ON,
                         RenderingHints.VALUE_TEXT_ANTIALIAS_GASP,
                         RenderingHints.VALUE_ALPHA_INTERPOLATION_DEFAULT,
                         RenderingHints.VALUE_COLOR_RENDER_DEFAULT,
@@ -237,6 +240,14 @@ final public class PannelloGioco extends JPanel{
 
     public MenuCarte getMenuCarte() {
         return barra.getMenuCarte();
+    }
+
+    public void setRisultatoDadi(int[] dadiAttacco, int[] dadiDifesa) {
+        risultatoDadi.setRisultato(dadiAttacco, dadiDifesa);
+    }
+
+    public void disattivaRisultatoDadi() {
+        risultatoDadi.disattiva();
     }
 
     public AttivatoreGrafica getAttivatoreGrafica() {

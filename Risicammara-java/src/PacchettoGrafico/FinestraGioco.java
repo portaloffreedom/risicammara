@@ -55,7 +55,7 @@ public class FinestraGioco extends JFrame implements Runnable {
         this.setMinimumSize(dimensioniMinime);
         
         this.plancia = pannello.getPlanciaImmagine();
-        this.gestoreFasi = new GestoreFasi(pannello.getBarraFasi(),partita,plancia ,pannello.getAttivatoreGrafica(), pannello.getMenuCarte());
+        this.gestoreFasi = new GestoreFasi(partita, plancia, pannello);
 
         this.addWindowListener(new WindowListenerImpl(server));
         this.setVisible(true);
@@ -245,25 +245,10 @@ public class FinestraGioco extends JFrame implements Runnable {
                 }
                 case RISULTATOLANCI: {
                     MessaggioRisultatoLanci msgDado = (MessaggioRisultatoLanci) msg;
-                    int valoreLancio;
-                    
-                    String attaccante = partita.getGiocatoreAttaccante().getNome();
-                    System.out.println("Risultato dado ("+attaccante+") :");
-                    while (true) {
-                        valoreLancio = msgDado.getLancioAttacco();
-                        if (valoreLancio < 0) break;
-                        System.out.print(" "+valoreLancio);
-                    }
-                    System.out.println();
-                    
-                    String difensore = partita.getGiocatoreAttaccato().getNome();
-                    System.out.println("Risultato dado ("+difensore+") :");
-                    while (true) {
-                        valoreLancio = msgDado.getLancioDifesa();
-                        if (valoreLancio < 0) break;
-                        System.out.print(" "+valoreLancio);
-                    }
-                    System.out.println();
+                    int valoriAttacco[] = msgDado.getValoriAttacco();
+                    int valoriDifesa[]  = msgDado.getValoriDifesa();
+
+                    pannello.setRisultatoDadi(valoriAttacco, valoriDifesa);
                     
                     break;
                 }

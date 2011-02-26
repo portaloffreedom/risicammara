@@ -1,8 +1,6 @@
 package PacchettoGrafico.PannelloGiocoPackage;
 
-import PacchettoGrafico.EventoAzioneRisicammara;
 import PacchettoGrafico.GraphicsAdvanced;
-import PacchettoGrafico.PannelloGiocoPackage.Elemento_2DGraphicsCliccable;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
@@ -17,7 +15,7 @@ import java.awt.Rectangle;
  * (non dalla larghezza del pannello).
  * @author matteo
  */
-public class BottoneFase extends Elemento_2DGraphicsCliccable implements RisicammaraEventListener {
+public class BottoneFase extends Elemento_2DGraphicsCliccable {
     static final private double TempoAnimazioneMillSec = 2000;
     static final int OFFSET = 8;
     static final int OFFSET_TESTO = 20;
@@ -57,6 +55,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements Risicam
         this.disegnaTestoSmosciato = false;
     }
 
+    @Override
     public void disegna(Graphics2D g2, GraphicsAdvanced colori) {
         
         //fase di ridimensionamento (dipendente da smoscia)
@@ -122,11 +121,6 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable implements Risicam
 
         g2.setColor(colori.getTesto());
         g2.drawString(testoSinistra, posizioneTesto.x, posizioneTesto.y);
-    }
-
-    @Deprecated
-    public void actionPerformed(EventoAzioneRisicammara ae) {
-        this.setSmosciato(!this.smosciato);
     }
 
     private void cambiaLarghezza(int larghezza){
