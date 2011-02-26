@@ -37,7 +37,7 @@ public class SottoMenuCarta extends Elemento_2DGraphicsCliccable {
     public void disegna(Graphics2D g2, GraphicsAdvanced ag) {
         Color coloreSfondo = ag.getColoreGiocatore();
         if (selezionato)
-            coloreSfondo = coloreSfondo.brighter();
+            coloreSfondo = ag.getColoreGiocatoreEvidenziato();
         
         g2.setColor(coloreSfondo);
         g2.fill(posizione);
