@@ -245,7 +245,7 @@ public class SuccessioneTurni {
                     if(proxfase == Fasi_t.FINETURNO) saltare = true;
                     break;
                     }
-                    return;
+                    break;
                 }
                 MessaggioCambiaArmateTerritorio msgArmate = (MessaggioCambiaArmateTerritorio)msgReceived;
                 partita.addArmateTerritorio(msgArmate.getTerritorio(), msgArmate.getArmate());
@@ -400,7 +400,6 @@ public class SuccessioneTurni {
                 //Se il giocatore ha conquistato un territorio allora pesca una carta.
                 //Viene settato il prossimo giocatore.
                 if(!saltafine){
-                    if(partita.isVincitore(gio)) vincitore = true;
                     if(conquistato){
                         conquistato = false;
                         Carta ctmp = partita.getCarta();
@@ -423,6 +422,7 @@ public class SuccessioneTurni {
                 prossimo = partita.getGiocatoreTurnoIndice();
                 proxfase = Fasi_t.RINFORZO;
                 gio = (Giocatore_Net) partita.getGiocatoreDiTurno();
+                if(partita.isVincitore(gio)) vincitore = true;
             default:                
                 break;
         }
