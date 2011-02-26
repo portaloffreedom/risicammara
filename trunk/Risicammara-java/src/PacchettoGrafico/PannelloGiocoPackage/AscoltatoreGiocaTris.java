@@ -46,6 +46,19 @@ public class AscoltatoreGiocaTris implements RisicammaraEventListener {
 
     public void setActive(boolean active) {
         this.active = active;
+        if (!active)
+            deseleziona_Pulisci();
+    }
+
+    private void deseleziona_Pulisci(){
+        contatoreSelezionate = 0;
+
+        for(int i=0; i<NUMERO_CARTE_TRIS; i++) {
+            if (carte[i] != null) {
+                selezionaCarta(carte[i], false);
+                carte[i] = null;
+            }
+        }
     }
 
     @Override

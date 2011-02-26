@@ -190,10 +190,6 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener, Acti
     }
 
     @Override
-    public void windowOpened(WindowEvent we) {
-    }
-
-    @Override
     public void windowClosing(WindowEvent we) {
         try {
             ritiratiAttacco();
@@ -202,6 +198,12 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener, Acti
             //qui va in palla
         }
         //terminaAttaccoInCorso();
+    }
+
+
+    //CHE PACCO STA ROBA CHE MI DEVO PORTARE DIETRO
+    @Override
+    public void windowOpened(WindowEvent we) {
     }
 
     @Override
