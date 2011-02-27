@@ -28,7 +28,7 @@ public class Giocatore_Net extends Giocatore {
     /** Input stream incapsulato*/
     transient private ObjectInputStream  clientIn;
     /** Il thread del giocatore*/
-    transient private Thread thread_player;
+    transient private PlayerThread thread_player;
 
     /**
      * Costruisce un oggetto Giocatore_Net assegnandogli un socket corrispondente
@@ -56,15 +56,6 @@ public class Giocatore_Net extends Giocatore {
             this.clientIn = new ObjectInputStream(
                     new BufferedInputStream(comunicatore.getInputStream()));
     }
-    /**
-     * Costruttore del giocatore senza socket.
-     * @deprecated Inutilizzabile in quanto è deprecato l'uso di setSocket.
-     * Usa il costruttore di default della classe Giocatore_Net
-     */
-    @Deprecated
-    public Giocatore_Net(){
-        this(null);
-    }
 
 
     //-------------- Funzioni che accedono al thread
@@ -75,7 +66,7 @@ public class Giocatore_Net extends Giocatore {
      * il thread falliranno.
      * @param t Il thread che corrisponde al giocatore
      */
-    public void AssignThread(Thread t){
+    public void AssignThread(PlayerThread t){
         this.thread_player = t;
     }
     /**
@@ -93,7 +84,7 @@ public class Giocatore_Net extends Giocatore {
      * @param leader true se è leader, false altrimenti
      */
     public void setLeader(boolean leader){
-        ((PlayerThread)thread_player).setLeader(leader);
+        thread_player.setLeader(leader);
     }
     /**
      * Indica se il giocatore selezionato è leader o meno della sala d'attesa.
@@ -103,7 +94,7 @@ public class Giocatore_Net extends Giocatore {
      * @return True se il giocatore è leader, False altrimenti
      */
     public boolean isLeader(){
-        return ((PlayerThread)thread_player).isLeader();
+        return thread_player.isLeader();
     }
     /**
      * Restituisce l'indice della lista in cui si trova effettivamente
@@ -113,28 +104,10 @@ public class Giocatore_Net extends Giocatore {
      * @return L'indice della lista dove prelevare il giocatore.
      */
     public int getPlayerIndex(){
-        return ((PlayerThread)thread_player).getPlayerIndex();
+        return thread_player.getPlayerIndex();
     }
 
     //------------------ Funzioni che utilizzano il socket
-    /**
-     * Imposta il socket del giocatore.
-     * @param sock Il socket da assegnare al giocatore.
-     * @deprecated Inutile in quanto è obbligatorio referenziare il giocatore
-     * con il socket quando viene invocato il costruttore.
-     */
-    public void setSocket(Socket sock){
-        this.comunicatore = sock;
-    }
-    /**
-     * Restituisce il socket corrispondente al giocatore.
-     * @return Il riferimento al socket del giocatore.
-     * @deprecated Questa funzione è inutile, si può agire sul socket attraverso
-     * altri metodi.
-     */
-    public Socket getSocket(){
-        return comunicatore;
-    }
     /**
      * Chiude il socket corrispondente al giocatore.
      * @throws IOException Eccezione sollevata in caso di problemi di IO con il
@@ -170,5 +143,8 @@ public class Giocatore_Net extends Giocatore {
         clientOut.writeObject(mess);
         clientOut.flush();
         System.out.println("messaggio "+mess.toString()+" inviato!");
+    }
+    public void closeThread(){
+        thread_player.setStop(true);
     }
 }

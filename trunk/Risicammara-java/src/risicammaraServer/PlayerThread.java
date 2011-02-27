@@ -7,6 +7,8 @@ package risicammaraServer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import risicammaraServer.messaggiManage.Messaggio;
 import risicammaraServer.messaggiManage.MessaggioComandi;
 
@@ -66,6 +68,20 @@ public class PlayerThread extends Thread{
         }
         System.out.println(this.getName()+" stoppato");
     }
+    /**
+     * Ferma il thread in modo sicuro.
+     * @param stop true per settare lo stato di stop.
+     */
+    public void setStop(boolean stop){
+        this.stop = stop;
+        while(holdsLock(coda)){
+            System.out.println("Wait locks");
+            try {
+                sleep(1000);
+            } catch (InterruptedException ex) {
+            }
+        }
+    }
 /**
  * Fornisce lo stato di leader del giocatore.
  * @return true se il giocatore è leader della sala d'attesa, false altrimenti.
@@ -112,23 +128,6 @@ public class PlayerThread extends Thread{
         }
         mustpass = true;
         numar = 0;
-    }
-
-    /**
-     * è appena entrato in partita per l'assegnazione armate.
-     * @return
-     * @deprecated
-     */
-    public boolean isFirst() {
-        return first;
-    }
-/**
- * Se devono essergli assegnate le armate.
- * @param first
- * @deprecated 
- */
-    public void setFirst(boolean first) {
-        this.first = first;
     }
 
 
