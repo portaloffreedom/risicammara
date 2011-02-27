@@ -120,6 +120,7 @@ public class ServerGUI implements ActionListener{
         pannello.add(bottonestart);
         pannello.add(bottonestop);
         pannello.add(etichettaStato);
+        finestra.setLocationByPlatform(true);
         
         finestra.setVisible(true);
         finestra.pack();
