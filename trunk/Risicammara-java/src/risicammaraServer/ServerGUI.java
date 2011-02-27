@@ -119,12 +119,10 @@ public class ServerGUI implements ActionListener{
         bottonestop = new JButton("Stop Server");
         etichettaStato = new JLabel("Server STOPPATO.");
 
-        Dimension dimensioniStandard = new Dimension(250, 100);
         ImageIcon ic = new ImageIcon(this.getClass().getResource(ServerGUI.ICON));
         finestra.setIconImage(ic.getImage());
         finestra.setTitle("Risicammara SERVER version: "+ServerGUI.VERSION);
         finestra.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //finestra.setMinimumSize(dimensioniStandard);
         finestra.getContentPane().add(pannello);
         bottonestart.addActionListener(this);
         bottonestop.addActionListener(this);
