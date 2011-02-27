@@ -7,13 +7,14 @@ package PacchettoGrafico.PannelloGiocoPackage;
 
 import PacchettoGrafico.GraphicsAdvanced;
 import java.awt.Color;
-import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 
 /**
- *
+ * Oggetto che visualizza il risultato dei dadi. La posizione non è dipendente
+ * dalle dimensioni del pannello, ma è da impostare a mano ogni volta che si
+ * deve spostare.
  * @author matteo
  */
 public class RisultatoDadi implements Elemento_2DGraphics {
@@ -28,6 +29,17 @@ public class RisultatoDadi implements Elemento_2DGraphics {
 
     private AttivatoreGrafica attivatoreGrafica;
 
+    /**
+     * Oggetto che visualizza il risultato dei dadi. La posizione deve essere
+     * impostata dall'esterno.
+     * @param attivatoreGrafica riferimento all'attivatore grafica
+     * @param altezza altezza in pixel dei dadi (essendo i dadi quadrati, questa
+     * diventa anche la larghezza dei singoli dadi).
+     * @param posizione posizione dell'angolo in alto a destra di questa figura
+     * @param spaziaturaDadi spaziatura che ci deve essere tra un dado e l'altro.
+     * Questa spaziatura viene anche inserita all'inizio e alla fine (destra e
+     * sinistra) dell'intero disegno.
+     */
     public RisultatoDadi(AttivatoreGrafica attivatoreGrafica, int altezza, Point posizione, int spaziaturaDadi) {
         this.posizione = new Rectangle(posizione.x, posizione.y, spaziaturaDadi, altezza+1);
         this.attivatoreGrafica = attivatoreGrafica;
@@ -52,14 +64,6 @@ public class RisultatoDadi implements Elemento_2DGraphics {
 
     private Rectangle getBordi() {
         return posizione;
-    }
-
-    private Rectangle getMaxBordi() {
-        Rectangle bordi = new Rectangle(getBordi());
-        int larghezza = bordi.width;
-        bordi.width = ((6)*(dimensioneDado+spaziaturaDadi))+spaziaturaDadi;
-        bordi.x += (larghezza - bordi.width);
-        return bordi;
     }
 
     /**
@@ -87,6 +91,9 @@ public class RisultatoDadi implements Elemento_2DGraphics {
         }
     }
 
+    /**
+     * Nasconde questo disegno
+     */
     public void disattiva() {
         this.attivo = false;
         ridisegna();
@@ -121,20 +128,23 @@ public class RisultatoDadi implements Elemento_2DGraphics {
         Rectangle bordiDado = new Rectangle(dimensioneDado, dimensioneDado);
         bordiDado.y = bordiFigura.y;
         bordiDado.x = margineDestro;
+        Dado dado = new Dado(BOMBATURA_DADO);
 
-        //g2.setColor(Color.blue);
+        
         for (int i=dadiDifesa.length-1; i>=0; i--) {
             boolean inverti = false;
-            Color coloreDado = Color.blue;
+            Color coloreDado = Color.BLUE;
             bordiDado.x -= (dimensioneDado+spaziaturaDadi);
             if (i >= dadiAttacco.length)
                 inverti = true;
             else
                 if (dadiDifesa[i] < dadiAttacco[i])
                     coloreDado = coloreDado.darker().darker();
-            disegnaDado(g2, coloreDado, dadiDifesa[i], bordiDado, ga, inverti);
+            //disegnaDado(g2, coloreDado, dadiDifesa[i], bordiDado, ga, inverti);
+            dado.setImpostazioniDado(coloreDado, Integer.toString(dadiDifesa[i]), bordiDado, inverti);
+            dado.disegna(g2, ga);
         }
-        //g2.setColor(Color.red);
+
         for (int i=dadiAttacco.length-1; i>=0; i--) {
             boolean inverti = false;
             Color coloreDado = Color.red;
@@ -144,36 +154,10 @@ public class RisultatoDadi implements Elemento_2DGraphics {
             else
                 if (dadiAttacco[i] <= dadiDifesa[i])
                     coloreDado = coloreDado.darker().darker();
-            disegnaDado(g2, coloreDado, dadiAttacco[i], bordiDado, ga, inverti);
+            //disegnaDado(g2, coloreDado, dadiAttacco[i], bordiDado, ga, inverti);
+            dado.setImpostazioniDado(coloreDado, Integer.toString(dadiAttacco[i]), bordiDado, inverti);
+            dado.disegna(g2, ga);
         }
-    }
-
-    private void disegnaDado(Graphics2D g2, Color coloreDado, int numeroDado, Rectangle bordiDado, GraphicsAdvanced ga, boolean inverti) {
-        Color bordo = ga.getColoreScuro();
-        Color testo = Color.BLACK;
-        Color sfondo = coloreDado;
-        if (inverti){
-            bordo = coloreDado;
-            testo = coloreDado;
-            sfondo = ga.getColoreScuro();
-        }
-
-        //disegna sfondo dado
-        g2.setColor(sfondo);
-        g2.fillRoundRect(bordiDado.x, bordiDado.y, bordiDado.width, bordiDado.height, BOMBATURA_DADO, BOMBATURA_DADO);
-        g2.setColor(bordo);
-        g2.drawRoundRect(bordiDado.x, bordiDado.y, bordiDado.width, bordiDado.height, BOMBATURA_DADO, BOMBATURA_DADO);
-        //disegna valore dado
-        String valoreDaDisegnare = Integer.toString(numeroDado);
-        g2.setColor(testo);
-        //disegna testo centrato
-        FontMetrics metrica = g2.getFontMetrics();
-        Rectangle rettangoloTesto = new Rectangle();
-        rettangoloTesto.width  = metrica.stringWidth(valoreDaDisegnare);
-        rettangoloTesto.height = metrica.getHeight();
-        rettangoloTesto.x = bordiDado.x + (bordiDado.width -rettangoloTesto.width )/2;
-        rettangoloTesto.y = bordiDado.y + (bordiDado.height-rettangoloTesto.height)/2 + rettangoloTesto.height;
-        g2.drawString(valoreDaDisegnare, rettangoloTesto.x, rettangoloTesto.y);
     }
 
 }
