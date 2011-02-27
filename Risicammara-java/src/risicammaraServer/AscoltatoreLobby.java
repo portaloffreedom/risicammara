@@ -36,6 +36,16 @@ public class AscoltatoreLobby extends Thread {
         this.coda = coda;
         this.stop = false;
         this.numerogiocatori = 0;
+        try {
+            this.ascoltatore = new ServerSocket(this.porta);
+        }
+        catch (IOException ex) {
+            System.err.println(
+                    "Impossibile aprire una connessione sulla porta: "
+                    +this.porta);
+            System.err.println("Errore: "+ex);
+            return;
+        }
     }
 
     /**
@@ -46,21 +56,10 @@ public class AscoltatoreLobby extends Thread {
     @Override
     public void run() {
         try {
-            this.ascoltatore = new ServerSocket(this.porta);
-        } catch (IOException ex) {
-            System.err.println(
-                    "Impossibile aprire una connessione sulla porta: "
-                    +this.porta);
-            System.err.println("Errore: "+ex.getStackTrace());
-            System.exit(1);
-        }
-
-
-        try {
             this.ascolta();
         } catch (IOException ex) {
             System.err.println("Errore nell'ascoltare nuovi client: "+ex);
-            System.exit(2);
+            return;
         }
     }
 
@@ -79,7 +78,10 @@ public class AscoltatoreLobby extends Thread {
 
         while (!this.stop) {
             giocatore = ascoltatore.accept();
-            if(numerogiocatori>5) continue;
+            if(numerogiocatori>5){
+                giocatore.close();
+                continue;
+            }
             numerogiocatori++;
             coda.Send(new MessaggioNuovoGiocatore(giocatore));
         }
@@ -91,9 +93,12 @@ public class AscoltatoreLobby extends Thread {
         this.numerogiocatori = num;
     }
 
-    public void setStop(boolean stop) throws IOException {
+    public void setStop(boolean stop) {
         this.stop = stop;
-        this.interrupt();
+        try{
+        ascoltatore.close();
+        }
+        catch(IOException ex){}
     }
 
 }

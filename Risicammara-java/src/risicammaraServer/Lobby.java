@@ -1,6 +1,8 @@
 package risicammaraServer;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraServer.messaggiManage.Messaggio;
 import risicammaraServer.messaggiManage.MessaggioAddPlayer;
@@ -11,7 +13,6 @@ import risicammaraServer.messaggiManage.MessaggioConfermaNuovoGiocatore;
 import risicammaraServer.messaggiManage.MessaggioNuovoGiocatore;
 import risicammaraServer.messaggiManage.MessaggioComandi;
 import risicammaraServer.messaggiManage.MessaggioErrore;
-import risicammaraServer.messaggiManage.errori_t;
 
 /**
  * La classe che rappresenta un oggetto "lobby" (sala d'attesa)
@@ -27,6 +28,7 @@ public class Lobby {
     private CodaMsg coda;
     private int porta;
     private boolean inizia;
+    private boolean esci;
     AscoltatoreLobby attendiConnessioni;
 
 /**
@@ -39,6 +41,7 @@ public class Lobby {
         this.coda = coda;
         this.listaGiocatori = new ListaPlayers();
         this.inizia = false;
+        this.esci = false;
     }
 
 /**
@@ -55,7 +58,7 @@ public class Lobby {
         attendiConnessioni = new AscoltatoreLobby(this.porta, this.coda);
         attendiConnessioni.start();
         Messaggio msg = null;
-        while (!inizia) {
+        while (!esci && !inizia) {
             msg = coda.get();
             System.out.println("Tipo messaggio: "+msg.getType().toString());
             //System.out.println("Sono fuori");
@@ -153,14 +156,23 @@ public class Lobby {
             System.err.println("Errore nella spedizione di Avvio partita: "
                     +ex.getMessage());
         }
-        try {
-            attendiConnessioni.setStop(true);
-        } catch (IOException ex) {
-            System.err.println(
-                    "Ascolto nuove connessioni interrotto non correttamente: "
-                    +ex);
-        }
+        if(attendiConnessioni.isAlive()) attendiConnessioni.setStop(true);
+        if(esci) return null;
         return listaGiocatori;
+    }
+
+    public void setStop(boolean stop){
+        this.esci = stop;
+        attendiConnessioni.setStop(true);
+        for(int i=0;i<ListaPlayers.MAXPLAYERS;i++){
+            Giocatore_Net g = (Giocatore_Net) listaGiocatori.get(i);
+            if(g==null) continue;
+            try {
+                g.closeSocket();
+            } catch (IOException ex) {
+            }
+            g.closeThread();
+        }
     }
 
 /**

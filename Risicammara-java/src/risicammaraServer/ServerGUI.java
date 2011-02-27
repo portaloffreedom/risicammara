@@ -1,12 +1,8 @@
 package risicammaraServer;
 
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,7 +11,8 @@ import javax.swing.JPanel;
 import risicammaraClient.Client;
 
 /**
- *
+ * Classe avviabile per il server. In base gli argomenti passati all'eseguibile
+ * puoi far partire o meno l'interfaccia per comandare il server.
  * @author stengun
  */
 public class ServerGUI implements ActionListener{
@@ -28,8 +25,7 @@ public class ServerGUI implements ActionListener{
     private JButton bottonestart,bottonestop;
     private JLabel etichettaStato;
 
-    private Server server;
-    private Thread serverThread;
+    private Server serverThread;
     private boolean gui;
 
     public static void main(String[] args){
@@ -37,13 +33,20 @@ public class ServerGUI implements ActionListener{
         servergui.open();
     }
 
+    /**
+     * Inizializza tutte le variabili necessarie al server per avviarsi.
+     * @param args gli argomenti passati all'eseguibile dalla riga di comando.
+     */
     public ServerGUI(String[] args){
         gui = true;
         if(args.length > 1) parseArgs(args);
-        server = new Server(Client.PORT);
-        serverThread = null;
+        serverThread = new Server(Client.PORT);
     }
-
+/**
+ * Screma gli argomenti della riga di comando per determinare se sono corretti e
+ * ne imposta il valore/opzioni.
+ * @param args gli argomenti passati all'eseguibile dalla riga di comando.
+ */
     private void parseArgs(String[] args){
         String prec = null;
         for(String s:args){
@@ -84,22 +87,30 @@ public class ServerGUI implements ActionListener{
             System.exit(12);
         }
     }
-
+/**
+ * Chiede se un dato comando ha bisogno di una sintassi particolari (esempio:
+ * --gui option è corretto, --gui -d è errato.)
+ * @param str il comando da controllare.
+ * @return true se il comando ha bisogno di un'ulteriore opzione, false altrimenti.
+ */
     private boolean requireOption(String str){
         if(str.contentEquals("--gui")) return true;
         return false;
     }
-    
+ /**
+  * Avvia il server con i parametri impostati.
+  */
     private void open(){
         if(gui){
             creaFinestra();
         }
         else{
-            serverThread = new Thread(server);
             serverThread.start();
         }
     }
-
+/**
+ * Crea la finestra del server.
+ */
     private void creaFinestra(){
 
         pannello = new JPanel();
@@ -117,6 +128,8 @@ public class ServerGUI implements ActionListener{
         finestra.getContentPane().add(pannello);
         bottonestart.addActionListener(this);
         bottonestop.addActionListener(this);
+        bottonestop.setEnabled(false);
+        
         pannello.add(bottonestart);
         pannello.add(bottonestop);
         pannello.add(etichettaStato);
@@ -129,17 +142,21 @@ public class ServerGUI implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == bottonestart){
-            if(serverThread != null) serverThread.interrupt();
-            serverThread = new Thread(server);
+            if(serverThread.isAlive()) serverThread.setStop(true);
+            serverThread = new Server(Client.PORT);
             serverThread.start();
             etichettaStato.setText("Server ATTIVO.");
             etichettaStato.repaint();
+            bottonestart.setEnabled(false);
+            bottonestop.setEnabled(true);
         }
         if(e.getSource() == bottonestop && serverThread != null){
 
-            serverThread.interrupt();
+            if(serverThread.isAlive()) serverThread.setStop(true);
             etichettaStato.setText("Server STOPPATO.");
             etichettaStato.repaint();
+            bottonestart.setEnabled(true);
+            bottonestop.setEnabled(false);
         }
     }
 
