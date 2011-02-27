@@ -174,7 +174,7 @@ public class PartitaServer extends GestionePartita {
     }
 
     public void eliminaGiocatoreAttaccato(){
-        sequenzaDiGioco.remove(giocattaccato);
+        sequenzaDiGioco.removeFirstOccurrence(giocattaccato);
     }
 
     public void modificaDistruzione(Colore_t eliminato){

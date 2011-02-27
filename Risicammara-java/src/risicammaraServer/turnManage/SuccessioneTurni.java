@@ -1,6 +1,7 @@
 package risicammaraServer.turnManage;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.logging.Level;
@@ -216,7 +217,8 @@ public class SuccessioneTurni {
                 //giocare tris e prendere bonus se si ha continenti.
             case RINFORZO:
                 if((msgReceived.getType() != messaggio_t.CAMBIAARMATETERRITORIO) 
-                        && (msgReceived.getType() != messaggio_t.GIOCATRIS))
+                        && (msgReceived.getType() != messaggio_t.GIOCATRIS)
+                        && (msgReceived.getType() != messaggio_t.FASE))
                     return;
                 //Assegno le armate in base ai territori posseduti dal giocatore.
                 if((msgReceived.getType() == messaggio_t.GIOCATRIS) 
@@ -299,25 +301,18 @@ public class SuccessioneTurni {
                         switch(cmd.getComando()){
                             case LANCIADADO:
                                 risolviAttacco(cmd.getOptParameter());
-                                Giocatore difensore = listaGiocatori.get(partita.getGiocattaccato());
+                                Giocatore_Net difensore = (Giocatore_Net) listaGiocatori.get(partita.getGiocattaccato());
                                 if(partita.getArmateTerrDifensore() == 0){
-                                    if(difensore.getNumTerritori()-1 == 0){
-                                        Colore_t eliminato = difensore.getArmyColour();
-                                        if(partita.hasDistruggiArmate(gio)){
-                                            if(vittoriaDistruzione(gio,eliminato)){
-                                                setVincitore(gio.getPlayerIndex());
-                                                return;
-                                            }
-                                        }
-                                        partita.eliminaGiocatoreAttaccato();
-                                        partita.modificaDistruzione(eliminato);
-                                    }
+                                    if(verificaEliminazione(difensore, gio)) return;
                                     int armterrat = partita.getArmateTerrAttaccante() -1;
                                     if(armterrat > cmd.getOptParameter()) armterrat = cmd.getOptParameter();
                                     conquistato = true;
                                     spostaattacco = true;
                                     partita.attaccoVinto();
-                                    partita.spostamento(partita.getTerritorioAttaccante(), partita.getTerritorioAttaccato(), armterrat);
+                                    partita.spostamento(
+                                            partita.getTerritorioAttaccante(),
+                                            partita.getTerritorioAttaccato(),
+                                            armterrat);
                                     try {
                                         Server.SpedisciMsgTutti(
                                                 new MessaggioAttaccoVinto(
@@ -330,9 +325,6 @@ public class SuccessioneTurni {
                                     }
                                     return;
                                 }
-                            //non uso return perché se no duplico codice.
-                            //non esiste l'attacco perpetuo
-                            //Si fa un attacco e ci si ritira
                             case RITIRATI:
                                 try {
                                   Server.SpedisciMsgTutti(
@@ -433,7 +425,7 @@ public class SuccessioneTurni {
         if(proxfase == Fasi_t.RINFORZO) {
             if(partita.isVincitore(gio)) setVincitore(prossimo);
             spedisciMsgCambioTurno(prossimo);
-            int abon = (gio.getNumTerritori()/3)+getTotalContinentalBonus(gio);
+            int abon = gio.calcolaArmate();
             gio.setArmatedisponibili(abon);
             try {
                 gio.sendMessage(new MessaggioArmateDisponibili(abon, -1));
@@ -455,6 +447,43 @@ public class SuccessioneTurni {
         }
     }
 
+    private boolean verificaEliminazione(Giocatore_Net difensore,Giocatore_Net attaccante){
+        if(difensore.getNumTerritori()-1 == 0){
+            Colore_t eliminato = difensore.getArmyColour();
+            if(partita.hasDistruggiArmate(attaccante)){
+                if(vittoriaDistruzione(attaccante,eliminato)){
+                    setVincitore(attaccante.getPlayerIndex());
+                    return true;
+                }
+            }
+            partita.eliminaGiocatoreAttaccato();
+            partita.modificaDistruzione(eliminato);
+            LinkedList<Carta> cartedif = difensore.getCarte();
+            while(!cartedif.isEmpty()){
+                try {
+                    Server.SpedisciMsgTutti(new MessaggioCarta(null, -1), listaGiocatori, attaccante.getPlayerIndex());
+                    attaccante.sendMessage(new MessaggioCarta(cartedif.poll(), -1));
+                } catch (IOException ex) {
+                    System.err.println("Errore nell'invio carte del difensore: "
+                            +ex.getMessage());
+                }
+            }
+            try {
+                Server.SpedisciMsgTutti(
+                        MessaggioComandi.creaMsgEliminato(
+                            partita.getGiocatoreTurnoIndice(),
+                            difensore.getPlayerIndex()),
+                        listaGiocatori,
+                        -1);
+            } catch (IOException ex) {
+                System.err.println(
+                        "Errore nell'invio Messaggio Eliminato: "
+                        +ex.getMessage());
+            }
+
+        }
+        return false;
+    }
     private void setVincitore(int vincito){
         this.indexvincente = vincito;
         this.vincitore = true;
@@ -687,21 +716,7 @@ public class SuccessioneTurni {
         //bonus per carte diverse
         return tuno.getBonus().TrisValue(true) + bonus;
     }
-/**
- * Calcola a quanto ammonta il numero di armate bonus per i continenti posseduti
- * dal giocatore.
- * @param gioc Il giocatore di cui calcolare le armate.
- * @return il totale delle armate bonus per continenti.
- */
-    private int getTotalContinentalBonus(Giocatore gioc){
-        int total = 0;
-        for(Continente_t c:Continente_t.values()){
-            if(gioc.hasContinente(c)){
-                total += c.getArmate();
-            }
-        }
-        return total;
-    }
+
 
     private void inviaArmateDisponibili() throws IOException {
         for(int i=0;i<ListaPlayers.MAXPLAYERS;i++){

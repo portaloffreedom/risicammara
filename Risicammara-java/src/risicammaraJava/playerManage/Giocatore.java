@@ -2,6 +2,7 @@ package risicammaraJava.playerManage;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import risicammaraClient.*;
 import risicammaraJava.deckManage.Carta;
@@ -20,7 +21,7 @@ public class Giocatore implements Serializable {
     /** Il colore delle armate di questo giocatore.*/
     protected Colore_t colore_armate;
     /** Le carte in mano al giocatore */
-    private ArrayList<Carta> carte;
+    private LinkedList<Carta> carte;
     /** L'obbiettivo del giocatore */
     private Obbiettivi_t obbiettivo;
     /** Se il giocatore è pronto per giocare */
@@ -38,7 +39,7 @@ public class Giocatore implements Serializable {
         this.nome = nome;
         this.colore_armate = colore_armate;
         this.armate_bonus = 0;
-        this.carte = new ArrayList<Carta>();
+        this.carte = new LinkedList<Carta>();
         this.listaterr = new ArrayList<territori_t>();
         this.obbiettivo = null;
         this.oceania = -Continente_t.OCEANIA.getNumterritori();
@@ -101,7 +102,7 @@ public class Giocatore implements Serializable {
      * Restiusce la lista delle carte del giocatore.
      * @return lista delle carte del giocatore.
      */
-    public ArrayList<Carta> getCarte() {
+    public LinkedList<Carta> getCarte() {
         return carte;
     }
 
@@ -278,6 +279,29 @@ public class Giocatore implements Serializable {
     public void setReady(boolean ready) {
         this.ready = ready;
     }
+/**
+ * Calcola il numero delle armate a cui ha diritto il giocatore in base ai
+ * territori posseduti e ai continenti.
+ * @return
+ */
+    public int calcolaArmate(){
+        return (getNumTerritori()/3)+getTotalContinentalBonus();
+    }
 
+    /**
+ * Calcola a quanto ammonta il numero di armate bonus per i continenti posseduti
+ * dal giocatore.
+ * @param gioc Il giocatore di cui calcolare le armate.
+ * @return il totale delle armate bonus per continenti.
+ */
+    private int getTotalContinentalBonus(){
+        int total = 0;
+        for(Continente_t c:Continente_t.values()){
+            if(hasContinente(c)){
+                total += c.getArmate();
+            }
+        }
+        return total;
+    }
 
 }
