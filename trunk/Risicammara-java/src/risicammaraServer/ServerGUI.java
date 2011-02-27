@@ -1,8 +1,13 @@
 package risicammaraServer;
 
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,7 +20,8 @@ import risicammaraClient.Client;
  */
 public class ServerGUI implements ActionListener{
 
-    public static String Version = "beta 2";
+    public static String VERSION = "beta 2";
+    public static String ICON = "/Images/banana.png";
 
     private JPanel pannello;
     private JFrame finestra;
@@ -32,7 +38,8 @@ public class ServerGUI implements ActionListener{
     }
 
     public ServerGUI(String[] args){
-        parseArgs(args);
+        gui = true;
+        if(args.length > 1) parseArgs(args);
         server = new Server(Client.PORT);
         serverThread = null;
     }
@@ -94,6 +101,7 @@ public class ServerGUI implements ActionListener{
     }
 
     private void creaFinestra(){
+
         pannello = new JPanel();
         finestra = new JFrame();
         bottonestart = new JButton("Start Server");
@@ -101,7 +109,9 @@ public class ServerGUI implements ActionListener{
         etichettaStato = new JLabel("Server STOPPATO.");
 
         Dimension dimensioniStandard = new Dimension(250, 100);
-        finestra.setTitle("Risicammara SERVER version: "+ServerGUI.Version);
+        ImageIcon ic = new ImageIcon(this.getClass().getResource(ServerGUI.ICON));
+        finestra.setIconImage(ic.getImage());
+        finestra.setTitle("Risicammara SERVER version: "+ServerGUI.VERSION);
         finestra.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         finestra.setMinimumSize(dimensioniStandard);
         finestra.getContentPane().add(pannello);
