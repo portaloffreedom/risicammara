@@ -24,7 +24,7 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
     BottoneFase spostamento;
     private RisicammaraEventListener ascoltatoreSpostamento;
 
-    BottoneFaseAvanzato attacco;
+    BottoneFaseAttaccoAvanzato attacco;
     private RisicammaraEventListener ascoltatoreAttacco;
 
     BottoneFase rinforzi;
@@ -55,8 +55,8 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
 
         //TODO posizionare per bene i bottone fasi(uno sopra all'altro, poi vengono rimpiccioliti
         int larghezzaB = LarghezzaBottoniMassima(ret.width);
-        this.spostamento = new BottoneFase(dimPannello, ag, new Point(inizio,     bordoSup),larghezzaB, altezza);
-        this.attacco     = new BottoneFaseAvanzato(dimPannello, ag, new Point(inizio+50,  bordoSup),larghezzaB, altezza);
+        this.spostamento = new BottoneFaseAvanzato(dimPannello, ag, new Point(inizio, bordoSup),larghezzaB, altezza, "FASE DI SPOSTAMENTO");
+        this.attacco     = new BottoneFaseAttaccoAvanzato(dimPannello, ag, new Point(inizio+50, bordoSup),larghezzaB, altezza);
         this.rinforzi    = new BottoneFase(dimPannello, ag, new Point(inizio+100, bordoSup),larghezzaB, altezza);
 
         //this.spostamento.setActionListener(spostamento);
@@ -67,8 +67,8 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
         spostamento.setTestoSmosciato("→");
 
         attacco.setTestoSinistra("Fase di Attacco");
-        attacco.setTestoSmosciato("ŧ");
-        attacco.setTestoDestra("ŧ");
+        attacco.setTestoSmosciato("X");
+        attacco.setTestoDestra("X");
 
         rinforzi.setTestoSinistra("Fase di Rinforzo dei territori");
         rinforzi.setTestoSmosciato("ø");
@@ -297,7 +297,7 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
     }
 
     public void setRisultato(int[] dadiAttacco, int[] dadiDifesa) {
-        attacco.setRisultato(dadiAttacco, dadiDifesa);
+        attacco.setRisultatoDadi(dadiAttacco, dadiDifesa);
     }
 
     public void disattivaDadi() {
