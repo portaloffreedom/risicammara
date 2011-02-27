@@ -50,8 +50,6 @@ public class Connessione {
 
     public void chiudiConnessione () throws IOException {
         scrivi.flush();
-        scrivi.close();
-        leggi.close();
         server.close();
     }
 
