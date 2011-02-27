@@ -99,7 +99,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable {
         Point posizioneTesto = new Point();
 
         dimensioniTesto.width = metrics.stringWidth(testo);
-        dimensioniTesto.height = metrics.getHeight();
+        dimensioniTesto.height = metrics.getAscent();
         posizioneTesto.x = rect.width+rect.x-dimensioniTesto.width-(OFFSET_TESTO);
         //posizioneTesto.y = rect.y + (rect.height-dimensioniTesto.height)/2;
         posizioneTesto.y = rect.y + (rect.height-dimensioniTesto.height)/2 + dimensioniTesto.height;
@@ -120,7 +120,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable {
         posizioneTesto.y = rect.y + (rect.height-dimensioniTesto.height)/2 + dimensioniTesto.height;
 
         g2.setColor(colori.getTesto());
-        g2.drawString(testoSinistra, posizioneTesto.x, posizioneTesto.y);
+        g2.drawString(testoSinistra, posizioneTesto.x, posizioneTesto.y-metrics.getDescent());
     }
 
     private void cambiaLarghezza(int larghezza){

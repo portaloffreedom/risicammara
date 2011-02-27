@@ -218,7 +218,7 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
     /**
      * Passa alla fase successiva. Le fasi si ripetono ciclicamente.<p>
      * Le fasi si susseguono in:<br>
-     * - ATTESA<br>
+     * - ATTESA - FINE TURNO<br>
      * - RINFORZO<br>
      * - ATTACCO<br>
      * - SPOSTAMENTO
