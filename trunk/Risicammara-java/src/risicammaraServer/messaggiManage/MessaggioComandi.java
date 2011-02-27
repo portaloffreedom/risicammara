@@ -12,6 +12,15 @@ public class MessaggioComandi implements Messaggio{
 // Qua ci vanno tutti i costruttori static per ogni tipo di messaggio, in modo da
     //facilitare la vita a chi crea i messaggi.
     /**
+     * Crea un messaggio che indica l'avvenuta eliminazione di un giocatore.
+     * @param giocatore_che_elimina Il giocatore che Ha eliminato.
+     * @param giocatore_eliminato Il giocatore che è stato eliminato
+     * @return L'oggetto MessaggioComandi inizializzato con ELIMINATO
+     */
+    public static MessaggioComandi creaMsgEliminato(int giocatore_che_elimina,int giocatore_eliminato){
+        return new MessaggioComandi(comandi_t.ELIMINATO, giocatore_che_elimina, giocatore_eliminato);
+    }
+    /**
      * Crea un messaggio di informazioni Vittoria.
      * @param giocatore_che_ha_vinto l'indice del giocatore che ha vinto la partita.
      * @return L'oggetto MessaggioComandi con valore VINCITORE corretto.

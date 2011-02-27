@@ -64,6 +64,12 @@ public enum comandi_t {
     //---------------- SERVER
     //--------partita
     /**
+     * Indica che il giocatore è stato eliminato da un altro giocatore.
+     * getSender = Giocatore che ha eliminato.
+     * getOptParameter = Giocatore che è stato appena eliminato.
+     */
+    ELIMINATO,
+    /**
      * Indica che è presente un vincitore.
      * getSender = Indice del vincitore.
      */
