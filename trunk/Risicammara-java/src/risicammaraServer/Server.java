@@ -39,7 +39,9 @@ public static void main(String[] args) {
 /**
  * Metodo che serve per far partire (all'occorrenza) il server come thread
  * (per esempio quando si fa partire un server in locale direttamente dalla gui).
+ *
  */
+    @Override
     public void run() {
         while(true){
             Lobby server = new Lobby(porta,coda);
