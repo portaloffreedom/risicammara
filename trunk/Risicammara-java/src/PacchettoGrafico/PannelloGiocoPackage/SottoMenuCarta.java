@@ -51,7 +51,7 @@ public class SottoMenuCarta extends Elemento_2DGraphicsCliccable {
         Point posizioneTesto = new Point(p.x+MARGINE, p.y+altezzaTesto+(altezzaCarta-altezzaTesto)/2);
 
         g2.setColor(ag.getTesto());
-        g2.drawString(testo, posizioneTesto.x, posizioneTesto.y);
+        g2.drawString(testo, posizioneTesto.x, posizioneTesto.y-g2.getFontMetrics().getDescent());
 
 
         //TOTO bonus

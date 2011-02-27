@@ -16,6 +16,7 @@ import javax.swing.ImageIcon;
 public class BottoneRisicammara extends Elemento_2DGraphicsCliccable {
     static public int ALTEZZA = 50;
     static public int LARGHEZZA = 100;
+    static private int ARROTONDAMENTO = 11;
 
     private boolean pressed;
 
@@ -56,7 +57,7 @@ public class BottoneRisicammara extends Elemento_2DGraphicsCliccable {
         //TODO fare diverse immagini a seconda che il pulsante sia premuto o no
         //graphics2D.drawImage(sfondo.getImage(), rect.x, rect.y, null); //disegnava l'immagine
         graphics2D.setColor(ga .getColoreGiocatore());
-        graphics2D.fillRoundRect(rect.x, rect.y, rect.width, rect.height, 11, 11);
+        graphics2D.fillRoundRect(rect.x, rect.y, rect.width, rect.height, ARROTONDAMENTO, ARROTONDAMENTO);
         if (pressed){
             graphics2D.fillRect(rect.x, rect.y+(rect.height/2), rect.width, rect.height/2);
         }
@@ -66,7 +67,7 @@ public class BottoneRisicammara extends Elemento_2DGraphicsCliccable {
         FontMetrics metrica = graphics2D.getFontMetrics();
         Point puntoTesto = new Point();
         puntoTesto.x = ((rect.width-metrica.stringWidth(testo))/2)+rect.x;
-        puntoTesto.y = ((rect.height-metrica.getHeight())/2)+rect.y+metrica.getHeight();
+        puntoTesto.y = ((rect.height-metrica.getHeight())/2)+rect.y+metrica.getAscent();
         graphics2D.drawString(testo, puntoTesto.x, puntoTesto.y);
     }
 

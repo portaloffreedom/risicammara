@@ -113,7 +113,7 @@ public class ServerGUI implements ActionListener{
         finestra.setIconImage(ic.getImage());
         finestra.setTitle("Risicammara SERVER version: "+ServerGUI.VERSION);
         finestra.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        finestra.setMinimumSize(dimensioniStandard);
+        //finestra.setMinimumSize(dimensioniStandard);
         finestra.getContentPane().add(pannello);
         bottonestart.addActionListener(this);
         bottonestop.addActionListener(this);
@@ -122,6 +122,7 @@ public class ServerGUI implements ActionListener{
         pannello.add(etichettaStato);
         
         finestra.setVisible(true);
+        finestra.pack();
     }
 
     @Override

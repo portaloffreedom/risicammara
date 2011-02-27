@@ -1,7 +1,6 @@
 package PacchettoGrafico.PannelloGiocoPackage;
 
 import PacchettoGrafico.GraphicsAdvanced;
-import PacchettoGrafico.PannelloGiocoPackage.Elemento_2DGraphicsCliccable;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
@@ -10,9 +9,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
-import javax.imageio.ImageIO;
 import risicammaraClient.Client;
 import risicammaraClient.Colore_t;
 import risicammaraJava.boardManage.TerritorioNonValido;
@@ -47,9 +43,9 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         this.plancia = partita.getPlancia();
         this.ag = ag;
 
-        planciaBMP = Client.loadImage(this, Client.RISICAMMARA_NEGATIVO);
-        planciaPNG = Client.loadImage(this, Client.RISICAMMARA_PLANCIA);
-        planciaPNGfinal = Client.loadImage(this, Client.RISICAMMARA_PLANCIA);
+        planciaBMP = Client.loadImage(partita, Client.RISICAMMARA_NEGATIVO);
+        planciaPNG = Client.loadImage(partita, Client.RISICAMMARA_PLANCIA);
+        planciaPNGfinal = Client.loadImage(partita, Client.RISICAMMARA_PLANCIA);
 
         Rectangle rettangolo = new Rectangle(posizione);
         rettangolo.setSize(planciaPNG.getWidth(null), planciaPNG.getHeight(null));
@@ -59,26 +55,29 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         for (territori_t territorio : territori_t.values()) {
             if (territorio == territori_t.Jolly1 || territorio == territori_t.Jolly2)
                 continue;
-            int idTerritorio = territorio.getIdTerritorio();
-            Rectangle rect = getRectangle(idTerritorio);
-            Point p = new Point(rect.x+(rect.width/2), rect.y+(rect.height/2));
-            plancia.setBounds(territorio, rect, p);
-
-            //colora ogni territorio (in trasparenza) del colore del proprietario
-            //int indexProprietario = plancia.getTerritorio(territorio).getProprietario();
-            //coloraSfumato(idTerritorio, partita.getListaGiocatori().get(indexProprietario).getArmyColour().getColor(), 0.7);
+            settaTerritorio(territorio);
         }
     }
 
-    private Rectangle getRectangle(int idTerritorio) {
+    private void settaTerritorio(territori_t territorio) {
+        Color idTerritorio = new Color(territorio.getIdTerritorio());
+        Point centro = new Point();
         int alto = planciaBMP.getHeight();
         int basso = 0;
         int sinistra = planciaBMP.getWidth();
         int destra = 0;
         for (int r=1; r<planciaBMP.getHeight(); r++){
             for (int c=1; c<planciaBMP.getWidth(); c++){
-                int tempRGB = this.planciaBMP.getRGB(c, r);
-                if (tempRGB == idTerritorio) {
+                Color tempRGB = new Color(this.planciaBMP.getRGB(c, r));
+                if (       tempRGB.getRed()   == idTerritorio.getRed()
+                        && tempRGB.getGreen() == idTerritorio.getGreen()
+                        && tempRGB.getAlpha() == idTerritorio.getAlpha()) {
+                    if (tempRGB.getBlue() > 0) {
+                        centro = new Point(c, r);
+                        planciaBMP.setRGB(c, r, idTerritorio.getRGB()); //ripristina il colore blu a 0
+                        if (tempRGB.getBlue() == 2)
+                            continue;
+                    }
                     if (alto > r)
                         alto = r;
                     if (basso < r)
@@ -90,7 +89,8 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
                 }
             }
         }
-        return new Rectangle(sinistra, alto, destra-sinistra+1, basso-alto+1);
+        Rectangle rect = new Rectangle(sinistra, alto, destra-sinistra+1, basso-alto+1);
+        plancia.setBounds(territorio, rect, centro);
     }
 
     @Override
@@ -119,7 +119,7 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         posizioneTesto.width = font.stringWidth(numeroArmate);
         posizioneTesto.height = font.getHeight();
         posizioneTesto.x = p.x-(posizioneTesto.width/2);
-        posizioneTesto.y = p.y+(posizioneTesto.height/2);
+        posizioneTesto.y = p.y+((posizioneTesto.height-font.getDescent())/2);
         
         //determina le dimensioni dell'ovale da disegnare
         Rectangle dimensioniOvale = new Rectangle(p.x-(CERCHIO/2), p.y-(CERCHIO/2), CERCHIO, CERCHIO);
