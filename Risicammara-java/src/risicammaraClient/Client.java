@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -213,11 +214,9 @@ public class Client implements Runnable {
             sequenzaGioco = (MessaggioSequenzaGioco) connessioneServer.ricevi();
             mioObbiettivo = ((MessaggioObbiettivo) connessioneServer.ricevi()).getObj();
         } catch (IOException ex) {
-            System.err.println("Errore nel leggere la plancia (lettura da stream): "+ex);
-            System.exit(10);
+            RiavviaClientErrore("Errore nel leggere la plancia (lettura da stream): "+ex);
         } catch (ClassNotFoundException ex) {
-            System.err.println("Errore nel leggere la plancia (interpretazione oggetto): "+ex);
-            System.exit(11);
+            RiavviaClientErrore("Errore nel leggere la plancia (interpretazione oggetto): "+ex);
         }
         ListaGiocatoriClient listaGiocatoriClient = new ListaGiocatoriClient(listaGiocatori, indexGiocatore, mioObbiettivo);
         PlanciaClient planciaClient = new PlanciaClient(veicoloPlancia.getPlancia());
@@ -231,10 +230,17 @@ public class Client implements Runnable {
         finestraThread.start();
     }
 
-    static public void RiavviaClient(){
+    static public void RiavviaClientErrore(String motivazione){
         //TODO implementare finestra di dialogo
         //TODO implementare la richiesta di una nuova connessione ad un'altro server
-        System.exit(4242);
+        JOptionPane.showMessageDialog(null, motivazione, "Riavvio Client", JOptionPane.ERROR_MESSAGE);
+        System.err.println(motivazione);
+        RiavviaClient();
+    }
+
+    static public void RiavviaClient(){
+        Client client = new Client(Client.PORT, laf);
+        client.run();
     }
 
     static public BufferedImage loadImage (URL pad){

@@ -1,7 +1,6 @@
 package risicammaraServer;
 
 import java.io.IOException;
-import risicammaraClient.Colore_t;
 import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraServer.messaggiManage.Messaggio;
 import risicammaraServer.messaggiManage.MessaggioAddPlayer;

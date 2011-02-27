@@ -2,6 +2,8 @@ package PacchettoGrafico;
 
 import PacchettoGrafico.PannelloGiocoPackage.AscoltatorePlanciaAttacco;
 import PacchettoGrafico.PannelloGiocoPackage.GestoreFasi;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import risicammaraJava.playerManage.ListaGiocatoriClient;
 import PacchettoGrafico.PannelloGiocoPackage.PannelloGioco;
 import PacchettoGrafico.PannelloGiocoPackage.PlanciaImmagine;
@@ -73,8 +75,8 @@ public class FinestraGioco extends JFrame implements Runnable {
 
             MessaggioFase msgFase = (MessaggioFase) server.ricevi();
             if (msgFase.getFase() != Fasi_t.PREPARTITA) {
-                System.err.println("Errore, server non sincronizzato");
-                Client.RiavviaClient();
+                riavviaPartitaErrore("Errore, server non sincronizzato");
+                return;
             }
 
             this.cicloPreFase();
@@ -83,11 +85,11 @@ public class FinestraGioco extends JFrame implements Runnable {
 
 
         } catch (IOException ex) {
-            System.err.println("Connessione al server persa o corrotta.");
-            Client.RiavviaClient();
+            riavviaPartitaErrore("Connessione al server persa o corrotta.");
+            return;
         } catch (ClassNotFoundException ex) {
-            System.err.println("Pacchetto inviato al server irriconoscibile. Disconnessione...");
-            Client.RiavviaClient();
+            riavviaPartitaErrore("Pacchetto inviato al server irriconoscibile. Disconnessione...");
+            return;
         }
     }
 
@@ -107,8 +109,7 @@ public class FinestraGioco extends JFrame implements Runnable {
                 case COMMAND:
                     MessaggioComandi msgComandi = (MessaggioComandi) msg;
                     if (Client.DEBUG && (msgComandi.getComando() != comandi_t.TURNOFPLAYER)){
-                        System.err.println("Errore si sincronizzazione col server");
-                        Client.RiavviaClient();
+                        riavviaPartitaErrore("Errore si sincronizzazione col server");
                     }
                     if (msgComandi.getSender() == listaGiocatori.meStessoIndex()){
                         gestoreFasi.avanzaFase();
@@ -281,32 +282,41 @@ public class FinestraGioco extends JFrame implements Runnable {
             this.server = server;
         }
 
+        @Override
         public void windowOpened(WindowEvent e) {
         }
 
+        @Override
         public void windowClosing(WindowEvent e) {
             //TODO casella di conferma uscita
             try {
                 server.chiudiConnessione();
             } catch (IOException ex) {
-                System.err.println("Connessione al server non chiusa nella maniera corretta");
-                System.exit(1234);
+                Client.RiavviaClientErrore("Connessione al server non chiusa nella maniera corretta");
+            } finally {
+                e.getWindow().setVisible(false);
+                e.getWindow().dispose();
             }
-            System.exit(0);
+            Client.RiavviaClient();
         }
 
+        @Override
         public void windowClosed(WindowEvent e) {
         }
 
+        @Override
         public void windowIconified(WindowEvent e) {
         }
 
+        @Override
         public void windowDeiconified(WindowEvent e) {
         }
 
+        @Override
         public void windowActivated(WindowEvent e) {
         }
 
+        @Override
         public void windowDeactivated(WindowEvent e) {
         }
     }// </editor-fold>
@@ -348,6 +358,13 @@ public class FinestraGioco extends JFrame implements Runnable {
         public void spostaArmate(int armate) throws IOException {
             server.spedisci(new MessaggioSpostaArmate(partita.getMeStessoIndex(), sorgente, destinazione, armate));
         }
+    }
+
+    public void riavviaPartitaErrore(String messaggio){
+        try { server.chiudiConnessione(); } catch (IOException ex) { }
+        this.setVisible(false);
+        this.dispose();
+        Client.RiavviaClientErrore(messaggio);
     }
 
 }

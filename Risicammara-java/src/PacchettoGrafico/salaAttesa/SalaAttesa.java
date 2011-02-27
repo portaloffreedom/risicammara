@@ -1,5 +1,7 @@
 package PacchettoGrafico.salaAttesa;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import risicammaraJava.playerManage.ListaGiocatoriClient;
 import java.awt.Rectangle;
 import java.awt.event.WindowEvent;
@@ -21,7 +23,7 @@ import risicammaraServer.messaggiManage.*;
  *
  * @author matteo
  */
-public class SalaAttesa extends JFrame implements Runnable {
+public final class SalaAttesa extends JFrame implements Runnable {
     
     /** Dimensioni iniziali e posizione della finestra */
     final static Rectangle finestraR = new Rectangle(100, 100, 600, 305);
@@ -53,14 +55,12 @@ public class SalaAttesa extends JFrame implements Runnable {
         try {
             this.server = creaConnessione(server);
         } catch (IOException ex) {
-            System.err.println("Il sistema non è riuscito ad aprire gli stream"
+            riavviaPartitaErrore("Il sistema non è riuscito ad aprire gli stream"
                     + "di output o di input dal server oppure non è riuscito a"
                     + "ricevere il messaggio dal server. Errore: "+ex);
-            System.exit(3);
         } catch (ClassNotFoundException ex) {
-            System.err.println("Errore di lettura nel messaggio di conferma del"
+            riavviaPartitaErrore("Errore di lettura nel messaggio di conferma del"
                     + " server: "+ex);
-            System.exit(4);
         }
 
 
@@ -84,11 +84,12 @@ public class SalaAttesa extends JFrame implements Runnable {
             try {
                 arrivo = server.ricevi();
             } catch (IOException ex) {
-                System.err.println("Errore! Client disconnesso :"+ex);
+                riavviaPartitaErrore("Errore! Client disconnesso :"+ex);
                 System.err.println(ex.getStackTrace());
-                System.exit(15);
+                return;
             } catch (ClassNotFoundException ex) {
-                System.err.println("Attenzione! messaggio arrivato irriconoscibile: "+ex);
+                riavviaPartitaErrore("Attenzione! messaggio arrivato irriconoscibile: "+ex);
+                return;
             }
 
             System.out.println("Nuovo messaggio arrivato: "+arrivo);
@@ -232,6 +233,13 @@ public class SalaAttesa extends JFrame implements Runnable {
         pannello.invertiPronto(indexGiocatore);
     }
 
+    public void riavviaPartitaErrore(String messaggio){
+        try { server.chiudiConnessione(); } catch (IOException ex1) { }
+        this.setVisible(false);
+        this.dispose();
+        Client.RiavviaClientErrore(messaggio);
+    }
+
     // <editor-fold defaultstate="collapsed" desc="WindowListener">
     private static class WindowListenerSalaAttesa implements WindowListener {
 
@@ -241,35 +249,45 @@ public class SalaAttesa extends JFrame implements Runnable {
             this.salaAttesa = salaAttesa;
         }
 
+        @Override
         public void windowOpened(WindowEvent e) {
             //throw new UnsupportedOperationException("Not supported yet.");
         }
 
+        @Override
         public void windowClosing(WindowEvent e) {
             try {
                 salaAttesa.server.chiudiConnessione();
             } catch (IOException ex) {
-                System.err.println("Errore nel chiudere il collegamento col server: " + ex);
+                Client.RiavviaClientErrore("Errore nel chiudere il collegamento col server: " + ex);
+            } finally {
+                salaAttesa.setVisible(false);
+                salaAttesa.dispose();
             }
-            System.exit(0);
+            Client.RiavviaClient();
         }
 
+        @Override
         public void windowClosed(WindowEvent e) {
             //throw new UnsupportedOperationException("Not supported yet.");
         }
 
+        @Override
         public void windowIconified(WindowEvent e) {
             //throw new UnsupportedOperationException("Not supported yet.");
         }
 
+        @Override
         public void windowDeiconified(WindowEvent e) {
             //throw new UnsupportedOperationException("Not supported yet.");
         }
 
+        @Override
         public void windowActivated(WindowEvent e) {
             //throw new UnsupportedOperationException("Not supported yet.");
         }
 
+        @Override
         public void windowDeactivated(WindowEvent e) {
             //throw new UnsupportedOperationException("Not supported yet.");
         }
