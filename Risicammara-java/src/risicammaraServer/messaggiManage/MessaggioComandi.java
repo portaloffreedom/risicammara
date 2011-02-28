@@ -41,6 +41,7 @@ public class MessaggioComandi implements Messaggio{
     /**
      * Messaggio che informa la fine di un attacco.
      * @param giocatorecheAttaccava il giocatore che effettuava l'attacco.
+     * @param giocatoreCheDifendeva il giocatore che si difendeva
      * @return l'oggetto MessaggioAttaccoTerminato.
      */
     public static MessaggioComandi creaMsgAttaccoterminato(int giocatorecheAttaccava,int giocatoreCheDifendeva){
@@ -166,6 +167,7 @@ public class MessaggioComandi implements Messaggio{
  * Indica che il pacchetto è di tipo COMMAND (da ::messaggi_t )
  * @return ::messaggio_t.COMMAND
  */
+    @Override
     public messaggio_t getType() {
         return messaggio_t.COMMAND;
     }
@@ -181,6 +183,7 @@ public class MessaggioComandi implements Messaggio{
  * Fornisce il nome di chi ha inviato il pacchetto
  * @return l'indice del giocatore che invia il comando.
  */
+    @Override
     public int getSender(){
         return sender;
     }

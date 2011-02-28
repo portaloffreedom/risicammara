@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package risicammaraServer.messaggiManage;
 
 import java.net.Socket;
@@ -29,12 +24,13 @@ public class MessaggioNuovoGiocatore implements Messaggio {
     }
 
     
+    @Override
     public messaggio_t getType() {
         return messaggio_t.AGGIUNGIGIOCATORE;
     }
 
     /**
-     *
+     * Chiede il socket fra server e giocatore.
      * @return il Socket di connessione tra il Server e il client del giocatore
      * in questione
      */
@@ -42,6 +38,7 @@ public class MessaggioNuovoGiocatore implements Messaggio {
         return connessioneGiocatore;
     }
 
+    @Override
     public int getSender() {
         return -1;
     }

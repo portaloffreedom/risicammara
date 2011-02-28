@@ -49,9 +49,7 @@ public class AscoltatoreLobby extends Thread {
     }
 
     /**
-     * Fa partire il lavoro di ascolto di nuove connessioni. Implementazioni
-     * dell'interfaccia Runnable per creare un nuovo Thread si cui questo è il
-     * nuovo "main"
+     * Fa partire il lavoro di ascolto di nuove connessioni.
      */
     @Override
     public void run() {
@@ -65,7 +63,7 @@ public class AscoltatoreLobby extends Thread {
 
     /**
      * Comincia ad ascoltare sul ServerSocket e notifica al Thread server ogni
-     * volta che si connette un nuovo giocatore
+     * volta che si connette un nuovo giocatore.
      * <p>
      * Da Implelentare: Si blocca al compimento della 6 connessione fino a che
      * il server non si notifica una disconnessione o non vuole terminare il
@@ -89,10 +87,18 @@ public class AscoltatoreLobby extends Thread {
 
     private int numerogiocatori;
 
+    /**
+     * Imposta il numero di giocatori attivi.
+     * @param num il numero dei giocatori.
+     */
     public void setNumeroGiocatori(int num){
         this.numerogiocatori = num;
     }
 
+    /**
+     * Imposta lo stato di stop del Thread per poter chiudere tutto in maniera sicura.
+     * @param stop true se fermare, false altrimenti.
+     */
     public void setStop(boolean stop) {
         this.stop = stop;
         try{

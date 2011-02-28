@@ -14,7 +14,14 @@ public class MessaggioRisultatoLanci implements Messaggio {
     private int attaccante;
     private int difensore;
 
-    public MessaggioRisultatoLanci(PriorityQueue<Integer> lancioAttacco, 
+    /**
+     * Costruisce un messaggio per il risultato dei lanci.
+     * @param lancioAttacco I lanci dell'attacco
+     * @param lancioDifesa i lanci della difesa
+     * @param attaccante indice dell'attaccante
+     * @param difensore indice del difensore
+     */
+    public MessaggioRisultatoLanci(PriorityQueue<Integer> lancioAttacco,
             PriorityQueue<Integer> lancioDifesa, int attaccante,int difensore) {
         this.lancioAttacco = lancioAttacco;
         this.lancioDifesa = lancioDifesa;
@@ -87,10 +94,18 @@ public class MessaggioRisultatoLanci implements Messaggio {
         return getValori(lancioDifesa);
     }
 
+    /**
+     * Restituisce l'attaccante
+     * @return l'indice dell'attaccante
+     */
     public int getAttaccante() {
         return attaccante;
     }
 
+    /**
+     * L'indice del difensore.
+     * @return
+     */
     public int getDifensore() {
         return difensore;
     }

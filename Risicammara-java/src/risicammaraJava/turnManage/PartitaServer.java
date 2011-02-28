@@ -34,7 +34,10 @@ public class PartitaServer extends GestionePartita {
     private MazzoTerritori mazzo;
     private Dado dado;
     private ArrayList<Integer> vittoriaDistruzione;
-
+/**
+ * Crea una pseudo-random sequenza di gioco.
+ * @return La sequenza di gioco creata.
+ */
     private LinkedList<Integer> creaSequenzaGioco(){
         Integer [] ve = new Integer[listagiocatori.getSize()];
         int a = 0;
@@ -167,16 +170,30 @@ public class PartitaServer extends GestionePartita {
     //Metodi per le fasi
 
     //Metodi Obbietttivi
+    /**
+     * Chiede se il giocatore aveva come obbiettivo "distruggi le armate..."
+     * @param gio Il giocatore da controllare
+     * @return true se doveva distruggere le armate, false altrimenti
+     */
     public boolean hasDistruggiArmate(Giocatore gio){
         Obbiettivi_t ob = gio.getObbiettivo();
         if(getVictoryType(ob) == tipovittoria_t.DISTRUZIONE) return true;
         return false;
     }
 
+    /**
+     * Metodo che gestisce l'eliminazione del giocatore che si stava difendendo.
+     */
     public void eliminaGiocatoreAttaccato(){
         sequenzaDiGioco.removeFirstOccurrence(giocattaccato);
     }
 
+    /**
+     * Controlla tutti i giocatori che avevano un obbiettivo "distruggi armate"
+     * e lo cambia in "conquista 24 territori" se le armate eliminate erano
+     * quelle di uno di loro.
+     * @param eliminato Il colore delle armate che sono state eliminate
+     */
     public void modificaDistruzione(Colore_t eliminato){
         for(Integer i:vittoriaDistruzione){
             Giocatore g = listagiocatori.get(i);
@@ -224,6 +241,7 @@ public class PartitaServer extends GestionePartita {
     }
     /**
      * Verifica qual è il giocatore che ha vinto per territori.
+     * @param giocatore
      * @return l'indice del giocatore che soddisfa i requisiti. se è minore di 0
      * allora non c'è nessun vincitore.
      */
@@ -260,6 +278,11 @@ public class PartitaServer extends GestionePartita {
     };
 
     //Funzioni per verificare le condizioni di vittoria in base all'obbiettivo
+    /**
+     * Chiede il tipo di vittoria di un obbiettivo.
+     * @param obj L'obbiettivo
+     * @return Il suo tipo.
+     */
     private tipovittoria_t getVictoryType(Obbiettivi_t obj){
         return obj.VictoryType();
     }
@@ -284,11 +307,11 @@ public class PartitaServer extends GestionePartita {
         if(gioc.getNumTerritori() >= numterritori) return true;
         return false;
     };
-/**
- * Verifica se un giocatore può vincere in base ai continenti che possiede.
- * @param gioc il giocatore del quale verificare i continenti
- * @return true se ha vinto, false altrimenti.
- */
+    /**
+     * Verifica se un giocatore può vincere in base ai continenti che possiede.
+     * @param gioc il giocatore del quale verificare i continenti
+     * @return true se ha vinto, false altrimenti.
+     */
     private boolean Verifica_continentale(Giocatore gioc){
         switch(gioc.getObbiettivo()){
             case ASIAAFRICA:

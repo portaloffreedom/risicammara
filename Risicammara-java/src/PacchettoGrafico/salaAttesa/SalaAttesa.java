@@ -1,8 +1,5 @@
 package PacchettoGrafico.salaAttesa;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import risicammaraJava.playerManage.ListaGiocatoriClient;
 import java.awt.Rectangle;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -12,15 +9,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import risicammaraClient.Client;
 import risicammaraClient.Connessione;
-import risicammaraClient.Obbiettivi_t;
-import risicammaraJava.boardManage.PlanciaClient;
 import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
-import risicammaraJava.turnManage.PartitaClient;
 import risicammaraServer.messaggiManage.*;
 
 /**
- *
+ * Classe che implementa tutti i metodi di gestione della sala d'attesa del server.
  * @author matteo
  */
 public final class SalaAttesa extends JFrame implements Runnable {
@@ -29,6 +23,9 @@ public final class SalaAttesa extends JFrame implements Runnable {
     final static Rectangle finestraR = new Rectangle(100, 100, 600, 305);
     
     // variabili locali per il funzionamento interno
+    /**
+     * Oggetto Connessione con il server.
+     */
     public Connessione server;
     /** Riferimento al Client: unico scopo fare partire la fase successiva di gioco */
     private Client meStesso;
@@ -40,7 +37,11 @@ public final class SalaAttesa extends JFrame implements Runnable {
     int indexGiocatore;
     /** Intera lista dei giocatori */
     ListaPlayers listaGiocatori;
-
+/**
+ * Inizializza tutti i dati necessari alla creazione della sala d'attesa.
+ * @param server il socket del server.
+ * @param meStesso L'oggetto client che parte in locale.
+ */
     public SalaAttesa(Socket server, Client meStesso) {
         super("Sala d'Attesa");
         this.server = null;
@@ -183,7 +184,14 @@ public final class SalaAttesa extends JFrame implements Runnable {
 
         }
     }
-
+/**
+ * Crea una connessione con il server.
+ * @param server il socket con il quale creare la connessione
+ * @return un oggetto Connessione
+ * @throws IOException Quando non si riesce ad aprire lo stream Socket.
+ * @throws ClassNotFoundException Quando non si riesce a deserializzare gli
+ * oggetti di preconnessione.
+ */
     private Connessione creaConnessione(Socket server) throws IOException, ClassNotFoundException {
         /*
         if (server.isInputShutdown()) {
@@ -203,7 +211,9 @@ public final class SalaAttesa extends JFrame implements Runnable {
         this.listaGiocatori = msg.getPlyList();
         return connessioneServer;
     }
-    
+    /**
+     * Prepara tutto il client per avviare la partita.
+     */
     private void avviaPartita(){
         this.pannello.stampaMessaggioComando("Caricamento Partita in corso...");
         meStesso.inizializzaPartita(server, listaGiocatori, indexGiocatore);
@@ -219,22 +229,41 @@ public final class SalaAttesa extends JFrame implements Runnable {
         //this.leader = true;
         pannello.diventaLeader();
     }
-
+/**
+ * Elimina un giocatore dalla lista locale.
+ * @param index L'indice da rimuovere.
+ */
     public void eliminaGiocatore(int index) {
         listaGiocatori.remPlayer(index);
         pannello.eliminaGiocatore(index);
     }
-
+/**
+ * Chiede se un giocatore è pronto.
+ * @param indexGiocatore L'indice del giocatore di cui testare il pronto.
+ * @return true se è pronto, false altrimenti.
+ */
     public boolean pronto(int indexGiocatore) {
         return pannello.pronto(indexGiocatore);
     }
-
+/**
+ * Inverte lo stato di pronto nella sala d'attesa.
+ * @param indexGiocatore L'indice del giocatore che inverte lo stato
+ */
     public void invertiPronto(int indexGiocatore){
         pannello.invertiPronto(indexGiocatore);
     }
-
+/**
+ * Se si verifica un errore fa riapparire la finestra di connessione.
+ * @param messaggio il messaggio da visualizzare nella finestra di errore.
+ */
     public void riavviaPartitaErrore(String messaggio){
-        try { server.chiudiConnessione(); } catch (IOException ex1) { }
+        
+        try {
+            if(server != null){
+                server.chiudiConnessione();
+                server = null;
+            }
+        } catch (IOException ex1) { }
         this.setVisible(false);
         this.dispose();
         Client.RiavviaClientErrore(messaggio);

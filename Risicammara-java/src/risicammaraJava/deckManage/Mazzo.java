@@ -44,9 +44,6 @@ public abstract class Mazzo {
  * Miscela il mazzo di carte.
  */
     protected void Mischia(){
-      int asd = 0;
-      while(asd < 500){
-          asd++;
           Random random = new Random();
           for(int i=0;i<inizio_mazzo;i++){
               Carta temp;
@@ -55,7 +52,6 @@ public abstract class Mazzo {
               deck[i] = deck[r];
               deck[r] = temp;
           }
-      }
     }
     /** Preleva una carta dal mazzo
      * @return la carta pescata

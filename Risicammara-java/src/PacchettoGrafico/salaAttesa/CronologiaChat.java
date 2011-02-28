@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package PacchettoGrafico.salaAttesa;
 
@@ -14,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
 /**
- *
+ * Classe che implementa i metodi per creare un pannello di cronologia dei messaggi di chat.
  * @author matteo
  */
 public class CronologiaChat extends JLabel {
@@ -23,17 +19,11 @@ public class CronologiaChat extends JLabel {
     private List<String> testoInRighe;
     private int contatore;
 
-    @Deprecated
-    public CronologiaChat(Rectangle cronologiaR) {
-        this.setBounds(cronologiaR);
-
-
-        //Calcola il numero massimo di righe dato dallo spazio vertivale diviso
-        ///l'altezza di ogni riga
-        maxRighe = ( cronologiaR.height ) / ( getFontMetrics(this.getFont()).getHeight() );
-        testoInRighe = new ArrayList<String>(maxRighe+1);
-    }
-
+    /**
+     * Lo scrollpane per la cronologia dei messaggi.
+     * @param dimensioniScrollPane Dimensioni dello scrollpane
+     * @return L'oggetto della cronologia chat inscatolato dentro lo scorrimento.
+     */
     public JScrollPane inscatolaInScrollPane(Rectangle dimensioniScrollPane){
         JScrollPane konsoleScorrimento = new JScrollPane(this);
         konsoleScorrimento.setPreferredSize(new Dimension(dimensioniScrollPane.width, dimensioniScrollPane.height));
@@ -42,6 +32,10 @@ public class CronologiaChat extends JLabel {
         return konsoleScorrimento;
     }
 
+    /**
+     * Il riquadro dove vengono stampati i messaggi passati. Costruttore.
+     * @param maxRighe le righe di cronologia.
+     */
     public CronologiaChat(int maxRighe){
         this.contatore = 0;
         this.maxRighe = maxRighe;
@@ -53,6 +47,10 @@ public class CronologiaChat extends JLabel {
     }
 
 
+    /**
+     * Stampa un messaggio nella chat.Usa tag html
+     * @param messaggio il messaggio da stampare
+     */
     public synchronized void stampaMessaggio(String messaggio) {
 
         testoInRighe.add(messaggio);

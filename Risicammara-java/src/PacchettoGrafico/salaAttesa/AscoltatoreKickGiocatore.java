@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package PacchettoGrafico.salaAttesa;
 
 import java.awt.event.ActionEvent;
@@ -12,18 +7,24 @@ import risicammaraServer.messaggiManage.Messaggio;
 import risicammaraServer.messaggiManage.MessaggioComandi;
 
 /**
- *
+ * Ascolta i kick del giocatore
  * @author matteo
  */
 public class AscoltatoreKickGiocatore implements ActionListener {
         private SalaAttesa salaAttesa;
         private PannelloSalaAttesa pannello;
 
+        /**
+         * Inizializza tutti i parametri dell'ascoltatore
+         * @param salaAttesa la sala d'attesa
+         * @param pannello il pannello associato
+         */
         public AscoltatoreKickGiocatore(SalaAttesa salaAttesa, PannelloSalaAttesa pannello) {
             this.salaAttesa = salaAttesa;
             this.pannello =  pannello;
         }
 
+    @Override
         public void actionPerformed(ActionEvent e) {
             //throw new UnsupportedOperationException("Not supported yet.");
             int index = ((BottoneGiocatori) (e.getSource())).getIndex();

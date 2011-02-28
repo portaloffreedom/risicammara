@@ -17,6 +17,10 @@ public interface Carta extends Serializable{
      */
     public String tipoCarta();
     
+    /**
+     * Restituisce l'icona assegnata alla carta.
+     * @return
+     */
     public BufferedImage getIcona();
 
 }

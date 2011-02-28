@@ -17,7 +17,6 @@ import risicammaraJava.boardManage.PlanciaClient;
 import risicammaraJava.playerManage.ListaGiocatoriClient;
 import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraJava.turnManage.PartitaClient;
-import risicammaraJava.turnManage.PartitaServer;
 import risicammaraServer.messaggiManage.MessaggioObbiettivo;
 import risicammaraServer.messaggiManage.MessaggioPlancia;
 import risicammaraServer.messaggiManage.MessaggioSequenzaGioco;
@@ -32,8 +31,17 @@ import risicammaraServer.messaggiManage.MessaggioSequenzaGioco;
  * @author matteo
  */
 public class Client implements Runnable {
+    /**
+     * Percorso del logo del programma.
+     */
     public static final String RISICAMLOGO = "/Images/risicamlogo.png";
+    /**
+     * Percorso dell'immagine Plancia usata nel client
+     */
     public static final String RISICAMMARA_PLANCIA = "/Images/risicammara_plancia.png";
+    /**
+     * Percorso dell'immagine Negativo usata dal client
+     */
     public static final String RISICAMMARA_NEGATIVO = "/Images/risicammara_plancia.bmp";
     /** Rappresenta la Porta di default che deve utilizzare il programma. Viene
      * utlizzata anche dal lato server come porta di DEFAULT */
@@ -45,10 +53,22 @@ public class Client implements Runnable {
      * di DEBUG */
     public static boolean DEBUG = false;
 
+    /**
+     * Livello qualità del client Bassa
+     */
     public static final int QUALITA_BASSA = 0;
+    /**
+     * Livello qualità del client Media
+     */
     public static final int QUALITA_MEDIA = 1;
+    /**
+     * Livello qualità del client Alta
+     */
     public static final int QUALITA_ALTA = 2;
 
+    /**
+     * Livello qualità del client
+     */
     public static int QUALITA = 1;
 
 
@@ -193,10 +213,17 @@ public class Client implements Runnable {
         this.collegatiPartita();
     }
 
+    /**
+     * tu sei malato
+     */
     public void collegatiPartita() {
         CollegatiPartita dialogo = new CollegatiPartita(this, this.porta);
     }
 
+    /**
+     * Crea una sala d'attesa.
+     * @param server Il socket del server.
+     */
     public void salaAttesa(Socket server) {
         this.server = server;
         
@@ -205,7 +232,13 @@ public class Client implements Runnable {
         salaAttesa.start();
     }
 
-    public void inizializzaPartita (Connessione connessioneServer, ListaPlayers listaGiocatori, int indexGiocatore){
+    /**
+     * Inizializza la partita lato client.
+     * @param connessioneServer La connessione al server
+     * @param listaGiocatori La lista dei giocatori
+     * @param indexGiocatore L'indice del giocatore locale
+     */
+    public void inizializzaPartita(Connessione connessioneServer, ListaPlayers listaGiocatori, int indexGiocatore){
         MessaggioPlancia veicoloPlancia = null;
         Obbiettivi_t mioObbiettivo = null;
         MessaggioSequenzaGioco sequenzaGioco = null;
@@ -230,6 +263,10 @@ public class Client implements Runnable {
         finestraThread.start();
     }
 
+    /**
+     * Riavvia il client in seguito ad un errore.
+     * @param motivazione il testo dell'errore
+     */
     static public void RiavviaClientErrore(String motivazione){
         //TODO implementare finestra di dialogo
         //TODO implementare la richiesta di una nuova connessione ad un'altro server
@@ -238,12 +275,20 @@ public class Client implements Runnable {
         RiavviaClient();
     }
 
+    /**
+     * Riavvia il client.
+     */
     static public void RiavviaClient(){
         Client client = new Client(Client.PORT, laf);
         client.run();
     }
 
-    static public BufferedImage loadImage (URL pad){
+    /**
+     * Carica una immagine da un URL.
+     * @param pad Il percorso dell'immagine in formato URL
+     * @return L'oggetto BufferedImage corrispondente
+     */
+    static public BufferedImage loadImage(URL pad){
         //return Toolkit.getDefaultToolkit().getImage(getClass().getResource(pad));
         BufferedImage img = null;
         try {
@@ -254,7 +299,13 @@ public class Client implements Runnable {
         return img;
     }
 
-    static public BufferedImage loadImage (Object questo, String pad){
+    /**
+     * Carica una immagine da un percorso specifico come risorsa.
+     * @param questo l'oggetto da cui viene chiamata
+     * @param pad La stringa che identifica il percorso
+     * @return Un oggetto BufferedImage corrispondente
+     */
+    static public BufferedImage loadImage(Object questo, String pad){
         return loadImage(questo.getClass().getResource(pad));
     }
 }

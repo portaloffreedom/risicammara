@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package PacchettoGrafico.salaAttesa;
 
 import java.awt.event.ActionEvent;
@@ -14,13 +9,18 @@ import risicammaraServer.messaggiManage.Messaggio;
 import risicammaraServer.messaggiManage.MessaggioCambiaNickColore;
 
 /**
- *
+ * Ascoltatore per i cambi di nome/colore dei giocatori
  * @author matteo
  */
 public class AscoltatoreCambiaNomeColore implements ActionListener {
     private SalaAttesa salaAttesa;
     private PannelloSalaAttesa pannello;
 
+    /**
+     * Inizializza tutti i dati dell'ascoltatore
+     * @param salaAttesa La sala d'attesa
+     * @param pannello Il pannello associato
+     */
     public AscoltatoreCambiaNomeColore(SalaAttesa salaAttesa, PannelloSalaAttesa pannello) {
         this.salaAttesa = salaAttesa;
         this.pannello = pannello;
@@ -28,6 +28,7 @@ public class AscoltatoreCambiaNomeColore implements ActionListener {
 
     
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         aggiornaNomeColore();
     }

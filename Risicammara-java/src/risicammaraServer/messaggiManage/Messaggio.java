@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package risicammaraServer.messaggiManage;
 
 import java.io.Serializable;
@@ -18,6 +13,10 @@ public interface Messaggio extends Serializable {
      * @return tipo di messaggio ::messaggio_t
      */
     public messaggio_t getType();
+    /**
+     * Restituisce l'inviante di un messaggio.
+     * @return
+     */
     public int getSender();
 
 }

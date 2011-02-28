@@ -4,11 +4,8 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import risicammaraClient.Bonus_t;
 import risicammaraClient.Colore_t;
-import risicammaraClient.Continente_t;
 import risicammaraClient.Obbiettivi_t;
 import risicammaraClient.territori_t;
 import risicammaraJava.deckManage.Carta;
@@ -137,7 +134,6 @@ public class SuccessioneTurni {
 
         return null;
     }
-
     /**
      * Controlla la validità del messaggio in base al tipo (se è un messaggio di chat
      * viene mandato a tutti ma ritorna falso, in quanto non è un messaggio di partita)
@@ -160,7 +156,6 @@ public class SuccessioneTurni {
         if(msgReceived.getSender() != partita.getGiocatoreTurnoIndice()) return false;
         return true;
     }
-
     /**
      * Stabilisce la validità del messaggio in base alla fase in cui ci troviamo
      * attualmente. Per ogni fase il messaggio viene processato e viene effettuata
@@ -446,7 +441,12 @@ public class SuccessioneTurni {
                     +ex.getMessage());
         }
     }
-
+    /**
+     * Verifica se c'è stata una eliminazione dopo l'attacco.
+     * @param difensore Il giocatore che difendeva.
+     * @param attaccante il giocatore che attaccava
+     * @return True se il difensore è stato eliminato, false altrimenti.
+     */
     private boolean verificaEliminazione(Giocatore_Net difensore,Giocatore_Net attaccante){
         if(difensore.getNumTerritori()-1 == 0){
             Colore_t eliminato = difensore.getArmyColour();
@@ -484,10 +484,17 @@ public class SuccessioneTurni {
         }
         return false;
     }
+    /**
+     * Imposta il giocatore che ha vinto la partita.
+     * @param vincito L'indice del giocatore che ha vinto la partita.
+     */
     private void setVincitore(int vincito){
         this.indexvincente = vincito;
         this.vincitore = true;
     }
+    /**
+     * Invia il messaggio "vincitore" a tutti i giocatori.
+     */
     private void inviaMessaggioVincitore(){
         try {
             Server.SpedisciMsgTutti(MessaggioComandi.creaMsgVincitore(indexvincente), listaGiocatori, -1);
@@ -497,6 +504,13 @@ public class SuccessioneTurni {
                     +ex.getMessage());
         }
     }
+    /**
+     * Controlla se il giocatore che ha eliminato un altro aveva l'obbiettivo
+     * di distruggere le armate.
+     * @param gio Il giocatore da controllare
+     * @param eliminato Il colore delle armate eliminate
+     * @return True se erano le armate da distruggere, false altrimenti.
+     */
     private boolean vittoriaDistruzione(Giocatore gio,Colore_t eliminato){
         Obbiettivi_t ob = gio.getObbiettivo();
         switch(ob){
@@ -542,7 +556,11 @@ public class SuccessioneTurni {
     }
 
     /** Risolve l'attacco effettuando il lancio dei dadi e la rimozione delle
-     * armate. */
+     * armate.
+     * Invia un messaggio contenente tutti i risultati dell'attaccante e del difensore,
+     * Già ordinati secondo le regole di risoluzione attacco.
+     * @param numdadi Il numero dei dadi che lancia l'attaccante.
+     */
     private void risolviAttacco(int numdadi){
         PriorityQueue<Integer> lancidifensore = new PriorityQueue<Integer>();
         PriorityQueue<Integer> lanciattaccante = new PriorityQueue<Integer>();
@@ -717,7 +735,10 @@ public class SuccessioneTurni {
         return tuno.getBonus().TrisValue(true) + bonus;
     }
 
-
+/**
+ * Invia il messaggio di armate disponibili al giocatore.
+ * @throws IOException lancia l'eccezione se ci sono problemi con il socket
+ */
     private void inviaArmateDisponibili() throws IOException {
         for(int i=0;i<ListaPlayers.MAXPLAYERS;i++){
             Giocatore_Net g = (Giocatore_Net)listaGiocatori.get(i);

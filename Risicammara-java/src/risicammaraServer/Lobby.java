@@ -161,6 +161,10 @@ public class Lobby {
         return listaGiocatori;
     }
 
+    /**
+     * Imposta lo stato di stop per la lobby (chiude la lobby in modo sicuro).
+     * @param stop true se il trhead deve essere fermato, false altrimenti.
+     */
     public void setStop(boolean stop){
         this.esci = stop;
         attendiConnessioni.setStop(true);
