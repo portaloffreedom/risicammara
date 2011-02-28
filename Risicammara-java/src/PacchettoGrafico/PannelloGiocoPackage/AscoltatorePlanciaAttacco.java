@@ -18,12 +18,23 @@ import risicammaraServer.messaggiManage.MessaggioComandi;
 import risicammaraServer.messaggiManage.MessaggioDichiaraAttacco;
 
 /**
- *
+ * Ascoltatore che gestisce la fase di attacco reagendo agli eventi sulla plancia
+ * di gioco.
  * @author matteo
  */
 public class AscoltatorePlanciaAttacco implements RisicammaraEventListener {
+    /**
+     * Colore con qui sfumare il territorio selezionato come attaccante.
+     */
     public static final Color Attacco = Color.RED;
+    /**
+     * Colore con cui sfumare il territorio selezionato come difensore.
+     */
     public static final Color Difesa  = Color.BLUE;
+    /**
+     * Valore che imposta quanto deve essere visibile la colorazione di attacco
+     * e difesa.
+     */
     public static final double pesantezzaSfumatura = 0.86;
 
     private PlanciaImmagine plancia;
@@ -37,6 +48,15 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener {
     private TerritorioPlanciaClient territorioDifensore;
     private boolean attaccoInCorso;
 
+    /**
+     * Costruttore
+     * @param plancia riferimento alla plancia che deve gestire
+     * @param fasi riferimento al gestore delle fasi
+     * @param server riferimento alla connessione col server
+     * @param partita riferimento all'oggetto partita
+     * @param bottoneFaseAttacco riferimento al bottone fase attacco (per gestire
+     * la visualizzazzione dei dialoghi)
+     */
     public AscoltatorePlanciaAttacco(PlanciaImmagine plancia, GestoreFasi fasi, Connessione server, PartitaClient partita, BottoneFaseAttaccoAvanzato bottoneFaseAttacco) {
         this.plancia = plancia;
         this.fasi = fasi;
@@ -50,6 +70,7 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener {
 
     /**
      * Metodo che viene chiamato dopo che viene premuta la plancia
+     * @param e
      */
     @Override
     public void actionPerformed(EventoAzioneRisicammara e) {
@@ -151,6 +172,7 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener {
     /**
      * Metodo che viene azionato dopo che viene scelto il numero di armate da
      * scegliere
+     * @param ae
      */
     public void rispostaNumeroArmate(ActionEvent ae) {
         int armateAttaccanti = bottoneFaseAttacco.getNumeroArmateAttaccanti();
@@ -184,6 +206,10 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener {
         server.spedisci(MessaggioComandi.creaMsgRitirati(partita.getMeStessoIndex()));
     }
 
+    /**
+     * Termina l'attacco in corso, ripristinando tutte le variabili (e i colori
+     * sulla plancia) per potere passare o effettuare un nuovo attacco.
+     */
     public void terminaAttacco() {
         attaccoInCorso(false);
         plancia.ripristinaTerritorio(territorioAttaccante);
@@ -193,6 +219,10 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener {
         disattivaRichiestaArmate();
     }
 
+    /**
+     * Disattiva il dialogo di richiesta armate da spostare (dopo un'eventuale
+     * vincita). 
+     */
     public void disattivaRichiestaArmate() {
         bottoneFaseAttacco.setRichiestaNumeroArmateAttaccanti(false);
     }

@@ -8,8 +8,6 @@ import PacchettoGrafico.PannelloGiocoPackage.PannelloGioco;
 import PacchettoGrafico.PannelloGiocoPackage.PlanciaImmagine;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
@@ -38,6 +36,11 @@ public class FinestraGioco extends JFrame implements Runnable {
 
     private PannelloGioco pannello;
 
+    /**
+     * Costruisce la finestra di gioco di Risicammara.
+     * @param server la Connessione al server
+     * @param partita La partita lato Client.
+     */
     public FinestraGioco(Connessione server, PartitaClient partita) {
         super("Risicammara - "+partita.getMeStesso().getNome());
         this.server = server;
@@ -321,6 +324,10 @@ public class FinestraGioco extends JFrame implements Runnable {
 
     
 
+    /**
+     * Riavvia la partita in caso di errore.
+     * @param messaggio Il messaggio di errore
+     */
     public void riavviaPartitaErrore(String messaggio){
         try { server.chiudiConnessione(); } catch (IOException ex) { }
         this.setVisible(false);

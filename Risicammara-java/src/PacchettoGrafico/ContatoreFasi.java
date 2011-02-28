@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package PacchettoGrafico;
 
 import risicammaraJava.turnManage.Fasi_t;
@@ -13,11 +8,12 @@ import risicammaraJava.turnManage.Fasi_t;
  */
 public class ContatoreFasi {
     private int fase;
-    static final public int FINETURNO   = 0;
-    static final public int ATTESA      = 0;
-    static final public int RINFORZO    = 1;
-    static final public int ATTACCO     = 2;
-    static final public int SPOSTAMENTI = 3;
+
+    static final private int FINETURNO   = 0;
+    static final private int ATTESA      = 0;
+    static final private int RINFORZO    = 1;
+    static final private int ATTACCO     = 2;
+    static final private int SPOSTAMENTI = 3;
 
     /**
      * Costruttore. Inizializza la fase a 0.

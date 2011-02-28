@@ -21,8 +21,19 @@ public class Dado extends Elemento_2DGraphicsCliccable {
     private int bombaturaDado;
     private boolean inverti;
     private String valoreDado;
+    /**
+     * Colore principale del dado.
+     */
     protected Color coloreDado;
 
+    /**
+     * Costruttore completo.
+     * @param dimensioni dimensioni e posizione del dado.
+     * @param bombaturaDado quanto il dado deve essere arrotondato.
+     * @param inverti se il dado deve essere disegnato con i colori invertiti.
+     * @param valoreDado valore da disegnare sopra al dado.
+     * @param coloreDado colore principale del dado.
+     */
     public Dado(Rectangle dimensioni, int bombaturaDado, boolean inverti, String valoreDado, Color coloreDado) {
         this.bombaturaDado = bombaturaDado;
         this.setImpostazioniDado(coloreDado, valoreDado, dimensioni, inverti);
@@ -58,6 +69,10 @@ public class Dado extends Elemento_2DGraphicsCliccable {
         return getBordi().getBounds();
     }
 
+    /**
+     * Imposta nuova posizione e dimensioni del dado.
+     * @param bordiDado nuovi bordi del dado.
+     */
     public void setBordiDado(Rectangle bordiDado) {
         this.posizione = new java.awt.geom.RoundRectangle2D.Float(bordiDado.x, bordiDado.y, bordiDado.width, bordiDado.height, bombaturaDado, bombaturaDado);
     }

@@ -46,6 +46,7 @@ public class RisicammaraSpinner extends Dado {
      * @param inverti true se i colori devono essere invertiti.
      * @param coloreDado colore che deve avere il dado di sfondo (se i colori
      * sono invertiti, questo sarà il colore dei bordi e del testo).
+     * @param ag Attivatore Grafico
      */
     public RisicammaraSpinner(Rectangle dimensioni, int bombaturaDado, boolean inverti, Color coloreDado, AttivatoreGrafica ag) {
         super(dimensioni, bombaturaDado, inverti, "", coloreDado);
@@ -93,6 +94,7 @@ public class RisicammaraSpinner extends Dado {
     /**
      * Imposta il salto che ci deve essere ogni volta che si aumenta o diminuisce
      * il valore dello spinner.
+     * @param salto L'offset di quanto avanza lo spinner
      */
     public void setSalto(int salto) {
         this.salto = salto;
@@ -101,6 +103,7 @@ public class RisicammaraSpinner extends Dado {
     /**
      * Cambia il valore attuale dello spinner.<br>
      * Attenzione a come si cambia in funzione del salto che è stato impostato
+     * @param valoreAttuale Il valore da impostare allo spinner
      */
     public void setValoreAttuale(int valoreAttuale) {
         this.valoreAttuale = valoreAttuale;
@@ -109,6 +112,7 @@ public class RisicammaraSpinner extends Dado {
 
     /**
      * Imposta il valore massimo (incluso) che può essere raggiunto dallo spinner.
+     * @param valoreMassimo Il valore massimo che può raggiungere
      */
     public void setValoreMassimo(int valoreMassimo) {
         this.valoreMassimo = valoreMassimo;
@@ -116,6 +120,7 @@ public class RisicammaraSpinner extends Dado {
 
     /**
      * Imposta il valore minimo (incluso) che lo spinner può raggiungere.
+     * @param valoreMinimo Il valore minimo che lo spinner può raggiungere
      */
     public void setValoreMinimo(int valoreMinimo) {
         this.valoreMinimo = valoreMinimo;
@@ -129,6 +134,10 @@ public class RisicammaraSpinner extends Dado {
         return valoreAttuale;
     }
 
+    /**
+     * Quando viene effettuata una azione PRESSED
+     * @param e L'evento mouse generato
+     */
     @Override
     protected void actionPressed(MouseEvent e) {
         super.actionPressed(e);
@@ -187,6 +196,10 @@ public class RisicammaraSpinner extends Dado {
         g2.fill(new Polygon(xpoints, ypoints, NUMERO_PUNTI_FRECCIA));
     }
 
+    /**
+     * Imposta i bordi del dado
+     * @param bordiDado Il rettangolo che forma il dado
+     */
     @Override
     public void setBordiDado(Rectangle bordiDado) {
         super.setBordiDado(bordiDado);

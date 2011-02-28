@@ -76,6 +76,10 @@ public abstract class Elemento_2DGraphicsCliccable implements Elemento_2DGraphic
         this.ascoltatore = ascoltatore;
     }
 
+    /**
+     * Aziona l'ascoltatore se ne è stato impostato uno.
+     * @param e
+     */
     protected void actionPressed(MouseEvent e){
         if (this.ascoltatore != null) {
             EventoAzioneRisicammara risicEv = new EventoAzioneRisicammara(this, e.getID(), "cliccato",e.getPoint());

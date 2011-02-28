@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package PacchettoGrafico.PannelloGiocoPackage;
 
 import PacchettoGrafico.EventoAzioneRisicammara;
@@ -43,13 +38,10 @@ final public class GestoreFasi {
 
     /**
      * Costruttore
-     * @param barraFasi riferimento alla barra fasi che deve gestire
-     * @param server insieme di connessione che servono a mandare i messaggi al
-     * server
-     * @param listaGiocatori riferimento alla lista dei giocatori (versione Client)
+     * @param partita rifermento alla partita.
+     * @param pannello riferimento al pannello principale.
      * @param planciaImmagine riferimento alla planciaImmagine (che gestisce la
      * visualizzazione della plancia). Serve per agganciarci gli ascoltatori.
-     * @param ag riferimento all'Attivatore Grafica (per ridisegnare il pannello)
      */
     public GestoreFasi(PartitaClient partita, PlanciaImmagine planciaImmagine, PannelloGioco pannello) {
         this.pannello = pannello;
@@ -92,6 +84,9 @@ final public class GestoreFasi {
         planciaImmagine.setActionListener(ascoltatorePlanciaEvidenziatore);
     }
 
+    /**
+     * Imposta la fine della prefase e fa tornare alla fase di fineTurno / attesa.
+     */
     public void finePreFase(){
         this.preFase = false;
         this.faseToAttesa();
@@ -139,6 +134,10 @@ final public class GestoreFasi {
         }
     }
     
+    /**
+     * Scorre le fasi fino ad arrivare alla nuova fase.
+     * @param fase nuova fase a cui arrivare.
+     */
     public void setFase(Fasi_t fase) {
         int avanzamento = Fasi_t.getDistanzaFasi(getFaseCorrente(), fase);
         for (int i=0; i<avanzamento; i++){
@@ -146,6 +145,11 @@ final public class GestoreFasi {
         }
     }
 
+    /**
+     * Attiva o disattiva l'ascoltatore del bottone fase (area non occupata
+     * dagli altri bottonefase) di fineturno.
+     * @param fineTurno vero per attivarlo.
+     */
     public void setAscoltatoreFineTurno(boolean fineTurno) {
         //FINE TURNO
         if (fineTurno)
@@ -154,7 +158,11 @@ final public class GestoreFasi {
             barraFasi.setAscoltatoreFineTurno(null);
     }
 
-    public void setAscoltatoreSpostamenti (boolean spostamenti){
+    /**
+     * Attiva o disattiva l'ascoltatore del bottone fase degli spostamenti.
+     * @param spostamenti vero per attivarlo.
+     */
+    public void setAscoltatoreSpostamenti(boolean spostamenti){
         //SPOSTAMENTI
         if (spostamenti)
             barraFasi.setAscoltatoreSpostamento(ascoltatoreSpostamento);
@@ -162,7 +170,11 @@ final public class GestoreFasi {
             barraFasi.setAscoltatoreSpostamento(null);
     }
 
-    public void setAscoltatoreAttacco (boolean attacco){
+    /**
+     * Attiva o disattiva l'ascoltatore del bottone fase di attacco.
+     * @param attacco vero per attivarlo.
+     */
+    public void setAscoltatoreAttacco(boolean attacco){
         //SPOSTAMENTI
         if (attacco)
             barraFasi.setAscoltatoreAttacco(ascoltatoreAttacco);
@@ -170,6 +182,11 @@ final public class GestoreFasi {
             barraFasi.setAscoltatoreAttacco(null);
     }
 
+    /**
+     * Imposta le Armate disponibili da posizionare nella fase di rinforzo e
+     * le visualizza.
+     * @param armate armate disponibili.
+     */
     final public void setArmateRinforzoDisponibili(int armate){
         this.armateRinforzoDisponibili = armate;
         if (armateRinforzoDisponibili > 0) {
@@ -181,15 +198,27 @@ final public class GestoreFasi {
         ag.panelRepaint(barraFasi.rinforzi.getBounds());
     }
 
+    /**
+     * Decrementa di un'unità le armate di rinforzo disponibili.
+     */
     final public void diminuisciArmateRinforzoDisponibili(){
         armateRinforzoDisponibili--;
         setArmateRinforzoDisponibili(armateRinforzoDisponibili);
     }
 
+    /**
+     * Restituisce la fase corrente in cui è il giocatore.
+     * @return fase corrente.
+     */
     public Fasi_t getFaseCorrente(){
         return barraFasi.getFase();
     }
 
+    /**
+     * Delega il termina attaccon in corso dell'ascoltatorePlanciaAttacco per
+     * potere attivare questa funzione dalla finestraGioco che riceve e parsa
+     * i messaggi del server.
+     */
     public void terminaAttaccoInCorso() {
         ascoltatorePlanciaAttacco.terminaAttacco();
     }

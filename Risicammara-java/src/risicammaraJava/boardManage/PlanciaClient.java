@@ -14,7 +14,7 @@ public class PlanciaClient extends Plancia {
 
     /**
      * Costruisce una nuova Plancia lato client partendo da una plancia normale.
-     * @param plancia
+     * @param plancia riferimento alla plancia di gioco da cui ereditare i valori.
      */
     public PlanciaClient(Plancia plancia){
         super(plancia);
@@ -24,7 +24,7 @@ public class PlanciaClient extends Plancia {
     }
 
     /**
-     * Imposta il rettangol oassociato e il centro del bollino nel territorio
+     * Imposta il rettangolo associato e il centro del bollino nel territorio
      * @param territorio il territorio a cui associare
      * @param rettangolo rettangolo da associare
      * @param posizioneCerchio centro del bollino da associare.
@@ -58,7 +58,7 @@ public class PlanciaClient extends Plancia {
 
     /**
      * Restituisce il tabellone di gioco
-     * @return i ltebellone di gioco
+     * @return il tabellone di gioco
      */
     public TerritorioPlancia[] getTabellone() {
         return tabellone;

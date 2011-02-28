@@ -13,14 +13,22 @@ import risicammaraClient.Client;
 import risicammaraJava.turnManage.PartitaClient;
 
 /**
- *
+ * Menù che visualizza le informazioni del giocatore (l'obbiettivo). Si può
+ * rendere visibile o invisibile. Premere su questo menù farà ridisegnare
+ * l'intero pannello.
  * @author matteo
  */
 public class MenuGiocatore extends MenuRisicammara {
     private RiquadroTesto obbiettivo;
-    
+
+    //TODO usare questo riferimento per stampare più informazioni sul giocatore attuale
     private PartitaClient partita;
 
+    /**
+     * Costruttore.
+     * @param partita riferimento all'oggetto partita.
+     * @param attivatoreGrafica riferimento all'attivatore grafica.
+     */
     public MenuGiocatore(PartitaClient partita, AttivatoreGrafica attivatoreGrafica) {
         super(attivatoreGrafica);
         this.partita = partita;
@@ -40,6 +48,11 @@ public class MenuGiocatore extends MenuRisicammara {
         }
     }
 
+    /**
+     * Prima di azionare l'ascoltatore mette in coda un ridisegno totale
+     * del pannello.
+     * @param e evento
+     */
     @Override
     protected void actionPressed(MouseEvent e) {
         if (Client.DEBUG)

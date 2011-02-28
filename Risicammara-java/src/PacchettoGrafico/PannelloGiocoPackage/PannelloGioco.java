@@ -23,7 +23,10 @@ import risicammaraJava.turnManage.PartitaClient;
  * @author matteo
  */
 final public class PannelloGioco extends JPanel{
-    static public int ALTEZZAPANNELLO = 60;
+    /**
+     * Altezza della barra del pannello.
+     */
+    static public final int ALTEZZAPANNELLO = 60;
 
     private PartitaClient partita;
 
@@ -31,13 +34,17 @@ final public class PannelloGioco extends JPanel{
     private BarraSuperiore barra;
     private PlanciaImmagine planciaImmagine;
     private OrologioTimer cronometro;
-    private MillisecondiDiEsecuzione performance;
     private int durataFrame;
 
     private AttivatoreGrafica attivatoreGrafica;
     private MatricePannello gestionePulsanti;
     private GraphicsAdvanced colori;
 
+    /**
+     * Costruttore del pannello di gioco.
+     * @param frameRateMassimo fps massimi
+     * @param partita Oggetto Partita Client
+     */
     public PannelloGioco(int frameRateMassimo, PartitaClient partita) {
         super();
         this.partita = partita;
@@ -200,6 +207,10 @@ final public class PannelloGioco extends JPanel{
 
     }
     
+    /**
+     * Ascoltatore Evento MouseCliccato
+     * @param e Evento del mouse
+     */
     public void mouseCliccato(MouseEvent e) {
         this.gestionePulsanti.aziona(e);
     }
@@ -218,40 +229,76 @@ final public class PannelloGioco extends JPanel{
         this.colori = new GraphicsAdvanced(sfondoScuro, sfondoChiaro, testo, coloreGiocatore);
     }
 
-    public Dimension getDimensioniMinime (){
+    /**
+     * Ritorna le dimensioni minime della plancia Immagine
+     * @return Le dimensioni minime.
+     */
+    public Dimension getDimensioniMinime(){
         Dimension dim = this.planciaImmagine.getDimension();
         dim.height += ALTEZZAPANNELLO;
         return dim;
     }
 
+    /**
+     * Restituisce il riferimento alla barra delle fasi
+     * @return riferimento alla BarraFasi
+     */
     public BarraFasi getBarraFasi(){
         return barra.getBarraFasi();
     }
 
+    /**
+     * Restituisce il riferimento al menu delle carte
+     * @return il riferimento al menu delle carte
+     */
     public MenuCarte getMenuCarte() {
         return barra.getMenuCarte();
     }
 
+    /**
+     * Restituisce il bottoneFase per lo spostamento
+     * @return il bottoneFase relativo allo spostamento
+     */
     public BottoneFaseAvanzato getBottoneFaseSpostamento() {
         return barra.getBottoneFaseSpostamento();
     }
 
+    /**
+     * Restituisce il bottoneFase relativo all'attacco
+     * @return il bottone Fase relativo all'attacco.
+     */
     public BottoneFaseAttaccoAvanzato getBottoneFaseAttacco() {
         return barra.getBottoneFaseAttacco();
     }
 
+    /**
+     * Imposta il risultato dei dadi
+     * @param dadiAttacco risultato dei dadi di attacco
+     * @param dadiDifesa risultato dei dadi di difesa
+     */
     public void setRisultatoDadi(int[] dadiAttacco, int[] dadiDifesa) {
         barra.getBarraFasi().setRisultato(dadiAttacco, dadiDifesa);
     }
 
+    /**
+     * Cancella il disegno del risultato dei dadi sulla barra fasi.
+     */
     public void disattivaRisultatoDadi() {
         barra.getBarraFasi().disattivaDadi();
     }
 
+    /**
+     * Restituisce l'attivatore per la grafica di gioco.
+     * @return oggetto AttivatoreGrafica.
+     */
     public AttivatoreGrafica getAttivatoreGrafica() {
         return attivatoreGrafica;
     }
 
+    /**
+     * Restituisce l'oggetto PlanciaImmagine
+     * @return PlanciaImmagine.
+     */
     public PlanciaImmagine getPlanciaImmagine() {
         return planciaImmagine;
     }
@@ -265,22 +312,27 @@ final public class PannelloGioco extends JPanel{
             this.pannello = pannello;
         }
 
+        @Override
         public void mouseClicked(MouseEvent e) {
             pannello.mouseCliccato(e);
         }
 
+        @Override
         public void mousePressed(MouseEvent e) {
 
         }
 
+        @Override
         public void mouseReleased(MouseEvent e) {
 
         }
 
+        @Override
         public void mouseEntered(MouseEvent e) {
 
         }
 
+        @Override
         public void mouseExited(MouseEvent e) {
 
         }

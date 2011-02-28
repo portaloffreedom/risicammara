@@ -14,12 +14,19 @@ import risicammaraJava.deckManage.Carta;
 import risicammaraJava.turnManage.PartitaClient;
 
 /**
- *
+ * Menù che visualizza tutte le carte possedute dal Giocatore proprietario del
+ * client.
  * @author matteo
  */
 public class MenuCarte extends MenuRisicammara {
-    static public int LARGHEZZA_CARTA = 200;
-    static public int ALTEZZA_CARTA = 50;
+    /**
+     * Larghezza fissa di una carta
+     */
+    static public final int LARGHEZZA_CARTA = 200;
+    /**
+     * Altezza fissa di una carta
+     */
+    static public final int ALTEZZA_CARTA = 50;
 
     private SottoMenuCarta richiestaUsoTris;
     private ArrayList<CartaDisegnabile> listaCarteDisegnabili;
@@ -32,12 +39,13 @@ public class MenuCarte extends MenuRisicammara {
     private PartitaClient partita;
 
     /**
-     *
+     * Costruttore.
      * @param dimePanel riferimento alle dimensioni del pannelloGioco intero
      * @param ag riferimento all'attivatore grafica (per attivare ridisegnamenti,
      * e quindi anche possibili animazioni)
      * @param altezza Quanto spazio dall'alto prima di disegnare il pannello.
      * @param distanzaLatoSinistro Quanto spazio da sinistra prima di disegnare il pannello.
+     * @param partita riferimento alla partita.
      */
     public MenuCarte(Dimension dimePanel, AttivatoreGrafica ag, int altezza, int distanzaLatoSinistro, PartitaClient partita) {
         super(ag);
@@ -65,6 +73,11 @@ public class MenuCarte extends MenuRisicammara {
         Bonus_t.caricaImmagini(invertiColori);
     }
 
+    /**
+     * Imposta la fase di rinforzo. Se viene attivata la fase di rinforzo attiva
+     * la possibilità di giocare tris.
+     * @param faseRinforzo
+     */
     public void setFaseRinforzo(boolean faseRinforzo) {
         if (this.faseRinforzo == faseRinforzo)
             return;
@@ -81,6 +94,12 @@ public class MenuCarte extends MenuRisicammara {
         }
     }
 
+    /**
+     * Interfaccia per aggiungere una carta alla lista delle carte visualizzate
+     * da questo menù. Attenzione, questo metodo non inserisce la carta nella
+     * lista delle carte del giocatore. Bisogna impostarlo altrove @see PartitaClient.
+     * @param carta carta da aggiungere alle carte visualizzate.
+     */
     public void aggiungiCarta(Carta carta){
         //this.listaCarte.add(carta); devo farlo in partitaClient
 
@@ -94,6 +113,12 @@ public class MenuCarte extends MenuRisicammara {
             ridisegna();
     }
 
+    /**
+     * Interfaccia per rimuovere una carta dalla lista delle carte visualizzate
+     * da questo menù. Attenzione, questo metodo non elimina la cartta dalla
+     * lista delle carte del giocatore.  Bisogna farlo altrove @see PartitaClient.
+     * @param carta carta da rimuovere dalla lista delle carte visualizzate.
+     */
     public void rimuoviCarta(CartaDisegnabile carta){
         listaCarteDisegnabili.remove(carta);
         //listaCarte.remove(carta.getCarta()); da fare fare alla partitaClient
@@ -109,6 +134,11 @@ public class MenuCarte extends MenuRisicammara {
         getRectangle().x = dimensioniPannello.width-distanzaLatoSinistro-LARGHEZZA_CARTA;
     }
 
+    /**
+     * Ritorna un riferimento al SottoMenù che chiede di giocare un tris. Questo
+     * serve successivamente per trasformarlo in un pulsante.
+     * @return
+     */
     public SottoMenuCarta getRichiestaUsoTris() {
         return richiestaUsoTris;
     }
@@ -133,6 +163,11 @@ public class MenuCarte extends MenuRisicammara {
         
     }
 
+    /**
+     * Blocca l'action listener e chiama l'evento sull'action listener del
+     * sottomenù che è stato premuto.
+     * @param e evento
+     */
     @Override //cattura il mouse su se stesso
     protected void actionPressed(MouseEvent e) {
         if (!aperto)

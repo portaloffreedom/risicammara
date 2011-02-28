@@ -17,7 +17,7 @@ import java.awt.geom.Rectangle2D;
 import risicammaraClient.Client;
 
 /**
- *
+ * Classe che gestisce il Bottone Fase Avanzato.
  * @author matteo
  */
 public class BottoneFaseAvanzato extends BottoneFase {
@@ -29,6 +29,16 @@ public class BottoneFaseAvanzato extends BottoneFase {
     private String testoSupSpostamento;
     private String testoInfSpostamento;
 
+    /**
+     * Inizializza tutti i dati necessari.
+     * @param dimPannello Dimensioni del pannello
+     * @param ag Attivatore Grafico
+     * @param p Punto della posizione dell'angolo in alto a sinistra del
+     * pulsante
+     * @param larghezza Larghezza
+     * @param altezza Altezza
+     * @param testoSupSpostamento Testo che viene visualizzato superiore sulle righe.
+     */
     public BottoneFaseAvanzato(Dimension dimPannello, AttivatoreGrafica ag, Point p, int larghezza, int altezza, String testoSupSpostamento) {
         super(dimPannello, ag, p, larghezza, altezza);
         this.spinner = new RisicammaraSpinner(new Rectangle(100, 100, 300, 300), 5, false, Color.green, ag);
@@ -40,6 +50,10 @@ public class BottoneFaseAvanzato extends BottoneFase {
         this.testoInfSpostamento = "Quante armate vuoi spostare?";
     }
 
+    /**
+     * Imposta la visibilità dei pulsanti di quante armate spostare.
+     * @param visibile true se visibile, false altrimenti
+     */
     public final void setRichiestaVisible(boolean visibile){
         this.richiestaSpostamento = visibile;
         super.attivatoreGrafica.panelRepaint(super.getBounds());
@@ -100,18 +114,38 @@ public class BottoneFaseAvanzato extends BottoneFase {
         }
     }
 
+    /**
+     * Imposta l'ascoltatore per il Bottone Fase
+     * @param listener L'ascoltatore
+     */
     public void setOkActionListener(RisicammaraEventListener listener) {
         bottoneOK.setActionListener(listener);
     }
 
+    /**
+     * Restitusice il numero di armate da spostare
+     * @return numero di armate da spostare
+     */
     public int getNumeroArmateSpostamento() {
         return spinner.getValoreAttuale();
     }
 
+    /**
+     * Imposta i valori dello spinner del Bottone fase.
+     * @param valoreMassimo Valore Max raggiungibile
+     * @param valoreIniziale Valore minimo
+     */
     public final void setValori(int valoreMassimo, int valoreIniziale) {
         spinner.setValori(valoreMassimo, valoreIniziale);
     }
 
+    /**
+     * Imposta i valori allo spinner
+     * @param valoreMinimo Valore minimo
+     * @param valoreMassimo Valore massimo raggiungibile
+     * @param valoreIniziale Valore iniziale dello spinner
+     * @param salto di quanto andare avanti ad ogni click
+     */
     public final void setValori(int valoreMinimo, int valoreMassimo, int valoreIniziale, int salto) {
         spinner.setValori(valoreMinimo, valoreMassimo, valoreIniziale, salto);
     }
@@ -124,6 +158,10 @@ public class BottoneFaseAvanzato extends BottoneFase {
         return cliccato;
     }
 
+    /**
+     * Quando viene catturata una azione "pressed"
+     * @param e L'evento.
+     */
     @Override
     protected void actionPressed(MouseEvent e) {
         super.actionPressed(e);

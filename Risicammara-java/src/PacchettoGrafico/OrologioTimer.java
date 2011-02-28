@@ -1,13 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package PacchettoGrafico;
 
 
 /**
- *
+ * Implementa un timer.
  * @author matteo
  */
 public class OrologioTimer {
@@ -16,19 +11,30 @@ public class OrologioTimer {
     private long tempoPrima;
     private int millisecondiDiEsecuzione;
 
-    public OrologioTimer (){
+    /**
+     * Inizializza tutti i dati utili della classe
+     */
+    public OrologioTimer(){
         //this.lastTime=Calendar.getInstance().getTimeInMillis();
         this.tempoPrima = this.firstTime=System.currentTimeMillis();
         this.millisecondiDiEsecuzione = 0;
     }
 
-    public long tempoPassato (){
+    /**
+     * Restituisce il tempo passato
+     * @return il tempo passato
+     */
+    public long tempoPassato(){
         long tempoDopo= System.currentTimeMillis();
         this.millisecondiDiEsecuzione= (int) (tempoDopo - this.tempoPrima);
         this.tempoPrima= tempoDopo;
         return tempoDopo-this.firstTime;
     }
 
+    /**
+     * Restituisce il tempo impiegato dalla chiamata di tempoPassato o dal Costruttore.
+     * @return il tempo trascorso.
+     */
     public long getEsecTime() {
         long tempoDopo= System.currentTimeMillis();
         this.millisecondiDiEsecuzione= (int) (tempoDopo - this.tempoPrima);

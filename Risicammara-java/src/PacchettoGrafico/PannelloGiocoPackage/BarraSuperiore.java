@@ -36,7 +36,7 @@ public class BarraSuperiore implements Elemento_2DGraphics {
      * @param altezza Altezza totale della barra superiore.
      * @param pannello Riferimento al Pannello superiore su cui viene aggiunta
      * la barra. (Necessario per aggiungere i pulsanti alla MatricePannello)
-     * @param listaGiocatori Riferimento alla lista dei Giocatori.
+     * @param partita
      * @param attivatoreGrafica Riferimento all'attivatore Grafica necessario
      * per le animazioni.
      * @see MatricePannello
@@ -81,30 +81,58 @@ public class BarraSuperiore implements Elemento_2DGraphics {
         this.carteButton.disegna(graphics2D, colori);
     }
 
+    /**
+     * Richiede il riferimento alla barra delle fasi
+     * @return il riferimento alla barra delle fasi
+     */
     public BarraFasi getBarraFasi(){
         return barraFasi;
     }
 
+    /**
+     * Richiede il riferimento al menu delle carte
+     * @return il riferimento al menu delle carte
+     */
     public MenuCarte getMenuCarte() {
         return menuCarte;
     }
 
+    /**
+     * Richiede il riferimento al menu giocatore
+     * @return il riferimento al menu giocatore
+     */
     public MenuGiocatore getMenuGiocatore() {
         return menuGiocatore;
     }
 
+    /**
+     * Richiede il riferimento al bottone delle carte
+     * @return il riferimento al bottone dlle carte
+     */
     public BottoneRisicammara getCarteButton() {
         return carteButton;
     }
 
+    /**
+     * Richiede un bottone Giocatore
+     * @return il riferimento al Bottone Giocatore
+     */
     public BottoneRisicammara getGiocatoreButton() {
         return giocatoreButton;
     }
 
+    /**
+     * Restituisce il BottoneFase Spostamento
+     * @return il riferimento al bottone Fase Spostamento
+     */
     public BottoneFaseAvanzato getBottoneFaseSpostamento() {
         return barraFasi.getBottoneFaseSpostamento();
     }
 
+    /**
+     * Restituisce il BottoneFaseAttacco
+     * @return il riferimento al bottoneFase Attacco
+     */
     public BottoneFaseAttaccoAvanzato getBottoneFaseAttacco() {
         return barraFasi.getBottoneFaseAttacco();
     }

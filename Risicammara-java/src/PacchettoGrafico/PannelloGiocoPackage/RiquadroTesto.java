@@ -7,13 +7,22 @@ import java.awt.Rectangle;
 import risicammaraClient.Colore_t;
 
 /**
- *
+ * Riquadro che disegna un testo con uno sfondo. Se il testo è troppo lungo
+ * disegna il testo andando a capo (vengono moficate le dimensioni di altezza
+ * di questo oggetto).
  * @author matteo
  */
 public class RiquadroTesto extends TestoACapo {
 
     private Rectangle rettangoloRiquadro;
 
+    /**
+     * Costruttore
+     * @param rettangolo Dimensioni che deve avere questo Riquadro testo (l'altezza
+     * viene ignorata).
+     * @param testo testo da disegnare.
+     * @param coloreGiocatore colore di sfondo del testo.
+     */
     public RiquadroTesto(Rectangle rettangolo, String testo, Colore_t coloreGiocatore) {
         super(RimpicciolisciPerTesto(rettangolo), testo);
         this.rettangoloRiquadro = rettangolo;
@@ -32,16 +41,30 @@ public class RiquadroTesto extends TestoACapo {
         super.disegnaTesto(graphics2D, colori.getTesto());
     }
 
+    /**
+     * Imposta le nuove dimensioni e posizione del rettangolo. La dimensione
+     * di altezza viene ignorata.
+     * @param rettangolo nuove dimensione e posizione.
+     */
     @Override
     public void setRettangolo(Rectangle rettangolo){
         super.setRettangolo(RimpicciolisciPerTesto(rettangolo));
         this.rettangoloRiquadro = rettangolo;
     }
 
+    /**
+     * Imposta la nuova posizione dell'oggetto.
+     * @param posizione nuova posizione dell'oggetto.
+     */
     public void setPosizione(Point posizione){
         this.setRettangolo(new Rectangle(posizione, rettangoloRiquadro.getSize()));
     }
 
+    /**
+     * Restituisce un riferimento alle dimensione e alla posizione attuale del
+     * riquadro testo.
+     * @return riferimento ai bordi della figura.
+     */
     public Rectangle getRettangoloRiquadro() {
         return rettangoloRiquadro;
     }
