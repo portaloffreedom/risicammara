@@ -171,6 +171,14 @@ public class FinestraGioco extends JFrame implements Runnable {
                             }
                             break;
                         }
+
+                        case VINCITORE: {
+                            if (msgComandi.getSender() == partita.getMeStessoIndex())
+                                riavviaPartitaErrore("HAI VINTO!");
+                            else
+                                riavviaPartitaErrore("HA VINTO "+listaGiocatori.getNomeByIndex(msg.getSender()));
+                            return;
+                        }
                             
                         default:
                             System.err.println("MESSAGGIO COMANDO NON RICONOSCIUTO! "+msg);
