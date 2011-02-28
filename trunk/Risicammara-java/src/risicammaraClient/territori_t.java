@@ -62,10 +62,13 @@ public enum territori_t implements Carta {
     //carte jolly
     Jolly1                      (Bonus_t.JOLLY,      Continente_t.NESSUNO, 0, 0),
     Jolly2                      (Bonus_t.JOLLY,      Continente_t.NESSUNO, 0, 0);
-
+/** Contenitore per il valore "bonus" */
     private Bonus_t bonus;
+    /** Contenitore per il valore "continente" */
     private Continente_t continente;
+    /** Contenitore che tiene traccia del numero dei territori adiacenti */
     private int territori_adiacenti;
+    /** Contenitore per l'identificativo del territorio */
     private int id;
 /** Costruttore per i territori con la loro lista di adiacenza */
     territori_t(Bonus_t bonus,Continente_t continente,int territori_adiacenti, int id){
@@ -109,13 +112,24 @@ public enum territori_t implements Carta {
     public int getIdTerritorio(){
         return PlanciaImmagine.GetIdTerritorio(continente.getId(), id);
     }
-
+/**
+ * Restituisce un territorio a partire dal suo identificativo.
+ * @param idTerritorio l'identificativo da cercare.
+ * @return l'oggetto territori_t corrispondente.
+ * @throws TerritorioNonValido Se l'id non è valido viene sollevata questa eccezione.
+ */
     public static territori_t GetTerritorio(int idTerritorio) throws TerritorioNonValido {
         int territorio = PlanciaImmagine.GetTerritorio(idTerritorio);
         int continente = PlanciaImmagine.GetContinente(idTerritorio);
         return GetTerritorio(continente, territorio);
     }
-
+/**
+ * Metodo di supporto per GetTerritorio per cercare un territorio in base a id e continente.
+ * @param continente l'intero che identifica il continente
+ * @param territorio l'intero che identifica il territorio dentro un continente
+ * @return il territorio corrispondente
+ * @throws TerritorioNonValido Sollevata se l'id non è valido.
+ */
     private static territori_t GetTerritorio(int continente, int territorio) throws TerritorioNonValido {
         
         if (continente == Continente_t.ASIA.getId())//Asia
@@ -135,7 +149,12 @@ public enum territori_t implements Carta {
         throw new TerritorioNonValido("ERRORE, non esiste il continente="+continente+" (territorio="+territorio+")");
         //return null;
     }
-
+/**
+ * Metodo di supporto a GetTerritorio per restituire i territori che appartengono all'asia
+ * @param territorio l'id del territorio
+ * @return il territorio corrispondente
+ * @throws TerritorioNonValido sollevata se l'id non è valido.
+ */
     private static territori_t GetTerritorioAsia (int territorio) throws TerritorioNonValido{
         if (territorio == Afghanistan.id)
             return Afghanistan;
@@ -165,7 +184,12 @@ public enum territori_t implements Carta {
         throw new TerritorioNonValido("Non esiste il territorio="+territorio+" in Asia");
         //return null;
     }
-
+/**
+ * Metodo di supporto a GetTerritorio per restituire i territori che appartengono all'Africa
+ * @param territorio l'id del territorio
+ * @return il territorio corrispondente
+ * @throws TerritorioNonValido sollevata se l'id non è valido.
+ */
     private static territori_t GetTerritorioAfrica (int territorio) throws TerritorioNonValido{
         if (territorio == Congo.id)
             return Congo;
@@ -183,7 +207,12 @@ public enum territori_t implements Carta {
         throw new TerritorioNonValido("Non esiste il territorio="+territorio+" in Africa");
         //return null;
     }
-
+/**
+ * Metodo di supporto a GetTerritorio per restituire i territori che appartengono all'Europa
+ * @param territorio l'id del territorio
+ * @return il territorio corrispondente
+ * @throws TerritorioNonValido sollevata se l'id non è valido.
+ */
     private static territori_t GetTerritorioEuropa (int territorio) throws TerritorioNonValido{
         if (territorio == Gran_Bretagna.id)
             return Gran_Bretagna;
@@ -203,7 +232,12 @@ public enum territori_t implements Carta {
         throw new TerritorioNonValido("Non esiste il territorio="+territorio+" in Europa");
         //return null;
     }
-
+/**
+ * Metodo di supporto a GetTerritorio per restituire i territori che appartengono all'America del Nord
+ * @param territorio l'id del territorio
+ * @return il territorio corrispondente
+ * @throws TerritorioNonValido sollevata se l'id non è valido.
+ */
     private static territori_t GetTerritorioAmericaNord (int territorio) throws TerritorioNonValido{
 
         if (territorio == Alaska.id)
@@ -228,7 +262,12 @@ public enum territori_t implements Carta {
         throw new TerritorioNonValido("Non esiste il territorio="+territorio+" in Nord America");
         //return null;
     }
-
+/**
+ * Metodo di supporto a GetTerritorio per restituire i territori che appartengono all'America del Sud
+ * @param territorio l'id del territorio
+ * @return il territorio corrispondente
+ * @throws TerritorioNonValido sollevata se l'id non è valido.
+ */
     private static territori_t GetTerritorioAmericaSud (int territorio) throws TerritorioNonValido{
         if (territorio == Argentina.id)
             return Argentina;
@@ -242,7 +281,12 @@ public enum territori_t implements Carta {
         throw new TerritorioNonValido("Non esiste il territorio="+territorio+" in Sud America");
         //return null;
     }
-
+/**
+ * Metodo di supporto a GetTerritorio per restituire i territori che appartengono all'Oceania
+ * @param territorio l'id del territorio
+ * @return il territorio corrispondente
+ * @throws TerritorioNonValido sollevata se l'id non è valido.
+ */
     private static territori_t GetTerritorioOceania (int territorio) throws TerritorioNonValido{
         if (territorio == Australia_Occidentale.id)
             return Australia_Occidentale;
@@ -257,6 +301,10 @@ public enum territori_t implements Carta {
         //return null;
     }
 
+    /**
+     * Restituisce L'icona assegnata al bonus del territorio.
+     * @return Il riferimento all'immagine del bonus.
+     */
     @Override
     public BufferedImage getIcona() {
         String icona = this.getBonus().getPercorsoImmagine();

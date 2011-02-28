@@ -8,21 +8,60 @@ import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
 
 /**
- *
+ * Classe astratta che implementa i metodi atti alla gestione generica di una partita
+ * di Risicammara. Questa classe contiene la plancia di gioco, la lista dei
+ * giocatori e l'ordine di gioco dei giocatori.
  * @author Sten_Gun
  */
 public abstract class GestionePartita {
+    /**
+     * L'oggetto che rappresenta la plancia del gioco.
+     */
     protected Plancia planciadigioco;
+    /**
+     * La lista dei giocatori
+     */
     protected ListaPlayers listagiocatori;
+    /**
+     * Il giocatore che è di turno.
+     */
     protected int giocTurno;
+    /**
+     * La fase attuale di gioco.
+     */
     protected Fasi_t fase_attuale;
+    /**
+     * Se è stato giocato un tris
+     */
     protected boolean giocato_tris;
+    /**
+     * Se si sta attaccando.
+     */
     protected boolean attacking;
+    /**
+     * Se è un nuovo giro
+     */
     protected boolean nuovogiro;
+    /**
+     * L'indice del difensore di un attacco
+     */
     protected int giocattaccato;
+    /**
+     * Territorio da dove parte l'attacco
+     */
+    /**
+     * Territorio che si difende
+     */
     protected territori_t territorioAttaccato,territorioAttaccante;
+    /**
+     * La sequenza degli indici dei giocatori
+     */
     protected LinkedList<Integer> sequenzaDiGioco;
-    
+
+    /**
+     * Inizializza tutti i dati necessari.
+     * @param listagiocatori La lista dei giocatori.
+     */
     protected GestionePartita(ListaPlayers listagiocatori){
         this.listagiocatori = listagiocatori;
         this.giocato_tris = false;
@@ -33,7 +72,10 @@ public abstract class GestionePartita {
         this.nuovogiro = false;
         this.fase_attuale = Fasi_t.PREPARTITA;
     }
-
+    /**
+     * Chiede la sequenza di gioco
+     * @return la lista che rappresenta la sequenza di gioco
+     */
     public LinkedList<Integer> getSequenzaGioco(){
         return sequenzaDiGioco;
     }
@@ -78,7 +120,10 @@ public abstract class GestionePartita {
         }
         this.giocattaccato = getProprietarioTerritorio(terr);
     }
-
+/**
+ * Gestisce tutta la sequenza di azioni che si effettuano dopo che l'attaccante
+ * conquista il territorio che stava attaccando.
+ */
     public void attaccoVinto(){
         if(territorioAttaccato == null) return;
         TerritorioPlancia tpla = planciadigioco.getTerritorio(territorioAttaccato);

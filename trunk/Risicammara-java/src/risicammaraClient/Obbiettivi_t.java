@@ -98,8 +98,12 @@ public enum Obbiettivi_t implements Carta {
         return tipovittoria;
     }
 
+    /**
+     * Restituisce l'icona per L'obbiettivo
+     * @return L'icona dell'obbiettivo.
+     */
     @Override
     public BufferedImage getIcona() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return null;
     }
 }

@@ -23,7 +23,10 @@ public class Plancia implements Serializable {
             if((t == territori_t.Jolly1)|(t == territori_t.Jolly2)|(i==42)) break;
         }
     }
-
+/**
+ * Costruisce la plancia assegnando il tabellone di un altro oggetto Plancia.
+ * @param plancia L'oggetto plancia di cui copiare il tabellone.
+ */
     protected Plancia(Plancia plancia){
         this.tabellone = plancia.tabellone;
     }
@@ -60,7 +63,12 @@ public class Plancia implements Serializable {
         else if ( territorio.compareTo(terr[meta]) < 0) return getTerritorio(territorio, inizar, meta-1, terr);
         return null;
     }
-
+/**
+ * Restituisce un TerritorioPlancia partendo dal suo intero identificativo.
+ * @param idTerritorio l'identificativo del territorio.
+ * @return il TerritorioPlancia corrispondente.
+ * @throws TerritorioNonValido Se l'id non è valido viene sollevata questa eccezione.
+ */
     public TerritorioPlancia getTerritorio(int idTerritorio) throws TerritorioNonValido {
         return this.getTerritorio(territori_t.GetTerritorio(idTerritorio));
     }

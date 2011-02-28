@@ -17,7 +17,13 @@ import risicammaraClient.Client;
  */
 public class ServerGUI implements ActionListener{
 
+    /**
+     * La versione del server.
+     */
     public static String VERSION = "beta 2";
+    /**
+     * L'icona del server.
+     */
     public static String ICON = "/Images/banana.png";
 
     private JPanel pannello;
@@ -28,6 +34,10 @@ public class ServerGUI implements ActionListener{
     private Server serverThread;
     private boolean gui;
 
+    /**
+     * Metodo main della gui.
+     * @param args gli argomenti passati da riga di comando
+     */
     public static void main(String[] args){
         ServerGUI servergui = new ServerGUI(args);
         servergui.open();
@@ -42,11 +52,11 @@ public class ServerGUI implements ActionListener{
         if(args.length > 1) parseArgs(args);
         serverThread = new Server(Client.PORT);
     }
-/**
- * Screma gli argomenti della riga di comando per determinare se sono corretti e
- * ne imposta il valore/opzioni.
- * @param args gli argomenti passati all'eseguibile dalla riga di comando.
- */
+    /**
+     * Screma gli argomenti della riga di comando per determinare se sono corretti e
+     * ne imposta il valore/opzioni.
+     * @param args gli argomenti passati all'eseguibile dalla riga di comando.
+     */
     private void parseArgs(String[] args){
         String prec = null;
         for(String s:args){
@@ -87,19 +97,19 @@ public class ServerGUI implements ActionListener{
             System.exit(12);
         }
     }
-/**
- * Chiede se un dato comando ha bisogno di una sintassi particolari (esempio:
- * --gui option è corretto, --gui -d è errato.)
- * @param str il comando da controllare.
- * @return true se il comando ha bisogno di un'ulteriore opzione, false altrimenti.
- */
+    /**
+     * Chiede se un dato comando ha bisogno di una sintassi particolari (esempio:
+     * --gui option è corretto, --gui -d è errato.)
+     * @param str il comando da controllare.
+     * @return true se il comando ha bisogno di un'ulteriore opzione, false altrimenti.
+     */
     private boolean requireOption(String str){
         if(str.contentEquals("--gui")) return true;
         return false;
     }
- /**
-  * Avvia il server con i parametri impostati.
-  */
+    /**
+     * Avvia il server con i parametri impostati.
+     */
     private void open(){
         if(gui){
             creaFinestra();
@@ -108,9 +118,9 @@ public class ServerGUI implements ActionListener{
             serverThread.start();
         }
     }
-/**
- * Crea la finestra del server.
- */
+    /**
+     * Crea la finestra del server.
+     */
     private void creaFinestra(){
 
         pannello = new JPanel();

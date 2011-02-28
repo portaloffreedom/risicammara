@@ -144,6 +144,9 @@ public class Giocatore_Net extends Giocatore {
         clientOut.flush();
         System.out.println("messaggio "+mess.toString()+" inviato!");
     }
+    /**
+     * Chiude in modo sicuro il thread assegnato ad un particolare giocatore.
+     */
     public void closeThread(){
         thread_player.setStop(true);
     }

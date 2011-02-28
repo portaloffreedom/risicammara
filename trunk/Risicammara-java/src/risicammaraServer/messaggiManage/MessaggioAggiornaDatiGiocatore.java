@@ -1,14 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package risicammaraServer.messaggiManage;
 
 import risicammaraClient.Colore_t;
 
 /**
- *
+ * Messaggio che aggiorna i dati giocatore.
  * @author Sten_Gun
  */
 public class MessaggioAggiornaDatiGiocatore implements Messaggio {
@@ -16,28 +12,49 @@ public class MessaggioAggiornaDatiGiocatore implements Messaggio {
     private Colore_t color;
     private int who;
 
+    @Override
     public messaggio_t getType() {
         return messaggio_t.AGGIORNADATIGIOCATORE;
     }
 
+
+    @Override
     public int getSender() {
         return -1;
     }
 
+    /**
+     * Costruisce un nuovo messaggio Aggiorna Dati Giocatore
+     * @param nick il nuovo nick
+     * @param color il nuovo colore
+     * @param who l'indice di chi cambia
+     */
     public MessaggioAggiornaDatiGiocatore(String nick, Colore_t color, int who) {
         this.nick = nick;
         this.color = color;
         this.who = who;
     }
 
+    /**
+     * restituisce il colore delle nuove armate
+     * @return il colore delle nuove armate
+     */
     public Colore_t getColor() {
         return color;
     }
 
+    /**
+     * Restituisce il nuovo nick
+     * @return il nuovo nick
+     */
     public String getNick() {
         return nick;
     }
 
+    /**
+     * Aggiorna i dati di un dato giocatore.
+     * @return l'indice del gicoatore da aggiornare
+     */
     public int getWho() {
         return who;
     }

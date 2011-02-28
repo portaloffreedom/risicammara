@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package PacchettoGrafico.salaAttesa;
 
 import java.awt.event.ActionEvent;
@@ -12,18 +7,24 @@ import risicammaraServer.messaggiManage.Messaggio;
 import risicammaraServer.messaggiManage.MessaggioChat;
 
 /**
- *
+ * Ascoltatore per l'invio dei messaggi di chat
  * @author matteo
  */
 public class AscoltatoreMandaChat implements ActionListener {
         private SalaAttesa salaAttesa;
         private PannelloSalaAttesa pannello;
 
-    public AscoltatoreMandaChat(SalaAttesa salaAttesa, PannelloSalaAttesa pannello) {
+        /**
+         * Ascoltatore per l'invio di messaggio di chat.Costruttore.
+         * @param salaAttesa Oggetto SalaAttesa
+         * @param pannello pannello associato.
+         */
+        public AscoltatoreMandaChat(SalaAttesa salaAttesa, PannelloSalaAttesa pannello) {
         this.salaAttesa = salaAttesa;
         this.pannello = pannello;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         mandaMessaggioChat();
     }

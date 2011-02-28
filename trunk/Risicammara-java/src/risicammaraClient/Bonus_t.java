@@ -18,10 +18,13 @@ import java.awt.image.BufferedImage;
 
     private int numarm;
     private String percorsoImmagine;
-
+/** Riferimento all'immagine assegnata al bonus Cannone */
     private static BufferedImage cannone = null;
+    /** Riferimento all'immagine assegnata al bonus fante */
     private static BufferedImage fante = null;
+    /** Riferimento all'immagine assegnata al bonus Cavallo */
     private static BufferedImage cavallo = null;
+/** Riferimento all'immagine assegnata al bonus Jolly */
     private static BufferedImage jolly = null;
 
     /** Inizializza il valore dell'enumerato in base al valore assegnato*/
@@ -37,11 +40,17 @@ import java.awt.image.BufferedImage;
         if(diversi) return 10;
         return numarm;
     }
-
+/**
+ * Restituisce il percorso dell'immagine assegnata al bonus.
+ * @return la stringa che rappresenta il percorso dell'immagine.
+ */
     public String getPercorsoImmagine() {
         return percorsoImmagine;
     }
-
+/**
+ * Richiede l'immagine del bonus.
+ * @return il riferimento all'immagine del bonus che questo oggetto rappresenta.
+ */
     public BufferedImage getImmagine() {
         if (this == CANNONE)
             return cannone;
@@ -54,7 +63,10 @@ import java.awt.image.BufferedImage;
 
         return null;
     }
-
+/**
+ * Carica l'immagine del bonus.
+ * @param invertiColori Impostare a true se l'immagine deve avere i colori invertiti.
+ */
     static public void caricaImmagini(boolean invertiColori) {
         cannone = Client.loadImage(CANNONE, CANNONE.percorsoImmagine);
         fante = Client.loadImage(FANTE, FANTE.percorsoImmagine);
@@ -68,7 +80,10 @@ import java.awt.image.BufferedImage;
             InvertiColori(jolly);
         }
     }
-
+/**
+ * Inverte i colori di una immagine.
+ * @param image L'immagine della quale invertire i colori.
+ */
     static private void InvertiColori(BufferedImage image){
         int RGB;
         for (int r=0; r<image.getHeight(); r++) {
@@ -79,10 +94,14 @@ import java.awt.image.BufferedImage;
             }
         }
     }
-
+/**
+ * Inverte i colori RGB di una immagine.
+ * @param RGB l'intero che rappresenta gli RGB
+ * @return L'intero RGB invertito
+ */
     static private int InvertiColori(int RGB) {
-         int Amask = 0x000000ff;    //(Alpha)
-         int Rmask = 0x0000ff00;    //(Red)
+//         int Amask = 0x000000ff;    //(Alpha)
+//         int Rmask = 0x0000ff00;    //(Red)
        //int Gmask = 0x00ff0000;    //(Green)
          int Bmask = 0xff000000;    //(Blue)
 

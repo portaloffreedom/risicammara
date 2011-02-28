@@ -29,6 +29,7 @@ public final class MazzoTerritori extends Mazzo {
  * contenitore delle carte.
  * @return riferimento alla carta presente in cima al mazzo
  */
+    @Override
     public Carta Pesca(){
         if(isEmpty()){
             if(scarti == null) return null;

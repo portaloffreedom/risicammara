@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package risicammaraJava.boardManage;
 import java.io.Serializable;
@@ -31,6 +27,11 @@ public class TerritorioPlancia implements Serializable{
         this.CompletaAdiacenze();
     }
 
+    /**
+     * Costruisce un territorioPlancia partendo da un altro territorioPlancia.
+     * Viene usato per le classi figlie.
+     * @param territorioPlancia il territorio da cui prelevare i dati.
+     */
     protected TerritorioPlancia(TerritorioPlancia territorioPlancia){
         this.territorio = territorioPlancia.territorio;
         this.armate_presenti = territorioPlancia.armate_presenti;
@@ -107,8 +108,8 @@ public class TerritorioPlancia implements Serializable{
     }
 
     /**
- * Completa la lista di adiacenza di tutti i territori.
- */
+     * Completa la lista di adiacenza di tutti i territori.
+     */
     //TODO caricamento adiacenze da file.
     private void CompletaAdiacenze(){
         this.adiacenze = new territori_t[territorio.getNumadiacenze()];

@@ -22,7 +22,7 @@ import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.playerManage.ListaPlayers;
 
 /**
- *
+ * Classe che implementa il pannello della sala d'attesa.
  * @author matteo
  */
 public class PannelloSalaAttesa extends JPanel {
@@ -60,6 +60,12 @@ public class PannelloSalaAttesa extends JPanel {
     /** Accesso alla memoria di SalaAttesa */
     private SalaAttesa salaAttesa;
 
+    /**
+     * Costruisce un pannello per la sala d'attesa
+     * @param indexGiocatore l'indice del giocatore
+     * @param listaGiocatori la lista dei giocatori
+     * @param salaAttesa L'oggetto SalaD'attesa corrispondente
+     */
     public PannelloSalaAttesa(int indexGiocatore, ListaPlayers listaGiocatori, SalaAttesa salaAttesa) {
         //super(new LayoutManagerMatteo());
         super();
@@ -77,6 +83,9 @@ public class PannelloSalaAttesa extends JPanel {
         personalizza();
     }
 
+    /**
+     * Abilita tutti i comandi per kickare
+     */
     public void diventaLeader() {
         this.ascoltatoreKick = new AscoltatoreKickGiocatore(salaAttesa,this);
 
@@ -93,67 +102,130 @@ public class PannelloSalaAttesa extends JPanel {
         this.giocatori = this.giocatoriBottoni;
     }
 
+    /**
+     * Restituisce il nome di un giocatore selezionato
+     * @return il nome del giocatore
+     */
     public String nomeGiocatore_getText(){
         return this.nomeGiocatore.getText();
     }
 
+    /**
+     * Richiede il colore di un oggetto selezionato
+     * @return il colore dell'oggetto selezionato
+     */
     public Colore_t colore_getSelectedItem(){
         return (Colore_t) this.colore.getSelectedItem();
     }
 
+    /**
+     * Stampa un messaggio di errore nella console e nella chat
+     * @param messaggio il messaggio da stampare
+     * @param ex L'eccezione da stampare
+     */
     public void stampaMessaggioErrore(String messaggio, Exception ex) {
         konsole.stampaMessaggioErrore(messaggio, ex);
     }
 
+    /**
+     * Stampa un messaggio relativo ad un comando ricevuto, nella chat.
+     * @param messaggio il messaggio da stampare
+     */
     public void stampaMessaggioComando(String messaggio) {
         konsole.stampaMessaggioComando(messaggio);
     }
 
+    /**
+     * Stampa un messaggio nella chat
+     * @param messaggio il messaggio da stampare
+     */
     public void stampaMessaggio(String messaggio) {
         konsole.stampaMessaggio(messaggio);
     }
 
-    public void giocatoreVisible (int index, boolean visibile){
+    /**
+     * Imposta il pulsante gicoatore Visibile
+     * @param index l'indice del giocatore da rendere visibile
+     * @param visibile true se è visibile, false altrimenti
+     */
+    public void giocatoreVisible(int index, boolean visibile){
         this.giocatori[index].setVisible(visibile);
         this.pronti[index].setVisible(visibile);
         if (!visibile)
             setInfoGiocatore(index, "sconnesso", Colore_t.NULLO, false);
     }
 
-    public void setInfoGiocatore (int index, String nome, Colore_t colore){
+    /**
+     * Imposta le info di un giocatore
+     * @param index indice del giocatore da modificare
+     * @param nome nome da modificare
+     * @param colore colore da modificare
+     */
+    public void setInfoGiocatore(int index, String nome, Colore_t colore){
         //ATTENZIONE index prende anche valori che puntano a giocatori 'null'
         setNomeGiocatore(index, nome);
         setColoreGiocatore(index, colore);
     }
 
-    public void setInfoGiocatore (int index, String nome, Colore_t colore, boolean pronto){
+    /**
+     * Imposta le info di un giocatore
+     * @param index L'indice del giocatore da modificare
+     * @param nome il nuovo nome da impostare
+     * @param colore il nuovo colore da impostare
+     * @param pronto lo stato di pronto.
+     */
+    public void setInfoGiocatore(int index, String nome, Colore_t colore, boolean pronto){
         //ATTENZIONE index prende anche valori che puntano a giocatori 'null'
         setNomeGiocatore(index, nome);
         setColoreGiocatore(index, colore);
         setPronto(index, pronto);
     }
 
+    /**
+     * Restituisce il testo della barra di chat
+     * @return Il testo della barra.
+     */
     public String immissioneChat_getText(){
         return immissioneChat.getText();
     }
 
-    public boolean immissioneChat_requestFocus() {
-        return immissioneChat.requestFocusInWindow();
+    /**
+     * Dopo aver inviato un messaggio sposta il cursore sulla barra di testo
+     */
+    public void immissioneChat_requestFocus() {
+        immissioneChat.requestFocusInWindow();
     }
 
+    /**
+     * Resetta la barra di testo della chat a Stringa vuota
+     */
     public void immissioneChat_resetText() {
         immissioneChat.setText("");
     }
 
+    /**
+     * Inverte lo stato di pronto di un giocatore
+     * @param indexGiocatore il giocatore a cui invertire lo stato
+     */
     public void invertiPronto(int indexGiocatore){
         //pronti[indexGiocatore].setSelected(!pronti[indexGiocatore].isSelected());
         setPronto(indexGiocatore, !pronto(indexGiocatore));
     }
 
+    /**
+     * Imposta lo stato di pronto di un giocatore
+     * @param indexGiocatore il giocatore a cui impostare lo stato
+     * @param pronto true se è pronto, false altrimenti
+     */
     public void setPronto(int indexGiocatore, boolean pronto){
         pronti[indexGiocatore].setSelected(pronto);
     }
 
+    /**
+     * Controlla lo stato di pronto di un giocatore
+     * @param indexGiocatore l'indice del giocatore da controllare
+     * @return true se è pronto, false altrimenti
+     */
     public boolean pronto(int indexGiocatore) {
         return pronti[indexGiocatore].isSelected();
     }
@@ -304,7 +376,11 @@ public class PannelloSalaAttesa extends JPanel {
         this.giocatori[index].setColore(nuovoColore);
     }
 
-    public void eliminaGiocatore (int index) {
+    /**
+     * Elimina un giocatore dal pannello della sala
+     * @param index l'indice del giocatore da rimuovere
+     */
+    public void eliminaGiocatore(int index) {
         this.giocatori[index].setVisible(false);
         this.pronti[index].setVisible(false);
     }
@@ -315,22 +391,27 @@ public class PannelloSalaAttesa extends JPanel {
         public LayoutManagerMatteo() {
         }
 
+        @Override
         public void addLayoutComponent(String name, Component comp) {
             //throw new UnsupportedOperationException("Not supported yet.");
         }
 
+        @Override
         public void removeLayoutComponent(Component comp) {
             //throw new UnsupportedOperationException("Not supported yet.");
         }
 
+        @Override
         public Dimension preferredLayoutSize(Container parent) {
             return new Dimension(80, 30);
         }
 
+        @Override
         public Dimension minimumLayoutSize(Container parent) {
             return new Dimension(80, 30);
         }
 
+        @Override
         public void layoutContainer(Container parent) {
             //throw new UnsupportedOperationException("Not supported yet.");
         }

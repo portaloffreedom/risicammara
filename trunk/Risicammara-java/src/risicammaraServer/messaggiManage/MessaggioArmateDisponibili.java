@@ -9,19 +9,31 @@ public class MessaggioArmateDisponibili implements Messaggio {
     private int numarm;
     private int sender;
 
+    /**
+     * Costruisce un messaggio ArmateDisponibili
+     * @param numarm numero di armate disponibili
+     * @param sender chi invia il messaggio
+     */
     public MessaggioArmateDisponibili(int numarm,int sender) {
         this.numarm = numarm;
         this.sender = sender;
     }
 
+    @Override
     public messaggio_t getType() {
         return messaggio_t.ARMATEDISPONIBILI;
     }
 
+    /**
+     * Restituisce il numero di armate disponibili
+     * @return il numero di armate disponibili
+     */
     public int getNumarm() {
         return numarm;
     }
 
+
+    @Override
     public int getSender() {
         return sender;
     }
