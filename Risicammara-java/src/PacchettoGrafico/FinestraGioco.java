@@ -57,6 +57,7 @@ public class FinestraGioco extends JFrame implements Runnable {
         this.plancia = pannello.getPlanciaImmagine();
         this.gestoreFasi = new GestoreFasi(partita, plancia, pannello);
         this.richiestaNumeroArmateAttacco = new RichiestaNumeroArmate(pannello.getBottoneFaseAttacco(), server, partita);
+        this.richiestaNumeroArmateAttacco.setOkActionListener(richiestaNumeroArmateAttacco);
 
         this.addWindowListener(new WindowListenerImpl(server));
         this.setVisible(true);
