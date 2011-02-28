@@ -13,7 +13,8 @@ import java.awt.Rectangle;
 import risicammaraClient.territori_t;
 
 /**
- *
+ * SottoMenù carta. Elemento che compone tutte una singola carta o altro nel
+ * menù carte.
  * @author matteo
  */
 public class SottoMenuCarta extends Elemento_2DGraphicsCliccable {
@@ -24,6 +25,12 @@ public class SottoMenuCarta extends Elemento_2DGraphicsCliccable {
     private String testo;
     private boolean selezionato;
 
+    /**
+     * Costruttore.
+     * @param testo Testo da visualizzare nel sottomenù.
+     * @param altezzaCarta altezza che deve avere il sottomenù.
+     * @param larghezzaCarta larghezza che deve avere il sottomenù.
+     */
     public SottoMenuCarta(String testo, int altezzaCarta, int larghezzaCarta) {
         super(new Rectangle(larghezzaCarta, altezzaCarta));
         this.larghezzaCarta = larghezzaCarta;
@@ -58,26 +65,52 @@ public class SottoMenuCarta extends Elemento_2DGraphicsCliccable {
             //mancano le immagini di roberto
     }
 
+    /**
+     * Imposta nuova posizione dell'angolo in alto a sinistra del sottomenù.
+     * @param p nuova posizione.
+     */
     public void setPosizione(Point p) {
         getContorni().setLocation(p);
     }
 
+    /**
+     * Imposta il nuovo testo visualizzato dal sottoMenù.
+     * @param testo testo nuovo da visualizzare.
+     */
     public void setTesto(String testo) {
         this.testo = testo;
     }
 
+    /**
+     * Imposta se il sottoMenù è selezionato o no. La selezione colora diversamente
+     * la carta.
+     * @param selezionato vero se selezionato.
+     */
     public void setSelezionato(boolean selezionato) {
         this.selezionato = selezionato;
     }
     
+    /**
+     * Restituisce il riferimento a posizione e dimensioni del sottomenù.
+     * @return riferimento ai bordi del sottomenù.
+     */
     protected Rectangle getContorni(){
         return (Rectangle) posizione;
     }
 
+    /**
+     * Restituisce la posizione dell'angolo in alto a sinistra del sottomenù.
+     * @return posizione del sottomenù.
+     */
     public Point getPosizione(){
         return getContorni().getLocation();
     }
     
+    /**
+     * Restituisce la carta che rappresenta il sottomenù. Se non rappresenta
+     * nessuna carta ritorna null.
+     * @return carta rappresentata dal sottomenù.
+     */
     public territori_t getCarta(){
         return null;
     }

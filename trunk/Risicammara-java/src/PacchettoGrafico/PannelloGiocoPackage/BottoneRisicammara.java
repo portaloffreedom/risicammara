@@ -10,11 +10,19 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 
 /**
- * Bottoni rettangolari normali. Si colorano del colore del giocatore.
+ * Bottoni rettangolari normali (Arrotondati). Si colorano del colore del giocatore.
+ * Hanno due stati: premuto o no. Quando vengono premuti tolgono i bordi arrotondati
+ * nei due angoli inferiori.
  * @author matteo
  */
 public class BottoneRisicammara extends Elemento_2DGraphicsCliccable {
+    /**
+     * Altezza del bottone
+     */
     static public int ALTEZZA = 50;
+    /**
+     * Larghezza del bottone
+     */
     static public int LARGHEZZA = 100;
     static private int ARROTONDAMENTO = 11;
 
@@ -89,6 +97,11 @@ public class BottoneRisicammara extends Elemento_2DGraphicsCliccable {
         this.pressed = pressed;
     }
 
+    /**
+     * Quando viene premuto il bottone, prima di chiamare l'eventuale ascoltatore,
+     * inverte il proprio stato di premuto o no.
+     * @param e
+     */
     @Override
     protected void actionPressed(MouseEvent e) {
         setPressed(!pressed);

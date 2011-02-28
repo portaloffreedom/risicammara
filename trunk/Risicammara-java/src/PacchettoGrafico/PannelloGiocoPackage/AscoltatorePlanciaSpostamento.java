@@ -12,13 +12,22 @@ import risicammaraJava.turnManage.PartitaClient;
 import risicammaraServer.messaggiManage.MessaggioSpostaArmate;
 
 /**
- *
+ * Ascoltatore per effettuare gli spostamenti sulla plancia.
  * @author matteo
  */
 public class AscoltatorePlanciaSpostamento implements RisicammaraEventListener {
 
+    /**
+     * Il colore del territorio da cui parte lo spostamento.
+     */
     public static final Color Sorgente = Color.WHITE;
+    /**
+     * Il colore del territorio in cui arriva lo spostamento.
+     */
     public static final Color Destinazione  = Color.PINK;
+    /**
+     * La sfumatura della colorazione.
+     */
     public static final double pesantezzaSfumatura = 0.86;
 
     private PlanciaImmagine plancia;
@@ -31,6 +40,14 @@ public class AscoltatorePlanciaSpostamento implements RisicammaraEventListener {
     private TerritorioPlanciaClient territorioDesitanzione;
     private boolean spostamentoInCorso;
 
+    /**
+     * Inizializza i dati necessari all'ascoltatore.
+     * @param plancia La plancia di gioco
+     * @param fasi Le fasi di gioco
+     * @param server La connessione al server
+     * @param partita La partita
+     * @param pannello Il pannello di gioco
+     */
     public AscoltatorePlanciaSpostamento(PlanciaImmagine plancia, GestoreFasi fasi, Connessione server, PartitaClient partita, PannelloGioco pannello) {
         this.plancia = plancia;
         this.fasi = fasi;
@@ -45,6 +62,7 @@ public class AscoltatorePlanciaSpostamento implements RisicammaraEventListener {
     
     /**
      * Metodo che viene chiamato dopo che viene premuta la plancia
+     * @param e L'evento
      */
     @Override
     public void actionPerformed(EventoAzioneRisicammara e) {
@@ -133,6 +151,7 @@ public class AscoltatorePlanciaSpostamento implements RisicammaraEventListener {
     /**
      * Metodo che viene azionato dopo che viene premuto ok nella finestra di 
      * richiesta armate
+     * @param ae Evento azione.
      */
     public void spedisciSpostamentoArmate(ActionEvent ae) {
         int armateDaSpostare = numeroArmate.getNumeroArmateSpostamento();

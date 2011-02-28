@@ -20,9 +20,21 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable {
     static final int OFFSET = 8;
     static final int OFFSET_TESTO = 20;
     static final int DIMENSIONI_PUNTA = 27;
+    /**
+     * Dimensioni del pannello
+     */
     protected Dimension dimPannello;
+    /**
+     * Se è raccolto o esteso.
+     */
     protected boolean smosciato;
+    /**
+     * Se il bottone è in fase di animazione
+     */
     protected boolean animazione;
+    /**
+     * Attivatore Grafico
+     */
     protected AttivatoreGrafica attivatoreGrafica;
     private long inizioAnim;
     private double faseAnimPrec;
@@ -222,6 +234,10 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable {
         return getFrecciaDestra().getBounds();
     }
 
+    /**
+     *
+     * @return
+     */
     public FrecciaDestra getFrecciaDestra(){
         return (FrecciaDestra) posizione;
     }

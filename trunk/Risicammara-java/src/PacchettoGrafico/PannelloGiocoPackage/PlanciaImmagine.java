@@ -36,6 +36,14 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
     private PartitaClient partita;
     PlanciaClient plancia;
 
+    /**
+     * Costruttore
+     * @param posizione posizione dell'angolo in alto a sinistra di questo oggetto.
+     * @param partita riferimento alla partita.
+     * @param dimensioniPannello dimensioni che deve avere l'immagine.
+     * @param ag riferimento all'attivatore grafica (per ridisegnare il pannello
+     * a comando).
+     */
     public PlanciaImmagine(Point posizione, PartitaClient partita, Dimension dimensioniPannello, AttivatoreGrafica ag) {
         super();
         this.dimensioniPannello = dimensioniPannello;
@@ -109,6 +117,13 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         }
     }
 
+    /**
+     * Disegna il pallino che contiene il numero di armate nel territorio.
+     * @param g2 riferimento al contesto grafico.
+     * @param colori riferimento al sistema di colori predefinito.
+     * @param font metrica dei font utilizzata.
+     * @param territorio territorio su cui disegnare il pallino.
+     */
     public void disegnaSegnaposto(Graphics2D g2, GraphicsAdvanced colori, FontMetrics font, TerritorioPlanciaClient territorio){
         Point p = getTransformedPointFromImage(territorio.getPosizioneCerchietto());
         Colore_t coloreProprietario = partita.getListaGiocatori().get(territorio.getProprietario()).getArmyColour();
@@ -142,33 +157,68 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         g2.drawString(numeroArmate, posizioneTesto.x, posizioneTesto.y);
     }
 
+    /**
+     * Restituisce un riferimento a posizione e dimensioni della PlanciaImmagine.
+     * @return riferimento ai bordi.
+     */
     public Rectangle getRettangolo(){
         return (Rectangle) posizione;
     }
 
-    public Dimension getDimension (){
+    /**
+     * Ritorna le dimensioni attuali di PlanciaImmagine.
+     * @return dimensioni di PlanciaImmagine.
+     */
+    public Dimension getDimension(){
         return getRettangolo().getSize();
     }
 
+    /**
+     * Ritorna la posizione attuale di PlanciaImmagine.
+     * @return posizione di PlanciaImmagine.
+     */
     public Point getPosizione(){
         return getRettangolo().getLocation();
     }
 
+    /**
+     * Estrae l'idTerritorio del punto.
+     * @param p punto da cui estrarre l'idTerritorio.
+     * @return idTerritorio del punto selezionato.
+     */
     public int getidTerritorio(Point p){
         return planciaBMP.getRGB(p.x, p.y);
     }
 
     //<editor-fold defaultstate="collapsed" desc="Colora">
+    /**
+     * Colora a pieno un territorio.
+     * @param territorio territorio da colorare.
+     * @param colore colore da usare per colorare.
+     */
     public void colora(TerritorioPlanciaClient territorio, Color colore){
         coloraSfumato(territorio, colore, 1);
     }
     
+    /**
+     * Colora a pieno un territorio.
+     * @param territorio territorio da colorare.
+     * @param colore colore da usare per colorare.
+     */
     public void colora(territori_t territorio, Color colore) {
         coloraSfumato(territorio, colore, 1);
     }
     
+    /**
+     * Colora a pieno un territorio.
+     * @param idTerritorio
+     * @param colore colore da usare per colorare.
+     * @return i bordi più piccoli che contengono il territorio.
+     * @throws TerritorioNonValido Lancia eccezzione se il territorio da colorare
+     * non è stato trovato.
+     */
     public Rectangle colora(int idTerritorio, Color colore) throws TerritorioNonValido {
-        /*
+        /* //vecchio metodo
          * Rectangle rettangolo = plancia.getTerritorio(idTerritorio).getPosizione();
          * for (int r=rettangolo.y; r<(rettangolo.height+rettangolo.y); r++){
          * for (int c=rettangolo.x; c<(rettangolo.width+rettangolo.x); c++){
@@ -189,15 +239,39 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
 
     //<editor-fold defaultstate="collapsed" desc="ColoraSfumato"> 
 
+    /**
+     * Colora un territorio con un gradiente di trasparenza.
+     * @param territorio territorio da colorare.
+     * @param colore colore da usare per colorare.
+     * @param trasparenza quanto deve essere trasparente il colore da applicare.
+     * (1 opaco, 0 non viene colorato).
+     */
     public void coloraSfumato(TerritorioPlanciaClient territorio, Color colore, double trasparenza) {
         coloraSfumato(territorio.getTerritorio().getIdTerritorio(), territorio.getPosizione(), colore, trasparenza);
         this.aggiornaTerritorio(territorio);
     }
 
+    /**
+     * Colora un territorio con un gradiente di trasparenza.
+     * @param territorio territorio da colorare.
+     * @param colore colore da usare per colorare.
+     * @param trasparenza quanto deve essere trasparente il colore da applicare.
+     * (1 opaco, 0 non viene colorato).
+     */
     public void coloraSfumato(territori_t territorio, Color colore, double trasparenza) {
         coloraSfumato(plancia.getTerritorio(territorio), colore, trasparenza);
     }
     
+    /**
+     * Colora un territorio con un gradiente di trasparenza.
+     * @param idTerritorio l'identificativo del territorio
+     * @param colore colore da usare per colorare.
+     * @param trasparenza quanto deve essere trasparente il colore da applicare.
+     * (1 opaco, 0 non viene colorato).
+     * @return i bordi più piccoli che contengono il territorio.
+     * @throws TerritorioNonValido Lancia eccezzione se il territorio da colorare
+     * non è stato trovato.
+     */
     public Rectangle coloraSfumato(int idTerritorio, Color colore, double trasparenza) throws TerritorioNonValido {
        Rectangle rettangolo = plancia.getTerritorio(idTerritorio).getPosizione();
        coloraSfumato(idTerritorio, rettangolo, colore, trasparenza);
@@ -253,6 +327,12 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         ripristinaTerritorio(plancia.getTerritorio(territorio));
     }
     
+    /**
+     * Ripristina il territorio del colore Originale
+     * @param idTerritorio id del territorio da ripristinare
+     * @return il Rettangolo che contiene il territorio
+     * @throws TerritorioNonValido Se l'id non è valido solleva l'eccezione.
+     */
     public Rectangle ripristinaTerritorio(int idTerritorio) throws TerritorioNonValido {
         Rectangle rettangolo = plancia.getTerritorio(idTerritorio).getPosizione();
         ripristinaTerritorio(idTerritorio, rettangolo);
@@ -272,6 +352,12 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
     //</editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Gestione idTerritorio">
+    /**
+     * Restituisce l'id del territorio.
+     * @param continente l'id continente
+     * @param territorio l'id territorio interno
+     * @return l'id del territorio formato esteso.
+     */
     public static int GetIdTerritorio(int continente, int territorio) {
         int idTerritorio = 0xff000000;
 
@@ -281,16 +367,31 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         return idTerritorio;
     }
 
+    /**
+     * Richiede l'id del continente da un ID territorio esteso
+     * @param idTerritorio id esteso del territorio
+     * @return l'id continente.
+     */
     public static int GetContinente(int idTerritorio) {
         int continenteMask = 0x00000f00;
         return ((idTerritorio & continenteMask) >> 2 * 4);
     }
 
+    /**
+     * Richiede l'id del territorio da un ID territorio esteso
+     * @param idTerritorio id territorio esteso.
+     * @return l'id territorio.
+     */
     public static int GetTerritorio(int idTerritorio) {
         int territorioMask = 0x000f0000;
         return ((idTerritorio & territorioMask) >> 4 * 4);
     }
 
+    /**
+     * controlla Se id territorio è un territorio o no
+     * @param idTerritorio l'id da controllare
+     * @return true se è un territorio, false altrimenti
+     */
     public static boolean eTerritorio(int idTerritorio) {
         boolean territorio = false;
         int mask = 0x00f0f0ff;
@@ -303,6 +404,10 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         return territorio;
     }
 
+    /**
+     * Stampa a 4 bit (solo debug)
+     * @param RGB gli RGB da stampare
+     */
     public static void StampaA4Bit(int RGB) {
         for (int i = 0; i < (8); i++) {
             System.out.print(((RGB >> (i * 4)) & 0x0000000f) + " ");
@@ -310,6 +415,10 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         System.out.println();
     }
 
+    /**
+     * Stampa a 8 bit (solo debug)
+     * @param RGB RGB da stampare
+     */
     public static void StampaA8Bit(int RGB) {
         for (int i = 0; i < (4); i++) {
             System.out.print(((RGB >> (i * 8)) & 0x000000ff) + " ");
@@ -317,6 +426,10 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         System.out.println();
     }// </editor-fold>
 
+    /**
+     * Azione "pressed" da fare
+     * @param e l'evento.
+     */
     @Override
     protected void actionPressed(MouseEvent e) {
         //transforma il punto translandadolo dallo spazio del pannello allo spazio
@@ -403,6 +516,10 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         repaintPlancia(territorio.getPosizione());
     }
 
+    /**
+     * Ridisegna la plancia
+     * @param rettangoloImmagine rettangoo da ridisegnare
+     */
     public void repaintPlancia(Rectangle rettangoloImmagine){
         rettangoloImmagine = new Rectangle(rettangoloImmagine);
         transformRectangleToImage(rettangoloImmagine);
@@ -412,28 +529,61 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         ag.panelRepaint(rettangoloImmagine);
     }
     
+    /**
+     * Imposta un nuovo numero di armate nel territorio e lo fa vedere.
+     * @param armate numero di armate da sommare al precendente valore.
+     * @param territorio territorio da modificare.
+     */
     public void aggiornaArmateTerritorio(int armate, TerritorioPlanciaClient territorio){
         territorio.aggiornaArmate(armate);
         aggiornaTerritorio(territorio);
     }
 
+   /**
+     * Imposta un nuovo numero di armate nel territorio e lo fa vedere.
+     * @param armate numero di armate da sommare al precendente valore.
+     * @param territorioT territorio da modificare.
+     */
     public void aggiornaArmateTerritorio(int armate, territori_t territorioT){
         this.aggiornaArmateTerritorio(armate, plancia.getTerritorio(territorioT));
     }
     
+   /**
+     * Imposta un nuovo numero di armate nel territorio e lo fa vedere.
+     * @param armate nuovo numero di armate da sostituire al precendente valore.
+     * @param territorio territorio da modificare.
+     */
     public void setArmateTerritorio(int armate, TerritorioPlanciaClient territorio) {
         territorio.setArmate(armate);
         aggiornaTerritorio(territorio);
     }
     
+     /**
+     * Imposta un nuovo numero di armate nel territorio e lo fa vedere.
+     * @param armate nuovo numero di armate da sostituire al precendente valore.
+     * @param territorioT territorio da modificare.
+     */
     public void setArmateTerritorio(int armate, territori_t territorioT){
         this.setArmateTerritorio(armate, plancia.getTerritorio(territorioT));
     }
 
+    /**
+     * Ritorna il riferimento al territorio che viene identificato dall'idTerritorio.
+     * @param idTerritorio territorio da identificare.
+     * @return riferiento al territorioPlanciaClient cercato
+     * @throws TerritorioNonValido Eccezzione lanciata se l'idTerritorio non
+     * identifica nessun territorio nella listaTerritori.
+     */
     public TerritorioPlanciaClient getTerritorio(int idTerritorio) throws TerritorioNonValido {
         return plancia.getTerritorio(idTerritorio);
     }
 
+    /**
+     * Ritorna il riferimento al territorioPlanciaClient che corrisponde al
+     * teritorio_t cercato.
+     * @param territorio territorio da cercare.
+     * @return riferiento al territorioPlanciaClient cercato
+     */
     public TerritorioPlanciaClient getTerritorio(territori_t territorio) {
         return plancia.getTerritorio(territorio);
     }

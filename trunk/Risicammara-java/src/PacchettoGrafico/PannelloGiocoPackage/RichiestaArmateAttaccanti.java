@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package PacchettoGrafico.PannelloGiocoPackage;
 
 import PacchettoGrafico.EventoAzioneRisicammara;
@@ -14,7 +9,9 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 
 /**
- *
+ * Quadrato che raccoglie i pulsanti di richiesta "Quanti dadi di attacco lanciare?".
+ * Imposta il numero massimo di armate con cui attaccare e ridireziona tutti gli
+ * eventi premuti su se stesso ai suoi sotto pulsanti.
  * @author matteo
  */
 public class RichiestaArmateAttaccanti extends Elemento_2DGraphicsCliccable {
@@ -28,6 +25,12 @@ public class RichiestaArmateAttaccanti extends Elemento_2DGraphicsCliccable {
     private int margine;
     private int maxLancio;
 
+    /**
+     * Costruttore.
+     * @param bordaturaDadi Quanto i dadi devono essere arrotondati.
+     * @param margine Margine che ci deve essere tra un pulsante e l'altro.
+     * @param bordi dimensione e posizione di questo riquadro.
+     */
     public RichiestaArmateAttaccanti(int bordaturaDadi, int margine, Rectangle bordi) {
         this.margine = margine;
         this.posizione = bordi;
@@ -57,6 +60,11 @@ public class RichiestaArmateAttaccanti extends Elemento_2DGraphicsCliccable {
         return (Rectangle) posizione;
     }
 
+    /**
+     * Imposta il numero massimo di dadi lanciabile. Se vengono impostati parametri
+     * errati controlli interni li settano a valori accettabili.
+     * @param maxLancio numero massimo.
+     */
     public void setMaxLancio(int maxLancio) {
         if (maxLancio > 3)
             maxLancio = 3;
@@ -118,10 +126,19 @@ public class RichiestaArmateAttaccanti extends Elemento_2DGraphicsCliccable {
         dadoAnnulla.disegna(g2, ga);
     }
 
+    /**
+     * Ritorna il numero di armate con cui si vuole attaccare.
+     * @return numero di armate scelto.
+     */
     public int getNumeroArmateAttaccanti() {
         return numeroArmateAttaccanti;
     }
 
+    /**
+     * Blocca l'action listener di questo oggetto e ridireziona l'evento sui
+     * suoi pulsanti interni.
+     * @param e evento.
+     */
     @Override
     protected void actionPressed(MouseEvent e) {
         if (dado1.doClicked(e))

@@ -34,7 +34,13 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
 
     private ContatoreFasi contatoreFasi;
 
+    /**
+     * Larghezza che c'è tra un pulsante e l'altro freccia.
+     */
     public final static int LARGHEZZABORDO = 50;
+    /**
+     * Colore di sfondo (la parte che è passaTurno)
+     */
     public static Color SFONDO = new Color(255, 192, 0);
 
     /**
@@ -98,6 +104,12 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
         graphics2D.draw(posizione);
     }
 
+    /**
+     * Controlla quale pulsante fase premere (senza penetrazione: il primo
+     * pulsante che viene premuto in ordine di come appaiono all'utente preclude
+     * l'azione di tutti gli altri)
+     * @param e
+     */
     @Override
     protected void actionPressed(MouseEvent e) {
         Fasi_t who = whoIsPressed(e.getPoint());
@@ -253,6 +265,11 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
         }
     }
     
+    /**
+     * Imposta una nuova fase. Fa avanzare la fase vecchia finchè non si raggiunge
+     * la fase appena impostata.
+     * @param fase Fase nuova che si vuole raggiungere.
+     */
     public void setFase(Fasi_t fase) {
         int avanzamento = Fasi_t.getDistanzaFasi(contatoreFasi.getFase(), fase);
         for (int i=0; i<avanzamento; i++){
@@ -282,34 +299,75 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
         return contatoreFasi.getFase();
     }
 
+    /**
+     * Restituisce un riferimento al bottone fase di attacco.
+     * @return il bottone fase di attacco.
+     */
     public BottoneFaseAttaccoAvanzato getBottoneFaseAttacco() {
         return attacco;
     }
 
+    /**
+     * Restituisce un riferimento al bottone fase di spostamento.
+     * @return il bottone fase di spostamento.
+     */
     public BottoneFaseAvanzato getBottoneFaseSpostamento() {
         return spostamento;
     }
 
+    /**
+     * Imposta l'ascoltatore da azionare quando viene premuto il pulsante fase di
+     * attacco.
+     * @param ascoltatoreAttacco ascoltatore da impostare.
+     */
     public void setAscoltatoreAttacco(RisicammaraEventListener ascoltatoreAttacco) {
         this.ascoltatoreAttacco = ascoltatoreAttacco;
     }
 
+    /**
+     * Imposta l'ascoltatore da azionare quando viene premuta la parte non
+     * appartenente a nessun bottone fase: la parte di fondo colorata di SFONDO.
+     * @see SFONDO
+     * @param ascoltatoreFineTurno ascoltatore da impostare.
+     */
     public void setAscoltatoreFineTurno(RisicammaraEventListener ascoltatoreFineTurno) {
         this.ascoltatoreFineTurno = ascoltatoreFineTurno;
     }
 
+    /**
+     * Imposta l'ascoltatore da azionare quando viene premuto il bottone fase di
+     * rinforzo.
+     * @param ascoltatoreRinforzi ascoltatore da impostare.
+     */
     public void setAscoltatoreRinforzi(RisicammaraEventListener ascoltatoreRinforzi) {
         this.ascoltatoreRinforzi = ascoltatoreRinforzi;
     }
 
+    /**
+     * Imposta l'ascoltatore da azionare quando viene premuto il pulsante fase di
+     * spostamento.
+     * @param ascoltatoreSpostamento ascoltatore da impostare.
+     */
     public void setAscoltatoreSpostamento(RisicammaraEventListener ascoltatoreSpostamento) {
         this.ascoltatoreSpostamento = ascoltatoreSpostamento;
     }
 
+    /**
+     * Imposta il risultato dei dadi che verra visualizzato sulla plancia. (Il
+     * risultato è gestito dal bottone fase di attacco, che decide lui se
+     * disegnarlo sopra se stesso, o nell'angolo in basso a destra). I valori
+     * verranno visualizzati nell'ordine con cui vengono passati. Vengono visualizzati
+     * primi i valori dei dadi di attacco.
+     * @param dadiAttacco Array che contiene i valori dei dadi di attacco.
+     * @param dadiDifesa Array che contiene i valori dei dadi di difesa.
+     */
     public void setRisultato(int[] dadiAttacco, int[] dadiDifesa) {
         attacco.setRisultatoDadi(dadiAttacco, dadiDifesa);
     }
 
+    /**
+     * Nasconde l'ultimo risultato dei dadi visualizzato.
+     */
     public void disattivaDadi() {
         attacco.disattivaDadi();
     }

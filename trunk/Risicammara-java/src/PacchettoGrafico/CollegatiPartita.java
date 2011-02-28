@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package PacchettoGrafico;
 
 import java.awt.BorderLayout;
@@ -24,7 +19,7 @@ import javax.swing.border.EmptyBorder;
 import risicammaraClient.Client;
 
 /**
- *
+ * Classe che implementa i metodi per effettuare una connessione alla partita.
  * @author matteo
  */
 public class CollegatiPartita extends JFrame {
@@ -37,10 +32,19 @@ public class CollegatiPartita extends JFrame {
     private Socket server;
     private int porta;
 
+    /**
+     * Restituisce il socket al server.
+     * @return il socket del server
+     */
     public Socket getServer() {
         return server;
     }
 
+    /**
+     * Si collega ad un server di gioco tramite una porta specificata.
+     * @param main l'oggetto Client che si connette
+     * @param porta la porta a cui connettersi
+     */
     public CollegatiPartita(Client main, int porta) {
         super("Collegati al server");
         //this.addWindowListener(this);

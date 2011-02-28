@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package PacchettoGrafico;
 
 import java.awt.Color;
@@ -100,6 +95,10 @@ public class GraphicsAdvanced {
     }
 
 
+    /**
+     * Restituisce il colore del giocatore evidenziato
+     * @return il colore del giocatore.
+     */
     public Color getColoreGiocatoreEvidenziato() {
         return coloreGiocatoreEvidenziato;
     }

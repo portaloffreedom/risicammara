@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package PacchettoGrafico.PannelloGiocoPackage;
 
 import PacchettoGrafico.EventoAzioneRisicammara;
@@ -15,7 +10,7 @@ import risicammaraJava.turnManage.PartitaClient;
 import risicammaraServer.messaggiManage.MessaggioGiocaTris;
 
 /**
- *
+ * Ascoltatore per le giocate dei tris.
  * @author matteo
  */
 public class AscoltatoreGiocaTris implements RisicammaraEventListener {
@@ -32,6 +27,12 @@ public class AscoltatoreGiocaTris implements RisicammaraEventListener {
     private CartaDisegnabile carte[];
     private boolean active;
 
+    /**
+     * Ascoltatore per le giocate del tris.
+     * @param menuCarte il riferimento al menu delle carte
+     * @param ag Attivatore Grafico
+     * @param partita Partita.
+     */
     public AscoltatoreGiocaTris(MenuCarte menuCarte, AttivatoreGrafica ag, PartitaClient partita) {
         this.menuCarte = menuCarte;
         this.attivatoreGrafica = ag;
@@ -44,6 +45,10 @@ public class AscoltatoreGiocaTris implements RisicammaraEventListener {
         this.carte = new CartaDisegnabile[NUMERO_CARTE_TRIS];
     }
 
+    /**
+     * Imposta lo stato Attivo.
+     * @param active true se è attivo, false altrimenti
+     */
     public void setActive(boolean active) {
         this.active = active;
         if (!active)
@@ -61,6 +66,10 @@ public class AscoltatoreGiocaTris implements RisicammaraEventListener {
         }
     }
 
+    /**
+     * Quando viene effettuata una azione allora l'ascoltatore fa partire questo metodo.
+     * @param e L'evento.
+     */
     @Override
     public void actionPerformed(EventoAzioneRisicammara e) {
         if (!active)

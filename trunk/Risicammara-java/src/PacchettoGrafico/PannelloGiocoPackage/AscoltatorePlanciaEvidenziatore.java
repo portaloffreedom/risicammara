@@ -13,7 +13,9 @@ import risicammaraClient.Client;
 import risicammaraJava.boardManage.TerritorioNonValido;
 
 /**
- *
+ * Ascoltatore che viene attivato sulla plancia quando vengono disattivati
+ * tutti gli altri. L'unica cosa che fa è selezionare di bianco (con trasparenza)
+ * e deselezionare un territorio alla volta. Senza nessuno effetto sul gioco.
  * @author matteo
  */
 public class AscoltatorePlanciaEvidenziatore implements RisicammaraEventListener {
@@ -22,12 +24,21 @@ public class AscoltatorePlanciaEvidenziatore implements RisicammaraEventListener
     private int idTerritorioSelezionato;
     private boolean selezionato;
 
+    /**
+     * Costruttore
+     * @param planciaImmagine riferimento alla planciaImmagine.
+     * @param ag riferimento all'attivatore grafica.
+     */
     public AscoltatorePlanciaEvidenziatore(PlanciaImmagine planciaImmagine, AttivatoreGrafica ag) {
         this.planciaImmagine = planciaImmagine;
         this.attivatoreGrafica = ag;
         //planciaImmagine.setActionListener(this);
     }
 
+    /**
+     * Funzione che reagisce alla pressione della plancia.
+     * @param e evento azione risicammara
+     */
     @Override
     public void actionPerformed(EventoAzioneRisicammara e) {
         Rectangle rettangolo = null;
