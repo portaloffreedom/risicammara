@@ -120,6 +120,7 @@ public class BottoneFaseAvanzato extends BottoneFase {
     public boolean isClicked(Point punto) {
         boolean cliccato = super.isClicked(punto);
         System.out.println(this+" Cliccato!"+cliccato);
+        System.out.println("Cliccato: "+posizione);
         return cliccato;
     }
 
