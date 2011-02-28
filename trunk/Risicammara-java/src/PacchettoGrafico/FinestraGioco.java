@@ -1,9 +1,8 @@
 package PacchettoGrafico;
 
+import PacchettoGrafico.PannelloGiocoPackage.RichiestaNumeroArmate;
 import PacchettoGrafico.PannelloGiocoPackage.AscoltatorePlanciaAttacco;
 import PacchettoGrafico.PannelloGiocoPackage.GestoreFasi;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import risicammaraJava.playerManage.ListaGiocatoriClient;
 import PacchettoGrafico.PannelloGiocoPackage.PannelloGioco;
 import PacchettoGrafico.PannelloGiocoPackage.PlanciaImmagine;
@@ -35,7 +34,7 @@ public class FinestraGioco extends JFrame implements Runnable {
     private PartitaClient partita;
     private GestoreFasi gestoreFasi;
     private PlanciaImmagine plancia;
-    private RichiestaNumeroArmate richiestaNumeroArmate;
+    private RichiestaNumeroArmate richiestaNumeroArmateAttacco;
 
     private PannelloGioco pannello;
 
@@ -44,7 +43,6 @@ public class FinestraGioco extends JFrame implements Runnable {
         this.server = server;
         this.listaGiocatori = partita.getListaGiocatori();
         this.partita = partita;
-        this.richiestaNumeroArmate = null;
         ImageIcon icona = new ImageIcon(this.getClass().getResource(Client.RISICAMLOGO));
         this.setIconImage(icona.getImage());
 
@@ -52,12 +50,13 @@ public class FinestraGioco extends JFrame implements Runnable {
         this.pannello = new PannelloGioco(240, partita);
         contestoFinestra.add(pannello);
 
-        Dimension dimensioniMinime = new Dimension(900, 600);
+        Dimension dimensioniMinime = new Dimension(950, 600);
         super.setLocationByPlatform(true);
         this.setMinimumSize(dimensioniMinime);
         
         this.plancia = pannello.getPlanciaImmagine();
         this.gestoreFasi = new GestoreFasi(partita, plancia, pannello);
+        this.richiestaNumeroArmateAttacco = new RichiestaNumeroArmate(pannello.getBottoneFaseAttacco(), server, partita);
 
         this.addWindowListener(new WindowListenerImpl(server));
         this.setVisible(true);
@@ -233,14 +232,12 @@ public class FinestraGioco extends JFrame implements Runnable {
                     if (attaccante.getProprietario() == listaGiocatori.meStessoIndex()){
                         //chiedere se vuoi spostare altre armate
                         int armateDaSpostare = attaccante.getArmate()-1;
-                        ArmateSpostateListener armateSpostateListener = new ArmateSpostateListener(server, partita, attaccante.getTerritorio(), difensore.getTerritorio());
-                            if (armateDaSpostare <= 0){
-                                armateSpostateListener.spostaArmate(0);
-                                break;
-                            }
-                        richiestaNumeroArmate = new RichiestaNumeroArmate("Quante Armate vuoi spostare nel territorio Conquistato?", armateDaSpostare);
-                        armateSpostateListener.setRichiestaNumeroArmate(richiestaNumeroArmate);
-                        richiestaNumeroArmate.addOKActionListener(armateSpostateListener);
+                        this.richiestaNumeroArmateAttacco.imposta(attaccante.getTerritorio(), difensore.getTerritorio(),armateDaSpostare);
+                        if (armateDaSpostare <= 0){
+                            richiestaNumeroArmateAttacco.spostaArmate(0);
+                            break;
+                        }
+                        richiestaNumeroArmateAttacco.attiva();
                     }
                     break;
                 }
@@ -321,44 +318,7 @@ public class FinestraGioco extends JFrame implements Runnable {
         }
     }// </editor-fold>
 
-    private class ArmateSpostateListener implements ActionListener {
-        private RichiestaNumeroArmate richiestaNumeroArmate;
-        private Connessione server;
-        private PartitaClient partita;
-        private territori_t sorgente;
-        private territori_t destinazione;
-
-        public ArmateSpostateListener(Connessione server, PartitaClient partita, territori_t sorgente, territori_t destinazione) {
-            this.server = server;
-            this.partita = partita;
-            this.sorgente = sorgente;
-            this.destinazione = destinazione;
-        }
-
-        public void setRichiestaNumeroArmate(RichiestaNumeroArmate richiestaNumeroArmate) {
-            this.richiestaNumeroArmate = richiestaNumeroArmate;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent ae) {
-            int armateDaSpostare = richiestaNumeroArmate.getNumArmate();
-            
-            try {
-                spostaArmate(armateDaSpostare);
-            } catch (IOException ex) {
-                System.err.println("Messaggio sposta armate non inviato con successo: "+ex);
-            }
-            
-            richiestaNumeroArmate.setVisible(false);
-            richiestaNumeroArmate.dispose();
-            richiestaNumeroArmate = null;
-        }
-        
-        
-        public void spostaArmate(int armate) throws IOException {
-            server.spedisci(new MessaggioSpostaArmate(partita.getMeStessoIndex(), sorgente, destinazione, armate));
-        }
-    }
+    
 
     public void riavviaPartitaErrore(String messaggio){
         try { server.chiudiConnessione(); } catch (IOException ex) { }

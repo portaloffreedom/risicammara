@@ -23,7 +23,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable {
     protected Dimension dimPannello;
     protected boolean smosciato;
     protected boolean animazione;
-    private AttivatoreGrafica attivatoreGrafica;
+    protected AttivatoreGrafica attivatoreGrafica;
     private long inizioAnim;
     private double faseAnimPrec;
     private String testoDestra;

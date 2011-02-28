@@ -100,5 +100,13 @@ public class BarraSuperiore implements Elemento_2DGraphics {
     public BottoneRisicammara getGiocatoreButton() {
         return giocatoreButton;
     }
+
+    public BottoneFaseAvanzato getBottoneFaseSpostamento() {
+        return barraFasi.getBottoneFaseSpostamento();
+    }
+
+    public BottoneFaseAttaccoAvanzato getBottoneFaseAttacco() {
+        return barraFasi.getBottoneFaseAttacco();
+    }
     
 }

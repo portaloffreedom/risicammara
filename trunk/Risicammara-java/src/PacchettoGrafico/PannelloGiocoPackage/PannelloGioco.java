@@ -232,6 +232,14 @@ final public class PannelloGioco extends JPanel{
         return barra.getMenuCarte();
     }
 
+    public BottoneFaseAvanzato getBottoneFaseSpostamento() {
+        return barra.getBottoneFaseSpostamento();
+    }
+
+    public BottoneFaseAttaccoAvanzato getBottoneFaseAttacco() {
+        return barra.getBottoneFaseAttacco();
+    }
+
     public void setRisultatoDadi(int[] dadiAttacco, int[] dadiDifesa) {
         barra.getBarraFasi().setRisultato(dadiAttacco, dadiDifesa);
     }
