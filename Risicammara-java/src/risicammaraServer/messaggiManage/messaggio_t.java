@@ -103,13 +103,6 @@ public enum messaggio_t {
      */
     PLANCIA,    //Messaggio plancia per inizio partita
     /**
-     * Messaggio inviato dal server che fornisce la lista dei giocatori a tutti
-     * i giocanti.
-     * <b> WARNING </b> probabilmente è inutile.
-     * @deprecated
-     */
-    PLAYERLIST, //Messaggio lista iniziale per tutti i giocatori
-    /**
      * Pacchetto che indica il cambio di armate in un dato territorio.
      * @see risicammaraServer.messaggiManage.MessaggioCambiaArmateTerritorio
      */    
@@ -138,11 +131,6 @@ public enum messaggio_t {
      * Aggiorna la fase del gioco.
      * @see risicammaraServer.messaggiManage.MessaggioFase
      */
-    FASE,
-    /**
-     * Pacchetto che avvisa i giocatori di un avvenuto cambio nella lista giocatori.
-     * @deprecated Inutilizabile (non serve);
-     */
-    AGGIORNALISTAGIOCATORI; //Il pacchetto ricevuto notifica un aggiornamento della lista dei giocatori
+    FASE;
 
 }

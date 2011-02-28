@@ -87,14 +87,6 @@ public abstract class GestionePartita {
         return giocattaccato;
     }
     /**
-     * imposta il giocatore che viene attaccato
-     * @param giocattaccato l'indice del giocoatore che viene attaccato
-     * @deprecated Si imposta automaticamente da "territorio attaccato"
-     */
-    public void setGiocattaccato(int giocattaccato) {
-        this.giocattaccato = giocattaccato;
-    }
-    /**
      * Informa se c'è un attacco in corso
      * @return true se c'è un attacco, false altrimenti
      */
@@ -132,15 +124,15 @@ public abstract class GestionePartita {
         listagiocatori.get(giocattaccato).remTerr(territorioAttaccato);
     }
     /**
-     * restituisci il territorio del difensore
+     * restituisce il territorio del difensore
      * @return il territorio del difensore
      */
     public territori_t getTerritorioAttaccato(){
         return this.territorioAttaccato;
     }
     /**
-     * restituisci il territorio del difensore
-     * @return il territorio del difensore
+     * restituisce il territorioPlancia del difensore
+     * @return il riferimento al territorioPlancia del difensore
      */
     public TerritorioPlancia getTerritorioPlanciaAttaccato() {
         return planciadigioco.getTerritorio(territorioAttaccato);
@@ -160,8 +152,8 @@ public abstract class GestionePartita {
         return territorioAttaccante;
     }
     /**
-     * restituisce il territorio dell'attaccante
-     * @return territorio attaccante
+     * restituisce il territorioPlancia dell'attaccante
+     * @return il riferimento al territorioPlancia dell'attaccante
      */
     public TerritorioPlancia getTerritorioPlanciaAttaccante() {
         return planciadigioco.getTerritorio(territorioAttaccante);
@@ -325,23 +317,7 @@ public abstract class GestionePartita {
             sequenzaDiGioco.addLast(giocTurno);
             return;
     };
-    /**
-     * Chiede se questo è un nuovo giro.
-     * @return true se lo è, false altrimenti
-     * @deprecated
-     */
-    public boolean isNuovogiro() {
-        return nuovogiro;
-    }
-    /**
-     * Imposta lo stato di NuovoGiro (se tutti i giocatori hanno terminato il
-     * turno )
-     * @param nuovogiro true se è un nuovo giro, false altrimenti
-     * @deprecated 
-     */
-    public void setNuovogiro(boolean nuovogiro) {
-        this.nuovogiro = nuovogiro;
-    }
+
         /**
      * Restituisce il numero di giocatori effettivi.
      * @return numero di giocatori.

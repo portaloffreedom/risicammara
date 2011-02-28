@@ -21,14 +21,6 @@ public enum comandi_t {
      */
     RITIRATI,       //Ritirati da un attacco
     //--------generale
-    /**
-     * Chi invia questo comando vuole passare alla fase successiva.
-     * getSender = Il giocatore che invia il messaggio.
-     * @see messaggio_t
-     * @see MessaggioFase
-     * @deprecated 
-     */
-    PASSAFASE,      //Passa la fase corrente.
 
     //---------------- LOBBY
     /**
@@ -85,13 +77,6 @@ public enum comandi_t {
      * getOptParameter = Il giocatore che si difendeva.
      */
     ATTACCOTERMINATO, // Indica che l'attacco in corso è terminato
-    /**
-     * Indica che una sessione di attacco è iniziata.
-     * getSender = Il giocatore che sta attaccando
-     * getOptParameter = Il giocatore che si deve difendere.
-     * @deprecated Si usa MessaggioDichiaraAttacco.
-     */
-    INIZIAATTACCO,      //Indica un attacco.
     //--------generale
     /**
      * Giocatore connesso al server

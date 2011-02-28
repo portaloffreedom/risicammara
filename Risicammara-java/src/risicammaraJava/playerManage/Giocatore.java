@@ -8,8 +8,9 @@ import risicammaraClient.*;
 import risicammaraJava.deckManage.Carta;
 
 /**
- * Oggetto di tipo giocatore che include il nome, il colore delle armate e
- * le armate che può inserire in quel dato turno.
+ * Oggetto di tipo giocatore che include il nome, il colore delle armate,
+ * le armate che può inserire in quel dato turno e le carte pescate.
+ * Tiene anche l'obbiettivo assegnato al giocatore.
  * @author stengun
  */
 public class Giocatore implements Serializable {
