@@ -21,7 +21,7 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
     private int inizio;
     private int fine;
 
-    BottoneFase spostamento;
+    BottoneFaseAvanzato spostamento;
     private RisicammaraEventListener ascoltatoreSpostamento;
 
     BottoneFaseAttaccoAvanzato attacco;
@@ -115,10 +115,12 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
                 break;
             //case ContatoreFasi.ATTACCO:
             case ATTACCO:
+                attacco.doClicked(e);
                 azionaAscoltatore(ascoltatoreAttacco, e);
                 break;
             //case ContatoreFasi.SPOSTAMENTI:
             case SPOSTAMENTO:
+                spostamento.doClicked(e);
                 azionaAscoltatore(ascoltatoreSpostamento, e);
                 break;
         }
@@ -278,6 +280,14 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
      */
     public Fasi_t getFase(){
         return contatoreFasi.getFase();
+    }
+
+    public BottoneFaseAttaccoAvanzato getBottoneFaseAttacco() {
+        return attacco;
+    }
+
+    public BottoneFaseAvanzato getBottoneFaseSpostamento() {
+        return spostamento;
     }
 
     public void setAscoltatoreAttacco(RisicammaraEventListener ascoltatoreAttacco) {

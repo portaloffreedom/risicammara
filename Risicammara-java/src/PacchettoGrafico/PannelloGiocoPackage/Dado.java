@@ -13,32 +13,75 @@ import java.awt.Rectangle;
 import java.awt.geom.RoundRectangle2D;
 
 /**
- *
+ * Crea un dado con del testo (centrato). Può essere spostato dove si vuole.
+ * Non si ridisegna da solo.
  * @author matteo
  */
 public class Dado extends Elemento_2DGraphicsCliccable {
     private int bombaturaDado;
     private boolean inverti;
     private String valoreDado;
-    private Color coloreDado;
+    protected Color coloreDado;
 
     public Dado(Rectangle dimensioni, int bombaturaDado, boolean inverti, String valoreDado, Color coloreDado) {
-        this(bombaturaDado);
+        this.bombaturaDado = bombaturaDado;
         this.setImpostazioniDado(coloreDado, valoreDado, dimensioni, inverti);
     }
 
+    /**
+     * Crea un dado con la bordatura (quanto i bordi devono essere arrotondati)
+     * impostata e con le altre impostazioni al minimo:<br>
+     * - dimesioni   = 0,0,0,0<br>
+     * - interti     = false<br>
+     * - valore Dado = ""<br>
+     * - colore Dado = Color.WHITE
+     * @param bombaturaDado
+     */
     public Dado(int bombaturaDado) {
-        this.bombaturaDado = bombaturaDado;
+        this(new Rectangle(), bombaturaDado, false, "", Color.WHITE);
     }
 
+    /**
+     * Ritorna i bordi (posizione e dimensioni) del dado.
+     * @return bordi (posizione e dimensioni) del dado.
+     */
     public RoundRectangle2D getBordi(){
         return (RoundRectangle2D) posizione;
     }
 
+    /**
+     * Ritorna i bordi (posizione e dimensioni) del dado non considerando
+     * l'arrotondamento degli angoli.
+     * @return bordi (posizione e dimensioni) del dado non arrotondati.
+     */
+    public Rectangle getBordiNetti(){
+        return getBordi().getBounds();
+    }
+
+    public void setBordiDado(Rectangle bordiDado) {
+        this.posizione = new java.awt.geom.RoundRectangle2D.Float(bordiDado.x, bordiDado.y, bordiDado.width, bordiDado.height, bombaturaDado, bombaturaDado);
+    }
+
+    /**
+     * Imposta cosa visualizzare sopra al dado.
+     * @param valoreDado Stringa da visualizzare sopra al dado.
+     */
+    public void setValoreDado(String valoreDado) {
+        this.valoreDado = valoreDado;
+    }
+
+    /**
+     * Imposta di nuovo i parametri del dado.
+     * @param coloreDado colore che deve avere il dado (se non invertito, è il
+     * colore di fondo).
+     * @param valoreDado Valore che deve essere visualizzato sopra al dado.
+     * @param bordiDado Nuova posizione e dimensioni del dado.
+     * @param inverti true se i colori del dado devono essere invertiti.
+     */
     final public void setImpostazioniDado(Color coloreDado, String valoreDado, Rectangle bordiDado, boolean inverti) {
         this.coloreDado = coloreDado;
-        this.valoreDado = valoreDado;
-        this.posizione = new java.awt.geom.RoundRectangle2D.Float(bordiDado.x, bordiDado.y, bordiDado.width, bordiDado.height, bombaturaDado, bombaturaDado);
+        setValoreDado(valoreDado);
+        setBordiDado(bordiDado);
         this.inverti = inverti;
     }
 

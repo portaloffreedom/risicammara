@@ -6,12 +6,8 @@
 package PacchettoGrafico.PannelloGiocoPackage;
 
 import PacchettoGrafico.EventoAzioneRisicammara;
-import PacchettoGrafico.RichiestaNumeroArmate;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.IOException;
 import risicammaraClient.Connessione;
 import risicammaraClient.territori_t;
@@ -25,7 +21,7 @@ import risicammaraServer.messaggiManage.MessaggioDichiaraAttacco;
  *
  * @author matteo
  */
-public class AscoltatorePlanciaAttacco implements RisicammaraEventListener, ActionListener, WindowListener {
+public class AscoltatorePlanciaAttacco implements RisicammaraEventListener {
     public static final Color Attacco = Color.RED;
     public static final Color Difesa  = Color.BLUE;
     public static final double pesantezzaSfumatura = 0.86;
@@ -34,19 +30,22 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener, Acti
     private GestoreFasi fasi;
     private Connessione server;
     private PartitaClient partita;
-    private RichiestaNumeroArmate numeroArmate;
+    //private RichiestaNumeroArmate numeroArmate;
+    private BottoneFaseAttaccoAvanzato bottoneFaseAttacco;
 
     private TerritorioPlanciaClient territorioAttaccante;
     private TerritorioPlanciaClient territorioDifensore;
     private boolean attaccoInCorso;
 
-    public AscoltatorePlanciaAttacco(PlanciaImmagine plancia, GestoreFasi fasi, Connessione server, PartitaClient partita) {
+    public AscoltatorePlanciaAttacco(PlanciaImmagine plancia, GestoreFasi fasi, Connessione server, PartitaClient partita, BottoneFaseAttaccoAvanzato bottoneFaseAttacco) {
         this.plancia = plancia;
         this.fasi = fasi;
         this.server = server;
         this.partita = partita;
+        this.bottoneFaseAttacco = bottoneFaseAttacco;
         this.territorioAttaccante = null;
         this.territorioDifensore = null;
+        bottoneFaseAttacco.setActionListenerArmateAttaccanti(new AscoltatoreNumeroArmateAttaccanti(this));
     }
 
     /**
@@ -130,23 +129,35 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener, Acti
         if (maxArmateAttaccanti > 3){
             maxArmateAttaccanti = 3;
         }
-        numeroArmate = new RichiestaNumeroArmate("Con quante armate vuoi attaccare?", maxArmateAttaccanti);
-        numeroArmate.addOKActionListener(this);
-        numeroArmate.addWindowListener(this);
+        bottoneFaseAttacco.setMaxLancioDadi(maxArmateAttaccanti);
+        bottoneFaseAttacco.setRichiestaNumeroArmateAttaccanti(true);
         attaccoInCorso(true);
     }
 
+    private class AscoltatoreNumeroArmateAttaccanti implements RisicammaraEventListener {
+        private AscoltatorePlanciaAttacco apa;
+
+        public AscoltatoreNumeroArmateAttaccanti(AscoltatorePlanciaAttacco apa) {
+            this.apa = apa;
+        }
+
+        @Override
+        public void actionPerformed(EventoAzioneRisicammara e) {
+            apa.rispostaNumeroArmate(e);
+        }
+
+    }
+
     /**
-     * Metodo che viene azionato dopo che viene premuto ok nella finestra di 
-     * richiesta armate
+     * Metodo che viene azionato dopo che viene scelto il numero di armate da
+     * scegliere
      */
-    @Override
-    public void actionPerformed(ActionEvent ae) {
-        int armateAttaccanti = numeroArmate.getNumArmate();
+    public void rispostaNumeroArmate(ActionEvent ae) {
+        int armateAttaccanti = bottoneFaseAttacco.getNumeroArmateAttaccanti();
         try {
             if (armateAttaccanti == 0){
                 ritiratiAttacco();
-                distruggiFinestraNumeroArmate();
+                disattivaRichiestaArmate();
                 return;
             }
             server.spedisci(MessaggioComandi.creaMsgLanciadado(partita.getMeStessoIndex(), armateAttaccanti));
@@ -155,7 +166,7 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener, Acti
             return;
         }
 
-        distruggiFinestraNumeroArmate();
+        disattivaRichiestaArmate();
     }
     
     /**
@@ -179,50 +190,10 @@ public class AscoltatorePlanciaAttacco implements RisicammaraEventListener, Acti
         plancia.ripristinaTerritorio(territorioDifensore);
         territorioAttaccante = null;
         territorioDifensore = null;
-        distruggiFinestraNumeroArmate();
+        disattivaRichiestaArmate();
     }
 
-    public void distruggiFinestraNumeroArmate() {
-        if (numeroArmate != null){
-            numeroArmate.distruggiFinestra();
-            numeroArmate = null;
-        }
-    }
-
-    @Override
-    public void windowClosing(WindowEvent we) {
-        try {
-            ritiratiAttacco();
-        } catch (IOException ex) {
-            System.err.println("Messaggio ritirati non riuscito!: "+ex);
-            //qui va in palla
-        }
-        //terminaAttaccoInCorso();
-    }
-
-
-    //CHE PACCO STA ROBA CHE MI DEVO PORTARE DIETRO
-    @Override
-    public void windowOpened(WindowEvent we) {
-    }
-
-    @Override
-    public void windowClosed(WindowEvent we) {
-    }
-
-    @Override
-    public void windowIconified(WindowEvent we) {
-    }
-
-    @Override
-    public void windowDeiconified(WindowEvent we) {
-    }
-
-    @Override
-    public void windowActivated(WindowEvent we) {
-    }
-
-    @Override
-    public void windowDeactivated(WindowEvent we) {
+    public void disattivaRichiestaArmate() {
+        bottoneFaseAttacco.setRichiestaNumeroArmateAttaccanti(false);
     }
 }

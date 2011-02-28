@@ -6,7 +6,6 @@
 package PacchettoGrafico.PannelloGiocoPackage;
 
 import PacchettoGrafico.EventoAzioneRisicammara;
-import PacchettoGrafico.RichiestaNumeroArmate;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,7 +23,7 @@ import risicammaraServer.messaggiManage.MessaggioSpostaArmate;
  *
  * @author matteo
  */
-public class AscoltatorePlanciaSpostamento implements RisicammaraEventListener, ActionListener, WindowListener {
+public class AscoltatorePlanciaSpostamento implements RisicammaraEventListener {
 
     public static final Color Sorgente = Color.WHITE;
     public static final Color Destinazione  = Color.PINK;
@@ -40,15 +39,15 @@ public class AscoltatorePlanciaSpostamento implements RisicammaraEventListener, 
     private TerritorioPlanciaClient territorioDesitanzione;
     private boolean spostamentoInCorso;
 
-    public AscoltatorePlanciaSpostamento(PlanciaImmagine plancia, GestoreFasi fasi, Connessione server, PartitaClient partita) {
+    public AscoltatorePlanciaSpostamento(PlanciaImmagine plancia, GestoreFasi fasi, Connessione server, PartitaClient partita, PannelloGioco pannello) {
         this.plancia = plancia;
         this.fasi = fasi;
         this.server = server;
         this.partita = partita;
-        
+        this.numeroArmate = new RichiestaNumeroArmate(pannello.getBottoneFaseSpostamento(), server, partita);
+        this.numeroArmate.setOkActionListener(new AscoltatoreNumeroArmate());
         this.territorioDesitanzione = null;
         this.territorioSorgente = null;
-        this.numeroArmate = null;
         this.spostamentoInCorso = false;
     }
     
@@ -85,32 +84,31 @@ public class AscoltatorePlanciaSpostamento implements RisicammaraEventListener, 
         }
         
         plancia.coloraSfumato(territorioSorgente, Sorgente, pesantezzaSfumatura);
-        //fasi.setAscoltatore(false, false);
         fasi.setAscoltatoreSpostamenti(false);
         fasi.setAscoltatoreFineTurno(false);
     }
     
     private void selezionaTerritorioDestinazione(int idTerritorio) {
-        territori_t difensore = null;
+        territori_t destinazione = null;
         try {
-            difensore = territori_t.GetTerritorio(idTerritorio);
+            destinazione = territori_t.GetTerritorio(idTerritorio);
             
             //controllo di deselezione del territorio
-            if (difensore == territorioSorgente.getTerritorio()) {
+            if (destinazione == territorioSorgente.getTerritorio()) {
                 spostamentoInCorso(false);
                 plancia.ripristinaTerritorio(territorioSorgente);
                 territorioSorgente = null;
                 return;
             }
             
-            territorioDesitanzione = plancia.plancia.getTerritorio(difensore);
+            territorioDesitanzione = plancia.plancia.getTerritorio(destinazione);
             
             //controllo che il giocatore non sposti in un territorio dell'avversario le proprie armate
             if (territorioDesitanzione.getProprietario() != partita.getMeStessoIndex())
                 throw new TerritorioNonValido("Non puoi attaccare te stesso!");
             
             //controllo che il territorio stia nelle adiacenze di quello attaccante
-            if (!territorioSorgente.isAdiacent(difensore))
+            if (!territorioSorgente.isAdiacent(destinazione))
                 throw new TerritorioNonValido("Non puoi attaccare un territorio troppo distante!");
             
         } catch (TerritorioNonValido ex) {
@@ -119,25 +117,33 @@ public class AscoltatorePlanciaSpostamento implements RisicammaraEventListener, 
         }
 
         //plancia.colora(idTerritorio, Difesa);
-        plancia.coloraSfumato(difensore, Destinazione, pesantezzaSfumatura);
+        plancia.coloraSfumato(destinazione, Destinazione, pesantezzaSfumatura);
 
         partita.setTerritorioAttaccante(territorioSorgente.getTerritorio());
-        partita.setTerritorioAttaccato(difensore);
+        partita.setTerritorioAttaccato(destinazione);
 
         //TODO chiedere con quante armate lanciare
         int armateSpostabili = territorioSorgente.getArmate()-1;
-        numeroArmate = new RichiestaNumeroArmate("Quante armate vuoi spostare?", armateSpostabili);
-        numeroArmate.addOKActionListener(this);
+        numeroArmate.imposta(territorioSorgente.getTerritorio(), territorioSorgente.getTerritorio(), armateSpostabili);
+        numeroArmate.attiva();
         spostamentoInCorso(true);
+    }
+
+    private class AscoltatoreNumeroArmate implements RisicammaraEventListener {
+
+        @Override
+        public void actionPerformed(EventoAzioneRisicammara e) {
+            spedisciSpostamentoArmate(e);
+        }
+
     }
 
     /**
      * Metodo che viene azionato dopo che viene premuto ok nella finestra di 
      * richiesta armate
      */
-    @Override
-    public void actionPerformed(ActionEvent ae) {
-        int armateDaSpostare = numeroArmate.getNumArmate();
+    public void spedisciSpostamentoArmate(ActionEvent ae) {
+        int armateDaSpostare = numeroArmate.getNumeroArmateSpostamento();
         try {
             
             server.spedisci(
@@ -161,10 +167,7 @@ public class AscoltatorePlanciaSpostamento implements RisicammaraEventListener, 
             //il colore territori viene ripristinato solo quando arriva il
             //messaggio fine attacco    
         spostamentoInCorso(false);
-        
-        numeroArmate.setVisible(false);
-        numeroArmate.dispose();
-        numeroArmate = null;
+        numeroArmate.disattiva();
     }
     
     /**
@@ -176,42 +179,6 @@ public class AscoltatorePlanciaSpostamento implements RisicammaraEventListener, 
         this.spostamentoInCorso = attacco;
         fasi.setAscoltatoreSpostamenti(false);
         fasi.setAscoltatoreFineTurno(!attacco);
-    }
-
-    @Override
-    public void windowOpened(WindowEvent we) {
-    }
-
-    @Override
-    public void windowClosing(WindowEvent we) {
-        spostamentoInCorso(false);
-        plancia.ripristinaTerritorio(territorioSorgente);
-        plancia.ripristinaTerritorio(territorioDesitanzione);
-        territorioSorgente = null;
-        territorioDesitanzione = null;
-        numeroArmate.setVisible(false);
-        numeroArmate.dispose();
-        numeroArmate = null;
-    }
-
-    @Override
-    public void windowClosed(WindowEvent we) {
-    }
-
-    @Override
-    public void windowIconified(WindowEvent we) {
-    }
-
-    @Override
-    public void windowDeiconified(WindowEvent we) {
-    }
-
-    @Override
-    public void windowActivated(WindowEvent we) {
-    }
-
-    @Override
-    public void windowDeactivated(WindowEvent we) {
     }
 }
 

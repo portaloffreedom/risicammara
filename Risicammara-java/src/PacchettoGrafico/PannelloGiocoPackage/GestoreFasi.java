@@ -23,6 +23,7 @@ final public class GestoreFasi {
     private MenuCarte menuCarte;
     private PannelloGioco pannello;
     private int armateRinforzoDisponibili;
+    private RichiestaNumeroArmate richiestaNumeroArmateSpostamento;
 
     private boolean preFase;
 
@@ -69,8 +70,11 @@ final public class GestoreFasi {
         
         this.ascoltatorePlanciaEvidenziatore = new AscoltatorePlanciaEvidenziatore(planciaImmagine, ag);
         this.ascoltatorePlanciaRinforzo = new AscoltatorePlanciaRinforzo(planciaImmagine, server, partita.getMeStessoIndex());
-        this.ascoltatorePlanciaAttacco = new AscoltatorePlanciaAttacco(planciaImmagine, this, server, partita);
-        this.ascoltatorePlanciaSpostamento = new AscoltatorePlanciaSpostamento(planciaImmagine, this, server, partita);
+        this.ascoltatorePlanciaAttacco = new AscoltatorePlanciaAttacco(planciaImmagine, this, server, partita,pannello.getBottoneFaseAttacco());
+        this.ascoltatorePlanciaSpostamento = new AscoltatorePlanciaSpostamento(planciaImmagine, this, server, partita,pannello);
+
+        this.richiestaNumeroArmateSpostamento = new RichiestaNumeroArmate(barraFasi.getBottoneFaseSpostamento(), server, partita);
+
         faseToAttesa();
     }
 
