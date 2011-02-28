@@ -8,9 +8,6 @@ package PacchettoGrafico.PannelloGiocoPackage;
 import PacchettoGrafico.EventoAzioneRisicammara;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.IOException;
 import risicammaraClient.Connessione;
 import risicammaraClient.territori_t;
@@ -124,7 +121,7 @@ public class AscoltatorePlanciaSpostamento implements RisicammaraEventListener {
 
         //TODO chiedere con quante armate lanciare
         int armateSpostabili = territorioSorgente.getArmate()-1;
-        numeroArmate.imposta(territorioSorgente.getTerritorio(), territorioSorgente.getTerritorio(), armateSpostabili);
+        numeroArmate.imposta(null, null, armateSpostabili);
         numeroArmate.attiva();
         spostamentoInCorso(true);
     }

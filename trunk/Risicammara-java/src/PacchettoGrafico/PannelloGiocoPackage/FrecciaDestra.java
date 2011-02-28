@@ -16,7 +16,7 @@ import java.awt.Rectangle;
  * @author matteo
  * @see Polygon
  */
-public class FrecciaDestra extends Polygon {
+public final class FrecciaDestra extends Polygon {
     private int freccia;
 
     /**
@@ -35,6 +35,7 @@ public class FrecciaDestra extends Polygon {
         addPoint(p.x+width, p.y+(height/2));
         addPoint(p.x+width-freccia, p.y+height);
         addPoint(p.x, p.y+height);
+        this.bounds = getBounds();
     }
 
     /**
@@ -47,6 +48,7 @@ public class FrecciaDestra extends Polygon {
         xpoints[2] = p.x+larghezza;
         xpoints[3] = p.x+larghezza-freccia;
         //this.bounds.width = larghezza;
+        this.bounds = getBounds();
     }
 
     /**
@@ -87,6 +89,11 @@ public class FrecciaDestra extends Polygon {
         Dimension dim = new Dimension(xpoints[2]-pos.x+BottoneFase.OFFSET, ypoints[4]-pos.y);
         Rectangle rect = new Rectangle(pos, dim);
         return rect;
+    }
+
+    @Override
+    public String toString() {
+        return "FrecciaDestra{xpoints=" + this.xpoints + "ypoints=" + this.ypoints + '}';
     }
 
 }
