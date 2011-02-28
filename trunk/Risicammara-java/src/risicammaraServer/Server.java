@@ -17,7 +17,7 @@ public class Server extends Thread {
     private boolean stop;
     private Lobby lobby;
 /**
- * Ininzializza tutti i parametri del lobby.
+ * Ininzializza tutti i parametri del server.
  * @param porta la porta da cui ascoltare le connessioni.
  */
     public Server(int porta) {
@@ -27,8 +27,8 @@ public class Server extends Thread {
 
     }
 /**
- * Metodo che serve per far partire (all'occorrenza) il lobby come thread
- * (per esempio quando si fa partire un lobby in locale direttamente dalla gui).
+ * Metodo che serve per far partire (all'occorrenza) il server come thread
+ * (per esempio quando si fa partire un server in locale direttamente dalla gui).
  *
  */
     @Override

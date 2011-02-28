@@ -19,7 +19,7 @@ public interface Carta extends Serializable{
     
     /**
      * Restituisce l'icona assegnata alla carta.
-     * @return
+     * @return il riferimento al file immagine della carta.
      */
     public BufferedImage getIcona();
 

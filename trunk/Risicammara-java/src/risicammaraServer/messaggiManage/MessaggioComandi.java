@@ -29,16 +29,6 @@ public class MessaggioComandi implements Messaggio{
         return new MessaggioComandi(comandi_t.VINCITORE, giocatore_che_ha_vinto);
     }
     /**
-     * Crea un messaggio di inizio attacco
-     * @param giocatorecheattacca l'indice di chi sta attaccando
-     * @param giocatorecheDifende l'indice di chi viene attaccato
-     * @return l'oggetto Messaggio IniziaAttacco.
-     * @deprecated si usa MessaggioDichiaraAttacco
-     */
-    public static MessaggioComandi creaMsgIniziaAttacco(int giocatorecheattacca,int giocatorecheDifende){
-        return new MessaggioComandi(comandi_t.INIZIAATTACCO, giocatorecheattacca, giocatorecheDifende);
-    }
-    /**
      * Messaggio che informa la fine di un attacco.
      * @param giocatorecheAttaccava il giocatore che effettuava l'attacco.
      * @param giocatoreCheDifendeva il giocatore che si difendeva
@@ -63,15 +53,6 @@ public class MessaggioComandi implements Messaggio{
  */
     public static MessaggioComandi creaMsgRitirati(int giocatoreCheSiRitira){
         return new MessaggioComandi(comandi_t.RITIRATI, giocatoreCheSiRitira);
-    }
-    /**
-     * Crea un messaggio di passaggio alla prossima fase
-     * @param giocatoreChePassa il giocatore che passa alla fase successiva
-     * @return l'oggetto MessaggioProssimaFase
-     * @deprecated Usare MessaggioFase al posto di questo
-     */
-    public static MessaggioComandi creaMsgProssimaFase(int giocatoreChePassa){
-        return new MessaggioComandi(comandi_t.PASSAFASE, giocatoreChePassa);
     }
 
     /**
@@ -164,8 +145,9 @@ public class MessaggioComandi implements Messaggio{
         this.opt_parameter = opt_parameter;
     }
 /**
- * Indica che il pacchetto è di tipo COMMAND (da ::messaggi_t )
- * @return ::messaggio_t.COMMAND
+ * Indica che il pacchetto è di tipo COMMAND
+ * @see messaggio_t 
+ * @return il tipo di messaggio (COMMAND)
  */
     @Override
     public messaggio_t getType() {

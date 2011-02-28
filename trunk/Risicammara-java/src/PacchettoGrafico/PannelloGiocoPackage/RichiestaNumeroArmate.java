@@ -22,8 +22,6 @@ public class RichiestaNumeroArmate implements RisicammaraEventListener {
         this.bottoneFase = bottoneFase;
         this.server = server;
         this.partita = partita;
-        //this.bottoneFase.setOkActionListener(this);
-        //this.bottoneFase.setRichiestaVisible(true);
     }
 
     public void setOkActionListener(RisicammaraEventListener listener) {

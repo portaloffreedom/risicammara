@@ -49,7 +49,7 @@ public class AscoltatoreLobby extends Thread {
     }
 
     /**
-     * Fa partire il lavoro di ascolto di nuove connessioni.
+     * Metodo run per l'interfaccia dell thread.
      */
     @Override
     public void run() {
