@@ -121,7 +121,7 @@ public class AscoltatorePlanciaSpostamento implements RisicammaraEventListener {
 
         //TODO chiedere con quante armate lanciare
         int armateSpostabili = territorioSorgente.getArmate()-1;
-        numeroArmate.imposta(null, null, armateSpostabili);
+        numeroArmate.imposta(territorioSorgente.getTerritorio(), territorioDesitanzione.getTerritorio(), armateSpostabili);
         numeroArmate.attiva();
         spostamentoInCorso(true);
     }
