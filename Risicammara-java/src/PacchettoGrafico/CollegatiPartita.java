@@ -1,6 +1,7 @@
 package PacchettoGrafico;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.TextField;
 import java.awt.event.ActionEvent;
@@ -17,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import risicammaraClient.Client;
+import risicammaraServer.Server;
 
 /**
  * Classe che implementa i metodi per effettuare una connessione alla partita.
@@ -26,7 +28,8 @@ public class CollegatiPartita extends JFrame {
 
     private TextField stringaIndirizzo;
     private JButton collegati;
-    private JCheckBox locale;
+    private JButton avvia_server;
+    private JCheckBox ospita_partita;
     private Client main;
 
     private Socket server;
@@ -65,29 +68,49 @@ public class CollegatiPartita extends JFrame {
         this.stringaIndirizzo = new TextField();
         pannello.add(stringaIndirizzo, BorderLayout.NORTH);
 
-        this.locale = new JCheckBox("Locale");
-        pannello.add(locale, BorderLayout.WEST);
-        this.locale.addActionListener(new ActionLocalHost(stringaIndirizzo));
-
         this.collegati = new JButton("Collegati");
         pannello.add(collegati, BorderLayout.EAST);
         this.collegati.addActionListener(new ActionCollegati(this, this.porta));
+                
+        this.avvia_server = new JButton("Avvia Server");
+        pannello.add(avvia_server, BorderLayout.CENTER);
+        this.avvia_server.addActionListener(new ActionAvviaServer(porta,avvia_server,collegati));
+        this.avvia_server.setVisible(false);
+        
+        this.ospita_partita = new JCheckBox("Ospita Partita");
+        pannello.add(ospita_partita, BorderLayout.WEST);
+        this.ospita_partita.addActionListener(new ActionOspitaServer(stringaIndirizzo,collegati,avvia_server));
 
         this.setVisible(true);
     }
 
-    private static class ActionLocalHost implements ActionListener {
+    private static class ActionOspitaServer implements ActionListener {
 
         private TextField stringaIndirizzo;
+        private JButton bott;
+        private JButton avvia_server;
 
-        public ActionLocalHost(TextField stringaIndirizzo) {
+        public ActionOspitaServer(TextField stringaIndirizzo,JButton bott,JButton avvia_server) {
             this.stringaIndirizzo=stringaIndirizzo;
+            this.bott = bott;
+            this.avvia_server = avvia_server;
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
             JCheckBox culo = (JCheckBox) e.getSource();
+
             this.stringaIndirizzo.setEnabled(!culo.isSelected());
+            if(culo.isSelected()){
+                this.stringaIndirizzo.setBackground(Color.GRAY);
+                this.avvia_server.setVisible(true);
+                this.bott.setEnabled(false);
+            }
+            else {
+                this.stringaIndirizzo.setBackground(Color.white);
+                this.avvia_server.setVisible(false);
+                this.bott.setEnabled(true);
+            }
         }
     }
 
@@ -104,10 +127,9 @@ public class CollegatiPartita extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             setWorking(true);
-
             InetAddress ip = null;
             try {
-                if (memoria.locale.isSelected()) {
+                if (memoria.ospita_partita.isSelected()) {
                     ip = InetAddress.getLocalHost();
                 }
                 else {
@@ -132,6 +154,7 @@ public class CollegatiPartita extends JFrame {
 
             //libera la memoria della finestra di "collegati partita"
             memoria.dispose();
+            setWorking(false);
         }
 
         private void setWorking (boolean lavorante){
@@ -151,4 +174,27 @@ public class CollegatiPartita extends JFrame {
         }
     }
 
+    private static class ActionAvviaServer implements ActionListener{
+
+        private int porta;
+        private JButton bottone;
+        private JButton collegam;
+
+        public ActionAvviaServer(int porta,JButton bottone,JButton collegam) {
+            this.porta = porta;
+            this.bottone = bottone;
+            this.collegam = collegam;
+        }
+        
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            this.bottone.setEnabled(false);
+            // Avvia server locale come thread.                    
+            Thread serv = new Server(porta);
+            serv.start();
+            this.collegam.setEnabled(true);
+                    
+        }
+        
+    }
 }

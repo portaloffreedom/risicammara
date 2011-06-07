@@ -112,8 +112,9 @@ public class FinestraGioco extends JFrame implements Runnable {
                 case COMMAND:
                     MessaggioComandi msgComandi = (MessaggioComandi) msg;
                     if (Client.DEBUG && (msgComandi.getComando() != comandi_t.TURNOFPLAYER)){
-                        riavviaPartitaErrore("Errore si sincronizzazione col server");
+                        riavviaPartitaErrore("Errore di sincronizzazione col server");
                     }
+                    if(msgComandi.getComando() == comandi_t.DISCONNECT) riavviaPartitaErrore("Giocatori disconnessi");
                     if (msgComandi.getSender() == listaGiocatori.meStessoIndex()){
                         gestoreFasi.avanzaFase();
                     }
@@ -179,7 +180,10 @@ public class FinestraGioco extends JFrame implements Runnable {
                                 riavviaPartitaErrore("HA VINTO "+listaGiocatori.getNomeByIndex(msg.getSender()));
                             return;
                         }
-                            
+                        
+                        case DISCONNECT:{
+                            riavviaPartitaErrore("Giocatori disconnessi!");
+                        }
                         default:
                             System.err.println("MESSAGGIO COMANDO NON RICONOSCIUTO! "+msg);
                             break;

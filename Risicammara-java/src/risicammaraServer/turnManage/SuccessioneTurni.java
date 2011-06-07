@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import risicammaraClient.Bonus_t;
 import risicammaraClient.Colore_t;
 import risicammaraClient.Obbiettivi_t;
@@ -115,6 +117,7 @@ public class SuccessioneTurni {
         // Ciclo principale
         while(!vincitore){
             Messaggio msgReceived = null;
+            
             if(saltare){
                 saltare = false;
             }
@@ -122,6 +125,10 @@ public class SuccessioneTurni {
                 msgReceived = coda.get();
                 System.out.println("Tipo messaggio: "+msgReceived.getType().toString());
             }
+//            if(msgReceived.getType() == messaggio_t.COMMAND
+//                    && ((MessaggioComandi)msgReceived).getComando() == comandi_t.DISCONNECT){
+//                return null;
+//            }
             if(partita.getFase() != Fasi_t.FINETURNO && !validitaMessaggio(msgReceived)) continue;
             //Processa i messaggi finché non c'è un vincitore.
             //Il server legge il messaggio e lo smista a seconda del messaggio ricevuto.
@@ -132,7 +139,7 @@ public class SuccessioneTurni {
         }
         inviaMessaggioVincitore();
 
-        return null;
+        return (Giocatore_Net) listaGiocatori.get(indexvincente);
     }
     /**
      * Controlla la validità del messaggio in base al tipo (se è un messaggio di chat
@@ -153,6 +160,16 @@ public class SuccessioneTurni {
             }
             return false;
         }
+        if(msgReceived.getType() == messaggio_t.COMMAND){
+            if(((MessaggioComandi)msgReceived).getComando() == comandi_t.DISCONNECT){
+                try {
+                    Server.SpedisciMsgTutti(msgReceived, listaGiocatori,msgReceived.getSender());
+                } catch (IOException ex) {
+                    System.err.println("Errore invio disconnessione in gioco.");
+                }
+                return false;
+            }
+        }
         if(msgReceived.getSender() != partita.getGiocatoreTurnoIndice()) return false;
         return true;
     }
@@ -163,11 +180,11 @@ public class SuccessioneTurni {
      * @param msgReceived il messaggio ricevuto
      */
     private void cicloFasi(Messaggio msgReceived){
-        Fasi_t proxfase = null;
-        int prossimo = partita.getGiocatoreTurnoIndice();
+        Fasi_t prossima_fase = null;
+        int indice_prossimo_giocatore = partita.getGiocatoreTurnoIndice();
         int indice_giocatore_turno = partita.getGiocatoreTurnoIndice();
-        Giocatore_Net gio = (Giocatore_Net)partita.getGiocatoreDiTurno();
-        PlayerThread pthread = (PlayerThread)gio.getThread();
+        Giocatore_Net oggetto_giocatore = (Giocatore_Net)partita.getGiocatoreDiTurno();
+        PlayerThread thread_giocatore = (PlayerThread)oggetto_giocatore.getThread();
 
 
         switch(partita.getFase()){
@@ -183,29 +200,25 @@ public class SuccessioneTurni {
                     System.err.println("Errore invio aggiornaArmate: "
                             +ex.getMessage());
                 }
-                int armatt = gio.getArmateperturno()-1;
-                gio.setArmatedisponibili(armatt);
-//                try {
-//                        gio.sendMessage(new MessaggioArmateDisponibili(armatt, -1));
-//                    } catch (IOException ex) {
-//                        System.err.println(
-//                                "Errore nell'invio Armate disponibili Tris: "
-//                                +ex.getMessage());
-//                }
-                if(armatt == 0) pthread.setMustpass(true);
-                else pthread.incnumar();
-                if(pthread.isMustpass()){
-                    pthread.setMustpass(false);
+                int armatt = oggetto_giocatore.getArmateperturno()-1;
+                oggetto_giocatore.setArmatedisponibili(armatt);
+
+                if(armatt == 0) thread_giocatore.setMustpass(true);
+                else thread_giocatore.incnumar();
+                if(thread_giocatore.isMustpass()){
+                    thread_giocatore.setMustpass(false);
                     partita.ProssimoGiocatore();
-                    gio = (Giocatore_Net) partita.getGiocatoreDiTurno();
-                    prossimo = gio.getPlayerIndex();
-                    if(gio.getArmateperturno() == 0){
-                        proxfase = Fasi_t.FINETURNO;
+                    //Oggetto giocatore contiene un riferimento all'oggetto del giocatore che
+                    // effettivamente giocherà il prossimo turno.
+                    oggetto_giocatore = (Giocatore_Net) partita.getGiocatoreDiTurno();
+                    indice_prossimo_giocatore = oggetto_giocatore.getPlayerIndex();
+                    if(oggetto_giocatore.getArmateperturno() == 0){
+                        prossima_fase = Fasi_t.FINETURNO;
                         saltafine = true;
                         saltare = true;
                         break;
                     }
-                    spedisciMsgCambioTurno(prossimo);
+                    spedisciMsgCambioTurno(indice_prossimo_giocatore);
                 }
                 return;
                 // Ogni 3 territori una armata, per difetto. Possibilità di
@@ -220,11 +233,11 @@ public class SuccessioneTurni {
                         && !partita.playedTris())
                 {
                     int armate_bonus = getBonusFromTris(msgReceived);
-                    int armatedispo = gio.getArmateperturno();
+                    int armatedispo = oggetto_giocatore.getArmateperturno();
                     int disp = armatedispo+armate_bonus;
-                    gio.setArmatedisponibili(disp);
+                    oggetto_giocatore.setArmatedisponibili(disp);
                     try {
-                        gio.sendMessage(new MessaggioArmateDisponibili(disp, -1));
+                        oggetto_giocatore.sendMessage(new MessaggioArmateDisponibili(disp, -1));
                         Server.SpedisciMsgTutti(msgReceived, listaGiocatori, indice_giocatore_turno);
                     } catch (IOException ex) {
                         System.err.println(
@@ -234,19 +247,19 @@ public class SuccessioneTurni {
                     partita.setPlayedTris(true);
                     return;
                 }
-                int armattu = gio.getArmateperturno();
+                int armattu = oggetto_giocatore.getArmateperturno();
                 if(armattu == 0){
                     if(msgReceived.getType() ==  messaggio_t.FASE) {
                     MessaggioFase msgFase = (MessaggioFase) msgReceived;
-                    proxfase = msgFase.getFase();
-                    if(proxfase == Fasi_t.FINETURNO) saltare = true;
+                    prossima_fase = msgFase.getFase();
+                    if(prossima_fase == Fasi_t.FINETURNO) saltare = true;
                     break;
                     }
                     break;
                 }
                 MessaggioCambiaArmateTerritorio msgArmate = (MessaggioCambiaArmateTerritorio)msgReceived;
                 partita.addArmateTerritorio(msgArmate.getTerritorio(), msgArmate.getArmate());
-                gio.setArmatedisponibili(armattu-msgArmate.getArmate());
+                oggetto_giocatore.setArmatedisponibili(armattu-msgArmate.getArmate());
                 // Informo tutti del cambio armate.
                 try {
                     Server.SpedisciMsgTutti(msgReceived, listaGiocatori, -1);
@@ -258,9 +271,9 @@ public class SuccessioneTurni {
                 //Permetti al giocatore di posizionare le sue armate
                 //Il giocatore mette tutte le armate e quando ha finito si passa
                 //Alla prossima fase.
-                if(gio.getArmateperturno()==0){
+                if(oggetto_giocatore.getArmateperturno()==0){
                     partita.setPlayedTris(false);
-                    proxfase = Fasi_t.ATTACCO;
+                    prossima_fase = Fasi_t.ATTACCO;
                     break;
                 }
                 return;
@@ -270,8 +283,8 @@ public class SuccessioneTurni {
                 if(!parseMsgAttacco(msgReceived)) return;
                 if(msgReceived.getType() ==  messaggio_t.FASE) {
                     MessaggioFase msgFase = (MessaggioFase) msgReceived;
-                    proxfase = msgFase.getFase();
-                    if(proxfase == Fasi_t.FINETURNO) saltare = true;
+                    prossima_fase = msgFase.getFase();
+                    if(prossima_fase == Fasi_t.FINETURNO) saltare = true;
                     break;
                 }
 
@@ -298,7 +311,7 @@ public class SuccessioneTurni {
                                 risolviAttacco(cmd.getOptParameter());
                                 Giocatore_Net difensore = (Giocatore_Net) listaGiocatori.get(partita.getGiocattaccato());
                                 if(partita.getArmateTerrDifensore() == 0){
-                                    if(verificaEliminazione(difensore, gio)) return;
+                                    if(verificaEliminazione(difensore, oggetto_giocatore)) return;
                                     int armterrat = partita.getArmateTerrAttaccante() -1;
                                     if(armterrat > cmd.getOptParameter()) armterrat = cmd.getOptParameter();
                                     conquistato = true;
@@ -361,7 +374,7 @@ public class SuccessioneTurni {
                 //Da qui passano solo spostaarmate e passafase e Fase
                 if(!validoSpostamento(msgReceived)) return;
                 if(msgReceived.getType() != messaggio_t.SPOSTAARMATE){
-                    proxfase = Fasi_t.FINETURNO;
+                    prossima_fase = Fasi_t.FINETURNO;
                     saltare = true;
                     break;
                 }
@@ -376,7 +389,7 @@ public class SuccessioneTurni {
                     System.err.print("Errore invio spostamento armate: "
                             +ex.getMessage());
                 }
-                proxfase = Fasi_t.FINETURNO;
+                prossima_fase = Fasi_t.FINETURNO;
                 saltare = true;
                 //Il giocatore sceglie di spostare n armate da un territorio all'altro.
                 //Questa fase finisce se il giocatore passa all'altro turno o se effettua
@@ -385,16 +398,16 @@ public class SuccessioneTurni {
                 //Fine del turno
             case FINETURNO:
                 //Se il giocatore ha conquistato un territorio allora pesca una carta.
-                //Viene settato il prossimo giocatore.
+                //Viene settato il indice_prossimo_giocatore giocatore.
                 if(!saltafine){
                     if(conquistato){
                         conquistato = false;
                         Carta ctmp = partita.getCarta();
                         if(ctmp != null){
-                            gio.addCard(ctmp);
+                            oggetto_giocatore.addCard(ctmp);
                             try {
-                                gio.sendMessage(new MessaggioCarta(ctmp, gio.getPlayerIndex()));
-                                Server.SpedisciMsgTutti(new MessaggioCarta(null, gio.getPlayerIndex()), listaGiocatori, gio.getPlayerIndex());
+                                oggetto_giocatore.sendMessage(new MessaggioCarta(ctmp, oggetto_giocatore.getPlayerIndex()));
+                                Server.SpedisciMsgTutti(new MessaggioCarta(null, oggetto_giocatore.getPlayerIndex()), listaGiocatori, oggetto_giocatore.getPlayerIndex());
                             } catch (IOException ex) {
                                 System.err.println("Errore invio carta pescata: "
                                         +ex.getMessage());
@@ -406,24 +419,20 @@ public class SuccessioneTurni {
                     
                 }
                 else saltafine = false;
-                prossimo = partita.getGiocatoreTurnoIndice();
-                proxfase = Fasi_t.RINFORZO;
-                gio = (Giocatore_Net) partita.getGiocatoreDiTurno();
-                if(partita.isVincitore(gio)) {
-                    vincitore = true;
-                    return;
-                }
+                indice_prossimo_giocatore = partita.getGiocatoreTurnoIndice();
+                prossima_fase = Fasi_t.RINFORZO;
+                oggetto_giocatore = (Giocatore_Net) partita.getGiocatoreDiTurno();
             default:                
                 break;
         }
-        partita.setFase(proxfase);
-        if(proxfase == Fasi_t.RINFORZO) {
-            if(partita.isVincitore(gio)) setVincitore(prossimo);
-            spedisciMsgCambioTurno(prossimo);
-            int abon = gio.calcolaArmate();
-            gio.setArmatedisponibili(abon);
+        partita.setFase(prossima_fase);
+        if(prossima_fase == Fasi_t.RINFORZO) {
+            if(partita.isVincitore(oggetto_giocatore)) setVincitore(indice_prossimo_giocatore);
+            spedisciMsgCambioTurno(indice_prossimo_giocatore);
+            int abon = oggetto_giocatore.calcolaArmate();
+            oggetto_giocatore.setArmatedisponibili(abon);
             try {
-                gio.sendMessage(new MessaggioArmateDisponibili(abon, -1));
+                oggetto_giocatore.sendMessage(new MessaggioArmateDisponibili(abon, -1));
             } catch (IOException ex) {
                 System.err.println(
                         "Errore nell'invio Armate disponibili: "
@@ -431,8 +440,8 @@ public class SuccessioneTurni {
             }
         }
                 try {
-            Server.SpedisciMsgTutti(new MessaggioFase( proxfase,
-                    prossimo),
+            Server.SpedisciMsgTutti(new MessaggioFase( prossima_fase,
+                    indice_prossimo_giocatore),
                     listaGiocatori,
                     -1);
             //messaggi per il cambio di fase
@@ -507,7 +516,7 @@ public class SuccessioneTurni {
     /**
      * Controlla se il giocatore che ha eliminato un altro aveva l'obbiettivo
      * di distruggere le armate.
-     * @param gio Il giocatore da controllare
+     * @param oggetto_giocatore Il giocatore da controllare
      * @param eliminato Il colore delle armate eliminate
      * @return True se erano le armate da distruggere, false altrimenti.
      */
