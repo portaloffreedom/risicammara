@@ -17,7 +17,7 @@ public final class MazzoObbiettivi extends Mazzo{
     }
 
     public Carta Pesca(){
-        Carta temp = deck[--inizio_mazzo];
+        Carta temp = deck[--fine_mazzo];
         return temp;
     }
 }

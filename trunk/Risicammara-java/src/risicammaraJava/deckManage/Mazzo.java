@@ -19,7 +19,7 @@ public abstract class Mazzo {
     /**
      * Indica da dove iniziare a considerare il mazzo
      */
-    protected int inizio_mazzo;
+    protected int fine_mazzo;
 /**
  * Costruttore Predefinito del mazzo. Inizializza tutte le variabili
  * e l'array che rappresenta il contenitore delle carte.
@@ -27,7 +27,7 @@ public abstract class Mazzo {
  */
     protected Mazzo(Carta[] tipo){
         deck = tipo;
-        inizio_mazzo = deck.length;
+        fine_mazzo = deck.length;
     }
 
 /**
@@ -35,7 +35,7 @@ public abstract class Mazzo {
  * @return true se il mazzo non ha più carte, falso altrimenti.
  */
     protected boolean isEmpty(){
-        if(inizio_mazzo == 0)
+        if(fine_mazzo == 0)
             return true;
         else return false;
     }
@@ -45,9 +45,9 @@ public abstract class Mazzo {
  */
     protected void Mischia(){
           Random random = new Random();
-          for(int i=0;i<inizio_mazzo;i++){
+          for(int i=0;i<fine_mazzo;i++){
               Carta temp;
-              int r = random.nextInt(inizio_mazzo);
+              int r = random.nextInt(fine_mazzo);
               temp = deck[i];
               deck[i] = deck[r];
               deck[r] = temp;

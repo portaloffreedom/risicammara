@@ -24,7 +24,6 @@ public class Server extends Thread {
         this.porta = porta;
         this.coda = new CodaMsg();
         this.stop = false;
-
     }
 /**
  * Metodo che serve per far partire (all'occorrenza) il server come thread

@@ -1,14 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package risicammaraServer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import risicammaraServer.messaggiManage.Messaggio;
 import risicammaraServer.messaggiManage.MessaggioComandi;
 
@@ -59,6 +53,7 @@ public class PlayerThread extends Thread{
                 System.err.println("Giocatore "+playerIndex+" non raggiungibile: "+ex.getMessage());
                 stop = true;
                 coda.Send(MessaggioComandi.creaMsgDisconnect(playerIndex));
+                System.err.println("Invio messaggio disconnessione per Giocatore "+playerIndex);
             } catch (ClassNotFoundException ex) {
                 System.err.println("Messaggio non riconosciuto: "+ex);
             } catch (Exception ex){

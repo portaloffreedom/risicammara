@@ -18,7 +18,7 @@ public final class MazzoTerritori extends Mazzo {
     public MazzoTerritori(){
         super(territori_t.values());
         inizio_scarti = 0;
-        scarti = null;
+        scarti = new Carta[deck.length];
         Mischia();
     }
 
@@ -32,29 +32,27 @@ public final class MazzoTerritori extends Mazzo {
     @Override
     public Carta Pesca(){
         if(isEmpty()){
-            if(scarti == null) return null;
+            if(inizio_scarti == 0) return null;
             ScambiaMazzi();
         }
-        Carta temp = deck[--inizio_mazzo];
+        Carta temp = deck[--fine_mazzo];
         return temp;
     }
 
 
 /**
  * Gli scarti diventano il mazzo da cui pescare le carte
- * e il mazzo degli scarti viene "distrutto" (null pointer)
  */
     private void ScambiaMazzi(){
         deck = scarti;
-        scarti = null;
-        inizio_mazzo = inizio_scarti;
+        fine_mazzo = inizio_scarti;
         inizio_scarti = 0;
-        this.Mischia();
-        this.Mischia();
+        Mischia();
     }
 
     /**
      * Restituisce una carta a partire da un preciso indice.
+     * <b> WARNING! </b> usare con cautela!
      * @param index l'indice dove prelevare la carta
      * @return la carta prelevata
      */
@@ -69,9 +67,6 @@ public final class MazzoTerritori extends Mazzo {
  * @param carta Il riferimento alla carta scartata
  */
     public void AddDiscardedCard(Carta carta){
-        if(scarti == null){
-            scarti = new Carta[deck.length];
-        }
         scarti[inizio_scarti++] = carta;
     }
 

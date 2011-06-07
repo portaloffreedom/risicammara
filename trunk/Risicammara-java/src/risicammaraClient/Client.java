@@ -32,15 +32,16 @@ import risicammaraServer.messaggiManage.MessaggioSequenzaGioco;
  */
 public class Client implements Runnable {
     /**
-     * Percorso del logo del programma.
+     * Percorso del logo del programma. (icona per la barra ecc.)
      */
     public static final String RISICAMLOGO = "/Images/risicamlogo.png";
     /**
-     * Percorso dell'immagine Plancia usata nel client
+     * Percorso dell'immagine Plancia usata nel client.
      */
     public static final String RISICAMMARA_PLANCIA = "/Images/risicammara_plancia.png";
     /**
-     * Percorso dell'immagine Negativo usata dal client
+     * Percorso dell'immagine Negativo usata dal client per identificare graficamente
+     * i territori sulla mappa originale.
      */
     public static final String RISICAMMARA_NEGATIVO = "/Images/risicammara_plancia.bmp";
     /** Rappresenta la Porta di default che deve utilizzare il programma. Viene
@@ -48,7 +49,7 @@ public class Client implements Runnable {
     public static int PORT = 12345;
     /** Stringa che codifica il look and feel da utilizzare. Nel caso si voglia
      * utilizzare il look and feel di sistema, lasciare una stringa vuota ("") */
-    private static String laf = "";
+    private static String laf = "metal";
     /** boolenano che identifica se si sta utilizzando il programma in modalità
      * di DEBUG */
     public static boolean DEBUG = false;
@@ -69,7 +70,7 @@ public class Client implements Runnable {
     /**
      * Livello qualità del client
      */
-    public static int QUALITA = 1;
+    public static int QUALITA = 0;
 
 
     /**
