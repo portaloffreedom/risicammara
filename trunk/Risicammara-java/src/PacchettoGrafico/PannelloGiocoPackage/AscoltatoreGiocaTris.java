@@ -19,7 +19,7 @@ public class AscoltatoreGiocaTris implements RisicammaraEventListener {
 
     private MenuCarte menuCarte;
     private PartitaClient partita;
-    private AttivatoreGrafica attivatoreGrafica;
+    private AnimatoreGraficaPannelli attivatoreGrafica;
     private Connessione server;
     private SottoMenuCarta richiestaUsoTris;
 
@@ -33,7 +33,7 @@ public class AscoltatoreGiocaTris implements RisicammaraEventListener {
      * @param ag Attivatore Grafico
      * @param partita Partita.
      */
-    public AscoltatoreGiocaTris(MenuCarte menuCarte, AttivatoreGrafica ag, PartitaClient partita) {
+    public AscoltatoreGiocaTris(MenuCarte menuCarte, AnimatoreGraficaPannelli ag, PartitaClient partita) {
         this.menuCarte = menuCarte;
         this.attivatoreGrafica = ag;
         this.partita = partita;

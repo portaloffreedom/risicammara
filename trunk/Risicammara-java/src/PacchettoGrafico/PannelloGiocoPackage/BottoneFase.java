@@ -35,7 +35,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable {
     /**
      * Attivatore Grafico
      */
-    protected AttivatoreGrafica attivatoreGrafica;
+    protected AnimatoreGraficaPannelli attivatoreGrafica;
     private long inizioAnim;
     private double faseAnimPrec;
     private String testoDestra;
@@ -52,7 +52,7 @@ public class BottoneFase extends Elemento_2DGraphicsCliccable {
      * @param larghezza Larghezza che deve avere il pulsante (ormai inutile).
      * @param altezza Altezza che deve avere il pulsante.
      */
-    public BottoneFase(Dimension dimPannello, AttivatoreGrafica ag, Point p, int larghezza, int altezza) {
+    public BottoneFase(Dimension dimPannello, AnimatoreGraficaPannelli ag, Point p, int larghezza, int altezza) {
         super();
         FrecciaDestra freccia = new FrecciaDestra(p, altezza, larghezza, DIMENSIONI_PUNTA);
         super.posizione = freccia;

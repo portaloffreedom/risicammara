@@ -51,6 +51,8 @@ public class PannelloSalaAttesa extends JPanel {
     private JButton invioChat;
     private CronologiaChat konsole;
 
+    private JComboBox img_armate;
+    
     private AscoltatoreKickGiocatore ascoltatoreKick;
 
     /** Indice del Giocatore che sta utilizzando l'attuale Client */
@@ -78,7 +80,6 @@ public class PannelloSalaAttesa extends JPanel {
         this.giocatoriBottoni = new BottoneGiocatori[ListaPlayers.MAXPLAYERS];
         this.giocatoriLabel = new LabelGiocatori[ListaPlayers.MAXPLAYERS];
         this.giocatori = giocatoriLabel;
-
         disegnaGiocatori();
         personalizza();
     }
@@ -292,7 +293,12 @@ public class PannelloSalaAttesa extends JPanel {
                 this.colore = new JComboBox(Colore_t.values());
                 this.colore.setPreferredSize(coloreR.getSize());
                 impostazioniPanel.add(this.colore);
-
+                
+                //TODO inserire l'array contenente le immagini
+                this.img_armate = new JComboBox();
+                this.img_armate.setPreferredSize(coloreR.getSize());
+                impostazioniPanel.add(this.img_armate);
+                
                 this.conferma = new JButton("conferma");
                 this.conferma.setPreferredSize(coloreR.getSize());
                 impostazioniPanel.add(this.conferma);

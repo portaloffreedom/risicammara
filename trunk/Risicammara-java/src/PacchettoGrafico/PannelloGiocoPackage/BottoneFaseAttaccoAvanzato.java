@@ -27,7 +27,7 @@ public class BottoneFaseAttaccoAvanzato extends BottoneFaseAvanzato {
      * @param larghezza La larghezza
      * @param altezza L'altezza
      */
-    public BottoneFaseAttaccoAvanzato(Dimension dimPannello, AttivatoreGrafica ag, Point p, int larghezza, int altezza) {
+    public BottoneFaseAttaccoAvanzato(Dimension dimPannello, AnimatoreGraficaPannelli ag, Point p, int larghezza, int altezza) {
         super(dimPannello, ag, p, larghezza, altezza, "HAI VINTO!");
         this.risultatoDadi = new RisultatoDadi(ag, altezza-(MARGINE*2), new Point(), MARGINE);
         this.armateAttaccanti = new RichiestaArmateAttaccanti(MARGINE*2,MARGINE, new Rectangle(getBounds().x, getBounds().y+MARGINE, 0, getBounds().height-MARGINE*2));

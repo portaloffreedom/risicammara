@@ -26,12 +26,12 @@ import risicammaraJava.turnManage.PartitaClient;
 public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
     private static final int CERCHIO = 30;
     private static final int OFFSET_CORONA = 3;
-    //private AttivatoreGrafica attivatoreGrafica;
+    //private AnimatoreGraficaPannelli attivatoreGrafica;
     private BufferedImage planciaBMP;
     private BufferedImage planciaPNG;
     private BufferedImage planciaPNGfinal;
     private Dimension dimensioniPannello;
-    private AttivatoreGrafica ag;
+    private AnimatoreGraficaPannelli ag;
 
     private PartitaClient partita;
     PlanciaClient plancia;
@@ -44,7 +44,7 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
      * @param ag riferimento all'attivatore grafica (per ridisegnare il pannello
      * a comando).
      */
-    public PlanciaImmagine(Point posizione, PartitaClient partita, Dimension dimensioniPannello, AttivatoreGrafica ag) {
+    public PlanciaImmagine(Point posizione, PartitaClient partita, Dimension dimensioniPannello, AnimatoreGraficaPannelli ag) {
         super();
         this.dimensioniPannello = dimensioniPannello;
         this.partita = partita;
@@ -56,7 +56,7 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         planciaPNGfinal = Client.loadImage(partita, Client.RISICAMMARA_PLANCIA);
 
         Rectangle rettangolo = new Rectangle(posizione);
-        rettangolo.setSize(planciaPNG.getWidth(null), planciaPNG.getHeight(null));
+        rettangolo.setSize(planciaPNG.getWidth(), planciaPNG.getHeight());
         super.setShape(rettangolo);
 
         

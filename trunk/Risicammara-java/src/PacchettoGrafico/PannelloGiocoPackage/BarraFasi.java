@@ -46,13 +46,13 @@ public class BarraFasi extends Elemento_2DGraphicsCliccable {
     /**
      * Costruttore
      * @param dimPannello Dimensioni del pannello variabili al ridimensionamento.
-     * @param ag AttivatoreGrafica che serve ai pulsanti per fare le animazioni.
+     * @param ag AnimatoreGraficaPannelli che serve ai pulsanti per fare le animazioni.
      * @param inizio Distanza dal bordo sinistro.
      * @param fine Distanza dal bordo destro.
      * @param altezza Altezza della barra.
      * @param bordoSup Distanza da bordo superiore.
      */
-    public BarraFasi(Dimension dimPannello, AttivatoreGrafica ag, int inizio, int fine, int altezza, int bordoSup) {
+    public BarraFasi(Dimension dimPannello, AnimatoreGraficaPannelli ag, int inizio, int fine, int altezza, int bordoSup) {
         this.dimPannello = dimPannello;
         this.inizio = inizio;
         this.fine = fine;

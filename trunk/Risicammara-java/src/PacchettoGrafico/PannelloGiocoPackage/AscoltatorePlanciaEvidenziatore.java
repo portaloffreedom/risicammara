@@ -20,7 +20,7 @@ import risicammaraJava.boardManage.TerritorioNonValido;
  */
 public class AscoltatorePlanciaEvidenziatore implements RisicammaraEventListener {
     private PlanciaImmagine planciaImmagine;
-    private AttivatoreGrafica attivatoreGrafica;
+    private AnimatoreGraficaPannelli attivatoreGrafica;
     private int idTerritorioSelezionato;
     private boolean selezionato;
 
@@ -29,7 +29,7 @@ public class AscoltatorePlanciaEvidenziatore implements RisicammaraEventListener
      * @param planciaImmagine riferimento alla planciaImmagine.
      * @param ag riferimento all'attivatore grafica.
      */
-    public AscoltatorePlanciaEvidenziatore(PlanciaImmagine planciaImmagine, AttivatoreGrafica ag) {
+    public AscoltatorePlanciaEvidenziatore(PlanciaImmagine planciaImmagine, AnimatoreGraficaPannelli ag) {
         this.planciaImmagine = planciaImmagine;
         this.attivatoreGrafica = ag;
         //planciaImmagine.setActionListener(this);

@@ -47,7 +47,7 @@ public class MenuCarte extends MenuRisicammara {
      * @param distanzaLatoSinistro Quanto spazio da sinistra prima di disegnare il pannello.
      * @param partita riferimento alla partita.
      */
-    public MenuCarte(Dimension dimePanel, AttivatoreGrafica ag, int altezza, int distanzaLatoSinistro, PartitaClient partita) {
+    public MenuCarte(Dimension dimePanel, AnimatoreGraficaPannelli ag, int altezza, int distanzaLatoSinistro, PartitaClient partita) {
         super(ag);
         this.dimensioniPannello = dimePanel;
         this.distanzaLatoSinistro = distanzaLatoSinistro;

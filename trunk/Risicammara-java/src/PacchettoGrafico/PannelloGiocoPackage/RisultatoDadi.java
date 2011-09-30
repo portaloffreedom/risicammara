@@ -27,7 +27,7 @@ public class RisultatoDadi implements Elemento_2DGraphics {
     private int dadiDifesa[];
     private boolean attivo;
 
-    private AttivatoreGrafica attivatoreGrafica;
+    private AnimatoreGraficaPannelli attivatoreGrafica;
 
     /**
      * Oggetto che visualizza il risultato dei dadi. La posizione deve essere
@@ -40,7 +40,7 @@ public class RisultatoDadi implements Elemento_2DGraphics {
      * Questa spaziatura viene anche inserita all'inizio e alla fine (destra e
      * sinistra) dell'intero disegno.
      */
-    public RisultatoDadi(AttivatoreGrafica attivatoreGrafica, int altezza, Point posizione, int spaziaturaDadi) {
+    public RisultatoDadi(AnimatoreGraficaPannelli attivatoreGrafica, int altezza, Point posizione, int spaziaturaDadi) {
         this.posizione = new Rectangle(posizione.x, posizione.y, spaziaturaDadi, altezza+1);
         this.attivatoreGrafica = attivatoreGrafica;
         this.dimensioneDado = altezza;

@@ -2,6 +2,7 @@ package PacchettoGrafico.PannelloGiocoPackage;
 
 import PacchettoGrafico.GraphicsAdvanced;
 import PacchettoGrafico.OrologioTimer;
+import PacchettoGrafico.salaAttesa.CronologiaChat;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -13,7 +14,6 @@ import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 import risicammaraClient.Client;
 import risicammaraClient.Colore_t;
-import risicammaraClient.territori_t;
 import risicammaraJava.playerManage.Giocatore;
 import risicammaraJava.turnManage.PartitaClient;
 
@@ -36,9 +36,10 @@ final public class PannelloGioco extends JPanel{
     private OrologioTimer cronometro;
     private int durataFrame;
 
-    private AttivatoreGrafica attivatoreGrafica;
+    private AnimatoreGraficaPannelli attivatoreGrafica;
     private MatricePannello gestionePulsanti;
     private GraphicsAdvanced colori;
+
 
     /**
      * Costruttore del pannello di gioco.
@@ -48,9 +49,10 @@ final public class PannelloGioco extends JPanel{
     public PannelloGioco(int frameRateMassimo, PartitaClient partita) {
         super();
         this.partita = partita;
-        this.attivatoreGrafica = new AttivatoreGrafica(this);
+        this.attivatoreGrafica = new AnimatoreGraficaPannelli(this);
         this.gestionePulsanti = new MatricePannello();
 
+        
         dimensioniPannello = new Dimension();
 
         this.cronometro = new OrologioTimer();
@@ -58,20 +60,6 @@ final public class PannelloGioco extends JPanel{
 
         this.barra = new BarraSuperiore(dimensioniPannello, ALTEZZAPANNELLO, this, partita, attivatoreGrafica);
         partita.setMenuCarte(barra.getMenuCarte());
-        
-        //prova carte
-        if (Client.DEBUG) {
-            partita.aggiungiCartaMeStesso(territori_t.Cina);
-            partita.aggiungiCartaMeStesso(territori_t.Argentina);
-            partita.aggiungiCartaMeStesso(territori_t.Egitto);
-            partita.aggiungiCartaMeStesso(territori_t.Gran_Bretagna);
-            partita.aggiungiCartaMeStesso(territori_t.Scandinavia);
-            partita.aggiungiCartaMeStesso(territori_t.Ucraina);
-            partita.aggiungiCartaMeStesso(territori_t.Jolly1);
-            partita.aggiungiCartaMeStesso(territori_t.Afghanistan);
-            partita.aggiungiCartaMeStesso(territori_t.Kamchatka);
-            partita.aggiungiCartaMeStesso(territori_t.Medio_Oriente);
-        }
 
         this.addMouseListener(new MouseListenerImpl(this));
         this.planciaImmagine = new PlanciaImmagine(new Point(0, ALTEZZAPANNELLO), partita, dimensioniPannello, attivatoreGrafica);
@@ -83,7 +71,6 @@ final public class PannelloGioco extends JPanel{
         Dimension dimensioniMinime = this.getDimensioniMinime();
         this.setMinimumSize(dimensioniMinime);
         this.setSize(dimensioniMinime);
-
         //mette a posto i pulsanti (l'ordine con cui vengono inseriti importa (invertito))
         this.addCliccabile(barra.getGiocatoreButton());
         this.addCliccabile(barra.getCarteButton());
@@ -91,6 +78,14 @@ final public class PannelloGioco extends JPanel{
         this.addCliccabile(barra.getMenuCarte());
         this.addCliccabile(barra.getMenuGiocatore());
         this.addCliccabile(planciaImmagine);
+        // prova per l'inclusione di una chat sulla plancia
+        CronologiaChat cron = new CronologiaChat(20);
+        
+        
+        cron.stampaMessaggio("porco dio prova");
+        cron.stampaMessaggioComando("sono un comando");
+        cron.stampaMessaggioErrore("sono un errore", null);
+        this.add(cron,BOTTOM_ALIGNMENT);
     }
 
     
@@ -193,7 +188,8 @@ final public class PannelloGioco extends JPanel{
                                        Object fractionalmetrics,
                                        Object interpolation,
                                        Object rendering,
-                                       Object stroke_control){
+                                       Object stroke_control)
+    {
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, antialias);
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, text_antialias);
         //g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
@@ -289,9 +285,9 @@ final public class PannelloGioco extends JPanel{
 
     /**
      * Restituisce l'attivatore per la grafica di gioco.
-     * @return oggetto AttivatoreGrafica.
+     * @return oggetto AnimatoreGraficaPannelli.
      */
-    public AttivatoreGrafica getAttivatoreGrafica() {
+    public AnimatoreGraficaPannelli getAttivatoreGrafica() {
         return attivatoreGrafica;
     }
 

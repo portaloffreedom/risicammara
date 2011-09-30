@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package PacchettoGrafico.PannelloGiocoPackage;
 
 import java.awt.Rectangle;
@@ -10,13 +5,13 @@ import javax.swing.JPanel;
 
 /**
  * Classe che serve interamente per permettere di fare le animazioni. Si può
- * scegliere se fare una animazione con i metodi interni ad AttivatoreGrafica o
+ * scegliere se fare una animazione con i metodi interni ad AnimatoreGraficaPannelli o
  * semplicemente richiamare repaint sul pannello principale.<p>
  * Il metodo repaint(Rectangle rect) è da preferire in quanto renderizza una
  * parte più piccola del pannello e quindi alleggerisce il carico del sistema.
  * @author matteo
  */
-public class AttivatoreGrafica {
+public class AnimatoreGraficaPannelli {
     private JPanel pannello;
     private int contatore;
 
@@ -24,7 +19,7 @@ public class AttivatoreGrafica {
      * Costruttore
      * @param pannello JPanel su cui si vogliono fare le animazioni.
      */
-    public AttivatoreGrafica (JPanel pannello){
+    public AnimatoreGraficaPannelli (JPanel pannello){
         this.pannello = pannello;
         this.contatore = 0;
     }
@@ -59,14 +54,14 @@ public class AttivatoreGrafica {
     }
 
     /**
-     * Delega il repaint del pannello.
+     * Delega il repaint dell'intero pannello.
      */
     public void panelRepaint (){
         this.pannello.repaint();
     }
 
     /**
-     * Delega il repaint del pannello.
+     * Delega il repaint di un'area rettangolare del pannello.
      * @param r Rettangolo in cui limitare il ridisegno.
      */
     public void panelRepaint(Rectangle r) {
@@ -74,7 +69,7 @@ public class AttivatoreGrafica {
     }
 
     /**
-     * Delega il repaint del pannello.
+     * Delega il repaint di una specifica area del pannello.
      * @param tm Questo parametro non è usato.
      * @param x Ascissa del vertice in alto a destra.
      * @param y Ordinata del vertice in alto a destra.
