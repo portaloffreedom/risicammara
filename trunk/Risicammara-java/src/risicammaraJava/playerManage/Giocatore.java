@@ -28,6 +28,9 @@ public class Giocatore implements Serializable {
     /** Se il giocatore è pronto per giocare */
     private boolean ready;
 
+    /** Se il giocatore è umano o un bot */
+    private boolean human;
+
 /**
  * Inizializza con i valori di default tutti i campi del giocatore eccetto il
  * nome (inizializzato con nome ) e colore delle armate (inizializzato
@@ -49,6 +52,7 @@ public class Giocatore implements Serializable {
         this.africa = -Continente_t.AFRICA.getNumterritori();
         this.asia = -Continente_t.ASIA.getNumterritori();
         this.sudamerica = -Continente_t.SUDAMERICA.getNumterritori();
+        this.human = false;
     }
 
     /**
@@ -57,6 +61,22 @@ public class Giocatore implements Serializable {
      */
     public String getNome(){
         return nome;
+    }
+
+    /**
+     * Legge se il giocatore è umano o meno
+     * @return true se è umano, falso altrimenti
+     */
+    public boolean isHuman() {
+        return human;
+    }
+
+    /**
+     * Imposta la tipologia del giocatore
+     * @param human true per umano, false per bot.
+     */
+    public void setHuman(boolean human) {
+        this.human = human;
     }
 
     /**
