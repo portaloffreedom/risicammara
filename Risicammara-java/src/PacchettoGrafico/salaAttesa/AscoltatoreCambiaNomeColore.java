@@ -52,7 +52,7 @@ public class AscoltatoreCambiaNomeColore implements ActionListener {
             }
             salaAttesa.server.spedisci((Messaggio) new MessaggioCambiaNickColore(nuovoNome, nuovoColore, salaAttesa.indexGiocatore));
         } catch (IOException ex) {
-            pannello.stampaMessaggioErrore("Cambio colore e/o nuck non riuscito", ex);
+            pannello.stampaMessaggioErrore("Cambio colore e/o nick non riuscito", ex);
             return;
         }
         pannello.setInfoGiocatore(salaAttesa.indexGiocatore, nuovoNome, nuovoColore);

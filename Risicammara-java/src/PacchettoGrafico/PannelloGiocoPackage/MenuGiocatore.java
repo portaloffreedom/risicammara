@@ -29,7 +29,7 @@ public class MenuGiocatore extends MenuRisicammara {
      * @param partita riferimento all'oggetto partita.
      * @param attivatoreGrafica riferimento all'attivatore grafica.
      */
-    public MenuGiocatore(PartitaClient partita, AttivatoreGrafica attivatoreGrafica) {
+    public MenuGiocatore(PartitaClient partita, AnimatoreGraficaPannelli attivatoreGrafica) {
         super(attivatoreGrafica);
         this.partita = partita;
         this.obbiettivo = new RiquadroTesto(new Rectangle(5, 55, 200, 1000), //TODO togliere l'hardcode,

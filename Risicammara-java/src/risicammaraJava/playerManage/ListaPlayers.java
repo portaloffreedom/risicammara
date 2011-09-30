@@ -16,7 +16,7 @@ public class ListaPlayers implements Serializable {
     private int nullnumber;
 
 /**
- * Indicai l massimo numero possibile di giocatori.
+ * Indica il massimo numero possibile di giocatori.
  */
     public static final int MAXPLAYERS = 6;
 

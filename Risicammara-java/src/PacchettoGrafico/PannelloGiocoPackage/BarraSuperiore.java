@@ -41,7 +41,7 @@ public class BarraSuperiore implements Elemento_2DGraphics {
      * per le animazioni.
      * @see MatricePannello
      */
-    public BarraSuperiore(Dimension dimensioniPannello, int altezza,PannelloGioco pannello, PartitaClient partita, AttivatoreGrafica attivatoreGrafica){
+    public BarraSuperiore(Dimension dimensioniPannello, int altezza,PannelloGioco pannello, PartitaClient partita, AnimatoreGraficaPannelli attivatoreGrafica){
         this.dimensioniPannello = dimensioniPannello;
         this.dimensioni= new Rectangle(dimensioniPannello);
         this.dimensioni.height = altezza;

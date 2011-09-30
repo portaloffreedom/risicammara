@@ -36,6 +36,7 @@ public class FinestraGioco extends JFrame implements Runnable {
 
     private PannelloGioco pannello;
 
+
     /**
      * Costruisce la finestra di gioco di Risicammara.
      * @param server la Connessione al server
@@ -46,13 +47,14 @@ public class FinestraGioco extends JFrame implements Runnable {
         this.server = server;
         this.listaGiocatori = partita.getListaGiocatori();
         this.partita = partita;
+
         ImageIcon icona = new ImageIcon(this.getClass().getResource(Client.RISICAMLOGO));
         this.setIconImage(icona.getImage());
 
         Container contestoFinestra = this.getContentPane();
-        this.pannello = new PannelloGioco(240, partita);
+        this.pannello = new PannelloGioco(240,partita);
         contestoFinestra.add(pannello);
-
+        
         Dimension dimensioniMinime = new Dimension(950, 600);
         super.setLocationByPlatform(true);
         this.setMinimumSize(dimensioniMinime);

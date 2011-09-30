@@ -70,7 +70,7 @@ public class Client implements Runnable {
     /**
      * Livello qualità del client
      */
-    public static int QUALITA = 0;
+    public static int QUALITA = 1;
 
 
     /**
@@ -79,7 +79,7 @@ public class Client implements Runnable {
      */
     public static void main(String[] args) {
         Parser(args);
-
+        
         Client client = new Client(Client.PORT, laf);
         client.run(); //Attenzione non viene creato un Thread, viene solo
         //eseguito il metodo run
@@ -257,7 +257,6 @@ public class Client implements Runnable {
         partita = new PartitaClient(connessioneServer, listaGiocatoriClient, planciaClient, sequenzaGioco.getSequenza());
         
         FinestraGioco finestra =  new FinestraGioco(connessioneServer, partita);
-
         //fa partire direttamente il ciclo di lettura dei messaggi
         //TODO implementare la cosa all'esterno di finestra, magari in partitaClient
         Thread finestraThread = new Thread(finestra);

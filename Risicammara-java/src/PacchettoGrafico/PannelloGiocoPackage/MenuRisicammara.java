@@ -19,13 +19,13 @@ abstract public class MenuRisicammara extends Elemento_2DGraphicsCliccable imple
      * riferimento ad attivatore grafica per ridisegnare quando il menù è mostrato
      * o no.
      */
-    protected AttivatoreGrafica attivatoreGrafica;
+    protected AnimatoreGraficaPannelli attivatoreGrafica;
 
     /**
      * Costruttore semplice. Ricordarsi poi di impostargli delle dimensioni.
      * @param attivatoreGrafica riferimento all'attivatore grafica.
      */
-    public MenuRisicammara(AttivatoreGrafica attivatoreGrafica) {
+    public MenuRisicammara(AnimatoreGraficaPannelli attivatoreGrafica) {
         this(new Rectangle(), attivatoreGrafica);
     }
 
@@ -34,7 +34,7 @@ abstract public class MenuRisicammara extends Elemento_2DGraphicsCliccable imple
      * @param forma dimensioni e posizione che deve avere il menù.
      * @param attivatoreGrafica riferimento all'attivatore grafica.
      */
-    public MenuRisicammara(Rectangle forma, AttivatoreGrafica attivatoreGrafica) {
+    public MenuRisicammara(Rectangle forma, AnimatoreGraficaPannelli attivatoreGrafica) {
         super(forma);
         this.attivatoreGrafica = attivatoreGrafica;
         this.aperto = false;

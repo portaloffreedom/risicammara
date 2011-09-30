@@ -33,7 +33,7 @@ public class RisicammaraSpinner extends Dado {
     private Rectangle frecciaSu;
     private Rectangle frecciaGiu;
 
-    private AttivatoreGrafica ag;
+    private AnimatoreGraficaPannelli ag;
 
 
     /**
@@ -48,7 +48,7 @@ public class RisicammaraSpinner extends Dado {
      * sono invertiti, questo sarà il colore dei bordi e del testo).
      * @param ag Attivatore Grafico
      */
-    public RisicammaraSpinner(Rectangle dimensioni, int bombaturaDado, boolean inverti, Color coloreDado, AttivatoreGrafica ag) {
+    public RisicammaraSpinner(Rectangle dimensioni, int bombaturaDado, boolean inverti, Color coloreDado, AnimatoreGraficaPannelli ag) {
         super(dimensioni, bombaturaDado, inverti, "", coloreDado);
         setValori(0, 0, 0, 1);
         this.ag = ag;

@@ -39,7 +39,7 @@ public class BottoneFaseAvanzato extends BottoneFase {
      * @param altezza Altezza
      * @param testoSupSpostamento Testo che viene visualizzato superiore sulle righe.
      */
-    public BottoneFaseAvanzato(Dimension dimPannello, AttivatoreGrafica ag, Point p, int larghezza, int altezza, String testoSupSpostamento) {
+    public BottoneFaseAvanzato(Dimension dimPannello, AnimatoreGraficaPannelli ag, Point p, int larghezza, int altezza, String testoSupSpostamento) {
         super(dimPannello, ag, p, larghezza, altezza);
         this.spinner = new RisicammaraSpinner(new Rectangle(100, 100, 300, 300), 5, false, Color.green, ag);
         this.spinner.setValori(15, 5);

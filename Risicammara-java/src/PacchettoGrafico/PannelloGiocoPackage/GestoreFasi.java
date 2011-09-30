@@ -34,7 +34,7 @@ final public class GestoreFasi {
 
     private PartitaClient partita;
     private Connessione server;
-    private AttivatoreGrafica ag;
+    private AnimatoreGraficaPannelli ag;
 
     /**
      * Costruttore
