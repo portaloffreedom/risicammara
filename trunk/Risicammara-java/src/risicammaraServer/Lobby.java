@@ -1,8 +1,6 @@
 package risicammaraServer;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import risicammaraJava.playerManage.ListaPlayers;
 import risicammaraServer.messaggiManage.Messaggio;
 import risicammaraServer.messaggiManage.MessaggioAddPlayer;
@@ -68,11 +66,11 @@ public class Lobby {
                 // Processa i vari tipi di pacchetto possibili
                 case MODIFICANICKCOLORE:
                     MessaggioCambiaNickColore mnick = (MessaggioCambiaNickColore)msg;
-                    Giocatore_Net giotmp = (Giocatore_Net)listaGiocatori.get(msg.getSender());
+                    Giocatore_Net giotmp = (Giocatore_Net)listaGiocatori.get((int)msg.getSender());
                     giotmp.setNome(mnick.getNick());
                     giotmp.setArmyColour(mnick.getColore());
                     ctt = new MessaggioAggiornaDatiGiocatore(mnick.getNick(), mnick.getColore(), mnick.getSender());
-                    escludi = mnick.getSender();
+                    escludi = (int)mnick.getSender();
                     break;
                 case AGGIUNGIGIOCATORE:
                     MessaggioNuovoGiocatore mgio = (MessaggioNuovoGiocatore)msg;
@@ -108,7 +106,7 @@ public class Lobby {
                     break;
                 case COMMAND:
                     ctt = CommandHandling((MessaggioComandi)msg);
-                    escludi = msg.getSender();
+                    escludi = (int)msg.getSender();
                     break;
                 case ERROR:
                     ctt = ErrorHandling((MessaggioErrore)msg);
@@ -201,14 +199,14 @@ public class Lobby {
     private Messaggio CommandHandling(MessaggioComandi cmdMsg){
         switch(cmdMsg.getComando()){
             case SETPRONTO:
-                serverSetPronto(cmdMsg.getSender());
+                serverSetPronto((int)cmdMsg.getSender());
                 break;
             case KICKPLAYER:
-                serverPlayerRemove(cmdMsg.getOptParameter());
+                serverPlayerRemove((int)cmdMsg.getOptParameter());
                 break;
             case DISCONNECT:
-                serverPlayerRemove(cmdMsg.getSender());
-                listaGiocatori.remPlayer(cmdMsg.getSender());
+                serverPlayerRemove((int)cmdMsg.getSender());
+                listaGiocatori.remPlayer((int)cmdMsg.getSender());
                 break;
             case EXIT:
                 for(int i=0;i<ListaPlayers.MAXPLAYERS;i++){

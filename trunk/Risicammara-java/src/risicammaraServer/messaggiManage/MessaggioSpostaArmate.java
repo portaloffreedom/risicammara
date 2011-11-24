@@ -7,7 +7,7 @@ import risicammaraClient.territori_t;
  * @author stengun
  */
 public class MessaggioSpostaArmate implements Messaggio {
-    private int sender;
+    private long sender;
     private territori_t sorgente,arrivo;
     private int numarmate;
 
@@ -18,7 +18,7 @@ public class MessaggioSpostaArmate implements Messaggio {
      * @param arrivo il territorio dove spostare le armate
      * @param numarmate il numero di armate da spostare.
      */
-    public MessaggioSpostaArmate(int sender, territori_t sorgente, territori_t arrivo, int numarmate) {
+    public MessaggioSpostaArmate(long sender, territori_t sorgente, territori_t arrivo, int numarmate) {
         this.sender = sender;
         this.sorgente = sorgente;
         this.arrivo = arrivo;
@@ -55,7 +55,7 @@ public class MessaggioSpostaArmate implements Messaggio {
     }
 
     @Override
-    public int getSender() {
+    public long getSender() {
         return sender;
     }
 

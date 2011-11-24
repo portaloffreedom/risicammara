@@ -7,14 +7,14 @@ package risicammaraServer.messaggiManage;
  */
 public class MessaggioArmateDisponibili implements Messaggio {
     private int numarm;
-    private int sender;
+    private long sender;
 
     /**
      * Costruisce un messaggio ArmateDisponibili
      * @param numarm numero di armate disponibili
      * @param sender chi invia il messaggio
      */
-    public MessaggioArmateDisponibili(int numarm,int sender) {
+    public MessaggioArmateDisponibili(int numarm,long sender) {
         this.numarm = numarm;
         this.sender = sender;
     }
@@ -34,7 +34,7 @@ public class MessaggioArmateDisponibili implements Messaggio {
 
 
     @Override
-    public int getSender() {
+    public long getSender() {
         return sender;
     }
 

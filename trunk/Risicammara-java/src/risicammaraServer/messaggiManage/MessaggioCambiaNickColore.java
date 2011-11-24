@@ -9,7 +9,7 @@ import risicammaraClient.Colore_t;
 public class MessaggioCambiaNickColore implements Messaggio {
     private String nick;
     private Colore_t colore;
-    private int sender;
+    private long sender;
 
     /**
      * Messaggio per indicare il cambiamento del nick o del colore delle armate
@@ -18,7 +18,7 @@ public class MessaggioCambiaNickColore implements Messaggio {
      * @param colore il nuovo colore armate
      * @param sender chi invia il messaggio
      */
-    public MessaggioCambiaNickColore(String nick, Colore_t colore,int sender) {
+    public MessaggioCambiaNickColore(String nick, Colore_t colore,long sender) {
         this.nick = nick;
         this.colore = colore;
         this.sender = sender;
@@ -48,7 +48,7 @@ public class MessaggioCambiaNickColore implements Messaggio {
     }
 
     @Override
-    public int getSender() {
+    public long getSender() {
         return sender;
     }
 

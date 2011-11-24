@@ -6,6 +6,10 @@ package risicammaraServer.messaggiManage;
  */
 public enum errori_t {
     /**
+     * Server pieno.
+     */
+    SERVERFULL,
+    /**
      * Connessione Rifiutata
      */
     CONNECTIONREFUSED, // Connessione rifiutata

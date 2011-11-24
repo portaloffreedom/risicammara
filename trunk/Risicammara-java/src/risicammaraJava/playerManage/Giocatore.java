@@ -126,6 +126,10 @@ public class Giocatore implements Serializable {
     public LinkedList<Carta> getCarte() {
         return carte;
     }
+    
+    public void remCarta(Carta carta){
+        if(!carte.remove(carta)) System.err.println("Qualcuno citta");
+    }
 
     /**
      * Restituisce l'oggetto Obbiettivo del giocatore

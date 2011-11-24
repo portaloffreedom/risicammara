@@ -39,7 +39,7 @@ public class MessaggioNuovoGiocatore implements Messaggio {
     }
 
     @Override
-    public int getSender() {
+    public long getSender() {
         return -1;
     }
 

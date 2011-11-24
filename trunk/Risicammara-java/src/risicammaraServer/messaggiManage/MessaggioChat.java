@@ -7,7 +7,7 @@ import risicammaraJava.playerManage.ListaPlayers;
  * @author Sten_Gun
  */
 public class MessaggioChat implements Messaggio {
-    private int sender;
+    private long sender;
     private String messaggio;
 
     /**
@@ -15,7 +15,7 @@ public class MessaggioChat implements Messaggio {
      * @param sender chi invia il messaggio
      * @param msg il messaggio.
      */
-    public MessaggioChat(int sender, String msg){
+    public MessaggioChat(long sender, String msg){
         this.sender = sender;
         this.messaggio = msg;
     }
@@ -27,7 +27,7 @@ public class MessaggioChat implements Messaggio {
 
 
     @Override
-    public int getSender(){
+    public long getSender(){
         return sender;
     }
 
@@ -37,7 +37,7 @@ public class MessaggioChat implements Messaggio {
      * @return il messaggio di chat nella forma nick: messaggio
      */
     public String toString(ListaPlayers list){
-        return list.getNomeByIndex(sender)+": "+messaggio;
+        return list.getNomeByIndex((int)sender)+": "+messaggio;
     }
 
     @Override

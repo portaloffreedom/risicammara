@@ -9,14 +9,14 @@ import risicammaraJava.turnManage.Fasi_t;
  */
 public class MessaggioFase implements Messaggio {
     private Fasi_t fase;
-    private int sender;
+    private long sender;
 
     /**
      * Costruisce un messaggio di cambio fase
      * @param fase la nuova fase
      * @param sender di chi è il turno
      */
-    public MessaggioFase(Fasi_t fase, int sender) {
+    public MessaggioFase(Fasi_t fase, long sender) {
         this.fase = fase;
         this.sender = sender;
     }
@@ -35,7 +35,7 @@ public class MessaggioFase implements Messaggio {
     }
 
     @Override
-    public int getSender() {
+    public long getSender() {
         return sender;
     }
 

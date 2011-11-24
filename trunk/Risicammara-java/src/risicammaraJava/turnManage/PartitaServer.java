@@ -187,6 +187,10 @@ public class PartitaServer extends GestionePartita {
     public void eliminaGiocatoreAttaccato(){
         sequenzaDiGioco.removeFirstOccurrence(giocattaccato);
     }
+    
+    public void eliminaPrimaOccorrenza(int giocat){
+        sequenzaDiGioco.removeFirstOccurrence(giocat);
+    }
 
     /**
      * Controlla tutti i giocatori che avevano un obbiettivo "distruggi armate"

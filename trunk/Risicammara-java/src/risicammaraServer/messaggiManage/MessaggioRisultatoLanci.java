@@ -11,8 +11,8 @@ import risicammaraClient.Client;
 public class MessaggioRisultatoLanci implements Messaggio {
     private PriorityQueue<Integer> lancioAttacco;
     private PriorityQueue<Integer> lancioDifesa;
-    private int attaccante;
-    private int difensore;
+    private long attaccante;
+    private long difensore;
 
     /**
      * Costruisce un messaggio per il risultato dei lanci.
@@ -22,7 +22,7 @@ public class MessaggioRisultatoLanci implements Messaggio {
      * @param difensore indice del difensore
      */
     public MessaggioRisultatoLanci(PriorityQueue<Integer> lancioAttacco,
-            PriorityQueue<Integer> lancioDifesa, int attaccante,int difensore) {
+            PriorityQueue<Integer> lancioDifesa, long attaccante,long difensore) {
         this.lancioAttacco = lancioAttacco;
         this.lancioDifesa = lancioDifesa;
         this.attaccante = attaccante;
@@ -98,7 +98,7 @@ public class MessaggioRisultatoLanci implements Messaggio {
      * Restituisce l'attaccante
      * @return l'indice dell'attaccante
      */
-    public int getAttaccante() {
+    public long getAttaccante() {
         return attaccante;
     }
 
@@ -106,7 +106,7 @@ public class MessaggioRisultatoLanci implements Messaggio {
      * L'indice del difensore.
      * @return
      */
-    public int getDifensore() {
+    public long getDifensore() {
         return difensore;
     }
     
@@ -116,7 +116,7 @@ public class MessaggioRisultatoLanci implements Messaggio {
     }
 
     @Override
-    public int getSender() {
+    public long getSender() {
         return -1;
     }
 

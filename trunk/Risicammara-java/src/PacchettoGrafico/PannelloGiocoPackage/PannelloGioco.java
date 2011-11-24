@@ -2,7 +2,6 @@ package PacchettoGrafico.PannelloGiocoPackage;
 
 import PacchettoGrafico.GraphicsAdvanced;
 import PacchettoGrafico.OrologioTimer;
-import PacchettoGrafico.salaAttesa.CronologiaChat;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -38,6 +37,7 @@ final public class PannelloGioco extends JPanel{
 
     private AnimatoreGraficaPannelli attivatoreGrafica;
     private MatricePannello gestionePulsanti;
+
     private GraphicsAdvanced colori;
 
 
@@ -52,7 +52,6 @@ final public class PannelloGioco extends JPanel{
         this.attivatoreGrafica = new AnimatoreGraficaPannelli(this);
         this.gestionePulsanti = new MatricePannello();
 
-        
         dimensioniPannello = new Dimension();
 
         this.cronometro = new OrologioTimer();
@@ -71,6 +70,7 @@ final public class PannelloGioco extends JPanel{
         Dimension dimensioniMinime = this.getDimensioniMinime();
         this.setMinimumSize(dimensioniMinime);
         this.setSize(dimensioniMinime);
+        
         //mette a posto i pulsanti (l'ordine con cui vengono inseriti importa (invertito))
         this.addCliccabile(barra.getGiocatoreButton());
         this.addCliccabile(barra.getCarteButton());
@@ -78,14 +78,6 @@ final public class PannelloGioco extends JPanel{
         this.addCliccabile(barra.getMenuCarte());
         this.addCliccabile(barra.getMenuGiocatore());
         this.addCliccabile(planciaImmagine);
-        // prova per l'inclusione di una chat sulla plancia
-        CronologiaChat cron = new CronologiaChat(20);
-        
-        
-        cron.stampaMessaggio("porco dio prova");
-        cron.stampaMessaggioComando("sono un comando");
-        cron.stampaMessaggioErrore("sono un errore", null);
-        this.add(cron,BOTTOM_ALIGNMENT);
     }
 
     
@@ -230,7 +222,7 @@ final public class PannelloGioco extends JPanel{
      * @return Le dimensioni minime.
      */
     public Dimension getDimensioniMinime(){
-        Dimension dim = this.planciaImmagine.getDimension();
+        Dimension dim = new Dimension(this.dimensioniPannello.width+60, this.dimensioniPannello.height+60);
         dim.height += ALTEZZAPANNELLO;
         return dim;
     }
