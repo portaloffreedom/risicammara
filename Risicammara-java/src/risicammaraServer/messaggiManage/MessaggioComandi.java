@@ -7,8 +7,8 @@ package risicammaraServer.messaggiManage;
 public class MessaggioComandi implements Messaggio{
 
     private comandi_t comando;
-    private int sender;
-    private int opt_parameter;
+    private long sender;
+    private long opt_parameter;
 // Qua ci vanno tutti i costruttori static per ogni tipo di messaggio, in modo da
     //facilitare la vita a chi crea i messaggi.
     /**
@@ -17,7 +17,7 @@ public class MessaggioComandi implements Messaggio{
      * @param giocatore_eliminato Il giocatore che è stato eliminato
      * @return L'oggetto MessaggioComandi inizializzato con ELIMINATO
      */
-    public static MessaggioComandi creaMsgEliminato(int giocatore_che_elimina,int giocatore_eliminato){
+    public static MessaggioComandi creaMsgEliminato(long giocatore_che_elimina,long giocatore_eliminato){
         return new MessaggioComandi(comandi_t.ELIMINATO, giocatore_che_elimina, giocatore_eliminato);
     }
     /**
@@ -25,7 +25,7 @@ public class MessaggioComandi implements Messaggio{
      * @param giocatore_che_ha_vinto l'indice del giocatore che ha vinto la partita.
      * @return L'oggetto MessaggioComandi con valore VINCITORE corretto.
      */
-    public static MessaggioComandi creaMsgVincitore(int giocatore_che_ha_vinto){
+    public static MessaggioComandi creaMsgVincitore(long giocatore_che_ha_vinto){
         return new MessaggioComandi(comandi_t.VINCITORE, giocatore_che_ha_vinto);
     }
     /**
@@ -34,7 +34,7 @@ public class MessaggioComandi implements Messaggio{
      * @param giocatoreCheDifendeva il giocatore che si difendeva
      * @return l'oggetto MessaggioAttaccoTerminato.
      */
-    public static MessaggioComandi creaMsgAttaccoterminato(int giocatorecheAttaccava,int giocatoreCheDifendeva){
+    public static MessaggioComandi creaMsgAttaccoterminato(long giocatorecheAttaccava,long giocatoreCheDifendeva){
         return new MessaggioComandi(comandi_t.ATTACCOTERMINATO, giocatorecheAttaccava,giocatoreCheDifendeva);
     }
     /**
@@ -43,7 +43,7 @@ public class MessaggioComandi implements Messaggio{
      * @param numerodadi il numero di dadi.
      * @return l'oggetto MessaggioLanciaDado
      */
-    public static MessaggioComandi creaMsgLanciadado(int giocatorecheLanciaDado,int numerodadi){
+    public static MessaggioComandi creaMsgLanciadado(long giocatorecheLanciaDado,int numerodadi){
         return new MessaggioComandi(comandi_t.LANCIADADO, giocatorecheLanciaDado,numerodadi);
     }
 /**
@@ -51,7 +51,7 @@ public class MessaggioComandi implements Messaggio{
  * @param giocatoreCheSiRitira il giocatore che si ritira (chi attaccava)
  * @return l'oggetto MessaggioRitirati
  */
-    public static MessaggioComandi creaMsgRitirati(int giocatoreCheSiRitira){
+    public static MessaggioComandi creaMsgRitirati(long giocatoreCheSiRitira){
         return new MessaggioComandi(comandi_t.RITIRATI, giocatoreCheSiRitira);
     }
 
@@ -60,7 +60,7 @@ public class MessaggioComandi implements Messaggio{
      * @param giocatoreCheStaGiocando l'indice del giocatore che è di turno
      * @return  l'oggetto messaggioComandi con comando TURNOFPLAYER
      */
-    public static MessaggioComandi creaMsgTurnOfPlayer(int giocatoreCheStaGiocando){
+    public static MessaggioComandi creaMsgTurnOfPlayer(long giocatoreCheStaGiocando){
         return new MessaggioComandi(comandi_t.TURNOFPLAYER, giocatoreCheStaGiocando);
     }
 
@@ -69,7 +69,7 @@ public class MessaggioComandi implements Messaggio{
      * @param giocatoreLeader il giocatore da far diventare leader
      * @return l'oggetto messaggioComandi con comando LEADER
      */
-    public static MessaggioComandi creaMsgLeader(int giocatoreLeader){
+    public static MessaggioComandi creaMsgLeader(long giocatoreLeader){
         return new MessaggioComandi(comandi_t.LEADER, -1,giocatoreLeader);
     }
     /**
@@ -77,7 +77,7 @@ public class MessaggioComandi implements Messaggio{
      * @param giocatoreConnesso l'indice del giocatore connesso
      * @return l'oggetto MessaggioComandi con comando CONNECTED
      */
-    public static MessaggioComandi creaMSGconnected(int giocatoreConnesso){
+    public static MessaggioComandi creaMSGconnected(long giocatoreConnesso){
         return new MessaggioComandi(comandi_t.CONNECTED, giocatoreConnesso);
     }
 
@@ -86,7 +86,7 @@ public class MessaggioComandi implements Messaggio{
      * @param giocatoreDisconnesso il giocatore che è uscito dal server
      * @return l'oggetto MessaggioComandi con comando DISCONNECT
      */
-    public static MessaggioComandi creaMsgDisconnect(int giocatoreDisconnesso){
+    public static MessaggioComandi creaMsgDisconnect(long giocatoreDisconnesso){
         return new MessaggioComandi(comandi_t.DISCONNECT, giocatoreDisconnesso);
     }
     /**
@@ -95,7 +95,7 @@ public class MessaggioComandi implements Messaggio{
      * @param giocatoreEspulso Chi viene espulso
      * @return oggetto MessaggioComandi con comando KICKPLAYER
      */
-    public static MessaggioComandi creaMsgKickplayer(int giocatoreCheCalcia, int giocatoreEspulso){
+    public static MessaggioComandi creaMsgKickplayer(long giocatoreCheCalcia, long giocatoreEspulso){
         return new MessaggioComandi(comandi_t.KICKPLAYER, giocatoreCheCalcia, giocatoreEspulso);
     }
     /**
@@ -103,7 +103,7 @@ public class MessaggioComandi implements Messaggio{
      * @param chi_invia Chi fa partire il server prima che siano tutti pronti (se non sei il lobby master il server rifiuterà il messaggio)
      * @return l'oggetto MessaggioComandi con comando AVVIAPARTITA
      */
-    public static MessaggioComandi creaMsgAvviaPartita(int chi_invia){
+    public static MessaggioComandi creaMsgAvviaPartita(long chi_invia){
         return new MessaggioComandi(comandi_t.AVVIAPARTITA, chi_invia);
     }
     /**
@@ -111,7 +111,7 @@ public class MessaggioComandi implements Messaggio{
      * @param giocatoreCheToglieLobby il giocatore che lancia il comando (non funzionerà se non è il lobby master)
      * @return  l'oggetto MessaggioComandi con comando EXIT
      */
-    public static MessaggioComandi creaMsgExit(int giocatoreCheToglieLobby){
+    public static MessaggioComandi creaMsgExit(long giocatoreCheToglieLobby){
         return new MessaggioComandi(comandi_t.EXIT, giocatoreCheToglieLobby);
     }
 
@@ -120,7 +120,7 @@ public class MessaggioComandi implements Messaggio{
      * @param giocatorePronto il giocatore che è pronto.
      * @return oggetto MessaggioComandi con comando SETPRONTO
      */
-    public static MessaggioComandi creaMsgSetPronto(int giocatorePronto){
+    public static MessaggioComandi creaMsgSetPronto(long giocatorePronto){
         return new MessaggioComandi(comandi_t.SETPRONTO, giocatorePronto);
     }
     /**
@@ -128,7 +128,7 @@ public class MessaggioComandi implements Messaggio{
      * @param cmd Il comando desiderato
      * @param inviante  il nome del giocatore che lo ha inviato (-1 se è di sistema)
      */
-    private MessaggioComandi(comandi_t cmd, int inviante){
+    private MessaggioComandi(comandi_t cmd, long inviante){
         this(cmd, inviante, -2);
     }
 
@@ -138,7 +138,7 @@ public class MessaggioComandi implements Messaggio{
      * @param inviante l'indice del giocatore che invia il comando (-1 se è il sistema,-2 se null)
      * @param opt_parameter l'indice di chi riceve questa azione(non può essere -1)
      */
-    private MessaggioComandi(comandi_t cmd, int inviante, int opt_parameter){
+    private MessaggioComandi(comandi_t cmd, long inviante, long opt_parameter){
         this.comando = cmd;
         this.sender = inviante;
         if((opt_parameter < -1) && (opt_parameter < 0)) opt_parameter=-2;
@@ -166,14 +166,14 @@ public class MessaggioComandi implements Messaggio{
  * @return l'indice del giocatore che invia il comando.
  */
     @Override
-    public int getSender(){
+    public long getSender(){
         return sender;
     }
 /**
  * Fornisce chi riceve l'azione di questo comando.
  * @return l'indice del giocatore che riceve l'azione.
  */
-    public int getOptParameter(){
+    public long getOptParameter(){
         return opt_parameter;
     }
 

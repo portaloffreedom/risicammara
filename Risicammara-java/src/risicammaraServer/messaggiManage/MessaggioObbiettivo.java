@@ -8,7 +8,6 @@ import risicammaraClient.Obbiettivi_t;
  */
 public class MessaggioObbiettivo implements Messaggio{
     private Obbiettivi_t obj;
-    private int sender;
 
     /**
      * Costruisce un messaggio per assegnare un obbiettivo
@@ -16,7 +15,6 @@ public class MessaggioObbiettivo implements Messaggio{
      */
     public MessaggioObbiettivo(Obbiettivi_t obj) {
         this.obj = obj;
-        this.sender = -1;
     }
 
     /**
@@ -33,8 +31,8 @@ public class MessaggioObbiettivo implements Messaggio{
     }
 
     @Override
-    public int getSender() {
-        return sender;
+    public long getSender() {
+        return -1;
     }
 
 }

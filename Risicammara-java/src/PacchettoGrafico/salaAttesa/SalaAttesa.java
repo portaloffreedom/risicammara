@@ -104,7 +104,7 @@ public final class SalaAttesa extends JFrame implements Runnable {
 
                 case AGGIORNADATIGIOCATORE:
                     MessaggioAggiornaDatiGiocatore msgUpdateGioct = (MessaggioAggiornaDatiGiocatore) arrivo;
-                    Giocatore gioctAggiornato = listaGiocatori.get(msgUpdateGioct.getWho());
+                    Giocatore gioctAggiornato = listaGiocatori.get((int)msgUpdateGioct.getWho());
 
                     String messaggio = "Il Giocatore \""+gioctAggiornato.getNome()+"\" ha cambiato ";
                     boolean nomeCambiato = false;
@@ -129,7 +129,7 @@ public final class SalaAttesa extends JFrame implements Runnable {
                     pannello.stampaMessaggioComando(messaggio);
 
                     //if (gioctrAggiornato.equals(lobby))
-                    pannello.setInfoGiocatore(msgUpdateGioct.getWho(), msgUpdateGioct.getNick(), msgUpdateGioct.getColor());
+                    pannello.setInfoGiocatore((int)msgUpdateGioct.getWho(), msgUpdateGioct.getNick(), msgUpdateGioct.getColor());
                     break;
 
                 case AGGIUNGIGIOCATORE:
@@ -145,7 +145,7 @@ public final class SalaAttesa extends JFrame implements Runnable {
                     MessaggioComandi msgComando = (MessaggioComandi) arrivo;
                     switch (msgComando.getComando()) {
                         case DISCONNECT:
-                            int indexRimozione = msgComando.getSender();
+                            int indexRimozione = (int)msgComando.getSender();
                             String nomeGiocatore = listaGiocatori.getNomeByIndex(indexRimozione);
                             pannello.giocatoreVisible(indexRimozione, false);
                             listaGiocatori.remPlayer(indexRimozione);
@@ -157,12 +157,12 @@ public final class SalaAttesa extends JFrame implements Runnable {
                             break;
 
                         case KICKPLAYER:
-                            pannello.stampaMessaggio("Giocatore \""+listaGiocatori.getNomeByIndex(msgComando.getOptParameter())+
-                                    "\" è stato kickato da \""+listaGiocatori.getNomeByIndex(msgComando.getSender())+"\"");
+                            pannello.stampaMessaggio("Giocatore \""+listaGiocatori.getNomeByIndex((int)msgComando.getOptParameter())+
+                                    "\" è stato kickato da \""+listaGiocatori.getNomeByIndex((int)msgComando.getSender())+"\"");
                             break;
 
                         case SETPRONTO:
-                            pannello.invertiPronto(msgComando.getSender());
+                            pannello.invertiPronto((int)msgComando.getSender());
                             break;
 
                         case AVVIAPARTITA:
@@ -207,7 +207,7 @@ public final class SalaAttesa extends JFrame implements Runnable {
          */
         Connessione connessioneServer = new Connessione(server);
         MessaggioConfermaNuovoGiocatore msg = (MessaggioConfermaNuovoGiocatore) connessioneServer.ricevi();
-        this.indexGiocatore = msg.getPlyIndex();
+        this.indexGiocatore = (int)msg.getPlyIndex();
         this.listaGiocatori = msg.getPlyList();
         return connessioneServer;
     }

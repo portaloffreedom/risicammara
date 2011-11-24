@@ -7,14 +7,19 @@ package risicammaraServer.messaggiManage;
  */
 public class MessaggioErrore implements Messaggio{
     private errori_t errore;
-    private int sender;
+    private long sender;
 
+    
+    public static MessaggioErrore creaMsgServerFull(long sender)
+    {
+        return new MessaggioErrore(errori_t.SERVERFULL, sender);
+    }
     /**
      * Messaggio che informa un errore di Connessione Rifiutata
      * @param sender da chi parte questo errore
      * @return l'oggetto MessaggioErrore corrispondente a CONNECTIONREFUSED
      */
-    public static MessaggioErrore creaMsgConnectionRefused(int sender){
+    public static MessaggioErrore creaMsgConnectionRefused(long sender){
         return new MessaggioErrore(errori_t.CONNECTIONREFUSED, sender);
     }
 
@@ -23,7 +28,7 @@ public class MessaggioErrore implements Messaggio{
      * @param err tipo di errore
      * @param sender da chi parte l'errore
      */
-    private MessaggioErrore(errori_t err,int sender){
+    private MessaggioErrore(errori_t err,long sender){
         this.errore = err;
         this.sender = sender;
     }
@@ -38,6 +43,7 @@ public class MessaggioErrore implements Messaggio{
  * Ritorna il tipo di messaggio (override dall'interfaccia Messaggio)
  * @return
  */
+    @Override
     public messaggio_t getType() {
         return messaggio_t.ERROR;
     }
@@ -45,7 +51,8 @@ public class MessaggioErrore implements Messaggio{
  * Ritorna chi ha inviato il messaggio (override dall'interfaccia Messaggio)
  * @return chi invia il messaggio
  */
-    public int getSender() {
+    @Override
+    public long getSender() {
         return sender;
     }
 }

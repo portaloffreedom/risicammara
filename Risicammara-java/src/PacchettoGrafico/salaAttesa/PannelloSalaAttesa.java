@@ -289,7 +289,7 @@ public class PannelloSalaAttesa extends JPanel {
                 this.nomeGiocatore = new JTextField();
                 this.setPreferredSize(nomeGiocatoreR.getSize());
                 impostazioniPanel.add(this.nomeGiocatore);
-
+                
                 this.colore = new JComboBox(Colore_t.values());
                 this.colore.setPreferredSize(coloreR.getSize());
                 impostazioniPanel.add(this.colore);

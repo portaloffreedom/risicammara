@@ -10,14 +10,14 @@ import risicammaraClient.territori_t;
  */
 public final class MazzoTerritori extends Mazzo {
     private Carta scarti[];
-    private int inizio_scarti;
+    private int fine_scarti;
 
     /**
      * Inizializza tutto il necessario per il mazzo di carte.
      */
     public MazzoTerritori(){
         super(territori_t.values());
-        inizio_scarti = 0;
+        fine_scarti = 0;
         scarti = new Carta[deck.length];
         Mischia();
     }
@@ -32,11 +32,12 @@ public final class MazzoTerritori extends Mazzo {
     @Override
     public Carta Pesca(){
         if(isEmpty()){
-            if(inizio_scarti == 0) return null;
+            System.out.println("Carte finite");
+            if(fine_scarti == 0) return null;
+            System.out.println("Scambio i mazzi.");
             ScambiaMazzi();
         }
-        Carta temp = deck[--fine_mazzo];
-        return temp;
+        return super.Pesca();
     }
 
 
@@ -44,9 +45,10 @@ public final class MazzoTerritori extends Mazzo {
  * Gli scarti diventano il mazzo da cui pescare le carte
  */
     private void ScambiaMazzi(){
-        deck = scarti;
-        fine_mazzo = inizio_scarti;
-        inizio_scarti = 0;
+        deck = scarti.clone();
+        scarti  = new Carta[deck.length];
+        fine_mazzo = fine_scarti;
+        fine_scarti = 0;
         Mischia();
     }
 
@@ -67,7 +69,7 @@ public final class MazzoTerritori extends Mazzo {
  * @param carta Il riferimento alla carta scartata
  */
     public void AddDiscardedCard(Carta carta){
-        scarti[inizio_scarti++] = carta;
+        scarti[fine_scarti++] = carta;
     }
 
 }

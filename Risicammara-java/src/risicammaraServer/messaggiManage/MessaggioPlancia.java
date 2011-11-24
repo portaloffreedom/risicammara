@@ -31,7 +31,7 @@ public class MessaggioPlancia implements Messaggio{
     }
 
     @Override
-    public int getSender() {
+    public long getSender() {
         return -1;
     }
 

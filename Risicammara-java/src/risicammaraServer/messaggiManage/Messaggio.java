@@ -17,6 +17,6 @@ public interface Messaggio extends Serializable {
      * Restituisce l'inviante di un messaggio.
      * @return
      */
-    public int getSender();
+    public long getSender();
 
 }

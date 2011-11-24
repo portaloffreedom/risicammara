@@ -10,7 +10,7 @@ import risicammaraClient.Colore_t;
 public class MessaggioAggiornaDatiGiocatore implements Messaggio {
     private String nick;
     private Colore_t color;
-    private int who;
+    private long who;
 
     @Override
     public messaggio_t getType() {
@@ -19,7 +19,7 @@ public class MessaggioAggiornaDatiGiocatore implements Messaggio {
 
 
     @Override
-    public int getSender() {
+    public long getSender() {
         return -1;
     }
 
@@ -29,7 +29,7 @@ public class MessaggioAggiornaDatiGiocatore implements Messaggio {
      * @param color il nuovo colore
      * @param who l'indice di chi cambia
      */
-    public MessaggioAggiornaDatiGiocatore(String nick, Colore_t color, int who) {
+    public MessaggioAggiornaDatiGiocatore(String nick, Colore_t color, long who) {
         this.nick = nick;
         this.color = color;
         this.who = who;
@@ -55,7 +55,7 @@ public class MessaggioAggiornaDatiGiocatore implements Messaggio {
      * Aggiorna i dati di un dato giocatore.
      * @return l'indice del gicoatore da aggiornare
      */
-    public int getWho() {
+    public long getWho() {
         return who;
     }
 

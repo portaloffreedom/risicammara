@@ -54,9 +54,9 @@ public class PlanciaImmagine extends Elemento_2DGraphicsCliccable {
         planciaBMP = Client.loadImage(partita, Client.RISICAMMARA_NEGATIVO);
         planciaPNG = Client.loadImage(partita, Client.RISICAMMARA_PLANCIA);
         planciaPNGfinal = Client.loadImage(partita, Client.RISICAMMARA_PLANCIA);
-
+        
         Rectangle rettangolo = new Rectangle(posizione);
-        rettangolo.setSize(planciaPNG.getWidth(), planciaPNG.getHeight());
+        rettangolo.setSize(planciaPNG.getWidth()-60, planciaPNG.getHeight()-60);
         super.setShape(rettangolo);
 
         

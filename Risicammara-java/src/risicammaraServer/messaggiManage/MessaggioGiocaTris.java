@@ -7,7 +7,7 @@ import risicammaraJava.deckManage.Carta;
  * @author stengun
  */
 public class MessaggioGiocaTris implements Messaggio{
-    private int sender;
+    private long sender;
     private Carta carta1,carta2,carta3;
 
     /**
@@ -17,7 +17,7 @@ public class MessaggioGiocaTris implements Messaggio{
      * @param carta2 la seconda carta
      * @param carta3 la terza carta
      */
-    public MessaggioGiocaTris(int sender, Carta carta1, Carta carta2, Carta carta3) {
+    public MessaggioGiocaTris(long sender, Carta carta1, Carta carta2, Carta carta3) {
         this.sender = sender;
         this.carta1 = carta1;
         this.carta2 = carta2;
@@ -55,7 +55,7 @@ public class MessaggioGiocaTris implements Messaggio{
 
 
     @Override
-    public int getSender() {
+    public long getSender() {
         return sender;
     }
 

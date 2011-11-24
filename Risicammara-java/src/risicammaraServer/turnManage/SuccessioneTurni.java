@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import risicammaraClient.Bonus_t;
 import risicammaraClient.Colore_t;
 import risicammaraClient.Obbiettivi_t;
@@ -163,7 +161,12 @@ public class SuccessioneTurni {
         if(msgReceived.getType() == messaggio_t.COMMAND){
             if(((MessaggioComandi)msgReceived).getComando() == comandi_t.DISCONNECT){
                 try {
-                    Server.SpedisciMsgTutti(msgReceived, listaGiocatori,msgReceived.getSender());
+                    if(msgReceived.getSender() == partita.getGiocatoreTurnoIndice()){
+                        partita.ProssimoGiocatore();
+                        spedisciMsgCambioTurno(partita.getGiocatoreTurnoIndice());
+                    }
+                    partita.eliminaPrimaOccorrenza((int)msgReceived.getSender());
+                    Server.SpedisciMsgTutti(msgReceived, listaGiocatori,(int)msgReceived.getSender());
                 } catch (IOException ex) {
                     System.err.println("Errore invio disconnessione in gioco.");
                 }
@@ -245,6 +248,16 @@ public class SuccessioneTurni {
                                 +ex.getMessage());
                     }
                     partita.setPlayedTris(true);
+                    //scarto carte
+                    MessaggioGiocaTris mes = (MessaggioGiocaTris)msgReceived;
+                    Carta tempcard[] = new Carta[3];
+                    tempcard[0] = mes.getCarta1();
+                    tempcard[1] = mes.getCarta2();
+                    tempcard[2] = mes.getCarta3();
+                    for(Carta i : tempcard) {
+                        oggetto_giocatore.remCarta(i);
+                    }
+                    partita.discardCarta(tempcard);
                     return;
                 }
                 int armattu = oggetto_giocatore.getArmateperturno();
@@ -308,12 +321,12 @@ public class SuccessioneTurni {
                     MessaggioComandi cmd = (MessaggioComandi)msgReceived;
                         switch(cmd.getComando()){
                             case LANCIADADO:
-                                risolviAttacco(cmd.getOptParameter());
+                                risolviAttacco((int)cmd.getOptParameter());
                                 Giocatore_Net difensore = (Giocatore_Net) listaGiocatori.get(partita.getGiocattaccato());
                                 if(partita.getArmateTerrDifensore() == 0){
                                     if(verificaEliminazione(difensore, oggetto_giocatore)) return;
                                     int armterrat = partita.getArmateTerrAttaccante() -1;
-                                    if(armterrat > cmd.getOptParameter()) armterrat = cmd.getOptParameter();
+                                    if(armterrat > (int)cmd.getOptParameter()) armterrat = (int)cmd.getOptParameter();
                                     conquistato = true;
                                     spostaattacco = true;
                                     partita.attaccoVinto();
@@ -472,10 +485,10 @@ public class SuccessioneTurni {
                 try {
                     Server.SpedisciMsgTutti(new MessaggioCarta(null, -1), listaGiocatori, attaccante.getPlayerIndex());
                     attaccante.sendMessage(new MessaggioCarta(cartedif.poll(), -1));
-                } catch (IOException ex) {
+               } catch (IOException ex) {
                     System.err.println("Errore nell'invio carte del difensore: "
                             +ex.getMessage());
-                }
+               }
             }
             try {
                 Server.SpedisciMsgTutti(
@@ -719,7 +732,7 @@ public class SuccessioneTurni {
      */
     private int getBonusFromTris(Messaggio msg){
         MessaggioGiocaTris msgTris = (MessaggioGiocaTris)msg;
-        List<territori_t> tergio = listaGiocatori.get(msg.getSender()).getListaterr();
+        List<territori_t> tergio = listaGiocatori.get((int)msg.getSender()).getListaterr();
         int bonus = 0;
         territori_t tuno = (territori_t)msgTris.getCarta1();
         if(tergio.contains(tuno)) bonus += 2;

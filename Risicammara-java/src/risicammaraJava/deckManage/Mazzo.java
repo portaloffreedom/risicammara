@@ -35,7 +35,7 @@ public abstract class Mazzo {
  * @return true se il mazzo non ha più carte, falso altrimenti.
  */
     protected boolean isEmpty(){
-        if(fine_mazzo == 0)
+        if(fine_mazzo < 0)
             return true;
         else return false;
     }
@@ -56,5 +56,8 @@ public abstract class Mazzo {
     /** Preleva una carta dal mazzo
      * @return la carta pescata
      */
-    public abstract Carta Pesca();
+    public Carta Pesca(){
+        Carta temp = deck[--fine_mazzo];
+        return temp;
+    }
 }

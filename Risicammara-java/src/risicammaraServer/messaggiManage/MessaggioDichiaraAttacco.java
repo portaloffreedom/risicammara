@@ -8,7 +8,7 @@ import risicammaraClient.territori_t;
  */
 public class MessaggioDichiaraAttacco implements Messaggio {
     private territori_t territorio_attaccante,territorio_difensore;
-    private int sender;
+    private long sender;
 
     /**
      * Costruisce un messaggio per dichiarare un attacco.
@@ -16,7 +16,7 @@ public class MessaggioDichiaraAttacco implements Messaggio {
      * @param territorio_difensore il territorio attaccato
      * @param sender chi invia il messaggio
      */
-    public MessaggioDichiaraAttacco(territori_t territorio_attaccante, territori_t territorio_difensore, int sender) {
+    public MessaggioDichiaraAttacco(territori_t territorio_attaccante, territori_t territorio_difensore, long sender) {
         this.territorio_attaccante = territorio_attaccante;
         this.territorio_difensore = territorio_difensore;
         this.sender = sender;
@@ -45,7 +45,7 @@ public class MessaggioDichiaraAttacco implements Messaggio {
     }
 
     @Override
-    public int getSender() {
+    public long getSender() {
         return sender;
     }
 

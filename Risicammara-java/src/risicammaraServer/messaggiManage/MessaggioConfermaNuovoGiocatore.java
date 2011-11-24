@@ -10,14 +10,14 @@ import risicammaraJava.playerManage.ListaPlayers;
 public class MessaggioConfermaNuovoGiocatore implements Messaggio{
 
     private ListaPlayers listgioc;
-    private int indexply;
+    private long indexply;
 
     /**
      * Costruisce un messaggio di Conferma nuovo giocatore.
      * @param listgioc la lista dei giocatori già connessi
      * @param indexply l'index del giocatore appena accettato.
      */
-    public MessaggioConfermaNuovoGiocatore(ListaPlayers listgioc, int indexply) {
+    public MessaggioConfermaNuovoGiocatore(ListaPlayers listgioc, long indexply) {
         this.listgioc = listgioc;
         this.indexply = indexply;
     }
@@ -40,13 +40,13 @@ public class MessaggioConfermaNuovoGiocatore implements Messaggio{
      * Restituisce l'indice del giocatore.
      * @return l'indice del giocatore
      */
-    public int getPlyIndex(){
+    public long getPlyIndex(){
         return indexply;
     }
 
 
     @Override
-    public int getSender() {
+    public long getSender() {
         return -1;
     }
 

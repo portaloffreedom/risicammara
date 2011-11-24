@@ -38,7 +38,10 @@ public enum messaggio_t {
     CONFERMAAGGIUNGIGIOCATORE, //per il messaggio di risposta che deve mandare il server
 
     //----------------- MESSAGGI COMUNI
-
+    /**
+     * 
+     */
+    GIOCO,
     /** Messaggio di chat (contente testo e mittente)
      * @see risicammaraServer.MessageManage.Messaggio_chat
      */
@@ -94,11 +97,13 @@ public enum messaggio_t {
     GIOCATRIS,  //Messaggio che indica la giocata di un tris
     /**
      * Invia a tutti i client la sequenza di come si svolgerà il gioco.
+     * @deprecated Usare MsgInit per i dati globali di pre partita
      */
     SEQUENZAGIOCO,
     /**
      * Messaggio inviato dal server per dare la plancia di gioco a tutti i giocatori
      * che iniziano la partita.
+     * @deprecated Usare MsgInit per i dati globali di pre partita
      * @see risicammaraServer.messaggiManage.MessaggioPlancia
      */
     PLANCIA,    //Messaggio plancia per inizio partita
@@ -125,6 +130,7 @@ public enum messaggio_t {
      * Il giocatore che riceve questo messaggio ha coem obbiettivo quello
      * assegnato dal server. Solo il server può inviare questo messaggio.
      * @see risicammaraServer.messaggiManage.MessaggioObbiettivo
+     * @deprecated Usare MsgInit per i dati globali di pre partita
      */
     AGGIORNAOBJGIOCATORE, //Aggiorna l'obbiettivo.
     /**

@@ -7,7 +7,7 @@ package risicammaraServer.messaggiManage;
  */
 public class MessaggioSequenzaGioco implements Messaggio{
     private Integer[] sequenza;
-    private int sender;
+    private long sender;
 
     /**
      * Restituisce la sequenza di gioco.
@@ -22,7 +22,7 @@ public class MessaggioSequenzaGioco implements Messaggio{
      * @param sequenza la sequenza di gioco
      * @param sender chi invia la sequenza.
      */
-    public MessaggioSequenzaGioco(Integer[] sequenza, int sender) {
+    public MessaggioSequenzaGioco(Integer[] sequenza, long sender) {
         this.sequenza = sequenza;
         this.sender = sender;
     }
@@ -33,7 +33,7 @@ public class MessaggioSequenzaGioco implements Messaggio{
     }
 
     @Override
-    public int getSender() {
+    public long getSender() {
         return sender;
     }
 

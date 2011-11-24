@@ -10,7 +10,7 @@ import risicammaraClient.territori_t;
 public class MessaggioCambiaArmateTerritorio implements Messaggio{
     private int armate;
     private territori_t territorio;
-    private int sender;
+    private long sender;
 
     /**
      * Costruisce un messaggio CambiaArmateTerritorio
@@ -18,7 +18,7 @@ public class MessaggioCambiaArmateTerritorio implements Messaggio{
      * @param armate le armate da inserire
      * @param territorio il territorio da modificare
      */
-    public MessaggioCambiaArmateTerritorio(int sender,int armate, territori_t territorio) {
+    public MessaggioCambiaArmateTerritorio(long sender,int armate, territori_t territorio) {
         this.armate = armate;
         this.territorio = territorio;
         this.sender = sender;
@@ -46,7 +46,7 @@ public class MessaggioCambiaArmateTerritorio implements Messaggio{
     }
 
     @Override
-    public int getSender() {
+    public long getSender() {
         return sender;
     }
 

@@ -3,16 +3,26 @@ package PacchettoGrafico;
 import PacchettoGrafico.PannelloGiocoPackage.RichiestaNumeroArmate;
 import PacchettoGrafico.PannelloGiocoPackage.AscoltatorePlanciaAttacco;
 import PacchettoGrafico.PannelloGiocoPackage.GestoreFasi;
+import java.awt.event.ActionEvent;
+import java.util.LinkedList;
 import risicammaraJava.playerManage.ListaGiocatoriClient;
 import PacchettoGrafico.PannelloGiocoPackage.PannelloGioco;
 import PacchettoGrafico.PannelloGiocoPackage.PlanciaImmagine;
+import PacchettoGrafico.salaAttesa.CronologiaChat;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
+import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import risicammaraClient.Client;
 import risicammaraClient.Connessione;
 import risicammaraClient.territori_t;
@@ -26,7 +36,7 @@ import risicammaraServer.messaggiManage.*;
  * Finestra della interfaccia di gioco.
  * @author matteo
  */
-public class FinestraGioco extends JFrame implements Runnable {
+public class FinestraGioco extends JFrame implements Runnable, ActionListener {
     private Connessione server;
     private ListaGiocatoriClient listaGiocatori;
     private PartitaClient partita;
@@ -35,8 +45,10 @@ public class FinestraGioco extends JFrame implements Runnable {
     private RichiestaNumeroArmate richiestaNumeroArmateAttacco;
 
     private PannelloGioco pannello;
-
-
+    private JTextField jTextField1;
+    private JButton bottoneinsulta;
+    private JPanel pannello_chat;
+    private CronologiaChat chat;
     /**
      * Costruisce la finestra di gioco di Risicammara.
      * @param server la Connessione al server
@@ -52,9 +64,10 @@ public class FinestraGioco extends JFrame implements Runnable {
         this.setIconImage(icona.getImage());
 
         Container contestoFinestra = this.getContentPane();
+        
+        
         this.pannello = new PannelloGioco(240,partita);
         contestoFinestra.add(pannello);
-        
         Dimension dimensioniMinime = new Dimension(950, 600);
         super.setLocationByPlatform(true);
         this.setMinimumSize(dimensioniMinime);
@@ -65,6 +78,7 @@ public class FinestraGioco extends JFrame implements Runnable {
         this.richiestaNumeroArmateAttacco.setOkActionListener(richiestaNumeroArmateAttacco);
 
         this.addWindowListener(new WindowListenerImpl(server));
+        initlayout();
         this.setVisible(true);
     }
 
@@ -77,7 +91,14 @@ public class FinestraGioco extends JFrame implements Runnable {
          * deve giocare arriva un StartYourTurn (comando)
          */
         try {
-
+            LinkedList<Integer> sequenzaGioco = partita.getSequenzaGioco();
+            String seq = "";
+            
+//            for(Integer i : sequenzaGioco){
+//                seq = seq + listaGiocatori.get(i.intValue()).getArmyColour().toString() + " ";
+//            }
+            chat.stampaMessaggioComando("La sequenza è: "+seq);
+            
             MessaggioFase msgFase = (MessaggioFase) server.ricevi();
             if (msgFase.getFase() != Fasi_t.PREPARTITA) {
                 riavviaPartitaErrore("Errore, server non sincronizzato");
@@ -116,7 +137,10 @@ public class FinestraGioco extends JFrame implements Runnable {
                     if (Client.DEBUG && (msgComandi.getComando() != comandi_t.TURNOFPLAYER)){
                         riavviaPartitaErrore("Errore di sincronizzazione col server");
                     }
-                    if(msgComandi.getComando() == comandi_t.DISCONNECT) riavviaPartitaErrore("Giocatori disconnessi");
+                    if(msgComandi.getComando() == comandi_t.DISCONNECT){
+                        chat.stampaMessaggioComando(listaGiocatori.getNomeByIndex((int)msgComandi.getSender())+" è uscito");
+                        break;
+                    }
                     if (msgComandi.getSender() == listaGiocatori.meStessoIndex()){
                         gestoreFasi.avanzaFase();
                     }
@@ -134,6 +158,12 @@ public class FinestraGioco extends JFrame implements Runnable {
                     MessaggioArmateDisponibili msgMad = (MessaggioArmateDisponibili) msg;
                     gestoreFasi.setArmateRinforzoDisponibili(msgMad.getNumarm());
                     break;
+                case CHAT:
+                    MessaggioChat msgch = (MessaggioChat)msg;
+                    String nome = listaGiocatori.getNomeByIndex((int)msgch.getSender());
+                    chat.stampaMessaggio(nome+": "+msgch.getMessaggio());
+                    chat.repaint();
+                    break;
             }
         }
     }
@@ -149,7 +179,7 @@ public class FinestraGioco extends JFrame implements Runnable {
                     MessaggioComandi msgComandi = (MessaggioComandi) msg;
                     switch (msgComandi.getComando()) {
                         case TURNOFPLAYER: {
-                            int giocatoreDiTurno = msg.getSender();
+                            int giocatoreDiTurno = (int)msg.getSender();
                             partita.avanzaGiocatoreDiTurno(giocatoreDiTurno);
                             
                             if (giocatoreDiTurno == listaGiocatori.meStessoIndex()) {
@@ -179,12 +209,13 @@ public class FinestraGioco extends JFrame implements Runnable {
                             if (msgComandi.getSender() == partita.getMeStessoIndex())
                                 riavviaPartitaErrore("HAI VINTO!");
                             else
-                                riavviaPartitaErrore("HA VINTO "+listaGiocatori.getNomeByIndex(msg.getSender()));
+                                riavviaPartitaErrore("HA VINTO "+listaGiocatori.getNomeByIndex((int)msg.getSender()));
                             return;
                         }
                         
                         case DISCONNECT:{
-                            riavviaPartitaErrore("Giocatori disconnessi!");
+                            chat.stampaMessaggioComando(listaGiocatori.getNomeByIndex((int)msgComandi.getSender())+" è uscito");
+                            break;
                         }
                         default:
                             System.err.println("MESSAGGIO COMANDO NON RICONOSCIUTO! "+msg);
@@ -280,12 +311,51 @@ public class FinestraGioco extends JFrame implements Runnable {
                     break;
                 }
 
-
+                case CHAT:
+                    MessaggioChat msgch = (MessaggioChat)msg;
+                    String nome = listaGiocatori.getNomeByIndex((int)msgch.getSender());
+                    chat.stampaMessaggio(nome+": "+msgch.getMessaggio());
+                    chat.repaint();
+                    break;
                 default:
                     System.err.println("MESSAGGIO NON RICONOSCIUTO! "+msg);
                     break;
             }
         }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        MessaggioChat msg = null;
+        Insulti insulto;
+        try {
+            insulto = new Insulti(this.getClass().getResourceAsStream(Client.INSULTI));
+        } catch (IOException ex) {
+            System.err.println("Errore IO su chiusura stream insulto");
+            insulto = null;
+        }
+        
+        if(e.getSource() == bottoneinsulta && insulto != null)
+        {
+            msg = new MessaggioChat(listaGiocatori.meStessoIndex(), insulto.getinsulto());
+            try {
+                server.spedisci(msg);
+            } catch (IOException ex) {
+                System.err.print("Errore nell'invio del messaggio di chat");
+            }
+        }
+        else if(e.getSource() == jTextField1)
+        {
+            msg = new MessaggioChat(listaGiocatori.meStessoIndex(), jTextField1.getText());
+            try {
+                server.spedisci(msg);
+            } catch (IOException ex) {
+                System.err.print("Errore nell'invio del messaggio di chat");
+            }
+            jTextField1.setText("");
+            jTextField1.requestFocus();
+        }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="ascoltatore della finestra">
@@ -349,4 +419,54 @@ public class FinestraGioco extends JFrame implements Runnable {
         Client.RiavviaClientErrore(messaggio);
     }
 
+    
+    private void initlayout(){
+        jTextField1 = new javax.swing.JTextField();
+        this.pannello_chat = new JPanel();
+        this.chat = new CronologiaChat(20);
+        this.bottoneinsulta = new JButton("Insulta");
+        
+        this.bottoneinsulta.addActionListener(this);
+        jTextField1.addActionListener(this);
+        jTextField1.setMaximumSize(new Dimension(pannello.getMaximumSize().width, 15));
+        JScrollPane scrollchat = chat.inscatolaInScrollPane(
+                new Rectangle(pannello.getDimensioniMinime().width, 60));
+        scrollchat.setMaximumSize(new Dimension(pannello.getMaximumSize().width, 60));
+        //Layout per il pannello di chat
+        GroupLayout vert = new GroupLayout(pannello_chat);
+
+        pannello_chat.setLayout(vert);
+        pannello_chat.setMinimumSize(pannello.getDimensioniMinime());
+        
+        JPanel pinsult = new JPanel();
+        GroupLayout hor = new GroupLayout(pinsult);
+        pinsult.setLayout(hor);
+        hor.setAutoCreateContainerGaps(true);
+        hor.setAutoCreateGaps(true);
+        hor.setHorizontalGroup(hor.createSequentialGroup()
+                .addComponent(jTextField1)
+                .addComponent(bottoneinsulta));
+        hor.setVerticalGroup(hor.createSequentialGroup()
+                .addGroup(hor.createParallelGroup()
+                .addComponent(jTextField1)
+                .addComponent(bottoneinsulta)));
+        
+        vert.setAutoCreateContainerGaps(true);
+        vert.setAutoCreateGaps(true);
+        vert.setHorizontalGroup(
+            vert.createSequentialGroup()
+            .addGroup(vert.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addComponent(pannello)
+            .addComponent(scrollchat)
+            .addComponent(pinsult)));
+        
+        vert.setVerticalGroup(
+            vert.createSequentialGroup()
+            .addComponent(pannello)
+            .addComponent(scrollchat)
+            .addComponent(pinsult));
+
+        getContentPane().add(pannello_chat);
+    }
+    
 }

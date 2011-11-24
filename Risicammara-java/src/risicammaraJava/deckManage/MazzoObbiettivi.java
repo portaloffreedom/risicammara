@@ -15,10 +15,5 @@ public final class MazzoObbiettivi extends Mazzo{
         super(Obbiettivi_t.values());
         Mischia();
     }
-
-    public Carta Pesca(){
-        Carta temp = deck[--fine_mazzo];
-        return temp;
-    }
 }
 

@@ -31,6 +31,7 @@ import risicammaraServer.messaggiManage.MessaggioSequenzaGioco;
  * @author matteo
  */
 public class Client implements Runnable {
+    public static final String INSULTI = "/data/insulti.txt";
     /**
      * Percorso del logo del programma. (icona per la barra ecc.)
      */
@@ -268,11 +269,9 @@ public class Client implements Runnable {
      * @param motivazione il testo dell'errore
      */
     static public void RiavviaClientErrore(String motivazione){
-        //TODO implementare finestra di dialogo
-        //TODO implementare la richiesta di una nuova connessione ad un'altro server
         JOptionPane.showMessageDialog(null, motivazione, "Riavvio Client", JOptionPane.ERROR_MESSAGE);
         System.err.println(motivazione);
-        RiavviaClient();
+        //RiavviaClient();
     }
 
     /**
