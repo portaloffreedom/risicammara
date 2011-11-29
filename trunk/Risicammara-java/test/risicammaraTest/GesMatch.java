@@ -8,12 +8,13 @@ import risicammaraServer.messaggiManage.Messaggio;
  * @author stengun
  */
 class GesMatch extends Thread{
-    private ArrayBlockingQueue<Messaggio> codagioco,codasmp,codainvio;
+    private ArrayBlockingQueue<Messaggio> codagioco,codasmp;
+    private ArrayBlockingQueue<MessaggioInvio> codainvio;
     public GesMatch(ArrayBlockingQueue<Messaggio> codagioco) {
         this.codagioco = codagioco;
     }
 
-    public void setCodainvio(ArrayBlockingQueue<Messaggio> codainvio) {
+    public void setCodainvio(ArrayBlockingQueue<MessaggioInvio> codainvio) {
         this.codainvio = codainvio;
     }
 

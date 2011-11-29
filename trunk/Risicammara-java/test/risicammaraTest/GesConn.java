@@ -1,11 +1,13 @@
 package risicammaraTest;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import risicammaraServer.messaggiManage.Messaggio;
+import risicammaraServer.messaggiManage.MessaggioComandi;
+import risicammaraServer.messaggiManage.MessaggioErrore;
+import risicammaraServer.messaggiManage.MessaggioHelo;
 
 /**
  * Questa classe gestisce le connessioni in ingresso.
@@ -18,62 +20,58 @@ import risicammaraServer.messaggiManage.Messaggio;
  * quale invia i suoi messaggi e viene poi direttamente controllato dal server.
  * @author stengun
  */
-class GesConn extends Thread{
+class GesConn extends Thread
+{
     
     private boolean stop;
-    private ArrayBlockingQueue<Player> connessioni;
-    private ArrayBlockingQueue<Messaggio> codath;
-    private ConcurrentHashMap<Long,Player> collegati;
+    private ArrayBlockingQueue<Socket> connessioni;
+    private ArrayBlockingQueue<MsgNotify> notifiche;
+    private ConcurrentHashMap<Long,Threadplayer> collegati;
     private ConnectionListener ascoltatore;
-    private Player templayer;
     
     
-    public GesConn(ConcurrentHashMap<Long,Player> collegati){
-        this.templayer = null;
+    public GesConn(ConcurrentHashMap<Long,Threadplayer> collegati,ArrayBlockingQueue<MsgNotify> notifiche)
+    {
         this.collegati = collegati;
         this.stop = false;
-        this.connessioni = new ArrayBlockingQueue<Player>(Server_test.MAX_PLAYERS);
+        this.notifiche = notifiche;
+        this.connessioni = new ArrayBlockingQueue<Socket>(Server_test.MAX_PLAYERS);
         this.ascoltatore = new ConnectionListener(connessioni,Server_test.DEFAULT_PORT);
     }
 
-    public void setCodath(ArrayBlockingQueue<Messaggio> codath) {
-        this.codath = codath;
-    }
-
     @Override
-    public void run() {
+    public void run()
+    {
         ascoltatore.start();
         while(!stop){
+            Socket s = null;
             try {
-                templayer = connessioni.take();
+                s = connessioni.take();
             } catch (InterruptedException ex) {
-                Logger.getLogger(GesConn.class.getName()).log(Level.SEVERE, "Thread interrotto sulla ricezione", ex);
-                stop = true;
+                System.err.println("Errore prelievo socket dalla coda, Interrupted exception");
                 continue;
             }
-            Threadplayer tmpth = null;
-            try {
-                tmpth = new Threadplayer(templayer,codath);
-            } catch (IOException ex) {
-                System.err.println("Thread non inizializzabile, IO error"+this.getName());
-            } finally {
-                if(tmpth == null) continue;
-            }
-            tmpth.start();
-            if(hasGoodVersion(templayer) && !collegati.contains(templayer))
+            Threadplayer newplayer = null;
+            if(!ackPlayer(s, newplayer))
             {
-                
-                collegati.put(new Long(tmpth.getId()),templayer);
+                ascoltatore.setGiocatoriconnessi(collegati.size());
                 continue;
             }
-            tmpth.setStop(true);
+            collegati.put(newplayer.getId(), newplayer);
+            try {
+                notifiche.put(new MsgNotify(newplayer.getId(), Notify.CONNESSIONE));
+            } catch (InterruptedException ex) {
+                System.err.println("WARNING! Errore notifica su server per connessione");
+                continue;
+            }
         }
     }
     /**
      * Ferma il thread in modo sicuro.
      * @param stop true per impostare lo stop, false altrimenti.
      */
-    public void stop(boolean stop){
+    public void stop(boolean stop)
+    {
         this.stop = stop;
     }
     /**
@@ -85,12 +83,66 @@ class GesConn extends Thread{
         collegati.remove(thread_id);
         ascoltatore.setGiocatoriconnessi(collegati.size());
     }
+    
+    
     // PRIVATE METHODS
     
-    private boolean hasGoodVersion(Player giocatore){
-        if(giocatore.getVersion() >= Server_test.MIN_SUPPORTED_VERSION)
+    private boolean hasGoodVersion(Threadplayer thplayer)
+    {
+        if(thplayer.getVersion() >= Server_test.MIN_SUPPORTED_VERSION)
             return true;
         else 
             return false;
+    }
+    
+    private boolean ackPlayer(Socket s, Threadplayer newplayer)
+    {
+        try {
+            newplayer = new Threadplayer(new Player("giocatore "+connessioni.size()), s);
+        } catch (IOException ex) {
+            System.err.println("Errore nella creazione del thread giocatore.");
+            return false;
+        }
+        Messaggio tmpmsg = null;
+        try {
+            tmpmsg = newplayer.readMsg();
+        } catch (IOException ex) {
+            System.err.println("Errore ricezione HELO, aborting.");
+            return false;
+        }
+        switch(tmpmsg.getType())
+        {
+            case HELO:
+                Object[] dati = ((MessaggioHelo)tmpmsg).getData();
+                if(!hasGoodVersion(newplayer))
+                {
+                    try {                    
+                        newplayer.invia(MessaggioErrore.creaMsgConnectionRefused(0));
+                        newplayer.close();
+                    } catch (IOException ex) {
+                        System.err.println("Errore chiusura giocatore.");
+                    }
+                    return false;
+                }
+                Player tmplayer = newplayer.getPlayer();
+                tmplayer.setNome((String)dati[0]);
+                newplayer.setClientVersion((Double)dati[1]);
+                try {
+                    newplayer.invia(MessaggioComandi.creaMSGconnected(newplayer.getId()));
+                } catch (IOException ex) {
+                    System.err.println("Errore invio connessione");
+                    return false;
+                }
+                return true;
+            default:
+                System.out.println("Messaggio non riconosciuto per connessione, dropping");
+                try {
+                    newplayer.invia(MessaggioErrore.creaMsgConnectionRefused(0));
+                    newplayer.close();
+                } catch (IOException ex) {
+                    System.err.println("Errore chiusura giocatore.");
+                }
+                return false;
+        }
     }
 }
