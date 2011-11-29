@@ -5,15 +5,9 @@
 package risicammaraTest;
 
 import java.io.IOException;
-import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import risicammaraServer.messaggiManage.MessaggioErrore;
-import risicammaraServer.messaggiManage.errori_t;
 
 /**
  * Classe che implementa l'ascoltatore delle connessioni in entrata al server.
@@ -22,12 +16,13 @@ import risicammaraServer.messaggiManage.errori_t;
  * @author stengun
  */
 class ConnectionListener extends Thread{
-    private ArrayBlockingQueue<Player> codaconnessi;
+    private ArrayBlockingQueue<Socket> codaconnessi;
     private boolean stop;
     private int porta,giocatoriconnessi;
     private ServerSocket tcpsock;
     
-    public ConnectionListener(ArrayBlockingQueue<Player> coda,int porta) {
+    public ConnectionListener(ArrayBlockingQueue<Socket> coda,int porta)
+    {
         this.codaconnessi = coda;
         this.stop = false;
         this.porta = porta;
@@ -49,33 +44,28 @@ class ConnectionListener extends Thread{
         while(!stop)
         {
             Socket s = null;
-            Player gioc = null;
-            //Attesa connessione
             try {
                 s = tcpsock.accept();
-                gioc = new Player(s, new DatagramSocket(s.getRemoteSocketAddress()), porta);
-            } catch (SocketException ex) {
-                System.err.println("Errore apertura Datagram Socket Giocatore"+ex.getMessage());
             } catch (IOException ex) {
-                System.err.println("Errore Socket tcp in ascolto: "+ex.getMessage());
+                System.err.println("Errore IO nell'accettare una connessione.");
+                continue;
             }
-            //Accettazione giocatore            
-            if(giocatoriconnessi < Server_test.MAX_PLAYERS)
+            if(giocatoriconnessi > Server_test.MAX_PLAYERS)
             {
-                giocatoriconnessi++;
-                //Inserimento in codaconnessi
                 try {
-                    codaconnessi.put(gioc);
-                } catch (InterruptedException ex) {
-                    System.err.println("Errore inserimento giocatore in lista");
-                    gioc.invia(MessaggioErrore.creaMsgConnectionRefused(-1));
-                    gioc.close();
-                    giocatoriconnessi--;
+                    s.close();
+                } catch (IOException ex) {
+                    System.err.println("Errore chiusura socket");
                 }
                 continue;
             }
-            gioc.invia(MessaggioErrore.creaMsgServerFull(-1));
-            gioc.close();
+            try {
+                codaconnessi.put(s);
+            } catch (InterruptedException ex) {
+                System.err.println("Errore inserimento nuovo giocatore");
+                continue;
+            }
+            this.giocatoriconnessi++;
         }
     }
     /**
@@ -84,9 +74,12 @@ class ConnectionListener extends Thread{
      * attualmente registrati.(quando avviene una disconnessione forzata);
      * @param giocatoriconnessi 
      */
-    public void setGiocatoriconnessi(int giocatoriconnessi) {
+    public void setGiocatoriconnessi(int giocatoriconnessi)
+    {
         this.giocatoriconnessi = giocatoriconnessi;
     }
+
+
     
     
     

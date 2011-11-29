@@ -13,10 +13,12 @@ public class MsgNotify implements Messaggio {
     
     private long sender;
     private Notify notifica;
+    private Object dato;
 
     public MsgNotify(long sender,Notify notifica) {
         this.sender = sender;
         this.notifica = notifica;
+        this.dato = null;
     }
     
     @Override
@@ -32,5 +34,15 @@ public class MsgNotify implements Messaggio {
     public Notify getNotifica() {
         return notifica;
     }
+
+    public Object getDato() {
+        return dato;
+    }
+
+    public void setDato(Object dato) {
+        this.dato = dato;
+    }
+    
+    
     
 }

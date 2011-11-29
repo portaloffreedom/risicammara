@@ -24,21 +24,22 @@ public class Server_test extends Thread
     private Msgout msgout;
     private GesMatch gestorematch;
     /* strutture dati*/
-    private ConcurrentHashMap<Long,Player> connessi;
+    private ConcurrentHashMap<Long,Threadplayer> connessi;
     private ArrayBlockingQueue<MsgNotify> notifiche;
-    private ArrayBlockingQueue<Messaggio> codasmp,codainvio,codagioco,codaincoming;
+    private ArrayBlockingQueue<Messaggio> codasmp,codagioco,codaincoming;
+    private ArrayBlockingQueue<MessaggioInvio> codainvio;
 
     /**
      * Inizializza tutti i thread e le strutture dati
      */
     public Server_test(){
         this.codaincoming = new ArrayBlockingQueue<Messaggio>(50,true);
-        this.codainvio = new ArrayBlockingQueue<Messaggio>(50, true);
+        this.codainvio = new ArrayBlockingQueue<MessaggioInvio>(50, true);
         this.codagioco = new ArrayBlockingQueue<Messaggio>(50, true);
         this.codasmp = new ArrayBlockingQueue<Messaggio>(50, true);
         this.notifiche = new ArrayBlockingQueue<MsgNotify>(50, true);
-        this.connessi = new ConcurrentHashMap<Long,Player>();
-        this.gestoreconn = new GesConn(connessi);
+        this.connessi = new ConcurrentHashMap<Long,Threadplayer>();
+        this.gestoreconn = new GesConn(connessi,notifiche);
 // Inizializza server message processor e imposta le sue strutture dati.
         this.smp = new ServMsgProc(connessi,codasmp);
         smp.setCodainvio(codainvio);
@@ -77,6 +78,7 @@ public class Server_test extends Thread
                 case BANNA:
                     break;
                 case CONNESSIONE:
+                    msgin.avviaThreadGiocatore(tmp.getSender());
                     smp.newPlayer(tmp.getSender());
                     break;
                 case ESPELLI:

@@ -137,6 +137,12 @@ public enum messaggio_t {
      * Aggiorna la fase del gioco.
      * @see risicammaraServer.messaggiManage.MessaggioFase
      */
-    FASE;
+    FASE,
+    
+    /**
+     * Messaggio di avvenuta connessione e invio di dati preliminari.
+     * Se questo messaggio non viene ricevuto per primo il server stacca la connessione.
+     */
+    HELO;
 
 }

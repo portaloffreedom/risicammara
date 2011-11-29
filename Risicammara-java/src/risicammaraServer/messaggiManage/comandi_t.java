@@ -87,5 +87,9 @@ public enum comandi_t {
      * Giocatore disconnesso dal server.
      * getSender = L'indice del giocatore disconnesso.
      */
-    DISCONNECT;     // Il giocatore si è disconnesso dal server
+    DISCONNECT, 
+    /**
+     * La versione del client del giocatore.
+     */
+    VERSION;
 }

@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import risicammaraServer.messaggiManage.Messaggio;
+import risicammaraServer.messaggiManage.MessaggioChat;
 import risicammaraServer.messaggiManage.MessaggioComandi;
 
 /**
@@ -13,12 +14,13 @@ import risicammaraServer.messaggiManage.MessaggioComandi;
  * @author stengun
  */
 class ServMsgProc extends Thread{
-    private ArrayBlockingQueue<Messaggio> codainvio,codasmp;
+    private ArrayBlockingQueue<Messaggio> codasmp;
+    private ArrayBlockingQueue<MessaggioInvio> codainvio;
     private ArrayBlockingQueue<MsgNotify> notifiche;
-    private ConcurrentHashMap<Long,Player> connessi;
+    private ConcurrentHashMap<Long,Threadplayer> connessi;
     private boolean stop;
     
-    public ServMsgProc(ConcurrentHashMap<Long,Player> connessi, ArrayBlockingQueue<Messaggio> lettura) {
+    public ServMsgProc(ConcurrentHashMap<Long,Threadplayer> connessi, ArrayBlockingQueue<Messaggio> lettura) {
         this.connessi = connessi;
         this.codasmp = lettura;
         this.stop = false;
@@ -26,7 +28,8 @@ class ServMsgProc extends Thread{
     }
 
     @Override
-    public void run() {
+    public void run() 
+    {
         MessaggioComandi tmp = null;
         while(!stop){
             try {
@@ -43,39 +46,51 @@ class ServMsgProc extends Thread{
     
 //Interfaccia per essere gestito da fuori.    
 
-    public void newPlayer(long who) {
+    public void newPlayer(long who) 
+    {
+        try {
+            this.sendMsgToAll(new MessaggioChat(0, connessi.get(who).getPlayerName()+" è entrato in gioco"));
+        } catch (InterruptedException ex) {
+            System.err.println("Errore SMP gestione connessione.");
+        }
+    }
+
+    public void kickedPlayer(long who) 
+    {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    public void kickedPlayer(long who) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    public void remPlayer(long who) {
+    public void remPlayer(long who) 
+    {
         connessi.remove(who);
     }
     
-    public void setCodainvio(ArrayBlockingQueue<Messaggio> codainvio) {
+    public void setCodainvio(ArrayBlockingQueue<MessaggioInvio> codainvio) 
+    {
         this.codainvio = codainvio;
     }
 
-    public void setCodaNotifiche(ArrayBlockingQueue<MsgNotify> notifiche) {
+    public void setCodaNotifiche(ArrayBlockingQueue<MsgNotify> notifiche) 
+    {
         this.notifiche = notifiche;
     }
 
     //Metodi privati
     
-    private void sendMsg(Messaggio msg,Integer plto){
-        
-    }
-    
-    private void sendMsgToAll(Messaggio msg)
+    private void sendMsg(Messaggio msg,Long plto) throws InterruptedException
     {
-        this.sendMsg(msg, null);
+        codainvio.put(new MessaggioInvio(msg, plto));
     }
     
-    private void parseCommand(MessaggioComandi comando) {
-        switch(comando.getComando()){
+    private void sendMsgToAll(Messaggio msg) throws InterruptedException
+    {
+        this.sendMsg(msg, new Long(0));
+    }
+    
+    private void parseCommand(MessaggioComandi comando) 
+    {
+        switch(comando.getComando())
+        {
             case AVVIAPARTITA:
                 try {
                     //chi invia i messaggi "avvio partita in corso" è il server"
