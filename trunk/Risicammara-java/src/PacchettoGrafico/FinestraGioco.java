@@ -94,9 +94,10 @@ public class FinestraGioco extends JFrame implements Runnable, ActionListener {
             LinkedList<Integer> sequenzaGioco = partita.getSequenzaGioco();
             String seq = "";
             
-//            for(Integer i : sequenzaGioco){
-//                seq = seq + listaGiocatori.get(i.intValue()).getArmyColour().toString() + " ";
-//            }
+            for(Integer i : sequenzaGioco){
+                if(i==null) continue;
+                seq = seq + listaGiocatori.get(i.intValue()).getArmyColour().toString() + " ";
+            }
             chat.stampaMessaggioComando("La sequenza è: "+seq);
             
             MessaggioFase msgFase = (MessaggioFase) server.ricevi();

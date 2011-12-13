@@ -27,7 +27,7 @@ public class CronologiaChat extends JLabel {
     public JScrollPane inscatolaInScrollPane(Rectangle dimensioniScrollPane){
         JScrollPane konsoleScorrimento = new JScrollPane(this);
         konsoleScorrimento.setPreferredSize(new Dimension(dimensioniScrollPane.width, dimensioniScrollPane.height));
-        konsoleScorrimento.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        konsoleScorrimento.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
         return konsoleScorrimento;
     }
