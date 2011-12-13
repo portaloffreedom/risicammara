@@ -143,6 +143,6 @@ public enum messaggio_t {
      * Messaggio di avvenuta connessione e invio di dati preliminari.
      * Se questo messaggio non viene ricevuto per primo il server stacca la connessione.
      */
-    HELO;
+    HELO, LISTA, PLAYER;
 
 }
