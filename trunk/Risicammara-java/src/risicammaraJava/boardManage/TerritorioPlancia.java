@@ -8,6 +8,7 @@ import risicammaraClient.territori_t;
  * Classe che rappresenta un territorio della plancia di gioco e tutte
  * le operazioni che è possibile fare su di esso.
  * @author stengun
+ * @Deprecated
  */
 public class TerritorioPlancia implements Serializable{
 

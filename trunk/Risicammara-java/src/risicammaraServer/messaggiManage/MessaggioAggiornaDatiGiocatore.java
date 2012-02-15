@@ -6,6 +6,7 @@ import risicammaraClient.Colore_t;
 /**
  * Messaggio che aggiorna i dati giocatore.
  * @author Sten_Gun
+ * @deprecated 
  */
 public class MessaggioAggiornaDatiGiocatore implements Messaggio {
     private String nick;

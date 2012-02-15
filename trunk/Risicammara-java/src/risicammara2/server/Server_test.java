@@ -92,12 +92,26 @@ public class Server_test extends Thread
                 case CONNESSIONE:
                     msgin.avviaThreadGiocatore(tmp.getSender());
                     smp.newPlayer(tmp.getSender());
+                    if(connessi.size() == 1){
+                        connessi.get(tmp.getSender()).getThread().setLeader(true);
+                        smp.setLeader(tmp.getSender());
+                    }
                     break;
-                case ESPELLI:
-                    smp.kickedPlayer(tmp.getSender());
-                    break;
+//                case ESPELLI:
+//                    smp.kickedPlayer(tmp.getSender());
+//                    break;
                 case DISCONNESSIONE:
+                    boolean led = false;
+                    if(connessi.get(tmp.getSender()).getThread().isLeader()){
+                        led = true;
+                    }
                     smp.remPlayer(tmp.getSender());
+                    gestoreconn.disconnessione(tmp.getSender());
+//                    if(led){
+//                        long id = connessi.values().iterator().next().getId();
+//                        connessi.get(id).getThread().setLeader(true);
+//                        smp.setLeader(id);
+//                    }
                     break;
                 case AVVIA:
                     this.gestorematch.start();

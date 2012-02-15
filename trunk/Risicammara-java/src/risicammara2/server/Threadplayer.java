@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.concurrent.ArrayBlockingQueue;
 import risicammaraServer.messaggiManage.Messaggio;
 import risicammaraServer.messaggiManage.MessaggioChat;
+import risicammaraServer.messaggiManage.MessaggioComandi;
 
 /**
  * Classe che implementa il Thread associato a un preciso giocatore.
@@ -71,28 +72,21 @@ public class Threadplayer extends Thread
                 System.err.println("Errore nella lettura da socket: "+ex
                         +"\n su thread "+this.getName());
                 this.stop = true;
-                continue;
+                msg = MessaggioComandi.creaMsgDisconnect(getId());
+            } finally {
+                if(msg == null){
+                    continue;
+                }
+                try {
+                    codath.put(msg);
+                } catch (InterruptedException ex) {
+                    System.err.println("Thread "+this.getName()+" Interrotto.");
+                    continue;
+                }
             }
-            if(msg == null){
-                continue;
-            }
-            try {
-                codath.put(msg);
-            } catch (InterruptedException ex) {
-                System.err.println("Thread "+this.getName()+" Interrotto.");
-                continue;
-            }
+            
         }
     }
- 
-    /**
-     * Restituisce il giocatore associato al thread.
-     * @return 
-     */
-    /*public Player getPlayer()
-    {
-        return giocatore;
-    }*/
     
     /**
      * Ferma in modo sicuro il Thread.
@@ -141,10 +135,20 @@ public class Threadplayer extends Thread
     public final double getVersion() {
         return this.clientVersion;
     }
+
+    public boolean isLeader() {
+        return leader;
+    }
+
+    public void setLeader(boolean leader) {
+        this.leader = leader;
+    }
+
+    public boolean isReady() {
+        return this.pronto;
+    }
     
-//    public final String getPlayerName()
-//    {
-//        return giocatore.getNome();
-//    }
-    
+    public void setReady(boolean ready){
+        this.pronto = ready;
+    }
 }

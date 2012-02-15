@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import risicammara2.global.Player;
 import PacchettoGrafico.salaAttesa.CronologiaChat;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
 import java.awt.Rectangle;
@@ -47,14 +48,37 @@ public class PreGioco extends JFrame implements ActionListener,Runnable,WindowLi
 
     private void parseMsg(Messaggio msg) {
         switch(msg.getType()){
+            case MODIFICANICKCOLORE:
+                MessaggioCambiaNickColore msg2 = (MessaggioCambiaNickColore)msg;
+                for(int i = 0; i<6;i++){
+                    JButton_player btp = (JButton_player)btn_avat_arr[i][0];
+                    if(btp.getPlayer_id() != msg2.getSender()) continue;
+                    Player pl = lista_players.get(msg2.getSender());
+                    btp.setText(msg2.getNick());
+                    pl.setNome(msg2.getNick());
+                    if(msg2.getColore() == pl.getColoreArmate()) break;
+                    if(pl.getId() != my_id){
+                        campo_colore.addItem(pl.getColoreArmate());
+                        campo_colore.removeItem(msg2.getColore());
+                    }
+                    pl.setColoreArmate(msg2.getColore());
+                    btp.setForeground(msg2.getColore().getColor());
+                    break;
+                }
+                break;
+            case COMMAND:
+                parseComando((MessaggioComandi)msg);
+                break;
             case PLAYER:
                 MessaggioPlayer tmp = ((MessaggioPlayer)msg);
                 if(tmp.getId() == my_id) return;
                 for(int i = 0; i<6; i++){
-                    JButton bottone = (JButton)btn_avat_arr[i][0];
+                    JButton_player bottone = (JButton_player)btn_avat_arr[i][0];
                     if(!bottone.isShowing()){
-                        bottone.setText(tmp.getPlayer().getNome());
-                        lista_players.put(tmp.getId(), tmp.getPlayer());
+                        Player g = tmp.getPlayer();
+                        bottone.setText(g.getNome());
+                        bottone.setPlayer_id(tmp.getId());
+                        lista_players.put(tmp.getId(), g);
                         bottone.setVisible(true);
                         ((JToggleButton)btn_avat_arr[i][2]).setVisible(true);
                         return;
@@ -62,7 +86,7 @@ public class PreGioco extends JFrame implements ActionListener,Runnable,WindowLi
                 }
                 break;
             case CHAT:
-                if(msg.getSender() == 0) cronologia_chat.stampaMessaggioComando(
+                if(msg.getSender() <= 0) cronologia_chat.stampaMessaggioComando(
                         ((MessaggioChat)msg).getMessaggio());
                 else cronologia_chat.stampaMessaggio(
                         this.lista_players.get(msg.getSender()).getNome() + ": " + 
@@ -73,10 +97,76 @@ public class PreGioco extends JFrame implements ActionListener,Runnable,WindowLi
         }
     }
 
+    private void parseComando(MessaggioComandi messaggioComandi) {
+        System.out.println("Messaggio: "+messaggioComandi.toString());
+        switch(messaggioComandi.getComando()){
+            case LEADER:
+                diventa_leader();
+                cronologia_chat.stampaMessaggioComando("Sei il leader della sala");
+                break;            
+            case KICKPLAYER:
+                cronologia_chat.stampaMessaggioComando(lista_players.get(messaggioComandi.getOptParameter()).getNome() + 
+                        " è stato espulso");
+                if(messaggioComandi.getOptParameter() != my_id) break;
+            case EXIT:
+                setStop(true);
+                break;
+            case DISCONNECT:
+                if(messaggioComandi.getOptParameter() == my_id){
+                    setStop(true);
+                    break;
+                }
+                for(int i = 0;i<6;i++){
+                    JButton_player bp = (JButton_player)btn_avat_arr[i][0];
+                    if(bp.getPlayer_id() == messaggioComandi.getSender()){
+                        bp.setVisible(false);
+                        ((JToggleButton)btn_avat_arr[i][2]).setVisible(false);
+                        i=6;
+                    }
+                }
+                cronologia_chat.stampaMessaggioComando(
+                        lista_players.get(messaggioComandi.getSender()).getNome()
+                        + "si è disconnesso");
+                lista_players.remove(messaggioComandi.getSender());
+                break;
+            case SETPRONTO:
+                for(int i=0;i<6;i++){
+                    JToggleButton ready = ((JToggleButton)btn_avat_arr[i][2]);
+                    JButton_player bt_player = (JButton_player)btn_avat_arr[i][0];
+                    if(bt_player.getPlayer_id() 
+                            == messaggioComandi.getSender()){
+                        ready.setSelected(!ready.isSelected());
+                    }
+                    
+                }
+            default:
+                break;
+        }
+    }
+
+    private void setStop(boolean b) {
+        this.stop = b;
+        //messaggi_arrivo.notify();
+        try {
+            my_socket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(PreGioco.class.getName()).log(Level.SEVERE, 
+                    "Socket chiuso per stop", ex);
+        }
+    }
+
+    private void diventa_leader() {
+        for(int i= 0;i<6;i++){
+            ((JButton)btn_avat_arr[i][0]).setEnabled(true);
+            //((JToggleButton)btn_avat_arr[i][2]).setEnabled(true);
+        }
+    }
+
     private static class AscoltaMessaggiArrivo extends Thread{
         ArrayBlockingQueue<Messaggio> coda;
         ObjectInputStream is;
         private boolean stop;
+        
         public AscoltaMessaggiArrivo(ArrayBlockingQueue<Messaggio> coda,
                 ObjectInputStream is) {
             this.coda = coda;
@@ -89,19 +179,35 @@ public class PreGioco extends JFrame implements ActionListener,Runnable,WindowLi
         {
             while(!stop)
             {
+                Messaggio msg = null;
                 try {
-                    coda.put((Messaggio)is.readObject());
+                    msg = (Messaggio)is.readObject();
                 } catch (IOException ex) {
-                    Logger.getLogger(PreGioco.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(PreGioco.class.getName()).log(Level.SEVERE, 
+                            "Connessione persa!", ex);
+                    setStop(true);
+                    msg = MessaggioComandi.creaMsgExit(-1);                    
                 } catch (ClassNotFoundException ex) {
                     Logger.getLogger(PreGioco.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(PreGioco.class.getName()).log(Level.SEVERE, null, ex);
+                    msg = null;
+                } finally {
+                    if(msg == null) continue;
+                    try {
+                        coda.put(msg);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(PreGioco.class.getName()).log(Level.SEVERE, null, ex);
+                        setStop(true);
+                    }
                 }
             }
         }
         public void setStop(boolean stop){
             this.stop = stop;
+            try {
+                is.close();
+            } catch (IOException ex) {
+                Logger.getLogger(PreGioco.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -113,13 +219,13 @@ public class PreGioco extends JFrame implements ActionListener,Runnable,WindowLi
     private ObjectInputStream is;
     private Socket my_socket;
     private Object[][] btn_avat_arr;
-    private JButton btn_giocatore1,
+    private JButton_player btn_giocatore1,
                     btn_giocatore2,
                     btn_giocatore3,
                     btn_giocatore4,
                     btn_giocatore5,
-                    btn_giocatore6,
-                    conferma_dati,
+                    btn_giocatore6;
+    private JButton conferma_dati,
                     invia_chat;
     private JToggleButton   ready1,ready2,
                             ready3,ready4,
@@ -136,6 +242,7 @@ public class PreGioco extends JFrame implements ActionListener,Runnable,WindowLi
     private AscoltaMessaggiArrivo thread_arrivo;
     private boolean stop;
     private int my_local_id;
+    
     public PreGioco(String title,Socket s,String nome) throws HeadlessException 
     {
         super(title);
@@ -159,12 +266,12 @@ public class PreGioco extends JFrame implements ActionListener,Runnable,WindowLi
         this.pannello_giocatori = new JPanel();
         this.pannello_campi = new JPanel();
         //giocatori
-        this.btn_giocatore1 = new JButton();
-        this.btn_giocatore2 = new JButton();
-        this.btn_giocatore3 = new JButton();
-        this.btn_giocatore4 = new JButton();
-        this.btn_giocatore5 = new JButton();
-        this.btn_giocatore6 = new JButton();
+        this.btn_giocatore1 = new JButton_player();
+        this.btn_giocatore2 = new JButton_player();
+        this.btn_giocatore3 = new JButton_player();
+        this.btn_giocatore4 = new JButton_player();
+        this.btn_giocatore5 = new JButton_player();
+        this.btn_giocatore6 = new JButton_player();
         this.avatar1 = new JLabel();
         this.avatar2 = new JLabel();
         this.avatar3 = new JLabel();
@@ -232,10 +339,12 @@ public class PreGioco extends JFrame implements ActionListener,Runnable,WindowLi
             bottone.setMinimumSize(dimensione_bottoni);
             bottone.setMaximumSize(new Dimension(1024, 45));
             bottone.addActionListener(this);
+            bottone.setEnabled(false);
             ready.setVisible(false);
             ready.setMinimumSize(dimensione_avatar);
             ready.setMaximumSize(dimensione_avatar);
             ready.addActionListener(this);
+            ready.setEnabled(false);
             //((JLabel)btn_avat_arr[i][1]).setVisible(false);
         }
     }
@@ -245,8 +354,10 @@ public class PreGioco extends JFrame implements ActionListener,Runnable,WindowLi
         for(int i = 0;iteralista.hasNext();i++)
         {
             Player gio = iteralista.next();
-            JButton bottone = ((JButton)btn_avat_arr[i][0]);
+            JButton_player bottone = ((JButton_player)btn_avat_arr[i][0]);
             bottone.setText(gio.getNome());
+            bottone.setPlayer_id(gio.getId());
+            
             JLabel avatar = ((JLabel)btn_avat_arr[1][1]);
             if(avatar != null){
                 avatar.setIcon(new ImageIcon(gio.getAvatar()));
@@ -254,6 +365,10 @@ public class PreGioco extends JFrame implements ActionListener,Runnable,WindowLi
             }
             ((JButton)btn_avat_arr[i][0]).setVisible(true);
             ((JToggleButton)btn_avat_arr[i][2]).setVisible(true);
+            if(gio.getId() == my_id){
+                bottone.setEnabled(true);
+                ((JToggleButton)btn_avat_arr[i][2]).setEnabled(true);
+            }
             
         }
     }
@@ -433,19 +548,24 @@ public class PreGioco extends JFrame implements ActionListener,Runnable,WindowLi
                 System.err.println("Errore IO");
             }
         popola_tasti();
+        this.thread_arrivo.start();
         this.setVisible(true);
         while(!stop){
             Messaggio msg = null;
             try {
-                msg = (Messaggio)is.readObject();
-            } catch (IOException ex) {
+                msg = this.messaggi_arrivo.take();
+            }catch (InterruptedException ex) {
                 Logger.getLogger(PreGioco.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(PreGioco.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                setStop(true);
+            } 
             if(msg == null) continue;
             parseMsg(msg);
         }
+        thread_arrivo.setStop(true);
+        this.setVisible(false);
+        FinestraConnessione fin = new FinestraConnessione("Risicammara 2 - Connessione");
+        fin.setVisible(true);
+        this.dispose();
     }
     
     public static void main(String[] args)
@@ -459,7 +579,8 @@ public class PreGioco extends JFrame implements ActionListener,Runnable,WindowLi
         if(e.getSource() == conferma_dati){
             String nick = campo_testo_nick.getText();
             Colore_t colore = (Colore_t)campo_colore.getSelectedItem();
-            if(nick.equals("") || nick.equals(nome)){
+            if( nick.equals("") || nick.equals(nome)){
+                nick = nome;
                 if(colore.equals(col_prec)) return;
             }
             try {
@@ -484,6 +605,26 @@ public class PreGioco extends JFrame implements ActionListener,Runnable,WindowLi
             campo_testo_chat.requestFocus();
             return;
         }
+        for(int i = 0;i<6;i++){
+            JButton_player bottone = (JButton_player) btn_avat_arr[i][0];
+            JToggleButton ready = (JToggleButton) btn_avat_arr[i][2];
+            if(e.getSource() == bottone){
+                try {
+                    os.writeObject(MessaggioComandi.creaMsgKickplayer(my_id, bottone.getPlayer_id()));
+                } catch (IOException ex) {
+                    Logger.getLogger(PreGioco.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                break;
+            }
+            else if(e.getSource() == ready){
+                ready.setSelected(!ready.isSelected());
+                try {
+                    os.writeObject(MessaggioComandi.creaMsgSetPronto(my_id));
+                } catch (IOException ex) {
+                    Logger.getLogger(PreGioco.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }
 
     @Override
@@ -493,10 +634,16 @@ public class PreGioco extends JFrame implements ActionListener,Runnable,WindowLi
 
     @Override
     public void windowClosing(WindowEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
+        try {
+            thread_arrivo.setStop(true);
+            //throw new UnsupportedOperationException("Not supported yet.");
+            os.close();
+        } catch (IOException ex) {
+            Logger.getLogger(PreGioco.class.getName()).log(Level.SEVERE, null, ex);
+        }
         FinestraConnessione conn = new FinestraConnessione("Risicammara 2 - Connessione");
         conn.setVisible(true);
-        thread_arrivo.setStop(true);
+        
     }
 
     @Override
