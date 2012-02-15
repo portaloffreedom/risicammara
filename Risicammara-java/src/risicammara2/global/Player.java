@@ -18,6 +18,8 @@ public class Player implements Serializable
     protected String nome;
     protected BufferedImage avatar;
     protected Colore_t coloreArmate;
+    // privato
+    private long id;
     private transient Threadplayer thread;
     
     /**
@@ -57,11 +59,14 @@ public class Player implements Serializable
 
     public void setThread(Threadplayer threadplayer) {
         this.thread = threadplayer;
+        id = thread.getId();
     }
 
     public Threadplayer getThread() {
         return thread;
     }
-    
-    
+
+    public long getId() {
+        return id;
+    }
 }

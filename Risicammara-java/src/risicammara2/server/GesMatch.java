@@ -22,6 +22,7 @@ class GesMatch extends Thread{
 
     @Override
     public void run() {
+        prepara_partita();
         while(!stop && !winner)
         {
             Messaggio msg = null;
@@ -57,6 +58,10 @@ class GesMatch extends Thread{
          * invia a tutti il messaggio di termine partita/ritorno alla sala d'attesa
          * chiudi questo thread.
          */
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private void prepara_partita() {
         throw new UnsupportedOperationException("Not yet implemented");
     }
     

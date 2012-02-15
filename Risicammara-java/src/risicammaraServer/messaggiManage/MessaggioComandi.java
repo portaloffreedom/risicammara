@@ -87,7 +87,7 @@ public class MessaggioComandi implements Messaggio{
      * @return l'oggetto MessaggioComandi con comando DISCONNECT
      */
     public static MessaggioComandi creaMsgDisconnect(long giocatoreDisconnesso){
-        return new MessaggioComandi(comandi_t.DISCONNECT, giocatoreDisconnesso);
+        return new MessaggioComandi(comandi_t.DISCONNECT, giocatoreDisconnesso,giocatoreDisconnesso);
     }
     /**
      * Costruisce un messaggioComandi per espellere un giocatore

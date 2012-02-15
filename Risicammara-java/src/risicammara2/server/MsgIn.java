@@ -92,13 +92,14 @@ class MsgIn extends Thread
                     Logger.getLogger(MsgIn.class.getName()).log(Level.SEVERE, "Errore put.", ex);
                 }
                 break;
+            case MODIFICANICKCOLORE:
             case COMMAND:
                 try {
                     codasmp.put(msg);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(MsgIn.class.getName()).log(Level.SEVERE, "errore put command", ex);
                 }
-                break;
+                break;                
             default:
                 try {
                     codagioco.put(msg);
@@ -115,7 +116,7 @@ class MsgIn extends Thread
     public static final int NUMTENTATIVI = 5;
 
     void setStop(boolean b) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        this.stop = b;
     }
     
 }

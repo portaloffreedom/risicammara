@@ -10,7 +10,6 @@ public enum messaggio_t {
     /**
      * Pacchetto che indica la modifica dei dati di un altro giocatore.
      * Questo pacchetto invia la conferma AGGIORNADATIGIOCATORE.
-     * @see risicammaraServer.MessageManage.MessaggioAggiornaDatiGiocatore
      * @see risicammaraServer.MessageManage.MessaggioCambiaNickColore
      */
     MODIFICANICKCOLORE, // Pacchetto che segnala una modifica di nick e colore.
@@ -123,7 +122,7 @@ public enum messaggio_t {
      * Notifica tutti i giocatori che un altro giocatore ha modificato nick e colore.
      * La notifica non viene inviata a chi ha cambiato i propri attributi.
      * @see risicammaraServer.MessageManage.MessaggioAggiornaDatiGiocatore
-     * @see risicammaraServer.MessageManage.MessaggioCambiaNickColore
+     * @deprecated use @see risicammaraServer.MessageManage.MessaggioCambiaNickColore
      */
     AGGIORNADATIGIOCATORE,  //Il pacchetto ricevuto notifica un cambiamento nei dati giocatore
     /**
